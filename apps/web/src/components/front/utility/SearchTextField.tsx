@@ -1,24 +1,46 @@
-import { Box, TextField } from "@mui/material";
+import {InputAdornment, styled, TextField} from "@mui/material";
 import React from "react";
+import {Search} from "@mui/icons-material";
 type SearchTextFieldProps = {
   id: string,
-  label: string,
-  mb?: number
+  placeholder?: string
 }
 
-function SearchTextField({id, label, mb = 20}: SearchTextFieldProps) {
+const SearchTextFieldStyled = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: '#f0f0f0',
+    paddingLeft: '20px',
+    borderRadius: '20px',
+    '& fieldset': {
+      borderColor: '#f0f0f0',
+    },
+    '& fieldset.MuiOutlinedInput-notchedOutline': {
+      borderColor: '#f0f0f0',
+    }
+  },
+  '& .MuiSvgIcon-root': {
+    color: '#000000'
+  },
+  '& .MuiOutlinedInput-input': {
+    color: '#000000'
+  }
+})
+
+function SearchTextField({id, placeholder}: SearchTextFieldProps) {
   return (
-    <Box
-      sx={{
-        mb: `${mb.toString()}px`
+    <SearchTextFieldStyled
+      id={id}
+      variant="outlined"
+      fullWidth
+      placeholder={placeholder}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <Search />
+          </InputAdornment>
+        )
       }}
-    >
-      <TextField
-        id={id}
-        label={label}
-        variant="outlined"
-      />
-    </Box>
+    />
   )
 }
 

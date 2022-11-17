@@ -7,10 +7,12 @@ function Homepage() {
   return (
     <Box>
       <PageHeader headerText={"Dobrodošli na Pogledaj!"} />
-      <SearchTextField
-        id={"search-all"}
-        label={"Pronađi bioskop ili filmski naslov"}
-      />
+      <Box mb={'20px'}>
+        <SearchTextField
+          id={"search-all"}
+          placeholder={"Pronađi bioskop ili filmski naslov"}
+        />
+      </Box>
       <Box>
         {[...new Array(20)]
           .map(

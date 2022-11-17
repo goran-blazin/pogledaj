@@ -19,10 +19,12 @@ function MoviesListingWrapper() {
   return (
     <Box>
       <PageHeader headerText={"Filmovi"} />
-      <SearchTextField
-        id={"search-movies"}
-        label={"Pronađi filmski naslov"}
-      />
+      <Box mb={'20px'}>
+        <SearchTextField
+          id={"search-movies"}
+          placeholder={"Pronađi filmski naslov"}
+        />
+      </Box>
       <Box>
         {
           movies.length === 0 ? (

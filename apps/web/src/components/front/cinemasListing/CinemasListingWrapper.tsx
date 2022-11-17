@@ -17,10 +17,12 @@ function CinemasListingWrapper() {
 	return (
 		<Box>
 			<PageHeader headerText={"Bioskopi"} />
-			<SearchTextField
-				id={"search-cinemas"}
-				label={"Pronađi bioskop"}
-			/>
+			<Box mb={'20px'}>
+				<SearchTextField
+					id={"search-cinemas"}
+					placeholder={"Pronađi bioskop"}
+				/>
+			</Box>
 			{
 				cinemas.length === 0 ? (
 					<Typography
