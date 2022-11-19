@@ -29,7 +29,9 @@ function MainContentWrapper() {
     <Container>
       <Box sx={{
         mt: "20px",
-        mb: "60px"
+        mb: "60px",
+        ml: "5px",
+        mr: "5px"
       }}>
         <main>
           {routes}

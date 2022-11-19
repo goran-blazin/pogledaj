@@ -13,13 +13,13 @@ import MainContentWrapper from "./front/mainContentWrapper/MainContentWrapper";
 const theme = createTheme({
   palette: {
     background: {
-      "default": "#0a1f3e"
+      "default": "#091F3E"
     },
     primary: {
-      main: '#0a1f3e',
+      main: '#091F3E',
     },
     text: {
-      primary: "#0a1f3e",
+      primary: "#000000",
       secondary: "#edf2ff"
     }
   },

@@ -6,7 +6,7 @@ function PageHeader({headerText = "Header", mb = 20}) {
     <Box>
       <Typography
         variant="h6"
-        color={"text.primary"}
+        color={"primary.main"}
         sx={{
           mb: `${mb.toString()}px`,
           ml: "5px"

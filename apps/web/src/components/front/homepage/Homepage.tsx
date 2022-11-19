@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import PageHeader from "../utility/PageHeader";
 import React from "react";
 import SearchTextField from "../utility/SearchTextField";
+import PageSubHeader from "../utility/PageSubHeader";
+import {LocalFireDepartmentOutlined, LocationOnOutlined} from "@mui/icons-material";
 
 function Homepage() {
   return (
@@ -13,6 +15,15 @@ function Homepage() {
           placeholder={"Pronađi bioskop ili filmski naslov"}
         />
       </Box>
+      <PageSubHeader
+        headerText={"Ne propusti ove filmove"}
+        Icon={LocalFireDepartmentOutlined}
+      />
+      <PageSubHeader
+        headerText={"Bioskopi u tvojoj blizini"}
+        Icon={LocationOnOutlined}
+      />
+
       <Box>
         {[...new Array(20)]
           .map(
