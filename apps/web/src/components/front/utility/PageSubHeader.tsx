@@ -1,10 +1,16 @@
-import {Box, Stack, Typography} from "@mui/material";
-import React from "react";
-import { SvgIconComponent } from "@mui/icons-material";
+import {Box, Stack, Typography} from '@mui/material';
+import React from 'react';
+import {SvgIconComponent} from '@mui/icons-material';
 
-function PageSubHeader(
-  {headerText = "Header", Icon, mb = 0}: {headerText: string, Icon: SvgIconComponent, mb?:number}
-) {
+function PageSubHeader({
+  headerText = 'Header',
+  Icon,
+  mb = 0,
+}: {
+  headerText: string;
+  Icon: SvgIconComponent;
+  mb?: number;
+}) {
   return (
     <Box
       sx={{
@@ -14,18 +20,15 @@ function PageSubHeader(
       <Stack direction="row" alignItems="center" gap={1}>
         <Icon
           sx={{
-            color: '#3274F6'
+            color: '#3274F6',
           }}
         />
-        <Typography
-          variant="subtitle1"
-          color={"text.primary"}
-        >
+        <Typography variant="subtitle1" color={'text.primary'}>
           {headerText}
         </Typography>
       </Stack>
     </Box>
-  )
+  );
 }
 
 export default PageSubHeader;

@@ -1,13 +1,9 @@
-import { useParams } from "react-router-dom";
+import {useParams} from 'react-router-dom';
 
 function MovieProjectionSingle() {
-  const {movieProjectionId} = useParams()
+  const {movieProjectionId} = useParams();
 
-  return (
-    <div>
-      TEST {movieProjectionId}
-    </div>
-  )
+  return <div>TEST {movieProjectionId}</div>;
 }
 
 export default MovieProjectionSingle;

@@ -1,27 +1,27 @@
-import React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 // components
-import FooterMenuWrapper from "./front/footer/FooterMenuWrapper";
-import HeaderMenuWrapper from "./front/header/HeaderMenuWrapper";
+import FooterMenuWrapper from './front/footer/FooterMenuWrapper';
+import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
 
 // scss
-import "./App.scss";
-import MainContentWrapper from "./front/mainContentWrapper/MainContentWrapper";
+import './App.scss';
+import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
 
 const theme = createTheme({
   palette: {
     background: {
-      "default": "#091F3E"
+      default: '#091F3E',
     },
     primary: {
       main: '#091F3E',
     },
     text: {
-      primary: "#000000",
-      secondary: "#edf2ff"
-    }
+      primary: '#000000',
+      secondary: '#edf2ff',
+    },
   },
 });
 

@@ -55,6 +55,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .tsx,.ts",
+    "format": "prettier --write .",
     "serve-d-env": "npm run build && http-server -p 3000 -a 192.168.0.9 --proxy http://192.168.0.9:3000? ./build > ./d-env-http.log 2>&1 &"
   },
   "eslintConfig": {

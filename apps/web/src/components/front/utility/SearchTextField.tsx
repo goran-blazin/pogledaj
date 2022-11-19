@@ -1,10 +1,10 @@
-import {InputAdornment, styled, TextField} from "@mui/material";
-import React from "react";
-import {Search} from "@mui/icons-material";
+import {InputAdornment, styled, TextField} from '@mui/material';
+import React from 'react';
+import {Search} from '@mui/icons-material';
 type SearchTextFieldProps = {
-  id: string,
-  placeholder?: string
-}
+  id: string;
+  placeholder?: string;
+};
 
 const SearchTextFieldStyled = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -16,15 +16,15 @@ const SearchTextFieldStyled = styled(TextField)({
     },
     '& fieldset.MuiOutlinedInput-notchedOutline': {
       borderColor: '#f0f0f0',
-    }
+    },
   },
   '& .MuiSvgIcon-root': {
-    color: '#000000'
+    color: '#000000',
   },
   '& .MuiOutlinedInput-input': {
-    color: '#000000'
-  }
-})
+    color: '#000000',
+  },
+});
 
 function SearchTextField({id, placeholder}: SearchTextFieldProps) {
   return (
@@ -38,10 +38,10 @@ function SearchTextField({id, placeholder}: SearchTextFieldProps) {
           <InputAdornment position="start">
             <Search />
           </InputAdornment>
-        )
+        ),
       }}
     />
-  )
+  );
 }
 
 export default SearchTextField;
