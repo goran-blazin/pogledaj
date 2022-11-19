@@ -1,4 +1,4 @@
-import {Country, Genre, Language} from './GeneralTypes';
+import {Country, Genre, IntRange, Language} from './GeneralTypes';
 import {ActorMovie, DirectorMovie, ProducerMovie} from './PeopleTypes';
 import {Cinema, CinemaTheater} from './CinemaTypes';
 
@@ -15,6 +15,8 @@ export type Movie = {
   language: Language;
   countryOfOrigin: Country;
   releaseDate: string;
+  moviePosterImageFilename?: string;
+  rating?: IntRange<0, 101>;
 };
 
 export type MovieProjection = {

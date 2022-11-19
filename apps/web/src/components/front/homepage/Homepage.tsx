@@ -1,11 +1,22 @@
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import PageHeader from '../utility/PageHeader';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchTextField from '../utility/SearchTextField';
 import PageSubHeader from '../utility/PageSubHeader';
 import {LocalFireDepartmentOutlined, LocationOnOutlined} from '@mui/icons-material';
+import MovieBigCard from '../moviesListing/MovieBigCard';
+import {Movie} from '../../../types/MoviesTypes';
+import MoviesService from '../../../services/MoviesService';
 
 function Homepage() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    MoviesService.findAll().then((movies) => {
+      setMovies(movies);
+    });
+  }, []);
+
   return (
     <Box>
       <PageHeader headerText={'Dobrodošli na Pogledaj!'} />
@@ -13,18 +24,22 @@ function Homepage() {
         <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
       </Box>
       <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
-      <PageSubHeader headerText={'Bioskopi u tvojoj blizini'} Icon={LocationOnOutlined} />
-
-      <Box>
-        {[...new Array(20)]
-          .map(
-            () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
-          )
-          .join('\n')}
+      <Box mb={'5px'}>
+        {movies.length === 0 ? (
+          <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+        ) : (
+          <React.Fragment>
+            {movies.map((movie, i) => {
+              return (
+                <Box mb={'5px'} key={i}>
+                  <MovieBigCard movie={movie} />
+                </Box>
+              );
+            })}
+          </React.Fragment>
+        )}
       </Box>
+      <PageSubHeader headerText={'Bioskopi u tvojoj blizini'} Icon={LocationOnOutlined} />
     </Box>
   );
 }

@@ -6,7 +6,7 @@ import {DateTime} from 'ts-luxon';
 import {v4 as uuidv4} from 'uuid';
 import _ from 'lodash';
 
-const RESET_SEED_DATA_IF_LOWER_THAN = 1654597200877;
+const RESET_SEED_DATA_IF_LOWER_THAN = 1668883560510;
 
 type SeedDemoData = {
   countries: Country[];
@@ -323,6 +323,7 @@ function getSeedData(): SeedDemoData {
         month: 5,
         day: 2,
       }).toJSON() as string,
+      rating: 65,
     },
     {
       id: uuidv4(),
@@ -352,6 +353,7 @@ function getSeedData(): SeedDemoData {
         month: 5,
         day: 2,
       }).toJSON() as string,
+      rating: 91,
     },
     {
       id: uuidv4(),
@@ -379,6 +381,7 @@ function getSeedData(): SeedDemoData {
       releaseDate: DateTime.fromObject({
         year: 1972,
       }).toJSON() as string,
+      rating: 33,
     },
   ];
 
