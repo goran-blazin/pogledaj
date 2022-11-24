@@ -22,5 +22,5 @@ jobs:
         with:
           context: ./apps/web
           push: true
-          tags: pogledaj-web:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/pogledaj-web:latest
           file: ./apps/web/CI/Dockerfile
