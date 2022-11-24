@@ -21,6 +21,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./apps/web
-          push: false
+          push: true
           tags: pogledaj-web:latest
           file: ./apps/web/CI/Dockerfile
