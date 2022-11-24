@@ -23,4 +23,4 @@ jobs:
           context: ./apps/web
           push: false
           tags: pogledaj-web:latest
-          file: ./CI/Dockerfile
+          file: ./apps/web/CI/Dockerfile
