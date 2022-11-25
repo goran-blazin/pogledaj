@@ -19,7 +19,7 @@ function Homepage() {
 
   return (
     <Box>
-      <PageHeader headerText={'Dobrodošli na Pogledaj!'} />
+      <PageHeader headerText={'Dobrodošli na Pogledaj! test for CI'} />
       <Box mb={'20px'}>
         <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
       </Box>
