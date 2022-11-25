@@ -2,9 +2,10 @@ name: pogledajWeb CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+    paths:
+      - apps/web/**
 
 jobs:
   build-container:
