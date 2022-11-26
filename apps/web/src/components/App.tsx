@@ -11,12 +11,20 @@ import './App.scss';
 import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
 
 const theme = createTheme({
+  typography: {
+    fontFamily: ['Open Sans'].join(','),
+  },
   palette: {
     background: {
-      default: '#091F3E',
+      default: '#FFFFFF',
+      paper: '#F5F5F5',
     },
     primary: {
-      main: '#091F3E',
+      main: '#3274F6',
+    },
+    secondary: {
+      main: '#F5F5F5',
+      contrastText: '#A4A4A4',
     },
     text: {
       primary: '#000000',
