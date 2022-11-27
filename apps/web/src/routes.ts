@@ -5,7 +5,7 @@ const namedRoutes = {
   moviesListing: '/movies',
   movieSingle: '/movies/:movieId',
   movieProjectionSingle: '/movie-projections/:movieProjectionId',
-  settings: '/settings'
+  settings: '/settings',
 };
 
 export default namedRoutes;

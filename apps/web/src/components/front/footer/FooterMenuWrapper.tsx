@@ -1,15 +1,15 @@
-import { Link, useLocation } from "react-router-dom";
+import {Link, useLocation} from 'react-router-dom';
 import {BottomNavigation, BottomNavigationAction} from '@mui/material';
 import {HomeOutlined, TheatersOutlined, Tune, VideoCameraBackOutlined} from '@mui/icons-material';
-import { SxProps } from "@mui/system";
-import namedRoutes from "../../../routes";
+import {SxProps} from '@mui/system';
+import namedRoutes from '../../../routes';
 
 function FooterMenuWrapper() {
   const navActionStyles: SxProps = (isSelected = false) => {
     return {
       color: isSelected ? 'primary.main' : 'text.secondary',
       fontWeight: '600',
-      minWidth: '60px'
+      minWidth: '60px',
     };
   };
 
