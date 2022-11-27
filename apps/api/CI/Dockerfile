@@ -1,17 +1,26 @@
+# Base image
+FROM node:16-alpine as builder
+
+ENV NODE_ENV build
+
+# user node
+WORKDIR /home/node
+
+COPY . /home/node
+
+# Install app dependencies using package-lock.json
+RUN npm ci \
+    && npm run build \
+		&& npm prune --production
+
 FROM node:16-alpine
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ENV NODE_ENV PRODUCTION
 
-# Install packages
-ADD ../package.json /tmp/package.json
-ADD ../package-lock.json /tmp/package-lock.json
+COPY --from=builder /home/node/package*.json /home/node/
+COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
+COPY --from=builder /home/node/dist/ /home/node/dist/
 
-RUN cd /tmp && npm ci
-RUN cp -a /tmp/node_modules /usr/src/app
+EXPOSE 3000
 
-WORKDIR /usr/src/app
-
-# Bundle source
-ADD ../. /usr/src/app/
+CMD [ "node", "dist/main.js" ]

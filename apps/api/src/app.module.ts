@@ -7,7 +7,7 @@ import Utils from './helpers/Utils';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: Utils.getPublicPath(),
+      rootPath: Utils.getAssetsPath(),
     }),
   ],
   controllers: [AppController],
