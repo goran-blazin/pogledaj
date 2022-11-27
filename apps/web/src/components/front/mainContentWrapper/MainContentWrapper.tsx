@@ -5,6 +5,7 @@ import CinemaSingleWrapper from '../cinemaSingle/CinemaSingleWrapper';
 import MoviesListingWrapper from '../moviesListing/MoviesListingWrapper';
 import MovieSingleWrapper from '../movieSingle/MovieSingleWrapper';
 import MovieProjectionSingle from '../movieProjectionSingle/MovieProjectionSingle';
+import SettingsWrapper from '../settings/settingsWrapper';
 import React from 'react';
 import namedRoutes from '../../../routes';
 
@@ -13,12 +14,13 @@ import {Box, Container} from '@mui/material';
 function MainContentWrapper() {
   const routes = (
     <Routes>
-      <Route path="/" element={<Homepage />} />
-      <Route path="/cinemas" element={<CinemasListingWrapper />} />
-      <Route path="/cinemas/:cinemaId" element={<CinemaSingleWrapper />} />
-      <Route path="/movies" element={<MoviesListingWrapper />} />
-      <Route path="/movies/:movieId" element={<MovieSingleWrapper />} />
-      <Route path="/movie-projections/:movieProjectionId" element={<MovieProjectionSingle />} />
+      <Route path={namedRoutes.home} element={<Homepage />} />
+      <Route path={namedRoutes.settings} element={<SettingsWrapper />} />
+      <Route path={namedRoutes.cinemasListing} element={<CinemasListingWrapper />} />
+      <Route path={namedRoutes.cinemaSingle} element={<CinemaSingleWrapper />} />
+      <Route path={namedRoutes.moviesListing} element={<MoviesListingWrapper />} />
+      <Route path={namedRoutes.movieSingle} element={<MovieSingleWrapper />} />
+      <Route path={namedRoutes.movieProjectionSingle} element={<MovieProjectionSingle />} />
     </Routes>
   );
 
