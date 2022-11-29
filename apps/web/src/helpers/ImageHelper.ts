@@ -1,12 +1,16 @@
 import AppConfig from '../config/AppConfig';
 
+type ImageCdnParams = {
+  imageFileName: string;
+};
+
 const ImageHelper = {
-  getImagePath(imageFileName: string): string {
-    return AppConfig.getCDNUrl() + imageFileName;
+  getDynamicImagePath({imageFileName}: ImageCdnParams): string {
+    return AppConfig.getCDNUrl() + 'images/dynamic/' + imageFileName;
   },
 
-  getPlaceholderPath(): string {
-    return '/img/placeholders/';
+  getPlaceholderImagePath({imageFileName}: ImageCdnParams): string {
+    return AppConfig.getCDNUrl() + 'images/placeholders/' + imageFileName;
   },
 };
 

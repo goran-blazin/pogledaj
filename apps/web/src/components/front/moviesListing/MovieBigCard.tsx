@@ -8,8 +8,12 @@ function MovieBigCard({movie}: {movie: Movie}) {
       title={movie.localizedName}
       imageSrc={
         movie.moviePosterImageFilename
-          ? ImageHelper.getImagePath(movie.moviePosterImageFilename)
-          : ImageHelper.getPlaceholderPath() + 'movie-big-card-placeholder.png'
+          ? ImageHelper.getDynamicImagePath({
+              imageFileName: movie.moviePosterImageFilename,
+            })
+          : ImageHelper.getPlaceholderImagePath({
+              imageFileName: 'movie-big-card-placeholder.png',
+            })
       }
       descFirstRow={'Žanr: ' + movie.genres.map((genre) => genre.localizedName).join(', ')}
       descSecondRow={'Trajanje: ' + movie.runtimeMinutes.toString() + ' min'}

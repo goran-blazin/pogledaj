@@ -1,10 +1,8 @@
-const config = {
-  CDNUrl: 'http://pogledaj.rs:3008',
-};
-
 const AppConfig = {
   getCDNUrl() {
-    return config.CDNUrl + '/';
+    // eslint-disable-next-line no-console
+    console.log(process.env);
+    return process.env.REACT_APP_ASSETS_CDN_URL;
   },
 };
 
