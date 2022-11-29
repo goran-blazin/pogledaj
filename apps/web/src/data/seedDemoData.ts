@@ -6,7 +6,7 @@ import {DateTime} from 'ts-luxon';
 import {v4 as uuidv4} from 'uuid';
 import _ from 'lodash';
 
-const RESET_SEED_DATA_IF_LOWER_THAN = 1668883560510;
+const RESET_SEED_DATA_IF_LOWER_THAN = 1669729906835;
 
 type SeedDemoData = {
   countries: Country[];
@@ -324,6 +324,7 @@ function getSeedData(): SeedDemoData {
         day: 2,
       }).toJSON() as string,
       rating: 65,
+      moviePosterImageFilename: 'iron-man.png',
     },
     {
       id: uuidv4(),
@@ -354,6 +355,7 @@ function getSeedData(): SeedDemoData {
         day: 2,
       }).toJSON() as string,
       rating: 91,
+      moviePosterImageFilename: 'avengers.png',
     },
     {
       id: uuidv4(),

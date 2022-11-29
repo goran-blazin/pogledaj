@@ -3,15 +3,19 @@ import {FavoriteOutlined, SvgIconComponent} from '@mui/icons-material';
 import React from 'react';
 import {IntRange} from '../../../../types/GeneralTypes';
 import _ from 'lodash';
+import ImageHelper from '../../../../helpers/ImageHelper';
 
 interface BigCardParams {
   title: string;
   descFirstRow?: string;
   descSecondRow?: string;
   Icon?: SvgIconComponent;
-  imageSrc: string;
+  imageSrc?: string;
+  defaultImageSrc: string;
   imageAltText?: string;
   rating?: IntRange<0, 101>;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 const descCSSStyle = {
@@ -38,22 +42,38 @@ function BigCard({
   // eslint-disable-next-line no-unused-vars
   Icon = FavoriteOutlined,
   imageSrc,
+  defaultImageSrc,
   imageAltText = 'Image',
   rating,
+  maxWidth = 348,
+  maxHeight = 348,
 }: BigCardParams) {
   const fiveStarRating = rating ? _.round((rating / 100) * 5, 1) : undefined;
+  const resizedImageSrc = ImageHelper.getDynamicImagePath({
+    imageFilePath: imageSrc || defaultImageSrc,
+    transformations: {
+      width: maxWidth,
+      height: maxHeight,
+      padResize: true,
+      backgroundColor: '000000',
+      defaultImage: ImageHelper.getPlaceholderImagePath({
+        imageFilePath: defaultImageSrc,
+        omitCdnUrl: true
+      })
+    },
+  });
 
   return (
     <Card
       elevation={0}
       sx={{
         borderRadius: '4%',
-        maxHeight: '348px',
-        maxWidth: '348px',
+        maxHeight: `${maxHeight}px`,
+        maxWidth: `${maxWidth}px`,
       }}
     >
       <Box sx={{position: 'relative'}}>
-        <CardMedia component="img" image={imageSrc} alt={imageAltText} />
+        <CardMedia component="img" image={resizedImageSrc} alt={imageAltText} />
         <Box
           sx={{
             position: 'absolute',
