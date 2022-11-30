@@ -15,7 +15,7 @@ type ImageTransformations = {
 type ImageCdnParams = {
   imageFilePath: string;
   transformations?: ImageTransformations;
-  omitCdnUrl?: boolean
+  omitCdnUrl?: boolean;
 };
 
 const mapTransformation = (transformations: ImageTransformations) => {
@@ -57,7 +57,7 @@ const ImageHelper = {
     return ImageHelper.getImagePath({
       imageFilePath: 'placeholders/' + imageFilePath,
       transformations,
-      omitCdnUrl
+      omitCdnUrl,
     });
   },
 };

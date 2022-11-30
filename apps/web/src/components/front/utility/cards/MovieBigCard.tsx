@@ -1,5 +1,5 @@
-import BigCard from '../utility/cards/BigCard';
-import {Movie} from '../../../types/MoviesTypes';
+import BigCard from './BigCard';
+import {Movie} from '../../../../types/MoviesTypes';
 
 function MovieBigCard({movie}: {movie: Movie}) {
   return (

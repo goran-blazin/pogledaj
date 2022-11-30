@@ -18,9 +18,6 @@ const SearchTextFieldStyled = styled(TextField)({
       borderColor: '#f0f0f0',
     },
   },
-  '& .MuiSvgIcon-root': {
-    color: '#000000',
-  },
   '& .MuiOutlinedInput-input': {
     color: '#000000',
   },
@@ -36,7 +33,7 @@ function SearchTextField({id, placeholder}: SearchTextFieldProps) {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <Search />
+            <Search color="primary" />
           </InputAdornment>
         ),
       }}

@@ -14,8 +14,6 @@ interface BigCardParams {
   defaultImageSrc: string;
   imageAltText?: string;
   rating?: IntRange<0, 101>;
-  maxWidth?: number;
-  maxHeight?: number;
 }
 
 const descCSSStyle = {
@@ -39,27 +37,25 @@ function BigCard({
   title,
   descFirstRow,
   descSecondRow,
-  // eslint-disable-next-line no-unused-vars
   Icon = FavoriteOutlined,
   imageSrc,
   defaultImageSrc,
   imageAltText = 'Image',
   rating,
-  maxWidth = 348,
-  maxHeight = 348,
 }: BigCardParams) {
   const fiveStarRating = rating ? _.round((rating / 100) * 5, 1) : undefined;
   const resizedImageSrc = ImageHelper.getDynamicImagePath({
     imageFilePath: imageSrc || defaultImageSrc,
     transformations: {
-      width: maxWidth,
-      height: maxHeight,
-      padResize: true,
-      backgroundColor: '000000',
+      width: 600,
+      aspectRatio: {
+        width: 1,
+        height: 1,
+      },
       defaultImage: ImageHelper.getPlaceholderImagePath({
         imageFilePath: defaultImageSrc,
-        omitCdnUrl: true
-      })
+        omitCdnUrl: true,
+      }),
     },
   });
 
@@ -68,8 +64,6 @@ function BigCard({
       elevation={0}
       sx={{
         borderRadius: '4%',
-        maxHeight: `${maxHeight}px`,
-        maxWidth: `${maxWidth}px`,
       }}
     >
       <Box sx={{position: 'relative'}}>

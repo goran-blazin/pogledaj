@@ -35,8 +35,6 @@ function MainContentWrapper() {
         sx={{
           mt: '20px',
           mb: '60px',
-          ml: '5px',
-          mr: '5px',
         }}
       >
         <main>{routes}</main>
