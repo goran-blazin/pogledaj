@@ -33,8 +33,8 @@ function MainContentWrapper() {
     <Container>
       <Box
         sx={{
-          mt: '20px',
-          mb: '60px',
+          mt: '35px',
+          mb: '85px',
         }}
       >
         <main>{routes}</main>

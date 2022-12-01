@@ -11,6 +11,18 @@ function FooterMenuWrapper() {
       color: isSelected ? 'primary.main' : 'text.primary',
       fontWeight: '600',
       minWidth: '60px',
+      '::before': isSelected
+        ? {
+            content: '""',
+            display: 'block',
+            backgroundColor: 'primary.main',
+            position: 'absolute',
+            width: '15px',
+            height: '4px',
+            top: '0',
+            borderRadius: '0px 0px 5px 5px',
+          }
+        : {},
     };
   };
 
@@ -20,6 +32,9 @@ function FooterMenuWrapper() {
     <ThemeProvider
       theme={createTheme({
         palette: {
+          primary: {
+            main: '#3274F6',
+          },
           text: {
             primary: '#595959',
           },
@@ -33,6 +48,7 @@ function FooterMenuWrapper() {
           position: 'fixed',
           bottom: '16px',
           width: 'calc(100% - 24px);',
+          height: '68px',
           margin: '0 auto',
           boxShadow: '0px 3px 16px rgba(0, 0, 0, 0.05), 0px 3px 10px rgba(0, 0, 0, 0.02)',
           border: '1px solid rgba(233, 233, 233, 0.5)',

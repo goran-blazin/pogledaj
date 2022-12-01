@@ -6,7 +6,7 @@ import {DateTime} from 'ts-luxon';
 import {v4 as uuidv4} from 'uuid';
 import _ from 'lodash';
 
-const RESET_SEED_DATA_IF_LOWER_THAN = 1669729906835;
+const RESET_SEED_DATA_IF_LOWER_THAN = 1669924063602;
 
 type SeedDemoData = {
   countries: Country[];
@@ -359,8 +359,8 @@ function getSeedData(): SeedDemoData {
     },
     {
       id: uuidv4(),
-      originalName: 'Kako su se volele dve budale',
-      localizedName: 'Kako su se volele dve budale',
+      originalName: 'Maratonci trce pocasni krug',
+      localizedName: 'Maratonci trce pocasni krug',
       plot: 'Emotivna ljubavna prica dvoje mladih ljudi',
       genres: [genres[2], genres[3]],
       actors: [
