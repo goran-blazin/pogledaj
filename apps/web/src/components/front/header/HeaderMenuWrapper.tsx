@@ -45,7 +45,7 @@ function HeaderMenuWrapper() {
   const location = useLocation();
 
   function goToHome() {
-    navigate(namedRoutes.home, {replace: true});
+    navigate(namedRoutes.home);
   }
 
   function goBack() {
