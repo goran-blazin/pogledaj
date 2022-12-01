@@ -43,7 +43,7 @@ function BigCard({
   defaultImageSrc,
   imageAltText = 'Image',
   rating,
-  onClick
+  onClick,
 }: BigCardParams) {
   const fiveStarRating = rating ? _.round((rating / 100) * 5, 1) : undefined;
   const resizedImageSrc = ImageHelper.getDynamicImagePath({

@@ -1,4 +1,4 @@
-import {City} from './GeneralTypes';
+import {City, IntRange} from './GeneralTypes';
 
 export type Cinema = {
   id: string;
@@ -6,7 +6,9 @@ export type Cinema = {
   description: string;
   city: City;
   address: string;
+  rating?: IntRange<0, 101>;
   phone: string[];
+  cinemaPosterImageFilename?: string;
 };
 
 export type CinemaTheater = {

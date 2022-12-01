@@ -7,13 +7,22 @@ import MovieBigCard from '../utility/cards/MovieBigCard';
 import {Movie} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
 import HorizontalCardsCarousel from '../utility/reels/HorizontalCardsCarousel';
+import {Cinema} from '../../../types/CinemaTypes';
+import CinemasService from '../../../services/CinemasService';
+import CinemaBigCard from '../utility/cards/CinemaBigCard';
 
 function Homepage() {
   const [movies, setMovies] = useState<Movie[]>([]);
-
   useEffect(() => {
     MoviesService.findAll().then((movies) => {
       setMovies(movies);
+    });
+  }, []);
+
+  const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  useEffect(() => {
+    CinemasService.findAll().then((cinemas) => {
+      setCinemas(cinemas);
     });
   }, []);
 
@@ -23,7 +32,7 @@ function Homepage() {
         <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
       </Box>
       <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
-      <Box mb={'5px'}>
+      <Box mb={'20px'}>
         {movies.length === 0 ? (
           <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
         ) : (
@@ -35,6 +44,17 @@ function Homepage() {
         )}
       </Box>
       <PageSubHeader headerText={'Bioskopi u tvojoj blizini'} Icon={LocationOnOutlined} />
+      <Box mb={'20px'}>
+        {cinemas.length === 0 ? (
+          <Typography color={'text.primary'}>Bioskopi se učitavaju, molimo sačekajte...</Typography>
+        ) : (
+          <HorizontalCardsCarousel>
+            {cinemas.map((cinema, i) => (
+              <CinemaBigCard cinema={cinema} key={i} />
+            ))}
+          </HorizontalCardsCarousel>
+        )}
+      </Box>
     </Box>
   );
 }

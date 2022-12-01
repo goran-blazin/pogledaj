@@ -6,7 +6,7 @@ import {DateTime} from 'ts-luxon';
 import {v4 as uuidv4} from 'uuid';
 import _ from 'lodash';
 
-const RESET_SEED_DATA_IF_LOWER_THAN = 1669928840964;
+const RESET_SEED_DATA_IF_LOWER_THAN = 1669930342445;
 
 type SeedDemoData = {
   countries: Country[];
@@ -208,6 +208,8 @@ function getSeedData(): SeedDemoData {
       city: cities[0],
       address: 'Glavna 88',
       phone: ['011/555-1111', '011/555-2222'],
+      rating: 55,
+      cinemaPosterImageFilename: 'cinema1.png',
     },
     {
       id: uuidv4(),
@@ -216,6 +218,8 @@ function getSeedData(): SeedDemoData {
       city: cities[0],
       address: 'Sporedna 99',
       phone: ['011/555-3333'],
+      rating: 96,
+      cinemaPosterImageFilename: 'cinema2.png',
     },
     {
       id: uuidv4(),
@@ -224,6 +228,7 @@ function getSeedData(): SeedDemoData {
       city: cities[1],
       address: 'Dunavska 99',
       phone: ['021/555-8888', '021/555-9999'],
+      rating: 12,
     },
   ];
 

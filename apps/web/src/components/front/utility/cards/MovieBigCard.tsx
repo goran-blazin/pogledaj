@@ -1,7 +1,7 @@
 import BigCard from './BigCard';
 import {Movie} from '../../../../types/MoviesTypes';
-import { useNavigate } from "react-router-dom";
-import namedRoutes from "../../../../routes";
+import {useNavigate} from 'react-router-dom';
+import namedRoutes from '../../../../routes';
 
 function MovieBigCard({movie}: {movie: Movie}) {
   const navigate = useNavigate();
