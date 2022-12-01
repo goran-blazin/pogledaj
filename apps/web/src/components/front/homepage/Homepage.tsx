@@ -1,5 +1,4 @@
 import {Box, Typography} from '@mui/material';
-import PageHeader from '../utility/PageHeader';
 import React, {useEffect, useState} from 'react';
 import SearchTextField from '../utility/SearchTextField';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -20,7 +19,6 @@ function Homepage() {
 
   return (
     <Box>
-      <PageHeader headerText={'Dobrodošli na Pogledaj!'} />
       <Box mb={'20px'}>
         <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
       </Box>

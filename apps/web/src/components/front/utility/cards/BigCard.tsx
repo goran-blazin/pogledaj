@@ -64,6 +64,7 @@ function BigCard({
       elevation={0}
       sx={{
         borderRadius: '4%',
+        backgroundColor: 'inherit',
       }}
     >
       <Box sx={{position: 'relative'}}>

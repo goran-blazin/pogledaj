@@ -39,6 +39,7 @@ function FooterMenuWrapper() {
           backdropFilter: 'blur(10px)',
           borderRadius: '32px',
           marginLeft: '12px',
+          zIndex: '1000',
         }}
       >
         <BottomNavigationAction

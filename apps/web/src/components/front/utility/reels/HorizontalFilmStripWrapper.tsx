@@ -9,7 +9,6 @@ function HorizontalFilmStripWrapper({children}: {children: React.ReactNode | Rea
         width: '100vw',
         position: 'relative',
         left: 'calc(-50vw + 50%)',
-        padding: '21px 0',
       }}
     >
       {children}
