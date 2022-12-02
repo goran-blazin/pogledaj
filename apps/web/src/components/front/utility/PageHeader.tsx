@@ -7,6 +7,8 @@ function PageHeader({headerText = 'Header', mb = 20}) {
       <Typography
         variant="h6"
         color={'primary.main'}
+        fontWeight={700}
+        fontSize={20}
         sx={{
           mb: `${mb.toString()}px`,
           ml: '5px',

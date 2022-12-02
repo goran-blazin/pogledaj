@@ -5,38 +5,35 @@ import 'swiper/css/bundle';
 import HorizontalFilmStripWrapper from './HorizontalFilmStripWrapper';
 import CardFilmStripWrapper from '../cards/CardFilmStripWrapper';
 
-function HorizontalCardsCarousel({children}: {children: React.ReactNode[]}) {
+function HorizontalSmallCardsCarousel({children}: {children: React.ReactNode[]}) {
+  const filmStripSizeModifier = 0.5;
+
   return (
-    <HorizontalFilmStripWrapper>
+    <HorizontalFilmStripWrapper modifier={filmStripSizeModifier}>
       <Swiper
-        className={'horizontal-cards-carousel'}
-        slidesPerView={1.15}
+        slidesPerView={3.5}
         spaceBetween={0}
-        centeredSlides={true}
+        centerInsufficientSlides={true}
         breakpoints={{
           // when window width is >= 640px
           640: {
-            slidesPerView: 2.2,
+            slidesPerView: 5.5,
             spaceBetween: 0,
-            centeredSlides: false,
             centerInsufficientSlides: true,
           },
           960: {
-            slidesPerView: 3.4,
+            slidesPerView: 7.5,
             spaceBetween: 0,
-            centeredSlides: false,
             centerInsufficientSlides: true,
           },
           1280: {
-            slidesPerView: 4.6,
+            slidesPerView: 9.5,
             spaceBetween: 0,
-            centeredSlides: false,
             centerInsufficientSlides: true,
           },
           1600: {
-            slidesPerView: 5.8,
+            slidesPerView: 11.5,
             spaceBetween: 0,
-            centeredSlides: false,
             centerInsufficientSlides: true,
           },
         }}
@@ -44,7 +41,7 @@ function HorizontalCardsCarousel({children}: {children: React.ReactNode[]}) {
         {children.map((item, i) => {
           return (
             <SwiperSlide key={i}>
-              <CardFilmStripWrapper>{item}</CardFilmStripWrapper>
+              <CardFilmStripWrapper modifier={filmStripSizeModifier}>{item}</CardFilmStripWrapper>
             </SwiperSlide>
           );
         })}
@@ -53,4 +50,4 @@ function HorizontalCardsCarousel({children}: {children: React.ReactNode[]}) {
   );
 }
 
-export default HorizontalCardsCarousel;
+export default HorizontalSmallCardsCarousel;
