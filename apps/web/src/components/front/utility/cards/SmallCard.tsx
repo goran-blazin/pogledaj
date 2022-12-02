@@ -34,7 +34,7 @@ function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', on
       elevation={0}
       onClick={onClick || undefined}
       sx={{
-        borderRadius: '4%',
+        borderRadius: '15px',
         backgroundColor: 'inherit',
       }}
     >
