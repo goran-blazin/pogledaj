@@ -70,14 +70,14 @@ function FooterMenuWrapper() {
           icon={<HomeOutlined />}
         />
         <BottomNavigationAction
-          sx={navActionStyles(location.pathname.startsWith("/movie"))}
+          sx={navActionStyles(location.pathname.startsWith('/movie'))}
           component={Link}
           to={namedRoutes.moviesListing}
           label="Filmovi"
           icon={<TheatersOutlined />}
         />
         <BottomNavigationAction
-          sx={navActionStyles(location.pathname.startsWith("/cinema"))}
+          sx={navActionStyles(location.pathname.startsWith('/cinema'))}
           component={Link}
           to={namedRoutes.cinemasListing}
           label="Bioskopi"

@@ -12,7 +12,7 @@ function HorizontalSmallCardsCarousel({children}: {children: React.ReactNode[]})
     <HorizontalFilmStripWrapper modifier={filmStripSizeModifier}>
       <Swiper
         style={{
-          paddingLeft: '21px'
+          paddingLeft: '21px',
         }}
         slidesPerView={3.5}
         spaceBetween={0}
