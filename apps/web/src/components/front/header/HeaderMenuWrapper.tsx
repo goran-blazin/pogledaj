@@ -62,6 +62,7 @@ function HeaderMenuWrapper() {
           visibility={location.pathname === namedRoutes.home ? 'hidden' : 'visible'}
         >
           <HeaderMenuButton
+            visible={location.pathname !== namedRoutes.home}
             props={{
               onClick: goBack,
             }}

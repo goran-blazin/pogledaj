@@ -46,7 +46,7 @@ function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', on
             bottom: 0,
             left: 0,
             width: '100%',
-            bgcolor: 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
             backdropFilter: 'blur(8px)',
             color: 'secondary.main',
             padding: '0 10px',
