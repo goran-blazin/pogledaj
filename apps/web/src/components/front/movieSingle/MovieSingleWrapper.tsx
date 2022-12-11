@@ -6,8 +6,28 @@ import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {Link} from 'react-router-dom';
 import ProjectionsGroupedPerDateAndCinema from './ProjectionsGroupedPerDateAndCinema';
+import MovieSinglePreview from '../EventPreview/EventPreview';
 import {DateTime} from 'ts-luxon';
 import {Typography} from '@mui/material';
+import {styled} from '@mui/material';
+
+import MainTitle from '../utility/typography/MainTitle';
+import RatingInfo from '../utility/RatingInfo';
+import TagsComponent from '../utility/TagsComponent';
+
+const MovieTitleHolder = styled('div')({
+  // consult about margin bottom and gap
+  display: 'flex',
+  marginBottom: '16px',
+  gap: '10px',
+  '& .titleWrap': {
+    flex: '1 1 auto',
+  },
+  '& .titleRating': {
+    flex: '0 0 auto',
+    paddingTop: '4px',
+  },
+});
 
 function MovieSingleWrapper() {
   const [searchParams] = useSearchParams();
@@ -71,35 +91,53 @@ function MovieSingleWrapper() {
   }, []);
 
   const mainActors = (movie ? movie.actors : []).filter((actor) => actor.role === 'Main');
-  const supportingActors = (movie ? movie.actors : []).filter((actor) => actor.role === 'Supporting');
+  // const supportingActors = (movie ? movie.actors : []).filter((actor) => actor.role === 'Supporting');
 
   return (
-    <div>
+    <div className="movie-single-wrapper">
       {loadingData ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
-        <div>
+        <>
           {movie !== undefined ? (
-            <div>
+            <>
+              <MovieSinglePreview>
+                <iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY?controls=0"></iframe>
+              </MovieSinglePreview>
               <div>
-                <h2>Detalji o filmu</h2>
-                <p>Ime: {movie.localizedName}</p>
-                <p>Originalno ime: {movie.originalName}</p>
-                <p>Sinopsis: {movie.plot}</p>
-                <p>Zanrovi: {movie.genres.map((genre) => genre.localizedName).join(', ')}</p>
-                {mainActors.length && (
-                  <p>Glavni glumci: {mainActors.map((actor) => PersonHelper.concatName(actor.person)).join(', ')}</p>
-                )}
-                {supportingActors.length > 0 && (
-                  <p>
-                    Sporedni glumci: {supportingActors.map((actor) => PersonHelper.concatName(actor.person)).join(', ')}
-                  </p>
-                )}
-                <p>Reziser: {PersonHelper.concatName(movie.director.person)}</p>
-                <p>Duzina trajanja: {movie.runtimeMinutes} min</p>
-                <p>Jezik: {movie.language.name}</p>
-                <p>Drzava porekla: {movie.countryOfOrigin.name}</p>
-                <p>Datum izdavanja: {DateTime.fromISO(movie.releaseDate).toFormat('yyyy LLL dd')}</p>
+                <MovieTitleHolder>
+                  <div className="titleWrap">
+                    <MainTitle title={movie.localizedName} />
+                  </div>
+                  <div className="titleRating">
+                    <RatingInfo rating={movie.rating} />
+                  </div>
+                </MovieTitleHolder>
+                <TagsComponent genres={movie.genres} />
+                <ul>
+                  <li>
+                    <span>{movie.runtimeMinutes}min</span>{' '}
+                    <span>{DateTime.fromISO(movie.releaseDate).toFormat('yyyy LLL dd')}</span>
+                  </li>
+                  <li>
+                    <strong>sinopsis:</strong> {movie.plot}
+                  </li>
+                  <li>
+                    <p>
+                      <strong>Reziser</strong> <span>{PersonHelper.concatName(movie.director.person)}</span>
+                    </p>
+                    <p>
+                      <strong>Glumci</strong>{' '}
+                      <span>{mainActors.map((actor) => PersonHelper.concatName(actor.person)).join(', ')}</span>
+                    </p>
+                    <p>
+                      <strong>Distributer</strong> <span>MegaCom Film</span>
+                    </p>
+                    <p>
+                      <strong>Zemlja Porekla</strong> <span>movie.countryOfOrigin.name</span>
+                    </p>
+                  </li>
+                </ul>
               </div>
               <div>
                 {projectionsGroupedPerDateAndCinema !== undefined &&
@@ -130,11 +168,11 @@ function MovieSingleWrapper() {
                   <h2>Projekcije nisu pronadjene</h2>
                 )}
               </div>
-            </div>
+            </>
           ) : (
             <h2>Film nije pronadjen</h2>
           )}
-        </div>
+        </>
       )}
     </div>
   );
