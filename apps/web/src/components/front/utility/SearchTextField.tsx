@@ -1,10 +1,10 @@
 import {InputAdornment, styled, TextField} from '@mui/material';
 import React from 'react';
-import { Search } from "@mui/icons-material";
+import {Search} from '@mui/icons-material';
 type SearchTextFieldProps = {
   id: string;
   placeholder?: string;
-  EndAdornment?: React.ReactNode
+  EndAdornment?: React.ReactNode;
 };
 
 const SearchTextFieldStyled = styled(TextField)({
@@ -37,11 +37,7 @@ function SearchTextField({id, placeholder, EndAdornment}: SearchTextFieldProps) 
             <Search color="primary" />
           </InputAdornment>
         ),
-        endAdornment: EndAdornment ? (
-          <InputAdornment position="end">
-            {EndAdornment}
-          </InputAdornment>
-        ) : null
+        endAdornment: EndAdornment ? <InputAdornment position="end">{EndAdornment}</InputAdornment> : null,
       }}
     />
   );

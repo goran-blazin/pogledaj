@@ -2,8 +2,6 @@ import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 
-import {useLocation} from 'react-router-dom';
-
 // components
 import FooterMenuWrapper from './front/footer/FooterMenuWrapper';
 import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
@@ -11,6 +9,8 @@ import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
 // scss
 import './App.scss';
 import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
+import ComingSoon from './front/comingSoon/ComingSoon';
+import {EnvTypes} from '../types/GeneralTypes';
 
 const theme = createTheme({
   customTypography: {
@@ -114,20 +114,22 @@ const themeDark = createTheme({
 function App() {
   // handle dark theme switch
   const isDark = false;
-
-  const {pathname} = useLocation();
-
-  // eslint-disable-next-line no-console
-  console.log('location', pathname);
+  const reactAppEnv: EnvTypes = process.env.REACT_APP_ENV as EnvTypes;
 
   return (
     <React.Fragment>
       <div className="App">
         <CssBaseline />
         <ThemeProvider theme={isDark ? themeDark : theme}>
-          {pathname === '/comingSoon' ? null : <HeaderMenuWrapper />}
-          <MainContentWrapper />
-          {pathname === '/comingSoon' ? null : <FooterMenuWrapper />}
+          {reactAppEnv === 'production' ? (
+            <ComingSoon />
+          ) : (
+            <React.Fragment>
+              <HeaderMenuWrapper />
+              <MainContentWrapper />
+              <FooterMenuWrapper />
+            </React.Fragment>
+          )}
         </ThemeProvider>
       </div>
     </React.Fragment>
