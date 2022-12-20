@@ -1,6 +1,6 @@
 import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 
 // components
 import FooterMenuWrapper from './front/footer/FooterMenuWrapper';
@@ -12,124 +12,21 @@ import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
 import ComingSoon from './front/comingSoon/ComingSoon';
 import {EnvTypes} from '../types/GeneralTypes';
 
-const theme = createTheme({
-  customTypography: {
-    mainTitle: {
-      fontSize: '22px',
-      fontWeight: 'bold',
-      color: '#595959',
-    },
-    pageTitle: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      color: '#3274F6',
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-  colorPalette: {
-    darkGrey: {
-      color: '#595959',
-    },
-    grey: {
-      color: '#A4A4A4',
-    },
-    darkBlue: {
-      color: '#091F3E',
-    },
-    lightBlue: {
-      color: '#3274F6',
-    },
-  },
-  typography: {
-    fontFamily: ['Open Sans'].join(','),
-  },
-  palette: {
-    background: {
-      default: '#FFFFFF',
-      paper: '#F5F5F5',
-    },
-    primary: {
-      main: '#3274F6',
-    },
-    secondary: {
-      main: '#F5F5F5',
-      contrastText: '#A4A4A4',
-    },
-    text: {
-      primary: '#000000',
-      secondary: '#FFFFFF',
-    },
-  },
-});
-
-// styles for dark theme
-const themeDark = createTheme({
-  customTypography: {
-    mainTitle: {
-      fontSize: '22px',
-      fontWeight: 'bold',
-      color: '#ffffff',
-    },
-    pageTitle: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      color: '#3274F6',
-    },
-  },
-  colorPalette: {
-    darkGrey: {
-      color: '#595959',
-    },
-    grey: {
-      color: '#A4A4A4',
-    },
-    darkBlue: {
-      color: '#091F3E',
-    },
-    lightBlue: {
-      color: '#3274F6',
-    },
-  },
-  typography: {
-    fontFamily: ['Open Sans'].join(','),
-  },
-  palette: {
-    background: {
-      default: '#FFFFFF',
-      paper: '#F5F5F5',
-    },
-    primary: {
-      main: '#3274F6',
-    },
-    secondary: {
-      main: '#F5F5F5',
-      contrastText: '#A4A4A4',
-    },
-    text: {
-      primary: '#000000',
-      secondary: '#FFFFFF',
-    },
-  },
-});
+// theme
+import lightTheme from './front/utility/themes/lightTheme'
+import darkTheme from './front/utility/themes/darkTheme'
 
 function App() {
   // handle dark theme switch
   const isDark = false;
+  // handle env switch
   const reactAppEnv: EnvTypes = process.env.REACT_APP_ENV as EnvTypes;
 
   return (
     <React.Fragment>
       <div className="App">
         <CssBaseline />
-        <ThemeProvider theme={isDark ? themeDark : theme}>
+        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
           {reactAppEnv === 'production' ? (
             <ComingSoon />
           ) : (

@@ -10,7 +10,6 @@ const GridStyled = styled(Box)(({theme}) => ({
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'spread-apart',
   [theme.breakpoints.up('md')]: {
     flexDirection: 'row',
   },
@@ -24,6 +23,7 @@ const BoxLeft = styled(Box)(({theme}) => ({
   width: '100%',
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
   '& img': {
     width: '90%',
     height: 'auto',
@@ -40,6 +40,7 @@ const BoxRight = styled(Box)(({theme}) => ({
   width: '100%',
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
   [theme.breakpoints.up('md')]: {
     height: '100%',
   },
@@ -47,7 +48,6 @@ const BoxRight = styled(Box)(({theme}) => ({
 
 const FormWrap = styled(Box)(() => ({
   width: '350px',
-  margin: '0 auto',
 }));
 
 const initialFieldValues = {
