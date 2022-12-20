@@ -7,7 +7,6 @@ import MovieSingleWrapper from '../movieSingle/MovieSingleWrapper';
 import MovieProjectionSingle from '../movieProjectionSingle/MovieProjectionSingle';
 import ComingSoon from '../comingSoon/ComingSoon';
 import SettingsWrapper from '../settings/settingsWrapper';
-import React from 'react';
 import namedRoutes from '../../../routes';
 
 import {Box, Container} from '@mui/material';

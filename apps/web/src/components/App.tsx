@@ -25,6 +25,15 @@ const theme = createTheme({
       color: '#3274F6',
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   colorPalette: {
     darkGrey: {
       color: '#595959',
@@ -125,9 +134,9 @@ function App() {
       <div className="App">
         <CssBaseline />
         <ThemeProvider theme={isDark ? themeDark : theme}>
-          {pathname === '/comingSoon' ? null : <HeaderMenuWrapper />}
+          {pathname.includes('coming-soon') ? null : <HeaderMenuWrapper />}
           <MainContentWrapper />
-          {pathname === '/comingSoon' ? null : <FooterMenuWrapper />}
+          {pathname.includes('coming-soon') ? null : <FooterMenuWrapper />}
         </ThemeProvider>
       </div>
     </React.Fragment>

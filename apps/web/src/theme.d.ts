@@ -5,11 +5,13 @@ declare module '@mui/material/styles' {
   interface Theme {
     customTypography: {
       mainTitle: {
+        // missing font weight
         fontSize: string;
         fontWeight: string;
         color: string;
       };
       pageTitle: {
+        // missing font weight
         fontSize: string;
         fontWeight: string;
         color: string;
