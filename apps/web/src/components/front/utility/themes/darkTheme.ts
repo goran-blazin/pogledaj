@@ -11,6 +11,7 @@ const darkTheme = createTheme({
       fontSize: '20px',
       fontWeight: 'bold',
       color: '#3274F6',
+      marginBottom: '30px'
     },
   },
   colorPalette: {

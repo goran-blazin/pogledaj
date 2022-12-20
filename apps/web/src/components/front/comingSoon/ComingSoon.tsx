@@ -35,7 +35,6 @@ const BoxLeft = styled(Box)(({theme}) => ({
 
 const BoxRight = styled(Box)(({theme}) => ({
   overflow: 'hidden',
-  textAlign: 'center',
   height: 'auto',
   width: '100%',
   display: 'flex',
@@ -48,6 +47,10 @@ const BoxRight = styled(Box)(({theme}) => ({
 
 const FormWrap = styled(Box)(() => ({
   width: '350px',
+}));
+
+const InputWrap = styled(Box)(() => ({
+  marginBottom: '32px',
 }));
 
 const initialFieldValues = {
@@ -70,8 +73,21 @@ function ComingSoon() {
       <BoxRight>
         <FormWrap>
           <Form>
-            <PageTitle title="Kontaktirajte nas" />
-            <InputField onChange={handleInputChange} value={values.name} name="name" />
+            <PageTitle title="Kontaktirajte nas" marginBottom={'22px'} />
+            <InputWrap>
+              <InputField onChange={handleInputChange} value={values.name} name="name" placeholder={'Ime i prezime'} />
+            </InputWrap>
+            <InputWrap>
+              <InputField onChange={handleInputChange} value={values.email} name="email" placeholder={'Email adresa'} />
+            </InputWrap>
+            <InputWrap>
+              <InputField
+                onChange={handleInputChange}
+                value={values.phoneNUmber}
+                name="phoneNUmber"
+                placeholder={'Broj telefona (opciono)'}
+              />
+            </InputWrap>
           </Form>
         </FormWrap>
       </BoxRight>

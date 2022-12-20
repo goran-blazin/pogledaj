@@ -11,7 +11,13 @@ const lightTheme = createTheme({
         fontSize: '20px',
         fontWeight: 'bold',
         color: '#3274F6',
+        marginBottom: '30px'
       },
+    },
+    customForm: {
+        inputField: {
+            color: '#F0F0F0'
+        }
     },
     breakpoints: {
       values: {

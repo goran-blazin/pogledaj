@@ -15,6 +15,12 @@ declare module '@mui/material/styles' {
         fontSize: string;
         fontWeight: string;
         color: string;
+        marginBottom: string;
+      };
+    };
+    customForm: {
+      inputField: {
+        color: string;
       };
     };
     colorPalette: {
@@ -43,6 +49,12 @@ declare module '@mui/material/styles' {
       pageTitle?: {
         fontSize: React.CSSProperties['fontSize'];
         fontWeight: React.CSSProperties['fontWeight'];
+        color: React.CSSProperties['color'];
+        marginBottom: React.CSSProperties['marginBottom'];
+      };
+    };
+    customForm?: {
+      inputField?: {
         color: React.CSSProperties['color'];
       };
     };
