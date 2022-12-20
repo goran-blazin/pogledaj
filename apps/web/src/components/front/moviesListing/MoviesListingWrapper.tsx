@@ -8,7 +8,7 @@ import SearchTextField from '../utility/SearchTextField';
 import HorizontalSmallCardsCarousel from '../utility/reels/HorizontalSmallCardsCarousel';
 import MovieSmallCard from '../utility/cards/MovieSmallCard';
 import PageSubHeader from '../utility/PageSubHeader';
-import FilterButton from "../utility/FilterButton";
+import FilterButton from '../utility/FilterButton';
 
 function MoviesListingWrapper() {
   const [movies, setMovies] = useState<Movie[]>([]);

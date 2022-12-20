@@ -5,7 +5,6 @@ import CinemaSingleWrapper from '../cinemaSingle/CinemaSingleWrapper';
 import MoviesListingWrapper from '../moviesListing/MoviesListingWrapper';
 import MovieSingleWrapper from '../movieSingle/MovieSingleWrapper';
 import MovieProjectionSingle from '../movieProjectionSingle/MovieProjectionSingle';
-import ComingSoon from '../comingSoon/ComingSoon';
 import SettingsWrapper from '../settings/settingsWrapper';
 import namedRoutes from '../../../routes';
 
@@ -21,7 +20,6 @@ function MainContentWrapper() {
       <Route path={namedRoutes.moviesListing} element={<MoviesListingWrapper />} />
       <Route path={namedRoutes.movieSingle} element={<MovieSingleWrapper />} />
       <Route path={namedRoutes.movieProjectionSingle} element={<MovieProjectionSingle />} />
-      <Route path={namedRoutes.comingSoon} element={<ComingSoon />} />
     </Routes>
   );
 

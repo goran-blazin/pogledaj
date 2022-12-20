@@ -1,6 +1,6 @@
-import { FilterAltOutlined } from "@mui/icons-material";
-import { Button } from "@mui/material";
-import React from "react";
+import {FilterAltOutlined} from '@mui/icons-material';
+import {Button} from '@mui/material';
+import React from 'react';
 
 function FilterButton() {
   return (
@@ -12,9 +12,9 @@ function FilterButton() {
         minHeight: '32px',
         borderRadius: '8px',
       }}
-      variant='contained'
+      variant="contained"
     >
-      <FilterAltOutlined fontSize='small' />
+      <FilterAltOutlined fontSize="small" />
     </Button>
   );
 }
