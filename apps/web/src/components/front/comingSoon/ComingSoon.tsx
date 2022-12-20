@@ -4,32 +4,35 @@ import PageTitle from '../utility/typography/PageTitle';
 import InputField from '../utility/form/InputField';
 
 const GridStyled = styled(Box)(({theme}) => ({
-  height: '100vh',
   width: '100%',
   alignItems: 'center',
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
+  height: 'auto',
+  backgroundColor: '#091F3E',
   [theme.breakpoints.up('md')]: {
     flexDirection: 'row',
+    height: '100vh',
   },
 }));
 
 const BoxLeft = styled(Box)(({theme}) => ({
   textAlign: 'center',
   overflow: 'hidden',
-  backgroundColor: '#091F3E',
   height: 'auto',
   width: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: '50px 20px',
   '& img': {
     width: '90%',
     height: 'auto',
   },
   [theme.breakpoints.up('md')]: {
     height: '100%',
+    padding: '0',
   },
 }));
 
@@ -40,8 +43,15 @@ const BoxRight = styled(Box)(({theme}) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  borderTopLeftRadius: '15px',
+  borderTopRightRadius: '15px',
+  backgroundColor: 'white',
+  padding: '30px 20px 20px 20px',
   [theme.breakpoints.up('md')]: {
     height: '100%',
+    borderTopLeftRadius: '0',
+    borderTopRightRadius: '0',
+    padding: '0',
   },
 }));
 
