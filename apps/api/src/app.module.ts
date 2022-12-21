@@ -6,8 +6,8 @@ import { PersonsModule } from './modules/persons/persons.module';
 import { CinemasModule } from './modules/cinemas/cinemas.module';
 import * as Utils from './helpers/Utils';
 import configuration from './config/configuration';
-import { PrismaService } from "./modules/prisma/prisma.service";
-import { PrismaModule } from "./modules/prisma/prisma.module";
+import { PrismaService } from './modules/prisma/prisma.service';
+import { PrismaModule } from './modules/prisma/prisma.module';
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : '';
 
 @Module({

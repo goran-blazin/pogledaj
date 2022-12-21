@@ -13,8 +13,8 @@ import ComingSoon from './front/comingSoon/ComingSoon';
 import {EnvTypes} from '../types/GeneralTypes';
 
 // theme
-import lightTheme from './front/utility/themes/lightTheme'
-import darkTheme from './front/utility/themes/darkTheme'
+import lightTheme from './front/utility/themes/lightTheme';
+import darkTheme from './front/utility/themes/darkTheme';
 
 function App() {
   // handle dark theme switch

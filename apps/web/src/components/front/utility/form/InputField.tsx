@@ -11,7 +11,7 @@ const TextFieldStyled = styled('input')(({theme}) => ({
   padding: '0 22px',
   borderRadius: '15px',
   fontSize: '14px',
-  width: '100%'
+  width: '100%',
 }));
 
 type TextFieldTypes = {

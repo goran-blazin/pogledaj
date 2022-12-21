@@ -28,7 +28,7 @@ export class CinemasController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cinemasService.findOne({
-      id: id
+      id: id,
     });
   }
 
