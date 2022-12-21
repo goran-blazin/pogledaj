@@ -124,7 +124,7 @@ function MovieSingleWrapper() {
                   </li>
                   <li>
                     <p>
-                      <strong>Reziser</strong> <span>{PersonHelper.concatName(movie.director.person)}</span>
+                      <strong>Reziser</strong> <span>{PersonHelper.concatName(movie.directors[0].person)}</span>
                     </p>
                     <p>
                       <strong>Glumci</strong>{' '}

@@ -8,14 +8,28 @@ export type Cinema = {
   address: string;
   rating?: IntRange<0, 101>;
   phone: string[];
-  cinemaPosterImageFilename?: string;
+  posterImages: string[];
 };
 
 export type CinemaTheater = {
   id: string;
-  localizedName: string;
+  name: string;
   cinema: Cinema;
-  seatNumber: number;
-  rowNumber: number;
+  seatLayout: SeatGroup[];
   supports3D: boolean;
+  posterImages: string[];
+};
+
+export type SeatGroup = {
+  id: string;
+  name: string;
+  rowCount: number;
+  columnCount: number;
+  seats: Seat[];
+};
+
+export type Seat = {
+  id: string;
+  seatRow: string;
+  seatColumn: string;
 };

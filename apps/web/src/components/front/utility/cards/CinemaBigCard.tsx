@@ -9,7 +9,7 @@ function CinemaBigCard({cinema}: {cinema: Cinema}) {
   return (
     <BigCard
       title={cinema.name}
-      imageSrc={cinema.cinemaPosterImageFilename}
+      imageSrc={cinema.posterImages[0]}
       defaultImageSrc={'cinema-big-card-placeholder.png'}
       descFirstRow={cinema.address}
       descSecondRow={`${cinema.city.postalCode} ${cinema.city.name}`}

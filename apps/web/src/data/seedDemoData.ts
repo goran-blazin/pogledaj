@@ -6,7 +6,7 @@ import {DateTime} from 'ts-luxon';
 import {v4 as uuidv4} from 'uuid';
 import _ from 'lodash';
 
-const RESET_SEED_DATA_IF_LOWER_THAN = 1669930342445;
+const RESET_SEED_DATA_IF_LOWER_THAN = 1671625418284;
 
 type SeedDemoData = {
   countries: Country[];
@@ -209,7 +209,7 @@ function getSeedData(): SeedDemoData {
       address: 'Glavna 88',
       phone: ['011/555-1111', '011/555-2222'],
       rating: 55,
-      cinemaPosterImageFilename: 'cinema1.png',
+      posterImages: ['cinema1.png'],
     },
     {
       id: uuidv4(),
@@ -219,7 +219,7 @@ function getSeedData(): SeedDemoData {
       address: 'Sporedna 99',
       phone: ['011/555-3333'],
       rating: 96,
-      cinemaPosterImageFilename: 'cinema2.png',
+      posterImages: ['cinema2.png'],
     },
     {
       id: uuidv4(),
@@ -229,72 +229,73 @@ function getSeedData(): SeedDemoData {
       address: 'Dunavska 99',
       phone: ['021/555-8888', '021/555-9999'],
       rating: 12,
+      posterImages: [],
     },
   ];
 
   const cinemaTheaters: CinemaTheater[] = [
     {
       id: uuidv4(),
-      localizedName: 'Sala 1',
+      name: 'Sala 1',
       cinema: cinemas[0],
-      seatNumber: 55,
-      rowNumber: 5,
       supports3D: true,
+      seatLayout: [],
+      posterImages: [],
     },
     {
       id: uuidv4(),
-      localizedName: 'Sala 2',
+      name: 'Sala 2',
       cinema: cinemas[0],
-      seatNumber: 88,
-      rowNumber: 7,
+      seatLayout: [],
+      posterImages: [],
       supports3D: false,
     },
     {
       id: uuidv4(),
-      localizedName: 'Decja sala',
+      name: 'Decja sala',
       cinema: cinemas[0],
-      seatNumber: 44,
-      rowNumber: 5,
+      seatLayout: [],
+      posterImages: [],
       supports3D: true,
     },
     {
       id: uuidv4(),
-      localizedName: 'Velika sala',
+      name: 'Velika sala',
       cinema: cinemas[1],
-      seatNumber: 66,
-      rowNumber: 6,
+      seatLayout: [],
+      posterImages: [],
       supports3D: false,
     },
     {
       id: uuidv4(),
-      localizedName: 'Mala sala',
+      name: 'Mala sala',
       cinema: cinemas[1],
-      seatNumber: 20,
-      rowNumber: 3,
+      seatLayout: [],
+      posterImages: [],
       supports3D: false,
     },
     {
       id: uuidv4(),
-      localizedName: 'Sala 1',
+      name: 'Sala 1',
       cinema: cinemas[2],
-      seatNumber: 55,
-      rowNumber: 5,
+      seatLayout: [],
+      posterImages: [],
       supports3D: true,
     },
     {
       id: uuidv4(),
-      localizedName: 'Sala 2',
+      name: 'Sala 2',
       cinema: cinemas[2],
-      seatNumber: 88,
-      rowNumber: 7,
+      seatLayout: [],
+      posterImages: [],
       supports3D: false,
     },
     {
       id: uuidv4(),
-      localizedName: 'Decja sala',
+      name: 'Decja sala',
       cinema: cinemas[2],
-      seatNumber: 44,
-      rowNumber: 5,
+      seatLayout: [],
+      posterImages: [],
       supports3D: true,
     },
   ];
@@ -316,12 +317,14 @@ function getSeedData(): SeedDemoData {
           role: 'Supporting',
         },
       ],
-      director: {
-        person: persons[5],
-        type: 'Main',
-      },
+      directors: [
+        {
+          person: persons[5],
+          type: 'Main',
+        },
+      ],
       runtimeMinutes: 126,
-      language: languages[0],
+      originalLanguage: languages[0],
       countryOfOrigin: countries[0],
       releaseDate: DateTime.fromObject({
         year: 2008,
@@ -329,7 +332,8 @@ function getSeedData(): SeedDemoData {
         day: 2,
       }).toJSON() as string,
       rating: 65,
-      moviePosterImageFilename: 'iron-man.png',
+      posterImages: ['iron-man.png'],
+      dubbedLanguage: languages[1],
     },
     {
       id: uuidv4(),
@@ -347,12 +351,14 @@ function getSeedData(): SeedDemoData {
           role: 'Main',
         },
       ],
-      director: {
-        person: persons[6],
-        type: 'Main',
-      },
+      directors: [
+        {
+          person: persons[6],
+          type: 'Main',
+        },
+      ],
       runtimeMinutes: 143,
-      language: languages[0],
+      originalLanguage: languages[0],
       countryOfOrigin: countries[0],
       releaseDate: DateTime.fromObject({
         year: 2012,
@@ -360,7 +366,7 @@ function getSeedData(): SeedDemoData {
         day: 2,
       }).toJSON() as string,
       rating: 91,
-      moviePosterImageFilename: 'avengers.png',
+      posterImages: ['avengers.png'],
     },
     {
       id: uuidv4(),
@@ -378,17 +384,20 @@ function getSeedData(): SeedDemoData {
           role: 'Main',
         },
       ],
-      director: {
-        person: persons[4],
-        type: 'Main',
-      },
+      directors: [
+        {
+          person: persons[4],
+          type: 'Main',
+        },
+      ],
       runtimeMinutes: 30,
-      language: languages[1],
+      originalLanguage: languages[1],
       countryOfOrigin: countries[1],
       releaseDate: DateTime.fromObject({
         year: 1972,
       }).toJSON() as string,
       rating: 33,
+      posterImages: [],
     },
   ];
 

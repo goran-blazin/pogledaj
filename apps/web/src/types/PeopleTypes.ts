@@ -10,17 +10,17 @@ export type Person = {
   countryOfOrigin?: Country;
 };
 
-export type ActorMovie = {
+export type Actor = {
   person: Person;
   role: 'Main' | 'Supporting' | 'Extra' | 'Cameo';
 };
 
-export type DirectorMovie = {
+export type Director = {
   person: Person;
   type: 'Main' | 'Assistant';
 };
 
-export type ProducerMovie = {
+export type Producer = {
   person: Person;
   type: 'Executive' | 'Assistant';
 };
