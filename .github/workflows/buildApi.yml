@@ -7,19 +7,19 @@ on:
     paths:
       - apps/api/**
 jobs:
-publish-hello-docker-image:
-runs-on: ubuntu-latest
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v3
-  - name: Login to GitHub Container Registry
-    uses: docker/login-action@v2
-    with:
-      registry: ghcr.io
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
-  - name: Build the Docker image
-    run: |
-      docker build -f ./apps/api/CI/Dockerfile/Dockerfile . --tag ghcr.io/creepy00/pogledaj/pogledajapi:latest
-      docker run ghcr.io/creepy00/pogledaj/pogledajapi:latest
-      docker push ghcr.io/creepy00/pogledaj/pogledajapi:latest
+  build-and-push-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Docker image
+        run: |
+          docker build -f ./apps/api/CI/Dockerfile/Dockerfile . --tag ghcr.io/creepy00/pogledaj/pogledajapi:latest
+          docker run ghcr.io/creepy00/pogledaj/pogledajapi:latest
+          docker push ghcr.io/creepy00/pogledaj/pogledajapi:latest

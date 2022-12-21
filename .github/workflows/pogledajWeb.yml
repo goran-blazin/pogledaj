@@ -6,9 +6,8 @@ on:
       - main
     paths:
       - apps/web/**
-
 jobs:
-  build-container:
+  build-and-push-container:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
