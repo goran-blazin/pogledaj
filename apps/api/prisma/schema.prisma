@@ -1,0 +1,156 @@
+// prisma/schema.prisma
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ENUMS
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum ActorRoleType {
+  Main
+  Supporting
+  Extra
+  Cameo
+}
+
+enum DirectorType {
+  Main
+  Assistant
+}
+
+enum ProducerType {
+  Executive
+  Assistant
+}
+
+// TABLES
+
+model Genre {
+  systemName    String @id
+  localizedName String @unique
+}
+
+model Language {
+  code String @id
+  name String @unique
+}
+
+model Country {
+  code String @id
+  name String @unique
+}
+
+model City {
+  id          String @id @default(uuid())
+  cityCode    String
+  name        String
+  postalCode  String
+  countryCode String
+
+  @@unique([cityCode, countryCode])
+}
+
+model Cinema {
+  id           String @id @default(uuid())
+  name         String @unique
+  description  String
+  cityId       Int
+  address      String
+  rating       Int
+  phone        Json   @default("[]")
+  posterImages Json   @default("[]")
+}
+
+model CinemaTheater {
+  id           String  @id @default(uuid())
+  name         String
+  cinemaId     String
+  supports3D   Boolean @default(false)
+  posterImages Json    @default("[]")
+}
+
+model SeatGroup {
+  id          String @id @default(uuid())
+  theaterId   String
+  name        String
+  rowCount    Int
+  columnCount Int
+}
+
+model Seat {
+  id          String @id @default(uuid())
+  seatGroupId String
+  seatRow     String
+  seatColumn  String
+  options     Json   @default("{}")
+}
+
+model Movie {
+  id                 String   @id @default(uuid())
+  originalName       String
+  localizedName      String
+  plot               String
+  genreId            String
+  actors             Json
+  directors          Json
+  producers          Json
+  runtimeMinutes     Int
+  originalLanguageId String
+  dubbedLanguageId   String?
+  countryOfOriginId  String
+  posterImages       Json     @default("[]")
+  rating             Int
+  releaseDate        DateTime @db.Date
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+}
+
+model Person {
+  id                String   @id @default(uuid())
+  countryOfOriginId String
+  firstName         String
+  middleName        String?
+  lastName          String
+  dateOfBirth       DateTime @db.Date
+  gender            Gender
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+}
+
+model Actor {
+  personId String
+  movieId  String
+  role     ActorRoleType
+
+  @@id([personId, movieId])
+}
+
+model Director {
+  personId String
+  movieId  String
+  type     DirectorType
+
+  @@id([personId, movieId])
+}
+
+model Producer {
+  personId String
+  movieId  String
+  type     ProducerType
+
+  @@id([personId, movieId])
+}
