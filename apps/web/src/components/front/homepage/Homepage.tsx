@@ -29,7 +29,7 @@ function Homepage() {
   return (
     <Box>
       <Box mb={'20px'}>
-        <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
+        <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov TEST'} />
       </Box>
       <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
       <Box mb={'20px'}>
