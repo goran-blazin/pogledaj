@@ -9,7 +9,7 @@ export class PersonsService {
   }
 
   findAll() {
-    return `This action returns all persons`;
+    return `This action returns all persons - actor, producer or director`;
   }
 
   findOne(id: number) {
