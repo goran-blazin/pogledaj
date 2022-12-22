@@ -17,6 +17,12 @@ declare module '@mui/material/styles' {
         color: string;
         marginBottom: string;
       };
+      paragraph: {
+        // missing font weight
+        fontSize: string;
+        color: string;
+        marginBottom: string;
+      };
     };
     customForm: {
       inputField: {
@@ -49,6 +55,11 @@ declare module '@mui/material/styles' {
       pageTitle?: {
         fontSize: React.CSSProperties['fontSize'];
         fontWeight: React.CSSProperties['fontWeight'];
+        color: React.CSSProperties['color'];
+        marginBottom: React.CSSProperties['marginBottom'];
+      };
+      paragraph?: {
+        fontSize: React.CSSProperties['fontSize'];
         color: React.CSSProperties['color'];
         marginBottom: React.CSSProperties['marginBottom'];
       };

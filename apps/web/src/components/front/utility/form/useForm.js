@@ -12,9 +12,9 @@ export function useForm(initialFieldValues) {
     const {name, value} = e.target;
 
     // eslint-disable-next-line no-console
-    console.log('handleInputChange name', name);
+    // console.log('handleInputChange name', name);
     // eslint-disable-next-line no-console
-    console.log('handleInputChange value', value);
+    // console.log('handleInputChange value', value);
 
     setValues({
       ...values,

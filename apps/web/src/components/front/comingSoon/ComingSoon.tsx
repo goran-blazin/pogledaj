@@ -2,6 +2,10 @@ import {Box, styled} from '@mui/material';
 import {Form, useForm} from '../utility/form/useForm';
 import PageTitle from '../utility/typography/PageTitle';
 import InputField from '../utility/form/InputField';
+import Textarea from '../utility/form/Textarea';
+import Button from '../utility/buttons/Button';
+import MovingBackground from './MovingBackground';
+import Paragraph from '../utility/typography/Paragraph';
 
 const GridStyled = styled(Box)(({theme}) => ({
   width: '100%',
@@ -20,15 +24,15 @@ const GridStyled = styled(Box)(({theme}) => ({
 const BoxLeft = styled(Box)(({theme}) => ({
   textAlign: 'center',
   overflow: 'hidden',
-  height: 'auto',
+  height: '700px',
   width: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '50px 20px',
   '& img': {
-    width: '90%',
-    height: 'auto',
+    // width: '90%',
+    // height: 'auto',
   },
   [theme.breakpoints.up('md')]: {
     height: '100%',
@@ -61,29 +65,48 @@ const FormWrap = styled(Box)(() => ({
 
 const InputWrap = styled(Box)(() => ({
   marginBottom: '32px',
+  '&:last-child': {
+    marginBottom: 0,
+  },
 }));
 
 const initialFieldValues = {
   name: '',
   email: '',
-  phoneNUmber: '',
+  phoneNumber: '',
   message: '',
 };
 
 function ComingSoon() {
-  const {values, handleInputChange} = useForm(initialFieldValues);
+  const {values, handleInputChange, resetValues} = useForm(initialFieldValues);
+
+  const handleFormSubmit = () => {
+    // eslint-disable-next-line no-console
+    console.log('form data', values);
+    setTimeout(() => {
+      resetValues(initialFieldValues);
+    }, 2000);
+  };
 
   return (
     <GridStyled>
       <BoxLeft>
-        <div>
+        {/* <div>
           <img src="/img/popcorn-couch.png" alt="logo-preview" />
-        </div>
+        </div> */}
+        <MovingBackground />
       </BoxLeft>
       <BoxRight>
         <FormWrap>
           <Form>
             <PageTitle title="Kontaktirajte nas" marginBottom={'22px'} />
+            <InputWrap>
+              <Paragraph
+                text={
+                  'Ukoliko želite da nam se obratite, imate pitanja ili sugestije, popunite kontakt formu u nastavku i naši saradnici će vas kontaktirati u najkaćem roku.'
+                }
+              />
+            </InputWrap>
             <InputWrap>
               <InputField onChange={handleInputChange} value={values.name} name="name" placeholder={'Ime i prezime'} />
             </InputWrap>
@@ -93,10 +116,22 @@ function ComingSoon() {
             <InputWrap>
               <InputField
                 onChange={handleInputChange}
-                value={values.phoneNUmber}
-                name="phoneNUmber"
+                value={values.phoneNumber}
+                name="phoneNumber"
                 placeholder={'Broj telefona (opciono)'}
               />
+            </InputWrap>
+            <InputWrap>
+              <Textarea
+                onChange={handleInputChange}
+                value={values.message}
+                name="message"
+                placeholder={'Poruka'}
+                rows={10}
+              />
+            </InputWrap>
+            <InputWrap>
+              <Button onClick={handleFormSubmit} text={'Posalji'} type={'button'} />
             </InputWrap>
           </Form>
         </FormWrap>

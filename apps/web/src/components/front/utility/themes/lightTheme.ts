@@ -13,6 +13,11 @@ const lightTheme = createTheme({
       color: '#3274F6',
       marginBottom: '30px',
     },
+    paragraph: {
+      fontSize: '14px',
+      color: '#595959',
+      marginBottom: '30px',
+    },
   },
   customForm: {
     inputField: {
