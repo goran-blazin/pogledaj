@@ -6,6 +6,7 @@ import Textarea from '../utility/form/Textarea';
 import Button from '../utility/buttons/Button';
 import MovingBackground from './MovingBackground';
 import Paragraph from '../utility/typography/Paragraph';
+import Link from '../utility/typography/Link';
 
 const GridStyled = styled(Box)(({theme}) => ({
   width: '100%',
@@ -30,10 +31,10 @@ const BoxLeft = styled(Box)(({theme}) => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: '50px 20px',
-  '& img': {
-    // width: '90%',
-    // height: 'auto',
-  },
+  // '& img': {
+  //   width: '90%',
+  //   height: 'auto',
+  // },
   [theme.breakpoints.up('md')]: {
     height: '100%',
     padding: '0',
@@ -41,12 +42,9 @@ const BoxLeft = styled(Box)(({theme}) => ({
 }));
 
 const BoxRight = styled(Box)(({theme}) => ({
-  overflow: 'hidden',
+  overflow: 'auto',
   height: 'auto',
   width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
   borderTopLeftRadius: '15px',
   borderTopRightRadius: '15px',
   backgroundColor: 'white',
@@ -59,14 +57,27 @@ const BoxRight = styled(Box)(({theme}) => ({
   },
 }));
 
-const FormWrap = styled(Box)(() => ({
+const FormWrap = styled(Box)(({theme}) => ({
   width: '350px',
+  padding: '0',
+  margin: '0 auto',
+  [theme.breakpoints.up('md')]: {
+    padding: '56px 0',
+    margin: '0 auto'
+  },
 }));
 
 const InputWrap = styled(Box)(() => ({
   marginBottom: '32px',
   '&:last-child': {
     marginBottom: 0,
+  },
+}));
+const LinkWrap = styled(Box)(({theme}) => ({
+  marginTop: '85px',
+  textAlign: 'center',
+  [theme.breakpoints.up('md')]: {
+    marginTop: '127px',
   },
 }));
 
@@ -133,6 +144,9 @@ function ComingSoon() {
             <InputWrap>
               <Button onClick={handleFormSubmit} text={'Posalji'} type={'button'} />
             </InputWrap>
+            <LinkWrap>
+              <Link text={'pogledaj.rs'} link={'https://www.pogledaj.rs/'} />
+            </LinkWrap>
           </Form>
         </FormWrap>
       </BoxRight>

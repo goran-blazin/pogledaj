@@ -3,7 +3,7 @@ import {styled} from '@mui/material';
 const TextFieldStyled = styled('input')(({theme}) => ({
   backgroundColor: theme.customForm.inputField.color,
   borderColor: theme.customForm.inputField.color,
-  color: theme.colorPalette.darkGrey.color,
+  color: theme.customForm.inputField.textColor,
   height: '48px',
   lineHeight: '48px',
   outline: 'none',
@@ -12,6 +12,9 @@ const TextFieldStyled = styled('input')(({theme}) => ({
   borderRadius: '15px',
   fontSize: '14px',
   width: '100%',
+  '&::placeholder': {
+    color: theme.customForm.inputField.textColor,
+  }
 }));
 
 type TextFieldTypes = {

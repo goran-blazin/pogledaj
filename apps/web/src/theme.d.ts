@@ -18,15 +18,19 @@ declare module '@mui/material/styles' {
         marginBottom: string;
       };
       paragraph: {
-        // missing font weight
         fontSize: string;
         color: string;
         marginBottom: string;
+      };
+      link: {
+        fontSize: string;
+        color: string;
       };
     };
     customForm: {
       inputField: {
         color: string;
+        textColor: string;
       };
     };
     colorPalette: {
@@ -63,10 +67,15 @@ declare module '@mui/material/styles' {
         color: React.CSSProperties['color'];
         marginBottom: React.CSSProperties['marginBottom'];
       };
+      link?: {
+        fontSize: React.CSSProperties['fontSize'];
+        color: React.CSSProperties['color'];
+      };
     };
     customForm?: {
       inputField?: {
         color: React.CSSProperties['color'];
+        textColor: React.CSSProperties['color'];
       };
     };
     colorPalette?: {

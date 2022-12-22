@@ -18,10 +18,15 @@ const lightTheme = createTheme({
       color: '#595959',
       marginBottom: '30px',
     },
+    link: {
+      fontSize: '14px',
+      color: '#3274F6',
+    },
   },
   customForm: {
     inputField: {
       color: '#F0F0F0',
+      textColor: '#595959',
     },
   },
   breakpoints: {
