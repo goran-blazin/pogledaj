@@ -18,7 +18,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the Docker image
+      - name: Build and push the Docker image
         run: |
-          docker build -f ./apps/api/CI/Dockerfile-dev ./apps/api --tag ghcr.io/creepy00/pogledaj/pogledajapi:latest
-          docker push ghcr.io/creepy00/pogledaj/pogledajapi:latest
+          docker build -f ./apps/api/CI/Dockerfile-dev ./apps/api --tag ghcr.io/creepy00/pogledaj/pogledaj-api:latest
+          docker push ghcr.io/creepy00/pogledaj/pogledaj-api:latest
