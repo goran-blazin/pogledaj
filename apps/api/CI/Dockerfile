@@ -1,4 +1,4 @@
-# Base image
+# builder image
 FROM node:16-slim as builder
 ENV NODE_ENV build
 RUN apt-get update && apt-get install -y openssl libssl-dev
@@ -10,13 +10,16 @@ WORKDIR /home/node
 COPY package*.json ./
 COPY prisma/ ./prisma/
 
+# build node_modules
 RUN npm ci
 
 COPY --chown=node:node . .
 
+# build dist
 RUN npm run build \
     && npm prune --omit=dev
 
+# production image
 FROM node:16-slim as production
 RUN apt-get update && apt-get install -y openssl libssl-dev
 

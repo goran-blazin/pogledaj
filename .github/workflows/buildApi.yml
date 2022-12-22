@@ -20,6 +20,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the Docker image
         run: |
-          docker build -f ./apps/api/CI/Dockerfile/Dockerfile . --tag ghcr.io/creepy00/pogledaj/pogledajapi:latest
+          docker build -f ./apps/api/CI/Dockerfile ./apps/api --tag ghcr.io/creepy00/pogledaj/pogledajapi:latest
           docker run ghcr.io/creepy00/pogledaj/pogledajapi:latest
           docker push ghcr.io/creepy00/pogledaj/pogledajapi:latest
