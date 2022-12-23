@@ -63,7 +63,7 @@ const FormWrap = styled(Box)(({theme}) => ({
   margin: '0 auto',
   [theme.breakpoints.up('md')]: {
     padding: '56px 0',
-    margin: '0 auto'
+    margin: '0 auto',
   },
 }));
 

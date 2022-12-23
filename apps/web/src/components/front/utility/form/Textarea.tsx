@@ -13,7 +13,7 @@ const TextareaStyled = styled('textarea')(({theme}) => ({
   width: '100%',
   '&::placeholder': {
     color: theme.customForm.inputField.textColor,
-  }
+  },
 }));
 
 type TextareaTypes = {

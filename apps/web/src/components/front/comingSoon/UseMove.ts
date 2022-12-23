@@ -3,11 +3,11 @@ import {useState, useEffect} from 'react';
 export function useMove() {
   const [state, setState] = useState({x: 0, y: 0});
 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: MouseEvent) => {
     setState((state) => ({...state, x: e.clientX, y: e.clientY}));
 
     document.querySelectorAll<HTMLElement>('.object').forEach(function (move) {
-      const moving_value: any = move.getAttribute('data-value');
+      const moving_value = parseInt(move.getAttribute('data-value') || '1');
       const x = (e.clientX * moving_value) / 250;
       const y = (e.clientY * moving_value) / 250;
 

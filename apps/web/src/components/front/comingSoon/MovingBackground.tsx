@@ -45,7 +45,7 @@ const MovingBackground = () => {
     <Container
       onMouseMove={(event) => {
         event.persist();
-        handleMouseMove(event);
+        handleMouseMove(event.nativeEvent);
       }}
     >
       <img src="/img/stars.png" className={'object stars'} data-value="-2.5" alt="stars" />

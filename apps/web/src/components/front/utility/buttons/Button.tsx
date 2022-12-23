@@ -18,7 +18,7 @@ const ButtonStyled = styled('button')(({theme}) => ({
 type ButtonStyledTypes = {
   onClick?: () => void;
   text: string;
-  type: any;
+  type: 'submit' | 'reset' | 'button' | undefined;
 };
 
 export default function Button(props: ButtonStyledTypes) {

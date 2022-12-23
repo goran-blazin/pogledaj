@@ -14,7 +14,7 @@ const TextFieldStyled = styled('input')(({theme}) => ({
   width: '100%',
   '&::placeholder': {
     color: theme.customForm.inputField.textColor,
-  }
+  },
 }));
 
 type TextFieldTypes = {
