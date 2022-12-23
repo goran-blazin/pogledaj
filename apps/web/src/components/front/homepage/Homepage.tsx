@@ -14,7 +14,7 @@ import CinemaBigCard from '../utility/cards/CinemaBigCard';
 function Homepage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   useEffect(() => {
-    MoviesService.findAll().then((movies:any) => {
+    MoviesService.findAll().then((movies) => {
       setMovies(movies);
     });
   }, []);
