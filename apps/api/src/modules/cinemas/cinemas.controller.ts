@@ -2,22 +2,23 @@ import {
   Controller,
   Get,
   Post,
-  Body,
+  // Body,
   Patch,
   Param,
   Delete,
 } from '@nestjs/common';
 import { CinemasService } from './cinemas.service';
-import { CreateCinemaDto } from './dto/create-cinema.dto';
-import { UpdateCinemaDto } from './dto/update-cinema.dto';
+// import { CreateCinemaDto } from './dto/create-cinema.dto';
+// import { UpdateCinemaDto } from './dto/update-cinema.dto';
 
 @Controller('cinemas')
 export class CinemasController {
   constructor(private readonly cinemasService: CinemasService) {}
 
   @Post()
-  create(@Body() createCinemaDto: CreateCinemaDto) {
-    return this.cinemasService.create(createCinemaDto);
+  // create(@Body() createCinemaDto: CreateCinemaDto) {
+  create() {
+    return this.cinemasService.create();
   }
 
   @Get()
@@ -33,8 +34,9 @@ export class CinemasController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCinemaDto: UpdateCinemaDto) {
-    return this.cinemasService.update(+id, updateCinemaDto);
+  // update(@Param('id') id: string, @Body() updateCinemaDto: UpdateCinemaDto) {
+  update(@Param('id') id: string) {
+    return this.cinemasService.update(+id);
   }
 
   @Delete(':id')

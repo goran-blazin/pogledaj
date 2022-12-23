@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCinemaDto } from './dto/create-cinema.dto';
-import { UpdateCinemaDto } from './dto/update-cinema.dto';
+// import { CreateCinemaDto } from './dto/create-cinema.dto';
+// import { UpdateCinemaDto } from './dto/update-cinema.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cinema, Prisma } from '@prisma/client';
 
@@ -8,8 +8,9 @@ import { Cinema, Prisma } from '@prisma/client';
 export class CinemasService {
   constructor(private prismaService: PrismaService) {}
 
-  create(createCinemaDto: CreateCinemaDto) {
-    return 'This action adds a new cinema';
+  // create(createCinemaDto: CreateCinemaDto) {
+  create() {
+    return 'This action adds a new cinema ';
   }
 
   async findAll(
@@ -32,7 +33,8 @@ export class CinemasService {
     });
   }
 
-  update(id: number, updateCinemaDto: UpdateCinemaDto) {
+  // update(id: number, updateCinemaDto: UpdateCinemaDto) {
+  update(id: number) {
     return `This action updates a #${id} cinema`;
   }
 

@@ -19,7 +19,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env['APP_LISTEN_PORT']);
+  await app.listen(process.env['APP_LISTEN_PORT'] || 8080);
 
   Logger.log(
     `Started listening Pogledaj-api Nest app on port ${process.env['APP_LISTEN_PORT']}`,
