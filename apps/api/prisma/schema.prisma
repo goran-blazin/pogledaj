@@ -37,6 +37,11 @@ enum ProducerType {
   Assistant
 }
 
+enum ProjectionType {
+  Movie
+  TheaterPlay
+}
+
 // TABLES
 
 model Genre {
@@ -55,7 +60,7 @@ model Country {
 }
 
 model City {
-  id          String @id @default(uuid())
+  id          String @id @default(uuid()) @db.Uuid
   cityCode    String
   name        String
   postalCode  String
@@ -65,10 +70,10 @@ model City {
 }
 
 model Cinema {
-  id           String @id @default(uuid())
+  id           String @id @default(uuid()) @db.Uuid
   name         String @unique
   description  String
-  cityId       Int
+  cityId       String @db.Uuid
   address      String
   rating       Int
   phone        Json   @default("[]")
@@ -76,38 +81,35 @@ model Cinema {
 }
 
 model CinemaTheater {
-  id           String  @id @default(uuid())
+  id           String  @id @default(uuid()) @db.Uuid
   name         String
-  cinemaId     String
+  cinemaId     String  @db.Uuid
   supports3D   Boolean @default(false)
   posterImages Json    @default("[]")
 }
 
-model SeatGroup {
-  id          String @id @default(uuid())
-  theaterId   String
+model CinemaSeatGroup {
+  id          String @id @default(uuid()) @db.Uuid
+  theaterId   String @db.Uuid
   name        String
   rowCount    Int
   columnCount Int
 }
 
-model Seat {
-  id          String @id @default(uuid())
-  seatGroupId String
+model CinemaSeat {
+  id          String @id @default(uuid()) @db.Uuid
+  seatGroupId String @db.Uuid
   seatRow     String
   seatColumn  String
   options     Json   @default("{}")
 }
 
 model Movie {
-  id                 String   @id @default(uuid())
+  id                 String   @id @default(uuid()) @db.Uuid
   originalName       String
   localizedName      String
   plot               String
   genreId            String
-  actors             Json
-  directors          Json
-  producers          Json
   runtimeMinutes     Int
   originalLanguageId String
   dubbedLanguageId   String?
@@ -120,7 +122,7 @@ model Movie {
 }
 
 model Person {
-  id                String   @id @default(uuid())
+  id                String   @id @default(uuid()) @db.Uuid
   countryOfOriginId String
   firstName         String
   middleName        String?
@@ -132,25 +134,28 @@ model Person {
 }
 
 model Actor {
-  personId String
-  movieId  String
-  role     ActorRoleType
+  personId       String         @db.Uuid
+  projectionId   String         @db.Uuid
+  projectionType ProjectionType
+  role           ActorRoleType
 
-  @@id([personId, movieId])
+  @@id([personId, projectionId])
 }
 
 model Director {
-  personId String
-  movieId  String
-  type     DirectorType
+  personId       String         @db.Uuid
+  projectionId   String         @db.Uuid
+  projectionType ProjectionType
+  type           DirectorType
 
-  @@id([personId, movieId])
+  @@id([personId, projectionId])
 }
 
 model Producer {
-  personId String
-  movieId  String
-  type     ProducerType
+  personId       String         @db.Uuid
+  projectionId   String         @db.Uuid
+  projectionType ProjectionType
+  type           ProducerType
 
-  @@id([personId, movieId])
+  @@id([personId, projectionId])
 }

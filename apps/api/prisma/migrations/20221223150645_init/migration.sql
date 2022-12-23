@@ -10,6 +10,9 @@ CREATE TYPE "DirectorType" AS ENUM ('Main', 'Assistant');
 -- CreateEnum
 CREATE TYPE "ProducerType" AS ENUM ('Executive', 'Assistant');
 
+-- CreateEnum
+CREATE TYPE "ProjectionType" AS ENUM ('Movie', 'TheaterPlay');
+
 -- CreateTable
 CREATE TABLE "Genre" (
     "systemName" TEXT NOT NULL,
@@ -36,7 +39,7 @@ CREATE TABLE "Country" (
 
 -- CreateTable
 CREATE TABLE "City" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "cityCode" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "postalCode" TEXT NOT NULL,
@@ -47,10 +50,10 @@ CREATE TABLE "City" (
 
 -- CreateTable
 CREATE TABLE "Cinema" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "cityId" INTEGER NOT NULL,
+    "cityId" UUID NOT NULL,
     "address" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
     "phone" JSONB NOT NULL DEFAULT '[]',
@@ -61,9 +64,9 @@ CREATE TABLE "Cinema" (
 
 -- CreateTable
 CREATE TABLE "CinemaTheater" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
-    "cinemaId" TEXT NOT NULL,
+    "cinemaId" UUID NOT NULL,
     "supports3D" BOOLEAN NOT NULL DEFAULT false,
     "posterImages" JSONB NOT NULL DEFAULT '[]',
 
@@ -71,37 +74,34 @@ CREATE TABLE "CinemaTheater" (
 );
 
 -- CreateTable
-CREATE TABLE "SeatGroup" (
-    "id" TEXT NOT NULL,
-    "theaterId" TEXT NOT NULL,
+CREATE TABLE "CinemaSeatGroup" (
+    "id" UUID NOT NULL,
+    "theaterId" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "rowCount" INTEGER NOT NULL,
     "columnCount" INTEGER NOT NULL,
 
-    CONSTRAINT "SeatGroup_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CinemaSeatGroup_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Seat" (
-    "id" TEXT NOT NULL,
-    "seatGroupId" TEXT NOT NULL,
+CREATE TABLE "CinemaSeat" (
+    "id" UUID NOT NULL,
+    "seatGroupId" UUID NOT NULL,
     "seatRow" TEXT NOT NULL,
     "seatColumn" TEXT NOT NULL,
     "options" JSONB NOT NULL DEFAULT '{}',
 
-    CONSTRAINT "Seat_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CinemaSeat_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Movie" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "originalName" TEXT NOT NULL,
     "localizedName" TEXT NOT NULL,
     "plot" TEXT NOT NULL,
     "genreId" TEXT NOT NULL,
-    "actors" JSONB NOT NULL,
-    "directors" JSONB NOT NULL,
-    "producers" JSONB NOT NULL,
     "runtimeMinutes" INTEGER NOT NULL,
     "originalLanguageId" TEXT NOT NULL,
     "dubbedLanguageId" TEXT,
@@ -117,7 +117,7 @@ CREATE TABLE "Movie" (
 
 -- CreateTable
 CREATE TABLE "Person" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "countryOfOriginId" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
@@ -132,29 +132,32 @@ CREATE TABLE "Person" (
 
 -- CreateTable
 CREATE TABLE "Actor" (
-    "personId" TEXT NOT NULL,
-    "movieId" TEXT NOT NULL,
+    "personId" UUID NOT NULL,
+    "projectionId" UUID NOT NULL,
+    "projectionType" "ProjectionType" NOT NULL,
     "role" "ActorRoleType" NOT NULL,
 
-    CONSTRAINT "Actor_pkey" PRIMARY KEY ("personId","movieId")
+    CONSTRAINT "Actor_pkey" PRIMARY KEY ("personId","projectionId")
 );
 
 -- CreateTable
 CREATE TABLE "Director" (
-    "personId" TEXT NOT NULL,
-    "movieId" TEXT NOT NULL,
+    "personId" UUID NOT NULL,
+    "projectionId" UUID NOT NULL,
+    "projectionType" "ProjectionType" NOT NULL,
     "type" "DirectorType" NOT NULL,
 
-    CONSTRAINT "Director_pkey" PRIMARY KEY ("personId","movieId")
+    CONSTRAINT "Director_pkey" PRIMARY KEY ("personId","projectionId")
 );
 
 -- CreateTable
 CREATE TABLE "Producer" (
-    "personId" TEXT NOT NULL,
-    "movieId" TEXT NOT NULL,
+    "personId" UUID NOT NULL,
+    "projectionId" UUID NOT NULL,
+    "projectionType" "ProjectionType" NOT NULL,
     "type" "ProducerType" NOT NULL,
 
-    CONSTRAINT "Producer_pkey" PRIMARY KEY ("personId","movieId")
+    CONSTRAINT "Producer_pkey" PRIMARY KEY ("personId","projectionId")
 );
 
 -- CreateIndex
