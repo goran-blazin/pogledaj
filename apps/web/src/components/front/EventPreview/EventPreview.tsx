@@ -45,8 +45,6 @@ const EventPreviewMainWrap = styled(Box)({
 });
 
 function FavoriteIconStyle(props: SvgIconProps) {
-  // eslint-disable-next-line no-console
-  console.log('props', props);
   return (
     <SvgIcon {...props}>
       <FavoriteBorderIcon />
@@ -54,8 +52,6 @@ function FavoriteIconStyle(props: SvgIconProps) {
   );
 }
 function ShareIconStyle(props: SvgIconProps) {
-  // eslint-disable-next-line no-console
-  console.log('props', props);
   return (
     <SvgIcon {...props}>
       <ShareIcon />

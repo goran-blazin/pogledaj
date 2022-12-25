@@ -1,19 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import {Cinema} from '../../../types/CinemaTypes';
 import CinemasService from '../../../services/CinemasService';
 import {Box, Typography} from '@mui/material';
 import PageHeader from '../utility/PageHeader';
 import SearchTextField from '../utility/SearchTextField';
 import CinemaBigCard from '../utility/cards/CinemaBigCard';
 import FilterButton from '../utility/FilterButton';
+import {useQuery} from 'react-query';
 
 function CinemasListingWrapper() {
-  const [cinemas, setCinemas] = useState<Cinema[]>([]);
-  useEffect(() => {
-    CinemasService.findAll().then((cinemas) => {
-      setCinemas(cinemas);
-    });
-  }, []);
+  const cinemas = useQuery(['cinemas', 'findAll'], CinemasService.findAll);
 
   return (
     <Box>
@@ -21,11 +15,11 @@ function CinemasListingWrapper() {
       <Box mb={'20px'}>
         <SearchTextField id={'search-cinemas'} placeholder={'Pronađi bioskop'} EndAdornment={<FilterButton />} />
       </Box>
-      {cinemas.length === 0 ? (
+      {cinemas.isLoading ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <Box>
-          {cinemas.map((cinema, i) => {
+          {(cinemas.data || []).map((cinema, i) => {
             return (
               <Box mb={'13px'} key={i}>
                 <CinemaBigCard cinema={cinema} key={i} />

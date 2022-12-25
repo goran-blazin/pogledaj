@@ -15,6 +15,10 @@ import {EnvTypes} from '../types/GeneralTypes';
 // theme
 import lightTheme from './front/utility/themes/lightTheme';
 import darkTheme from './front/utility/themes/darkTheme';
+import {QueryClient, QueryClientProvider} from 'react-query';
+
+// Create a client
+const queryClient = new QueryClient();
 
 function App() {
   // handle dark theme switch
@@ -24,20 +28,22 @@ function App() {
 
   return (
     <React.Fragment>
-      <div className="App">
-        <CssBaseline />
-        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-          {reactAppEnv === 'production' ? (
-            <ComingSoon />
-          ) : (
-            <React.Fragment>
-              <HeaderMenuWrapper />
-              <MainContentWrapper />
-              <FooterMenuWrapper />
-            </React.Fragment>
-          )}
-        </ThemeProvider>
-      </div>
+      <QueryClientProvider client={queryClient}>
+        <div className="App">
+          <CssBaseline />
+          <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+            {reactAppEnv === 'production' ? (
+              <ComingSoon />
+            ) : (
+              <React.Fragment>
+                <HeaderMenuWrapper />
+                <MainContentWrapper />
+                <FooterMenuWrapper />
+              </React.Fragment>
+            )}
+          </ThemeProvider>
+        </div>
+      </QueryClientProvider>
     </React.Fragment>
   );
 }

@@ -1,30 +1,17 @@
 import {Box, Typography} from '@mui/material';
-import React, {useEffect, useState} from 'react';
 import SearchTextField from '../utility/SearchTextField';
 import PageSubHeader from '../utility/PageSubHeader';
 import {LocalFireDepartmentOutlined, LocationOnOutlined} from '@mui/icons-material';
 import MovieBigCard from '../utility/cards/MovieBigCard';
-import {Movie} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
 import HorizontalCardsCarousel from '../utility/reels/HorizontalCardsCarousel';
-import {Cinema} from '../../../types/CinemaTypes';
 import CinemasService from '../../../services/CinemasService';
 import CinemaBigCard from '../utility/cards/CinemaBigCard';
+import {useQuery} from 'react-query';
 
 function Homepage() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  useEffect(() => {
-    MoviesService.findAll().then((movies) => {
-      setMovies(movies);
-    });
-  }, []);
-
-  const [cinemas, setCinemas] = useState<Cinema[]>([]);
-  useEffect(() => {
-    CinemasService.findAll().then((cinemas) => {
-      setCinemas(cinemas);
-    });
-  }, []);
+  const movies = useQuery(['movies', 'findAll'], MoviesService.findAll);
+  const cinemas = useQuery(['cinemas', 'findAll'], CinemasService.findAll);
 
   return (
     <Box>
@@ -33,11 +20,11 @@ function Homepage() {
       </Box>
       <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
       <Box mb={'20px'}>
-        {movies.length === 0 ? (
+        {movies.isLoading ? (
           <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
         ) : (
           <HorizontalCardsCarousel>
-            {[...movies, ...movies].map((movie, i) => (
+            {(movies.data || []).map((movie, i) => (
               <MovieBigCard movie={movie} key={i} />
             ))}
           </HorizontalCardsCarousel>
@@ -45,11 +32,11 @@ function Homepage() {
       </Box>
       <PageSubHeader headerText={'Bioskopi u tvojoj blizini'} Icon={LocationOnOutlined} />
       <Box mb={'20px'}>
-        {cinemas.length === 0 ? (
+        {movies.isLoading ? (
           <Typography color={'text.primary'}>Bioskopi se učitavaju, molimo sačekajte...</Typography>
         ) : (
           <HorizontalCardsCarousel>
-            {cinemas.map((cinema, i) => (
+            {(cinemas.data || []).map((cinema, i) => (
               <CinemaBigCard cinema={cinema} key={i} />
             ))}
           </HorizontalCardsCarousel>
