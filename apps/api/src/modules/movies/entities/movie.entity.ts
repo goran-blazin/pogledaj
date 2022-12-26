@@ -15,7 +15,7 @@ export class MovieEntity implements Movie {
   plot: string;
 
   @ApiProperty()
-  genreId: string;
+  genreIds: string[];
 
   @ApiProperty()
   actors: Prisma.JsonValue;

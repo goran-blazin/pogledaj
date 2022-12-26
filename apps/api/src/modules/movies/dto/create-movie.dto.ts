@@ -29,7 +29,7 @@ export class CreateMovieDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  genreId: string;
+  genreIds: string[];
 
   @ApiProperty()
   @IsArray()

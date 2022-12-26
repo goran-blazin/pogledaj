@@ -109,7 +109,7 @@ model Movie {
   originalName       String
   localizedName      String
   plot               String
-  genreId            String
+  genreIds           Json
   runtimeMinutes     Int
   originalLanguageId String
   dubbedLanguageId   String?
@@ -122,14 +122,14 @@ model Movie {
 }
 
 model Person {
-  id                String   @id @default(uuid()) @db.Uuid
+  id                String    @id @default(uuid()) @db.Uuid
   countryOfOriginId String
   firstName         String
   middleName        String?
   lastName          String
-  dateOfBirth       DateTime @db.Date
+  dateOfBirth       DateTime? @db.Date
   gender            Gender
-  createdAt         DateTime @default(now())
+  createdAt         DateTime  @default(now())
   updatedAt         DateTime
 }
 
