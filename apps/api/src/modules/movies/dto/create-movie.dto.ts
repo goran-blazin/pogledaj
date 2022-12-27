@@ -31,24 +31,6 @@ export class CreateMovieDto {
   @ApiProperty()
   genreIds: string[];
 
-  @ApiProperty()
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  actors: string[];
-
-  @ApiProperty()
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  directors: string[];
-
-  @ApiProperty()
-  @IsArray()
-  @IsNotEmpty()
-  @IsString({ each: true })
-  producers: string[];
-
   @IsNotEmpty()
   @ApiProperty()
   @IsInt()

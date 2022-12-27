@@ -25,7 +25,7 @@ export class MoviesController {
   @ApiOkResponse({ type: [MovieEntity] })
   @Get()
   findAll() {
-    return this.moviesService.findAll();
+    return this.moviesService.findAll({}, { includePersons: true });
   }
 
   @Get(':id')

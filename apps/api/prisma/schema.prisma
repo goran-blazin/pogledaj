@@ -45,117 +45,144 @@ enum ProjectionType {
 // TABLES
 
 model Genre {
-  systemName    String @id
-  localizedName String @unique
+  systemName    String  @id
+  localizedName String  @unique
+  movies        Movie[]
 }
 
 model Language {
   code String @id
   name String @unique
+
+  originalLanguageMovies Movie[] @relation("OriginalLanguage")
+  dubbedLanguageMovies   Movie[] @relation("DubbedLanguage")
 }
 
 model Country {
-  code String @id
-  name String @unique
+  code    String   @id
+  name    String   @unique
+  persons Person[]
+  cities  City[]
 }
 
 model City {
-  id          String @id @default(uuid()) @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
   cityCode    String
   name        String
   postalCode  String
   countryCode String
+  country     Country  @relation(fields: [countryCode], references: [code])
+  cinemas     Cinema[]
 
   @@unique([cityCode, countryCode])
 }
 
 model Cinema {
-  id           String @id @default(uuid()) @db.Uuid
-  name         String @unique
-  description  String
-  cityId       String @db.Uuid
-  address      String
-  rating       Int
-  phone        Json   @default("[]")
-  posterImages Json   @default("[]")
+  id             String          @id @default(uuid()) @db.Uuid
+  name           String          @unique
+  description    String
+  cityId         String          @db.Uuid
+  city           City            @relation(fields: [cityId], references: [id])
+  address        String
+  rating         Int
+  phone          Json            @default("[]")
+  posterImages   Json            @default("[]")
+  cinemaTheaters CinemaTheater[]
 }
 
 model CinemaTheater {
-  id           String  @id @default(uuid()) @db.Uuid
-  name         String
-  cinemaId     String  @db.Uuid
-  supports3D   Boolean @default(false)
-  posterImages Json    @default("[]")
+  id               String            @id @default(uuid()) @db.Uuid
+  name             String
+  cinemaId         String            @db.Uuid
+  cinema           Cinema            @relation(fields: [cinemaId], references: [id])
+  supports3D       Boolean           @default(false)
+  posterImages     Json              @default("[]")
+  cinemaSeatGroups CinemaSeatGroup[]
 }
 
 model CinemaSeatGroup {
-  id          String @id @default(uuid()) @db.Uuid
-  theaterId   String @db.Uuid
-  name        String
-  rowCount    Int
-  columnCount Int
+  id              String        @id @default(uuid()) @db.Uuid
+  cinemaTheaterId String        @db.Uuid
+  cinemaTheater   CinemaTheater @relation(fields: [cinemaTheaterId], references: [id])
+  name            String
+  rowCount        Int
+  columnCount     Int
+  cinemaSeats     CinemaSeat[]
 }
 
 model CinemaSeat {
-  id          String @id @default(uuid()) @db.Uuid
-  seatGroupId String @db.Uuid
-  seatRow     String
-  seatColumn  String
-  options     Json   @default("{}")
+  id                String          @id @default(uuid()) @db.Uuid
+  cinemaSeatGroupId String          @db.Uuid
+  cinemaSeatGroup   CinemaSeatGroup @relation(fields: [cinemaSeatGroupId], references: [id])
+  seatRow           String
+  seatColumn        String
+  options           Json            @default("{}")
 }
 
 model Movie {
-  id                 String   @id @default(uuid()) @db.Uuid
+  id                 String          @id @default(uuid()) @db.Uuid
   originalName       String
   localizedName      String
   plot               String
-  genreIds           Json
+  genres             Genre[]
   runtimeMinutes     Int
   originalLanguageId String
+  originalLanguage   Language        @relation(fields: [originalLanguageId], references: [code], name: "OriginalLanguage")
   dubbedLanguageId   String?
+  dubbedLanguage     Language?       @relation(fields: [dubbedLanguageId], references: [code], name: "DubbedLanguage")
   countryOfOriginId  String
-  posterImages       Json     @default("[]")
+  posterImages       Json            @default("[]")
   rating             Int
-  releaseDate        DateTime @db.Date
-  createdAt          DateTime @default(now())
+  releaseDate        DateTime        @db.Date
+  createdAt          DateTime        @default(now())
   updatedAt          DateTime
+  actors             MovieActor[]
+  directors          MovieDirector[]
+  producers          MovieProducer[]
 }
 
 model Person {
-  id                String    @id @default(uuid()) @db.Uuid
+  id                String          @id @default(uuid()) @db.Uuid
   countryOfOriginId String
+  countryOfOrigin   Country         @relation(fields: [countryOfOriginId], references: [code])
   firstName         String
   middleName        String?
   lastName          String
-  dateOfBirth       DateTime? @db.Date
+  dateOfBirth       DateTime?       @db.Date
   gender            Gender
-  createdAt         DateTime  @default(now())
+  createdAt         DateTime        @default(now())
   updatedAt         DateTime
+  actorInMovies     MovieActor[]
+  directorInMovies  MovieDirector[]
+  producerInMovies  MovieProducer[]
 }
 
-model Actor {
-  personId       String         @db.Uuid
-  projectionId   String         @db.Uuid
-  projectionType ProjectionType
-  role           ActorRoleType
+model MovieActor {
+  personId String        @db.Uuid
+  person   Person        @relation(fields: [personId], references: [id])
+  movieId  String        @db.Uuid
+  movie    Movie         @relation(fields: [movieId], references: [id])
+  role     ActorRoleType
 
-  @@id([personId, projectionId])
+  @@id([personId, movieId])
 }
 
-model Director {
-  personId       String         @db.Uuid
-  projectionId   String         @db.Uuid
-  projectionType ProjectionType
-  type           DirectorType
+model MovieDirector {
+  personId String       @db.Uuid
+  person   Person       @relation(fields: [personId], references: [id])
+  movieId  String       @db.Uuid
+  movie    Movie        @relation(fields: [movieId], references: [id])
+  type     DirectorType
 
-  @@id([personId, projectionId])
+  @@id([personId, movieId])
 }
 
-model Producer {
-  personId       String         @db.Uuid
-  projectionId   String         @db.Uuid
-  projectionType ProjectionType
-  type           ProducerType
+model MovieProducer {
+  personId String       @db.Uuid
+  person   Person       @relation(fields: [personId], references: [id])
+  movieId  String       @db.Uuid
+  movie    Movie        @relation(fields: [movieId], references: [id])
+  type     ProducerType
 
-  @@id([personId, projectionId])
+  @@id([personId, movieId])
 }

@@ -6,14 +6,17 @@ import { PersonsModule } from './modules/persons/persons.module';
 import { CinemasModule } from './modules/cinemas/cinemas.module';
 import * as Utils from './helpers/Utils';
 import configuration from './config/configuration';
-import { PrismaService } from './modules/prisma/prisma.service';
 import { PrismaModule } from './modules/prisma/prisma.module';
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : '';
+import * as process from 'process';
+import { NodeEnv } from './types/CommonTypes';
+const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
+  ? (process.env.NODE_ENV as NodeEnv)
+  : 'local';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `./config/${env}.env`,
+      envFilePath: `./.env.${env}`,
       isGlobal: true,
       load: [configuration],
     }),
@@ -26,6 +29,6 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : '';
     CinemasModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [],
 })
 export class AppModule {}

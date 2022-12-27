@@ -24,8 +24,27 @@ export class MoviesService {
       where?: Prisma.MovieWhereInput;
       orderBy?: Prisma.MovieOrderByWithRelationInput;
     } = {},
+    options: { includePersons?: boolean } = {},
   ): Promise<Movie[]> {
-    return this.prismaService.movie.findMany(params);
+    const personInclude = options.includePersons
+      ? {
+          include: {
+            person: true,
+          },
+        }
+      : false;
+
+    return this.prismaService.movie.findMany({
+      ...params,
+      include: {
+        genres: true,
+        originalLanguage: true,
+        dubbedLanguage: true,
+        actors: personInclude,
+        directors: personInclude,
+        producers: personInclude,
+      },
+    });
   }
 
   async findOne(

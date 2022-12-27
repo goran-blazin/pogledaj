@@ -76,7 +76,7 @@ CREATE TABLE "CinemaTheater" (
 -- CreateTable
 CREATE TABLE "CinemaSeatGroup" (
     "id" UUID NOT NULL,
-    "theaterId" UUID NOT NULL,
+    "cinemaTheaterId" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "rowCount" INTEGER NOT NULL,
     "columnCount" INTEGER NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE "CinemaSeatGroup" (
 -- CreateTable
 CREATE TABLE "CinemaSeat" (
     "id" UUID NOT NULL,
-    "seatGroupId" UUID NOT NULL,
+    "cinemaSeatGroupId" UUID NOT NULL,
     "seatRow" TEXT NOT NULL,
     "seatColumn" TEXT NOT NULL,
     "options" JSONB NOT NULL DEFAULT '{}',
@@ -101,7 +101,6 @@ CREATE TABLE "Movie" (
     "originalName" TEXT NOT NULL,
     "localizedName" TEXT NOT NULL,
     "plot" TEXT NOT NULL,
-    "genreId" TEXT NOT NULL,
     "runtimeMinutes" INTEGER NOT NULL,
     "originalLanguageId" TEXT NOT NULL,
     "dubbedLanguageId" TEXT,
@@ -122,7 +121,7 @@ CREATE TABLE "Person" (
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
-    "dateOfBirth" DATE NOT NULL,
+    "dateOfBirth" DATE,
     "gender" "Gender" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -131,33 +130,36 @@ CREATE TABLE "Person" (
 );
 
 -- CreateTable
-CREATE TABLE "Actor" (
+CREATE TABLE "MovieActor" (
     "personId" UUID NOT NULL,
-    "projectionId" UUID NOT NULL,
-    "projectionType" "ProjectionType" NOT NULL,
+    "movieId" UUID NOT NULL,
     "role" "ActorRoleType" NOT NULL,
 
-    CONSTRAINT "Actor_pkey" PRIMARY KEY ("personId","projectionId")
+    CONSTRAINT "MovieActor_pkey" PRIMARY KEY ("personId","movieId")
 );
 
 -- CreateTable
-CREATE TABLE "Director" (
+CREATE TABLE "MovieDirector" (
     "personId" UUID NOT NULL,
-    "projectionId" UUID NOT NULL,
-    "projectionType" "ProjectionType" NOT NULL,
+    "movieId" UUID NOT NULL,
     "type" "DirectorType" NOT NULL,
 
-    CONSTRAINT "Director_pkey" PRIMARY KEY ("personId","projectionId")
+    CONSTRAINT "MovieDirector_pkey" PRIMARY KEY ("personId","movieId")
 );
 
 -- CreateTable
-CREATE TABLE "Producer" (
+CREATE TABLE "MovieProducer" (
     "personId" UUID NOT NULL,
-    "projectionId" UUID NOT NULL,
-    "projectionType" "ProjectionType" NOT NULL,
+    "movieId" UUID NOT NULL,
     "type" "ProducerType" NOT NULL,
 
-    CONSTRAINT "Producer_pkey" PRIMARY KEY ("personId","projectionId")
+    CONSTRAINT "MovieProducer_pkey" PRIMARY KEY ("personId","movieId")
+);
+
+-- CreateTable
+CREATE TABLE "_GenreToMovie" (
+    "A" TEXT NOT NULL,
+    "B" UUID NOT NULL
 );
 
 -- CreateIndex
@@ -174,3 +176,57 @@ CREATE UNIQUE INDEX "City_cityCode_countryCode_key" ON "City"("cityCode", "count
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Cinema_name_key" ON "Cinema"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_GenreToMovie_AB_unique" ON "_GenreToMovie"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_GenreToMovie_B_index" ON "_GenreToMovie"("B");
+
+-- AddForeignKey
+ALTER TABLE "City" ADD CONSTRAINT "City_countryCode_fkey" FOREIGN KEY ("countryCode") REFERENCES "Country"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Cinema" ADD CONSTRAINT "Cinema_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CinemaTheater" ADD CONSTRAINT "CinemaTheater_cinemaId_fkey" FOREIGN KEY ("cinemaId") REFERENCES "Cinema"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CinemaSeatGroup" ADD CONSTRAINT "CinemaSeatGroup_cinemaTheaterId_fkey" FOREIGN KEY ("cinemaTheaterId") REFERENCES "CinemaTheater"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CinemaSeat" ADD CONSTRAINT "CinemaSeat_cinemaSeatGroupId_fkey" FOREIGN KEY ("cinemaSeatGroupId") REFERENCES "CinemaSeatGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Movie" ADD CONSTRAINT "Movie_originalLanguageId_fkey" FOREIGN KEY ("originalLanguageId") REFERENCES "Language"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Movie" ADD CONSTRAINT "Movie_dubbedLanguageId_fkey" FOREIGN KEY ("dubbedLanguageId") REFERENCES "Language"("code") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Person" ADD CONSTRAINT "Person_countryOfOriginId_fkey" FOREIGN KEY ("countryOfOriginId") REFERENCES "Country"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MovieActor" ADD CONSTRAINT "MovieActor_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MovieActor" ADD CONSTRAINT "MovieActor_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MovieDirector" ADD CONSTRAINT "MovieDirector_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MovieDirector" ADD CONSTRAINT "MovieDirector_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MovieProducer" ADD CONSTRAINT "MovieProducer_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MovieProducer" ADD CONSTRAINT "MovieProducer_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_GenreToMovie" ADD CONSTRAINT "_GenreToMovie_A_fkey" FOREIGN KEY ("A") REFERENCES "Genre"("systemName") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_GenreToMovie" ADD CONSTRAINT "_GenreToMovie_B_fkey" FOREIGN KEY ("B") REFERENCES "Movie"("id") ON DELETE CASCADE ON UPDATE CASCADE;
