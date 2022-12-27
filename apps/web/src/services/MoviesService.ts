@@ -2,11 +2,16 @@ import Utils from '../helpers/Utils';
 import seedData from '../data/seedDemoData';
 import {Movie} from '../types/MoviesTypes';
 import * as _ from 'lodash';
+import {PogledajApi} from './ApiHelper';
 
 const {movies} = seedData;
 
 const MoviesService = {
   async findAll(): Promise<Movie[]> {
+    if (Utils.isBetaMode()) {
+      const result = await PogledajApi.get('movies');
+      return result.data;
+    }
     await Utils.delay(_.random(500));
 
     return movies;
