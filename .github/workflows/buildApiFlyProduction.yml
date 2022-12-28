@@ -14,4 +14,4 @@ jobs:
         with:
           ref: production
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: flyctl deploy ./apps/api/ --remote-only
