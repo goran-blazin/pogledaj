@@ -9,6 +9,7 @@ import configuration from './config/configuration';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import * as process from 'process';
 import { NodeEnv } from './types/CommonTypes';
+import { AppController } from './app/app.controller';
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
   ? (process.env.NODE_ENV as NodeEnv)
   : 'local';
@@ -28,7 +29,7 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
     PersonsModule,
     CinemasModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
