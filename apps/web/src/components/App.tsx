@@ -16,20 +16,20 @@ import {EnvTypes} from '../types/GeneralTypes';
 import lightTheme from './front/utility/themes/lightTheme';
 import darkTheme from './front/utility/themes/darkTheme';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import Utils from "../helpers/Utils";
-import { useSearchParams } from "react-router-dom";
+import Utils from '../helpers/Utils';
+import {useSearchParams} from 'react-router-dom';
 
 // Create a client
 const queryClient = new QueryClient();
 
 function App() {
   const [searchParams] = useSearchParams();
-  if (!!searchParams.get("setBetaMode")) {
-    window.localStorage.setItem("betaMode", "1");
+  if (!!searchParams.get('setBetaMode')) {
+    window.localStorage.setItem('betaMode', '1');
   }
 
-  if (!!searchParams.get("unsetBetaMode")) {
-    window.localStorage.removeItem("betaMode");
+  if (!!searchParams.get('unsetBetaMode')) {
+    window.localStorage.removeItem('betaMode');
   }
 
   // handle dark theme switch
