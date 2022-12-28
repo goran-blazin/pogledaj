@@ -205,6 +205,9 @@ ALTER TABLE "Movie" ADD CONSTRAINT "Movie_originalLanguageId_fkey" FOREIGN KEY (
 ALTER TABLE "Movie" ADD CONSTRAINT "Movie_dubbedLanguageId_fkey" FOREIGN KEY ("dubbedLanguageId") REFERENCES "Language"("code") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Movie" ADD CONSTRAINT "Movie_countryOfOriginId_fkey" FOREIGN KEY ("countryOfOriginId") REFERENCES "Country"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Person" ADD CONSTRAINT "Person_countryOfOriginId_fkey" FOREIGN KEY ("countryOfOriginId") REFERENCES "Country"("code") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey

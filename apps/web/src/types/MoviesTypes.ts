@@ -8,9 +8,6 @@ export type Movie = {
   localizedName: string;
   plot: string;
   genres: Genre[];
-  actors: Actor[];
-  directors: Director[];
-  producers?: Producer[];
   runtimeMinutes: number;
   originalLanguage: Language;
   dubbedLanguage?: Language;
@@ -18,6 +15,12 @@ export type Movie = {
   releaseDate: string;
   posterImages: string[];
   rating?: IntRange<0, 101>;
+};
+
+export type MovieWithPersons = Movie & {
+  producers?: Producer[];
+  actors: Actor[];
+  directors: Director[];
 };
 
 export type MovieProjection = {

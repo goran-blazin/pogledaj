@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { CinemasService } from './cinemas.service';
 // import { CreateCinemaDto } from './dto/create-cinema.dto';
@@ -27,7 +28,7 @@ export class CinemasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.cinemasService.findOne({
       id: id,
     });

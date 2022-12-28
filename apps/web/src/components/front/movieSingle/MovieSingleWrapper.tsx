@@ -36,7 +36,11 @@ function MovieSingleWrapper() {
   const {movieId} = useParams();
 
   const selectedDate = searchParams.get('selectedDate');
-  const movie = movieId ? useQuery(['movie', movieId], () => MoviesService.findById(movieId)) : undefined;
+  const movie = movieId
+    ? useQuery(['movie.includePersons', movieId], () => MoviesService.findByIdWithPersons(movieId))
+    : undefined;
+  // eslint-disable-next-line no-console
+  console.log(movie);
   const movieProjections = movieId
     ? useQuery(['movieProjections', movieId], () => MovieProjectionsService.findAllByMovie(movieId))
     : undefined;

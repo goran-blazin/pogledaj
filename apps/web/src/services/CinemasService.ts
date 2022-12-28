@@ -1,29 +1,24 @@
 import {Cinema} from '../types/CinemaTypes';
-import seedData from '../data/seedDemoData';
-import {City} from '../types/GeneralTypes';
-import Utils from '../helpers/Utils';
-import * as _ from 'lodash';
-
-const {cinemas} = seedData;
+import {PogledajApi} from './ApiHelper';
 
 const CinemasService = {
   async findAll(): Promise<Cinema[]> {
-    await Utils.delay(_.random(500));
-    return cinemas;
+    const result = await PogledajApi.get(`cinemas`);
+
+    return result.data;
   },
 
-  async findAllByCity(city: City): Promise<Cinema[]> {
-    await Utils.delay(_.random(500));
-    return cinemas.filter((cinema) => {
-      return cinema.city.postalCode === city.postalCode;
-    });
-  },
+  // async findAllByCity(city: City): Promise<Cinema[]> {
+  //   await Utils.delay(_.random(500));
+  //   return cinemas.filter((cinema) => {
+  //     return cinema.city.postalCode === city.postalCode;
+  //   });
+  // },
 
   async findById(id: string): Promise<Cinema | undefined> {
-    await Utils.delay(_.random(200));
-    return cinemas.find((cinema) => {
-      return cinema.id === id;
-    });
+    const result = await PogledajApi.get(`cinemas/${id}`);
+
+    return result.data;
   },
 };
 export default Object.freeze(CinemasService);

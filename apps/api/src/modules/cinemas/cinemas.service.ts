@@ -22,7 +22,16 @@ export class CinemasService {
       orderBy?: Prisma.MovieOrderByWithRelationInput;
     } = {},
   ): Promise<Cinema[]> {
-    return this.prismaService.cinema.findMany(params);
+    return this.prismaService.cinema.findMany({
+      ...params,
+      include: {
+        city: {
+          include: {
+            country: true,
+          },
+        },
+      },
+    });
   }
 
   findOne(
@@ -30,6 +39,13 @@ export class CinemasService {
   ): Promise<Cinema | null> {
     return this.prismaService.cinema.findUnique({
       where: cinemaWhereUniqueInput,
+      include: {
+        city: {
+          include: {
+            country: true,
+          },
+        },
+      },
     });
   }
 

@@ -1,28 +1,36 @@
-import Utils from '../helpers/Utils';
-import seedData from '../data/seedDemoData';
-import {Movie} from '../types/MoviesTypes';
-import * as _ from 'lodash';
+import {Movie, MovieWithPersons} from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
-
-const {movies} = seedData;
 
 const MoviesService = {
   async findAll(): Promise<Movie[]> {
-    if (Utils.isBetaMode()) {
-      const result = await PogledajApi.get('movies');
-      return result.data;
-    }
-    await Utils.delay(_.random(500));
+    const result = await PogledajApi.get('movies');
+    return result.data;
+  },
 
-    return movies;
+  async findAllWithPersons(): Promise<MovieWithPersons[]> {
+    const result = await PogledajApi.get('movies', {
+      params: {
+        includePersons: 'true',
+      },
+    });
+
+    return result.data;
   },
 
   async findById(id: string): Promise<Movie | undefined> {
-    await Utils.delay(_.random(300));
+    const result = await PogledajApi.get(`movies/${id}`);
 
-    return movies.find((movie) => {
-      return movie.id === id;
+    return result.data;
+  },
+
+  async findByIdWithPersons(id: string): Promise<MovieWithPersons | undefined> {
+    const result = await PogledajApi.get(`movies/${id}`, {
+      params: {
+        includePersons: 'true',
+      },
     });
+
+    return result.data;
   },
 };
 export default Object.freeze(MoviesService);
