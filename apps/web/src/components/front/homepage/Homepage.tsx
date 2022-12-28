@@ -18,7 +18,7 @@ function Homepage() {
       <Box mb={'20px'}>
         <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
       </Box>
-      <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
+      <PageSubHeader headerText={'Ne propusti ove filmove!'} Icon={LocalFireDepartmentOutlined} />
       <Box mb={'20px'}>
         {movies.isLoading ? (
           <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
