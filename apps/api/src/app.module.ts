@@ -10,6 +10,8 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import * as process from 'process';
 import { NodeEnv } from './types/CommonTypes';
 import { AppController } from './app/app.controller';
+import { BullModule } from '@nestjs/bull';
+import { EmailModule } from './modules/email/email.module';
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
   ? (process.env.NODE_ENV as NodeEnv)
   : 'local';
@@ -24,10 +26,24 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
     ServeStaticModule.forRoot({
       rootPath: Utils.getAssetsPath(),
     }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+      prefix: 'PogledajRedisQueue',
+      defaultJobOptions: {
+        attempts: 3,
+        timeout: 60000,
+        removeOnComplete: true,
+        removeOnFail: false,
+      },
+    }),
     PrismaModule,
     MoviesModule,
     PersonsModule,
     CinemasModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [],
