@@ -7,6 +7,11 @@ import Button from '../utility/buttons/Button';
 import MovingBackground from './MovingBackground';
 import Paragraph from '../utility/typography/Paragraph';
 import Link from '../utility/typography/Link';
+import {useMutation} from 'react-query';
+import EmailService from '../../../services/EmailService';
+import {SupportEmail} from '../../../types/EmailTypes';
+import {AxiosError} from 'axios';
+import {ApiErrors} from '../../../types/ErrorTypes';
 
 const GridStyled = styled(Box)(({theme}) => ({
   width: '100%',
@@ -81,30 +86,28 @@ const LinkWrap = styled(Box)(({theme}) => ({
   },
 }));
 
-const initialFieldValues = {
+const initialFieldValues: SupportEmail = {
   name: '',
   email: '',
-  phoneNumber: '',
+  telephone: '',
   message: '',
 };
 
 function ComingSoon() {
   const {values, handleInputChange, resetValues} = useForm(initialFieldValues);
+  const {mutate, isError, error, isSuccess} = useMutation<unknown, AxiosError<ApiErrors>, SupportEmail>({
+    mutationFn: (values: SupportEmail) => EmailService.sendSupportEmail(values),
+  });
 
   const handleFormSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('form data', values);
-    setTimeout(() => {
-      resetValues(initialFieldValues);
-    }, 2000);
+    mutate(values, {
+      onSuccess: () => resetValues(initialFieldValues),
+    });
   };
 
   return (
     <GridStyled>
       <BoxLeft>
-        {/* <div>
-          <img src="/img/popcorn-couch.png" alt="logo-preview" />
-        </div> */}
         <MovingBackground />
       </BoxLeft>
       <BoxRight>
@@ -127,8 +130,8 @@ function ComingSoon() {
             <InputWrap>
               <InputField
                 onChange={handleInputChange}
-                value={values.phoneNumber}
-                name="phoneNumber"
+                value={values.telephone}
+                name="telephone"
                 placeholder={'Broj telefona (opciono)'}
               />
             </InputWrap>
@@ -144,6 +147,18 @@ function ComingSoon() {
             <InputWrap>
               <Button onClick={handleFormSubmit} text={'Posalji'} type={'button'} />
             </InputWrap>
+            {isError && error.response && (
+              <InputWrap>
+                {error.response.data.message.map((message, i) => {
+                  return <Paragraph key={i} text={message} />;
+                })}
+              </InputWrap>
+            )}
+            {isSuccess && (
+              <InputWrap>
+                <Paragraph text={'Poruka uspesno poslata!'} />
+              </InputWrap>
+            )}
             <LinkWrap>
               <Link text={'pogledaj.rs'} link={'https://www.pogledaj.rs/'} />
             </LinkWrap>
