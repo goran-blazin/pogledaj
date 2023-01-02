@@ -40,7 +40,6 @@ export class MoviesService {
       include: {
         genres: true,
         originalLanguage: true,
-        dubbedLanguage: true,
         countryOfOrigin: true,
         actors: personInclude,
         directors: personInclude,
@@ -66,7 +65,6 @@ export class MoviesService {
       include: {
         genres: true,
         originalLanguage: true,
-        dubbedLanguage: true,
         countryOfOrigin: true,
         actors: personInclude,
         directors: personInclude,

@@ -12,6 +12,7 @@ import { NodeEnv } from './types/CommonTypes';
 import { BullModule } from '@nestjs/bull';
 import { EmailModule } from './modules/email/email.module';
 import { CommonModule } from './modules/common/common.module';
+import { MovieProjectionsModule } from './modules/movieProjections/movieProjections.module';
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
   ? (process.env.NODE_ENV as NodeEnv)
   : 'local';
@@ -45,6 +46,7 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
     CinemasModule,
     EmailModule,
     CommonModule,
+    MovieProjectionsModule,
   ],
   controllers: [],
   providers: [],

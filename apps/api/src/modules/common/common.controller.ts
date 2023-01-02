@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { EmailJobData } from '../email/emailTypes';
+import { EmailJobData } from '../email/email.types';
 
 @Controller('/')
 export class CommonController {

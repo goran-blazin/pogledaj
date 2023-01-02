@@ -54,8 +54,8 @@ model Language {
   code String @id
   name String @unique
 
-  originalLanguageMovies Movie[] @relation("OriginalLanguage")
-  dubbedLanguageMovies   Movie[] @relation("DubbedLanguage")
+  originalLanguageMovies         Movie[]           @relation("OriginalLanguage")
+  dubbedLanguageMovieProjections MovieProjection[] @relation("DubbedLanguage")
 }
 
 model Country {
@@ -79,16 +79,17 @@ model City {
 }
 
 model Cinema {
-  id             String          @id @default(uuid()) @db.Uuid
-  name           String          @unique
-  description    String
-  cityId         String          @db.Uuid
-  city           City            @relation(fields: [cityId], references: [id])
-  address        String
-  rating         Int
-  phone          Json            @default("[]")
-  posterImages   Json            @default("[]")
-  cinemaTheaters CinemaTheater[]
+  id                   String                @id @default(uuid()) @db.Uuid
+  name                 String                @unique
+  description          String
+  cityId               String                @db.Uuid
+  city                 City                  @relation(fields: [cityId], references: [id])
+  address              String
+  rating               Int
+  phone                Json                  @default("[]")
+  posterImages         Json                  @default("[]")
+  cinemaTheaters       CinemaTheater[]
+  movieCinemaOverrides MovieCinemaOverride[]
 }
 
 model CinemaTheater {
@@ -99,6 +100,7 @@ model CinemaTheater {
   supports3D       Boolean           @default(false)
   posterImages     Json              @default("[]")
   cinemaSeatGroups CinemaSeatGroup[]
+  movieProjections MovieProjection[]
 }
 
 model CinemaSeatGroup {
@@ -121,26 +123,26 @@ model CinemaSeat {
 }
 
 model Movie {
-  id                 String          @id @default(uuid()) @db.Uuid
-  originalName       String
-  localizedName      String
-  plot               String
-  genres             Genre[]
-  runtimeMinutes     Int
-  originalLanguageId String
-  originalLanguage   Language        @relation(fields: [originalLanguageId], references: [code], name: "OriginalLanguage")
-  dubbedLanguageId   String?
-  dubbedLanguage     Language?       @relation(fields: [dubbedLanguageId], references: [code], name: "DubbedLanguage")
-  countryOfOriginId  String
-  countryOfOrigin    Country         @relation(fields: [countryOfOriginId], references: [code])
-  posterImages       Json            @default("[]")
-  rating             Int
-  releaseDate        DateTime        @db.Date
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime
-  actors             MovieActor[]
-  directors          MovieDirector[]
-  producers          MovieProducer[]
+  id                   String                @id @default(uuid()) @db.Uuid
+  originalName         String
+  localizedName        String
+  plot                 String
+  genres               Genre[]
+  runtimeMinutes       Int
+  originalLanguageId   String
+  originalLanguage     Language              @relation(fields: [originalLanguageId], references: [code], name: "OriginalLanguage")
+  countryOfOriginId    String
+  countryOfOrigin      Country               @relation(fields: [countryOfOriginId], references: [code])
+  posterImages         Json                  @default("[]")
+  rating               Int
+  releaseDate          DateTime              @db.Date
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime
+  actors               MovieActor[]
+  directors            MovieDirector[]
+  producers            MovieProducer[]
+  movieCinemaOverrides MovieCinemaOverride[]
+  movieProjections     MovieProjection[]
 }
 
 model Person {
@@ -187,4 +189,30 @@ model MovieProducer {
   type     ProducerType
 
   @@id([personId, movieId])
+}
+
+model MovieCinemaOverride {
+  movieId            String   @db.Uuid
+  cinemaId           String   @db.Uuid
+  movie              Movie    @relation(fields: [movieId], references: [id])
+  cinema             Cinema   @relation(fields: [cinemaId], references: [id])
+  movieDataOverrides Json     @default("{}")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+
+  @@id([movieId, cinemaId])
+}
+
+model MovieProjection {
+  id                 String        @id @default(uuid()) @db.Uuid
+  movieId            String        @db.Uuid
+  movie              Movie         @relation(fields: [movieId], references: [id])
+  cinemaTheaterId    String        @db.Uuid
+  cinemaTheater      CinemaTheater @relation(fields: [cinemaTheaterId], references: [id])
+  projectionDateTime DateTime      @db.Timestamptz(3)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime
+  dubbedLanguageId   String?
+  dubbedLanguage     Language?     @relation(fields: [dubbedLanguageId], references: [code], name: "DubbedLanguage")
+  options            Json          @default("{}")
 }

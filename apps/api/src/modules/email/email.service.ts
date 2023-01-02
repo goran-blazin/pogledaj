@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SupportEmailDto } from './dto/supportEmail.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { EmailJobData } from './emailTypes';
+import { EmailJobData } from './email.types';
 const sendSupportEmailsTo: string[] = [
   'goran.blazin@gmail.com',
   'pedjalaya@gmail.com',

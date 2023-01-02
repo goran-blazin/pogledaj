@@ -1,6 +1,6 @@
 import * as sgMail from '@sendgrid/mail';
 import { Injectable } from '@nestjs/common';
-import { EmailJobData } from './emailTypes';
+import { EmailJobData } from './email.types';
 sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
 
 @Injectable()

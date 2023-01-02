@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { SendGridService } from './sendGrid.service';
-import { EmailJobData } from './emailTypes';
+import { EmailJobData } from './email.types';
 
 @Processor('email')
 export class EmailProcessor {
