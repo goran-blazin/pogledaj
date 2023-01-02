@@ -29,7 +29,7 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
     BullModule.forRoot({
       url: process.env.REDIS_URL,
       redis: {
-        family: 6
+        family: 6,
       },
       prefix: 'PogledajRedisQueue',
       defaultJobOptions: {
