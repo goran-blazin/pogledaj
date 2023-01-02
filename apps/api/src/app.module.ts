@@ -9,12 +9,14 @@ import configuration from './config/configuration';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import * as process from 'process';
 import { NodeEnv } from './types/CommonTypes';
-import { AppController } from './app/app.controller';
 import { BullModule } from '@nestjs/bull';
 import { EmailModule } from './modules/email/email.module';
+import { CommonModule } from './modules/common/common.module';
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
   ? (process.env.NODE_ENV as NodeEnv)
   : 'local';
+
+console.log(process.env.REDIS_URL);
 
 @Module({
   imports: [
@@ -27,10 +29,7 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
       rootPath: Utils.getAssetsPath(),
     }),
     BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
+      redis: process.env.REDIS_URL,
       prefix: 'PogledajRedisQueue',
       defaultJobOptions: {
         attempts: 3,
@@ -44,8 +43,9 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
     PersonsModule,
     CinemasModule,
     EmailModule,
+    CommonModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}
