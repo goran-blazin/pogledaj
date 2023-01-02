@@ -16,8 +16,6 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
   ? (process.env.NODE_ENV as NodeEnv)
   : 'local';
 
-console.log(process.env.REDIS_URL);
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,7 +27,10 @@ console.log(process.env.REDIS_URL);
       rootPath: Utils.getAssetsPath(),
     }),
     BullModule.forRoot({
-      redis: process.env.REDIS_URL,
+      url: process.env.REDIS_URL,
+      redis: {
+        family: 6
+      },
       prefix: 'PogledajRedisQueue',
       defaultJobOptions: {
         attempts: 3,
