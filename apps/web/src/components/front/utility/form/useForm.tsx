@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {SupportEmail} from '../../../../types/EmailTypes';
 
 type ChildrenProps = {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 };
 
 export function useForm(initialFieldValues: SupportEmail) {
