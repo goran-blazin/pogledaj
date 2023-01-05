@@ -25,11 +25,11 @@ function CinemaSingleWrapper() {
 
     return movieProjections.data.reduce((carry: ProjectionsGroupedPerDateAndMovieType, mp) => {
       // first try to find existing date
-      const dateString = DateTime.fromISO(mp.dateTime).toFormat('yyyy-MM-dd');
+      const dateString = DateTime.fromISO(mp.projectionDateTime).toFormat('yyyy-MM-dd');
       const movie = mp.movie;
       const timeObject = {
         movieProjectionId: mp.id,
-        time: DateTime.fromISO(mp.dateTime).toFormat('HH:mm'),
+        time: DateTime.fromISO(mp.projectionDateTime).toFormat('HH:mm'),
       };
 
       if (carry[dateString]) {
@@ -51,7 +51,7 @@ function CinemaSingleWrapper() {
               movieProjections: [timeObject],
             },
           },
-          formattedDate: DateTime.fromISO(mp.dateTime).toFormat('LLL dd'),
+          formattedDate: DateTime.fromISO(mp.projectionDateTime).toFormat('LLL dd'),
         };
       }
 

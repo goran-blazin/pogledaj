@@ -6,7 +6,7 @@ import MoviesListingWrapper from '../moviesListing/MoviesListingWrapper';
 import MovieSingleWrapper from '../movieSingle/MovieSingleWrapper';
 import MovieProjectionSingle from '../movieProjectionSingle/MovieProjectionSingle';
 import SettingsWrapper from '../settings/settingsWrapper';
-import namedRoutes from '../../../routes';
+import {namedRoutes} from '../../../routes';
 
 import {Box, Container} from '@mui/material';
 

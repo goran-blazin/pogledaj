@@ -2,7 +2,7 @@ import {Link, useLocation} from 'react-router-dom';
 import {BottomNavigation, BottomNavigationAction} from '@mui/material';
 import {HomeOutlined, TheatersOutlined, Tune, VideoCameraBackOutlined} from '@mui/icons-material';
 import {SxProps} from '@mui/system';
-import namedRoutes from '../../../routes';
+import {namedRoutes} from '../../../routes';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 function FooterMenuWrapper() {

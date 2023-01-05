@@ -15,7 +15,7 @@
   "rules": {
     "prefer-const": ["error"],
     "no-unused-vars": ["error"],
-    "no-console": ["error"]
+    "no-console": ["warn"]
   },
   "settings": {
     "import/resolver": {

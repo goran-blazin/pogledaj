@@ -1,7 +1,7 @@
 import {AppBar, Box, Button, ButtonProps, Toolbar, Typography} from '@mui/material';
 import {AccountCircle, ArrowBackIos, NotificationsNoneRounded} from '@mui/icons-material';
 import {useNavigate, useLocation} from 'react-router-dom';
-import namedRoutes from '../../../routes';
+import {namedRoutes} from '../../../routes';
 import PogledajSvgIcon from '../utility/svgCustomIcons/PogledajSvgIcon';
 import {SxProps} from '@mui/system';
 import {ReactElement} from 'react';

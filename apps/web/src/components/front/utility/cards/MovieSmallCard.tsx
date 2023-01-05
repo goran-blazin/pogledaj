@@ -1,7 +1,7 @@
 import SmallCard from './SmallCard';
 import {Movie} from '../../../../types/MoviesTypes';
 import {useNavigate} from 'react-router-dom';
-import namedRoutes from '../../../../routes';
+import {namedRoutes} from '../../../../routes';
 
 function MovieSmallCard({movie}: {movie: Movie}) {
   const navigate = useNavigate();

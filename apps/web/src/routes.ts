@@ -1,4 +1,6 @@
-const namedRoutes = {
+import * as _ from 'lodash';
+
+export const namedRoutes = {
   home: '/',
   cinemasListing: '/cinemas',
   cinemaSingle: '/cinemas/:cinemaId',
@@ -8,4 +10,17 @@ const namedRoutes = {
   settings: '/settings',
 };
 
-export default namedRoutes;
+const adminRootPath = '/admin';
+
+const _adminNamedRoutes = {
+  home: '/',
+  movies: '/movies',
+};
+
+export const adminNamedRoutes = _.mapValues(_adminNamedRoutes, (value) => {
+  return adminRootPath + value;
+});
+
+export function isAdminRoute(route: string): boolean {
+  return route.startsWith(adminRootPath);
+}

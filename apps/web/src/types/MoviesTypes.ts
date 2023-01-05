@@ -10,7 +10,6 @@ export type Movie = {
   genres: Genre[];
   runtimeMinutes: number;
   originalLanguage: Language;
-  dubbedLanguage?: Language;
   countryOfOrigin: Country;
   releaseDate: string;
   posterImages: string[];
@@ -23,11 +22,17 @@ export type MovieWithPersons = Movie & {
   directors: Director[];
 };
 
+type MovieProjectionOptions = {
+  is3D: boolean;
+};
+
 export type MovieProjection = {
   id: string;
   movie: Movie;
   cinemaTheater: CinemaTheater;
-  dateTime: string;
+  projectionDateTime: string;
+  dubbedLanguage?: Language;
+  options: MovieProjectionOptions;
 };
 
 export type ProjectionsGroupedPerCinemaType = {

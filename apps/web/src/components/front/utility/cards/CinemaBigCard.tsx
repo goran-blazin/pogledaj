@@ -1,6 +1,6 @@
 import {Cinema} from '../../../../types/CinemaTypes';
 import BigCard from './BigCard';
-import namedRoutes from '../../../../routes';
+import {namedRoutes} from '../../../../routes';
 import {useNavigate} from 'react-router-dom';
 
 function CinemaBigCard({cinema}: {cinema: Cinema}) {
