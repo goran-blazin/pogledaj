@@ -17,7 +17,8 @@ const TextareaStyled = styled('textarea')(({theme}) => ({
 }));
 
 type TextareaTypes = {
-  onChange: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   name: string;
   value: string;
   placeholder?: string;

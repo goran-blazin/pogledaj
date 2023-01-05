@@ -18,9 +18,10 @@ const TextFieldStyled = styled('input')(({theme}) => ({
 }));
 
 type TextFieldTypes = {
-  onChange: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
-  value: string;
+  value?: string;
   placeholder?: string;
 };
 
