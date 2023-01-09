@@ -15,7 +15,7 @@ function CinemaSingleWrapper() {
 
   const cinema = cinemaId ? useQuery(['cinema', cinemaId], () => CinemasService.findById(cinemaId)) : undefined;
   const movieProjections = cinemaId
-    ? useQuery(['movieProjections', cinemaId], () => MovieProjectionsService.findAllByCinema(cinemaId))
+    ? useQuery(['movieProjections.findAllByCinema', cinemaId], () => MovieProjectionsService.findAllByCinema(cinemaId))
     : undefined;
 
   const projectionsGroupedPerDateAndMovie: ProjectionsGroupedPerDateAndMovieType = useMemo(() => {

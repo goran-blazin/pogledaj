@@ -39,10 +39,9 @@ function MovieSingleWrapper() {
   const movie = movieId
     ? useQuery(['movie.includePersons', movieId], () => MoviesService.findByIdWithPersons(movieId))
     : undefined;
-  // eslint-disable-next-line no-console
-  console.log(movie);
+
   const movieProjections = movieId
-    ? useQuery(['movieProjections', movieId], () => MovieProjectionsService.findAllByMovie(movieId))
+    ? useQuery(['movieProjections.findAllByMovie', movieId], () => MovieProjectionsService.findAllByMovie(movieId))
     : undefined;
 
   const projectionsGroupedPerDateAndCinema = useMemo(() => {

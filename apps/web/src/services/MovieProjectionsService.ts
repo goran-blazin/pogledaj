@@ -1,22 +1,17 @@
-import Utils from '../helpers/Utils';
 import {MovieProjection} from '../types/MoviesTypes';
-import * as _ from 'lodash';
+import {PogledajApi} from './ApiHelper';
 
 const MovieProjectionsService = {
   async findAllByMovie(movieId: string): Promise<MovieProjection[]> {
-    await Utils.delay(_.random(300));
-    // eslint-disable-next-line no-console
-    console.log('movie projections movie id', movieId);
+    const result = await PogledajApi.get(`movieProjections/movie/${movieId}`);
 
-    return [];
+    return result.data;
   },
 
   async findAllByCinema(cinemaId: string): Promise<MovieProjection[]> {
-    await Utils.delay(_.random(300));
-    // eslint-disable-next-line no-console
-    console.log('movie projections cinema id', cinemaId);
+    const result = await PogledajApi.get(`movieProjections/cinema/${cinemaId}`);
 
-    return [];
+    return result.data;
   },
 };
 

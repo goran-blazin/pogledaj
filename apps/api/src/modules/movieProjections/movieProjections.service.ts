@@ -41,6 +41,34 @@ export class MovieProjectionsService {
     });
   }
 
+  async findPerMovie(movieId: string) {
+    return this.prismaService.movieProjection.findMany({
+      where: {
+        movieId,
+      },
+      include: {
+        cinemaTheater: {
+          include: {
+            cinema: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findPerCinema(cinemaId: string) {
+    return this.prismaService.movieProjection.findMany({
+      where: {
+        cinemaTheater: {
+          cinemaId,
+        },
+      },
+      include: {
+        movie: true,
+      },
+    });
+  }
+
   async generate(daysCount = 30) {
     // first delete all MovieProjections
     await this.prismaService.movieProjection.deleteMany();

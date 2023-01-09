@@ -24,6 +24,16 @@ export class MovieProjectionsController {
     return this.movieProjectionsService.findPerMovieCinema(movieId, cinemaId);
   }
 
+  @Get('/movie/:movieId')
+  async findAllPerMovie(@Param('movieId', ParseUUIDPipe) movieId: string) {
+    return this.movieProjectionsService.findPerMovie(movieId);
+  }
+
+  @Get('/cinema/:cinemaId')
+  async findAllPerCinema(@Param('cinemaId', ParseUUIDPipe) cinemaId: string) {
+    return this.movieProjectionsService.findPerCinema(cinemaId);
+  }
+
   @Post('/generate')
   async generateMovieProjections(
     @Body('days', new DefaultValuePipe(30), ParseIntPipe) days: number,
