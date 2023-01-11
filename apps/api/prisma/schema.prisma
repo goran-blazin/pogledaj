@@ -42,6 +42,24 @@ enum ProjectionType {
   TheaterPlay
 }
 
+enum CinemaSeatGroupPositionEnum {
+  TopLeft
+  TopCenter
+  TopRight
+  CenterLeft
+  Center
+  CenterRight
+  BottomLeft
+  BottomCenter
+  BottomRight
+}
+
+enum AdminRole {
+  SuperAdmin
+  Manager
+  Employee
+}
+
 // TABLES
 
 model Genre {
@@ -104,13 +122,17 @@ model CinemaTheater {
 }
 
 model CinemaSeatGroup {
-  id              String        @id @default(uuid()) @db.Uuid
-  cinemaTheaterId String        @db.Uuid
-  cinemaTheater   CinemaTheater @relation(fields: [cinemaTheaterId], references: [id])
+  id              String                      @id @default(uuid()) @db.Uuid
+  cinemaTheaterId String                      @db.Uuid
+  cinemaTheater   CinemaTheater               @relation(fields: [cinemaTheaterId], references: [id])
   name            String
   rowCount        Int
   columnCount     Int
   cinemaSeats     CinemaSeat[]
+  position        CinemaSeatGroupPositionEnum @default(Center)
+  options         Json                        @default("{}")
+
+  @@unique([position, cinemaTheaterId])
 }
 
 model CinemaSeat {
@@ -215,4 +237,13 @@ model MovieProjection {
   dubbedLanguageId   String?
   dubbedLanguage     Language?     @relation(fields: [dubbedLanguageId], references: [code], name: "DubbedLanguage")
   options            Json          @default("{}")
+}
+
+model AdminUser {
+  id        String    @id @default(uuid()) @db.Uuid
+  email     String    @unique
+  password  String
+  fullName  String
+  role      AdminRole
+  cinemaIds Json      @default("[]")
 }
