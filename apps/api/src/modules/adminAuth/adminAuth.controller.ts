@@ -7,6 +7,7 @@ export class AdminAuthController {
   @UseGuards(LocalAdminAuthGuard)
   @Post('local')
   async adminLocalLogin(@Request() req: ExpressRequestWithUser) {
+    // eslint-disable-next-line no-console
     console.log(req.user.fullName);
     return true;
   }

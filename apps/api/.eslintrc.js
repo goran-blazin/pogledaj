@@ -17,6 +17,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-
+    "prefer-const": ["error"],
+    "no-console": ["warn"]
   },
 };
