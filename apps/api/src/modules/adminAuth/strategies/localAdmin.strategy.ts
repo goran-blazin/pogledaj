@@ -17,7 +17,7 @@ export class LocalAdminStrategy extends PassportStrategy(
   }
 
   async validate(email: string, password: string): Promise<AdminUserSafe> {
-    const adminUser = await this.adminAuthService.validateAdminUser(
+    const adminUser = await this.adminAuthService.validateAdminUserForLocal(
       email,
       password,
     );

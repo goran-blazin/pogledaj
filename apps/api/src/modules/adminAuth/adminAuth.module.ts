@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AdminUserService } from './adminUser.service';
 import { AdminAuthService } from './adminAuth.service';
 import { PassportModule } from '@nestjs/passport';
 import { LocalAdminStrategy } from './strategies/localAdmin.strategy';
 import { AdminAuthController } from './adminAuth.controller';
+import { AdminUsersModule } from '../adminUsers/adminUsers.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAdminStrategy } from './strategies/jwtAdmin.strategy';
 
 @Module({
-  imports: [PassportModule],
-  providers: [AdminUserService, AdminAuthService, LocalAdminStrategy],
+  imports: [PassportModule, AdminUsersModule, JwtModule],
+  providers: [AdminAuthService, LocalAdminStrategy, JwtAdminStrategy],
   controllers: [AdminAuthController],
 })
 export class AdminAuthModule {}
