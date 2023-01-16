@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import { PrismaService } from './modules/prisma/prisma.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +27,7 @@ async function bootstrap() {
     `Started listening Pogledaj-api Nest app on port ${process.env['APP_LISTEN_PORT']}`,
     'MainBootstrapFunction',
   );
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);

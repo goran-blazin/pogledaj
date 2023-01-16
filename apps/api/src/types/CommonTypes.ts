@@ -1,4 +1,5 @@
 import { AdminRole, AdminUser } from '@prisma/client';
+import e from 'express';
 
 export type NodeEnv =
   | 'local'
@@ -9,7 +10,7 @@ export type NodeEnv =
 
 export type AdminUserSafe = Omit<AdminUser, 'password'>;
 
-export type ExpressRequestWithUser = Omit<Express.Request, 'user'> & {
+export type ExpressRequestWithUser = Omit<e.Request, 'user'> & {
   user: AdminUserSafe;
 };
 

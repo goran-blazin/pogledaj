@@ -8,6 +8,7 @@ import {
 import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import * as process from 'process';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -21,21 +22,24 @@ export class AdminAuthService {
     email: string,
     password: string,
   ): Promise<AdminUserSafe | null> {
-    const adminUser = await this.adminUsersService.findByEmail(email);
-    if (adminUser && adminUser.password === password) {
-      return _.omit(adminUser, ['password']);
+    const adminUser = await this.adminUsersService.findByEmailUnsafe(email);
+    // check if user exists
+    if (adminUser) {
+      const isPasswordMatching = await bcrypt.compare(
+        password,
+        adminUser.password,
+      );
+      // validate password
+      if (isPasswordMatching) {
+        return _.omit(adminUser, ['password']);
+      }
     }
 
     return null;
   }
 
   async validateAdminUser(email: string): Promise<AdminUserSafe | null> {
-    const adminUser = await this.adminUsersService.findByEmail(email);
-    if (adminUser) {
-      return _.omit(adminUser, ['password']);
-    }
-
-    return null;
+    return this.adminUsersService.findByEmail(email);
   }
 
   async loginAdminUser(adminUser: AdminUserSafe): Promise<LoginOutputData> {

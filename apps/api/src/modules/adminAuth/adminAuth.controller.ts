@@ -1,10 +1,10 @@
 import { Controller, Post, UseGuards, Request, Get } from '@nestjs/common';
-import { LocalAdminAuthGuard } from './guards/localAdminAuth.guard';
+import { LocalAdminAuthGuard } from '../../guards/localAdminAuth.guard';
 import { ExpressRequestWithUser } from '../../types/CommonTypes';
 import { AdminAuthService } from './adminAuth.service';
-import { JwtAdminAuthGuard } from './guards/jwtAdminAuth.guard';
+import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
 
-@Controller('admin/auth')
+@Controller('adminAuth')
 export class AdminAuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}
 
