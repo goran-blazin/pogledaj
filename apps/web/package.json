@@ -20,7 +20,9 @@
     "axios": "^1.2.1",
     "env-cmd": "^10.1.0",
     "lodash": "^4.17.21",
+    "ra-data-json-server": "^4.7.0",
     "react": "^18.1.0",
+    "react-admin": "^4.7.1",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.41.5",
     "react-query": "^3.39.2",
@@ -32,14 +34,13 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-react-swc": "^3.0.1",
-    "vite": "^4.0.4",
     "@types/jest": "^27.5.1",
     "@types/lodash": "^4.14.182",
     "@types/supertest": "^2.0.12",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
+    "@vitejs/plugin-react-swc": "^3.0.1",
     "eslint": "^8.16.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
@@ -52,7 +53,8 @@
     "prettier": "^2.6.2",
     "sass": "^1.51.0",
     "ts-jest": "^28.0.3",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "vite": "^4.0.4"
   },
   "scripts": {
     "dev": "vite --port 3005",

@@ -9,7 +9,6 @@ import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
 // scss
 import './App.scss';
 import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
-import MainAdminContentWrapper from './admin/adminMainContentWrapper/MainAdminContentWrapper';
 import ComingSoon from './front/comingSoon/ComingSoon';
 import {EnvTypes} from '../types/GeneralTypes';
 
@@ -18,12 +17,12 @@ import lightTheme from './front/utility/themes/lightTheme';
 import darkTheme from './front/utility/themes/darkTheme';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import Utils from '../helpers/Utils';
-import {useLocation, useSearchParams} from 'react-router-dom';
+import {Route, Routes, useLocation, useSearchParams} from 'react-router-dom';
 import {isAdminRoute} from '../routes';
+import AdminRoot from './admin/AdminRoot';
 
 // Create a client
 const queryClient = new QueryClient();
-const adminQueryClient = new QueryClient();
 
 function App() {
   const [searchParams] = useSearchParams();
@@ -45,14 +44,9 @@ function App() {
   return isAdminRoute(location.pathname) ? (
     // admin backoffice
     <React.Fragment>
-      <QueryClientProvider client={adminQueryClient}>
-        <div className="AppAdmin">
-          <CssBaseline />
-          <React.Fragment>
-            <MainAdminContentWrapper />
-          </React.Fragment>
-        </div>
-      </QueryClientProvider>
+      <Routes>
+        <Route path="/admin/*" element={<AdminRoot />} />
+      </Routes>
     </React.Fragment>
   ) : (
     // customer front
