@@ -25,7 +25,6 @@
     "react-hook-form": "^7.41.5",
     "react-query": "^3.39.2",
     "react-router-dom": "^6.6.2",
-    "react-scripts": "5.0.1",
     "swiper": "^8.4.5",
     "ts-luxon": "^3.2.0",
     "typescript": "^4.6.4",
@@ -33,6 +32,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.0.1",
+    "vite": "^4.0.4",
     "@types/jest": "^27.5.1",
     "@types/lodash": "^4.14.182",
     "@types/supertest": "^2.0.12",
@@ -54,12 +55,10 @@
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test-auto": "react-scripts test --watchAll=false",
-    "lint": "eslint . --ext .tsx,.ts --color --max-warnings=0",
-    "format": "prettier --write .",
+    "dev": "vite --port 3005",
+    "build": "tsc && vite build",
+    "lint": "eslint ./src --ext .tsx,.ts --color --max-warnings=0",
+    "format": "prettier --write ./src",
     "prepare": "cd ../../ && husky install ./apps/web/.husky"
   },
   "eslintConfig": {

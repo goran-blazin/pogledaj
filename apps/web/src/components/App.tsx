@@ -38,7 +38,7 @@ function App() {
   // handle dark theme switch
   const isDark = false;
   // handle env switch
-  const reactAppEnv: EnvTypes = process.env.REACT_APP_ENV as EnvTypes;
+  const reactAppEnv: EnvTypes = import.meta.env.VITE_ENV as EnvTypes;
   const comingSoon = reactAppEnv === 'production' && !Utils.isBetaMode();
   const location = useLocation();
 

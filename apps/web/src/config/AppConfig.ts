@@ -1,6 +1,6 @@
 const AppConfig = {
   getCDNUrl() {
-    return process.env.REACT_APP_ASSETS_CDN_URL;
+    return import.meta.env.VITE_ASSETS_CDN_URL;
   },
 };
 
