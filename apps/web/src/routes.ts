@@ -12,12 +12,20 @@ export const namedRoutes = {
 
 const adminRootPath = '/admin';
 
-const _adminNamedRoutes = {
-  home: '/',
+const _adminNamedPrivateRoutes = {
+  dashboard: '/',
   movies: '/movies',
 };
 
-export const adminNamedRoutes = _.mapValues(_adminNamedRoutes, (value) => {
+export const adminNamedPrivateRoutes = _.mapValues(_adminNamedPrivateRoutes, (value) => {
+  return adminRootPath + value;
+});
+
+const _adminNamedPublicRoutes = {
+  login: '/login',
+};
+
+export const adminNamedPublicRoutes = _.mapValues(_adminNamedPublicRoutes, (value) => {
   return adminRootPath + value;
 });
 

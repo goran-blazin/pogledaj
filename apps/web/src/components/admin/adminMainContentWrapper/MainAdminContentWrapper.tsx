@@ -1,20 +1,48 @@
 import {Route, Routes} from 'react-router-dom';
-import {adminNamedRoutes} from '../../../routes';
+import {adminNamedPrivateRoutes, adminNamedPublicRoutes} from '../../../routes';
 
 import {Box, Container} from '@mui/material';
 import AdminMoviesWrapper from '../adminMoviesWrapper/adminMoviesWrapper';
+import AdminDashboardWrapper from '../adminDashboard/AdminDashboardWrapper';
+import LoginWrapper from '../adminAuth/LoginWrapper';
+import AdminRequireAuth from '../AdminRequireAuth';
 
 function MainAdminContentWrapper() {
-  const routes = (
+  const publicRoutes = (
     <Routes>
-      <Route path={adminNamedRoutes.home} element={<AdminMoviesWrapper />} />
-      <Route path={adminNamedRoutes.movies} element={<AdminMoviesWrapper />} />
+      <Route path={adminNamedPublicRoutes.login} element={<LoginWrapper />} />
     </Routes>
   );
 
-  if (routes.props.children.length !== Object.keys(adminNamedRoutes).length) {
+  if (publicRoutes.props.children.length !== Object.keys(adminNamedPublicRoutes).length) {
     // eslint-disable-next-line no-console
-    console.warn('adminNamedRoutes and main admin content routes do not have same number of elements!');
+    console.warn('adminNamedPublicRoutes and main admin content routes do not have same number of elements!');
+  }
+
+  const privateRoutes = (
+    <Routes>
+      <Route
+        path={adminNamedPrivateRoutes.dashboard}
+        element={
+          <AdminRequireAuth>
+            <AdminDashboardWrapper />
+          </AdminRequireAuth>
+        }
+      />
+      <Route
+        path={adminNamedPrivateRoutes.movies}
+        element={
+          <AdminRequireAuth>
+            <AdminMoviesWrapper />
+          </AdminRequireAuth>
+        }
+      />
+    </Routes>
+  );
+
+  if (privateRoutes.props.children.length !== Object.keys(adminNamedPrivateRoutes).length) {
+    // eslint-disable-next-line no-console
+    console.warn('adminNamedPrivateRoutes and main admin content routes do not have same number of elements!');
   }
 
   return (
@@ -26,7 +54,10 @@ function MainAdminContentWrapper() {
           pb: '50px',
         }}
       >
-        <main>{routes}</main>
+        <main>
+          {privateRoutes}
+          {publicRoutes}
+        </main>
       </Box>
     </Container>
   );

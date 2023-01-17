@@ -1,5 +1,5 @@
 function AdminMoviesWrapper() {
-  return <h1>HELLO FROM BACKOFFICE :)</h1>;
+  return <h1>BACKOFFICE movies :)</h1>;
 }
 
 export default AdminMoviesWrapper;
