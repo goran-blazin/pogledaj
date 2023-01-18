@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreateAdminUserDto } from './dto/create-admin-user.dto';
 import { UpdateAdminUserDto } from './dto/update-admin-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { AdminUserSafe } from '../../types/CommonTypes';
+import {
+  AdminUserSafe,
+  GetListOptions,
+  ReturnList,
+} from '../../types/CommonTypes';
 import { AdminRole, AdminUser } from '@prisma/client';
 import * as _ from 'lodash';
 import * as bcrypt from 'bcrypt';
@@ -31,22 +35,41 @@ export class AdminUsersService {
     return makeAdminUserSafe(adminUser);
   }
 
-  async findAll(): Promise<AdminUserSafe[]> {
-    return (await this.prismaService.adminUser.findMany()).map(
-      makeAdminUserSafe,
-    );
-  }
+  async findAllForAdminUser(
+    adminUser: AdminUserSafe,
+    options: GetListOptions = {},
+  ): Promise<ReturnList<AdminUserSafe>> {
+    const where =
+      adminUser.role === AdminRole.Manager
+        ? {
+            role: AdminRole.Employee,
+            cinemaIds: {
+              array_contains: adminUser.cinemaIds as string[],
+            },
+          }
+        : undefined;
+    const [adminUsers, adminUsersCount] = await Promise.all([
+      (
+        await this.prismaService.adminUser.findMany({
+          where,
+          skip: options.range?.skip,
+          take: options.range?.take,
+          orderBy: options.sort
+            ? {
+                [options.sort.field]: options.sort.order,
+              }
+            : undefined,
+        })
+      ).map(makeAdminUserSafe),
+      this.prismaService.adminUser.count({
+        where,
+      }),
+    ]);
 
-  async findAllEmployeesForCinema(cinemaId: string): Promise<AdminUserSafe[]> {
-    const adminUsers = await this.prismaService.adminUser.findMany({
-      where: {
-        role: AdminRole.Employee,
-        cinemaIds: {
-          array_contains: cinemaId,
-        },
-      },
-    });
-    return adminUsers.map(makeAdminUserSafe);
+    return {
+      data: adminUsers,
+      total: adminUsersCount,
+    };
   }
 
   async findOne(id: string): Promise<AdminUserSafe | null> {

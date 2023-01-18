@@ -25,3 +25,20 @@ export type AdminUserJwtPayload = {
   email: string;
   jti: string;
 };
+
+export type ReturnList<T> = {
+  data: Array<T>;
+  total: number;
+};
+
+export type GetListOptions = {
+  sort?: {
+    field: string;
+    order: 'asc' | 'desc';
+  };
+  range?: {
+    skip?: number;
+    take?: number;
+  };
+  filter?: Record<string, unknown>;
+};

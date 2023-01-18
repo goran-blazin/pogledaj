@@ -1,12 +1,11 @@
 // in src/admin/index.tsx
 import {Admin, Resource, ListGuesser} from 'react-admin';
-import jsonServerProvider from 'ra-data-json-server';
+import reactAdminDataProvider from '../../services/ReactAdminDataProvider';
 
-const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
+const dataProvider = reactAdminDataProvider;
 const AdminRoot = () => (
   <Admin basename="/admin" dataProvider={dataProvider}>
-    <Resource name="posts" list={ListGuesser} />
-    <Resource name="comments" list={ListGuesser} />
+    <Resource name="adminUsers" options={{label: 'Admins'}} list={ListGuesser} />
   </Admin>
 );
 

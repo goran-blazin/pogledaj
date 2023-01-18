@@ -10,6 +10,7 @@ import {
   UseGuards,
   ForbiddenException,
   Req,
+  Query,
 } from '@nestjs/common';
 import { AdminUsersService } from './adminUsers.service';
 import { CreateAdminUserDto } from './dto/create-admin-user.dto';
@@ -20,6 +21,7 @@ import { RolesGuard } from '../../guards/roles.guard';
 import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
 import { AdminUserSafe, ExpressRequestWithUser } from '../../types/CommonTypes';
 import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
+import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 
 function checkUserRolePermissions(
   loggedUser: AdminUserSafe,
@@ -83,24 +85,17 @@ export class AdminUsersController {
   }
 
   @Get()
-  @Roles(AdminRole.SuperAdmin)
+  @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard, RolesGuard)
-  findAll(@Req() req: ExpressRequestWithUser) {
-    if (req.user.role === AdminRole.SuperAdmin) {
-      return this.adminUsersService.findAll();
-    }
-  }
-
-  @Get('/cinema/:cinemaId')
-  @Roles(AdminRole.Manager)
-  @UseGuards(JwtAdminAuthGuard, RolesGuard)
-  findAllEmployeesForCinema(
+  async findAll(
     @Req() req: ExpressRequestWithUser,
-    @Param('cinemaId', ParseUUIDPipe) cinemaId: string,
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
   ) {
-    if (req.user.role === AdminRole.SuperAdmin) {
-      return this.adminUsersService.findAllEmployeesForCinema(cinemaId);
-    }
+    return await this.adminUsersService.findAllForAdminUser(req.user, {
+      sort: sort ? JSON.parse(sort) : undefined,
+      range: range ? JSON.parse(range) : undefined,
+    });
   }
 
   // @Roles(AdminRole.Manager)
@@ -120,10 +115,30 @@ export class AdminUsersController {
   //   return this.adminUsersService.update(+id, updateAdminUserDto);
   // }
 
-  @Roles(AdminRole.SuperAdmin)
+  @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard, RolesGuard)
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: ExpressRequestWithUser,
+  ) {
+    const adminUserForDelete = await this.adminUsersService.findOne(id);
+    if (!adminUserForDelete) {
+      throw new NotFoundException();
+    }
+
+    // it is not possible to delete SuperAdmin
+    if (adminUserForDelete.role === AdminRole.SuperAdmin) {
+      throw new ForbiddenException('Cannot delete SuperAdmin');
+    }
+
+    checkUserRolePermissions(
+      req.user,
+      adminUserForDelete.role,
+      adminUserForDelete.cinemaIds as string[],
+      adminUserForDelete.id,
+    );
+
     return this.adminUsersService.remove(id);
   }
 }

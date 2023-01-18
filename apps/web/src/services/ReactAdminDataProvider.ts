@@ -20,7 +20,6 @@ import {
   UpdateResult,
 } from 'react-admin';
 import {PogledajApi} from './ApiHelper';
-import {stringify} from 'querystring';
 
 const ReactAdminDataProvider: DataProvider = {
   async create(resource: string, params: CreateParams): Promise<CreateResult> {
@@ -34,26 +33,40 @@ const ReactAdminDataProvider: DataProvider = {
       filter: JSON.stringify({id: params.ids}),
     };
 
-    return PogledajApi.delete(`${resource}?${stringify(query)}`);
+    return PogledajApi.delete(`${resource}`, {
+      params: query,
+    });
   },
   async getList(resource: string, params: GetListParams): Promise<GetListResult> {
     const {page, perPage} = params.pagination;
-    const {field, order} = params.sort;
     const query = {
-      sort: JSON.stringify([field, order]),
-      range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+      sort: JSON.stringify({
+        field: params.sort.field,
+        order: params.sort.order.toLowerCase(),
+      }),
+      range: JSON.stringify({
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
       filter: JSON.stringify(params.filter),
     };
-    const url = `${resource}?${stringify(query)}`;
 
-    return PogledajApi.get(url);
+    const res = await PogledajApi.get(resource, {
+      params: query,
+    });
+
+    return {
+      data: res.data.data,
+      total: res.data.total,
+    };
   },
   async getMany(resource: string, params: GetManyParams): Promise<GetManyResult> {
     const query = {
       filter: JSON.stringify({ids: params.ids}),
     };
-    const url = `${resource}?${stringify(query)}`;
-    return PogledajApi.get(url);
+    return PogledajApi.get(resource, {
+      params: query,
+    });
   },
   async getManyReference(resource: string, params: GetManyReferenceParams): Promise<GetManyReferenceResult> {
     const {page, perPage} = params.pagination;
@@ -66,8 +79,9 @@ const ReactAdminDataProvider: DataProvider = {
         [params.target]: params.id,
       }),
     };
-    const url = `${resource}?${stringify(query)}`;
-    return PogledajApi.get(url);
+    return PogledajApi.get(resource, {
+      params: query,
+    });
   },
   async getOne(resource: string, params: GetOneParams): Promise<GetOneResult> {
     return PogledajApi.get(`${resource}/${params.id}`);
@@ -80,7 +94,9 @@ const ReactAdminDataProvider: DataProvider = {
       filter: JSON.stringify({id: params.ids}),
     };
 
-    return PogledajApi.put(`${resource}?${stringify(query)}`, params.data);
+    return PogledajApi.put(resource, params.data, {
+      params: query,
+    });
   },
 };
 
