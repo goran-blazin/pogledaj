@@ -57,7 +57,7 @@
     "vite": "^4.0.4"
   },
   "scripts": {
-    "dev": "vite --port 3005",
+    "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint ./src --ext .tsx,.ts --color --max-warnings=0",
     "format": "prettier --write ./src",
