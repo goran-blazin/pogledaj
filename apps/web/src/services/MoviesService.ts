@@ -3,12 +3,12 @@ import {PogledajApi} from './ApiHelper';
 
 const MoviesService = {
   async findAll(): Promise<Movie[]> {
-    const result = await PogledajApi.get('movies');
+    const result = await PogledajApi().get('movies');
     return result.data;
   },
 
   async findAllWithPersons(): Promise<MovieWithPersons[]> {
-    const result = await PogledajApi.get('movies', {
+    const result = await PogledajApi().get('movies', {
       params: {
         includePersons: 'true',
       },
@@ -18,13 +18,13 @@ const MoviesService = {
   },
 
   async findById(id: string): Promise<Movie | undefined> {
-    const result = await PogledajApi.get(`movies/${id}`);
+    const result = await PogledajApi().get(`movies/${id}`);
 
     return result.data;
   },
 
   async findByIdWithPersons(id: string): Promise<MovieWithPersons | undefined> {
-    const result = await PogledajApi.get(`movies/${id}`, {
+    const result = await PogledajApi().get(`movies/${id}`, {
       params: {
         includePersons: 'true',
       },

@@ -3,7 +3,7 @@ import {PogledajApi} from './ApiHelper';
 
 const CinemasService = {
   async findAll(): Promise<Cinema[]> {
-    const result = await PogledajApi.get(`cinemas`);
+    const result = await PogledajApi().get(`cinemas`);
 
     return result.data;
   },
@@ -16,8 +16,7 @@ const CinemasService = {
   // },
 
   async findById(id: string): Promise<Cinema | undefined> {
-    const result = await PogledajApi.get(`cinemas/${id}`);
-
+    const result = await PogledajApi().get(`cinemas/${id}`);
     return result.data;
   },
 };

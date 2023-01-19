@@ -23,17 +23,17 @@ import {PogledajApi} from './ApiHelper';
 
 const ReactAdminDataProvider: DataProvider = {
   async create(resource: string, params: CreateParams): Promise<CreateResult> {
-    return PogledajApi.post(`${resource}`, params.data);
+    return PogledajApi().post(`${resource}`, params.data);
   },
   async delete(resource: string, params: DeleteParams): Promise<DeleteResult> {
-    return PogledajApi.delete(`${resource}/${params.id}`);
+    return PogledajApi().delete(`${resource}/${params.id}`);
   },
   async deleteMany(resource: string, params: DeleteManyParams): Promise<DeleteManyResult> {
     const query = {
       filter: JSON.stringify({id: params.ids}),
     };
 
-    return PogledajApi.delete(`${resource}`, {
+    return PogledajApi().delete(`${resource}`, {
       params: query,
     });
   },
@@ -51,7 +51,7 @@ const ReactAdminDataProvider: DataProvider = {
       filter: JSON.stringify(params.filter),
     };
 
-    const res = await PogledajApi.get(resource, {
+    const res = await PogledajApi().get(resource, {
       params: query,
     });
 
@@ -64,7 +64,7 @@ const ReactAdminDataProvider: DataProvider = {
     const query = {
       filter: JSON.stringify({ids: params.ids}),
     };
-    return PogledajApi.get(resource, {
+    return PogledajApi().get(resource, {
       params: query,
     });
   },
@@ -79,22 +79,22 @@ const ReactAdminDataProvider: DataProvider = {
         [params.target]: params.id,
       }),
     };
-    return PogledajApi.get(resource, {
+    return PogledajApi().get(resource, {
       params: query,
     });
   },
   async getOne(resource: string, params: GetOneParams): Promise<GetOneResult> {
-    return PogledajApi.get(`${resource}/${params.id}`);
+    return PogledajApi().get(`${resource}/${params.id}`);
   },
   async update(resource: string, params: UpdateParams): Promise<UpdateResult> {
-    return PogledajApi.put(`${resource}/${params.id}`, params.data);
+    return PogledajApi().put(`${resource}/${params.id}`, params.data);
   },
   async updateMany(resource: string, params: UpdateManyParams): Promise<UpdateManyResult> {
     const query = {
       filter: JSON.stringify({id: params.ids}),
     };
 
-    return PogledajApi.put(resource, params.data, {
+    return PogledajApi().put(resource, params.data, {
       params: query,
     });
   },

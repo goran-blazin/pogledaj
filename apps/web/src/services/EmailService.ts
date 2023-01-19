@@ -3,7 +3,7 @@ import {PogledajApi} from './ApiHelper';
 
 const EmailService = {
   async sendSupportEmail(data: SupportEmail) {
-    return PogledajApi.post('email/support', data);
+    return PogledajApi().post('email/support', data);
   },
 };
 
