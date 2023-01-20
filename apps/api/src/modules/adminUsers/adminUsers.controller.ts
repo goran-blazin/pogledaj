@@ -98,12 +98,25 @@ export class AdminUsersController {
     });
   }
 
-  // @Roles(AdminRole.Manager)
-  // @UseGuards(JwtAdminAuthGuard, RolesGuard)
-  // @Get(':id')
-  // findOne(@Param('id', ParseUUIDPipe) id: string) {
-  //   return this.adminUsersService.findOne(id);
-  // }
+  @UseGuards(JwtAdminAuthGuard)
+  @Get(':id')
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: ExpressRequestWithUser,
+  ) {
+    const adminUserSafe = await this.adminUsersService.findOne(id);
+    if (adminUserSafe) {
+      checkUserRolePermissions(
+        req.user,
+        adminUserSafe.role,
+        adminUserSafe.cinemaIds as string[],
+      );
+
+      return adminUserSafe;
+    }
+
+    throw new NotFoundException();
+  }
 
   // @Roles(AdminRole.Manager)
   // @UseGuards(JwtAdminAuthGuard, RolesGuard)

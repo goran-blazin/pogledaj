@@ -30,7 +30,7 @@ const ReactAdminDataProvider: DataProvider = {
   },
   async deleteMany(resource: string, params: DeleteManyParams): Promise<DeleteManyResult> {
     const query = {
-      filter: JSON.stringify({id: params.ids}),
+      filter: JSON.stringify({ids: params.ids}),
     };
 
     return PogledajApi().delete(`${resource}`, {
@@ -95,7 +95,7 @@ const ReactAdminDataProvider: DataProvider = {
   },
   async updateMany(resource: string, params: UpdateManyParams): Promise<UpdateManyResult> {
     const query = {
-      filter: JSON.stringify({id: params.ids}),
+      filter: JSON.stringify({ids: params.ids}),
     };
 
     return PogledajApi().put(resource, params.data, {
