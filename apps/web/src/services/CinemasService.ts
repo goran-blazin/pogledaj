@@ -5,7 +5,7 @@ const CinemasService = {
   async findAll(): Promise<Cinema[]> {
     const result = await PogledajApi().get(`cinemas`);
 
-    return result.data;
+    return result.data.data;
   },
 
   // async findAllByCity(city: City): Promise<Cinema[]> {

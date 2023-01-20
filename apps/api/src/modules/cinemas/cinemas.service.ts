@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 // import { UpdateCinemaDto } from './dto/update-cinema.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cinema, Prisma } from '@prisma/client';
+import { GetListOptions, ReturnList } from '../../types/CommonTypes';
+import { resolveReactAdminFilters } from '../../helpers/Utils';
 
 @Injectable()
 export class CinemasService {
@@ -13,25 +15,33 @@ export class CinemasService {
     return 'This action adds a new cinema ';
   }
 
-  async findAll(
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.MovieWhereUniqueInput;
-      where?: Prisma.MovieWhereInput;
-      orderBy?: Prisma.MovieOrderByWithRelationInput;
-    } = {},
-  ): Promise<Cinema[]> {
-    return this.prismaService.cinema.findMany({
-      ...params,
-      include: {
-        city: {
-          include: {
-            country: true,
+  async findAll(options: GetListOptions = {}): Promise<ReturnList<Cinema>> {
+    const [cinemas, cinemasCount] = await Promise.all([
+      this.prismaService.cinema.findMany({
+        where: {
+          ...resolveReactAdminFilters(options.filter),
+        },
+        skip: options.range?.skip,
+        take: options.range?.take,
+        include: {
+          city: {
+            include: {
+              country: true,
+            },
           },
         },
-      },
-    });
+      }),
+      this.prismaService.cinema.count({
+        where: {
+          ...resolveReactAdminFilters(options.filter),
+        },
+      }),
+    ]);
+
+    return {
+      data: cinemas,
+      total: cinemasCount,
+    };
   }
 
   findOne(

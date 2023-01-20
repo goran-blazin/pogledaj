@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from './modules/prisma/prisma.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
@@ -9,7 +9,30 @@ import { useContainer } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      exceptionFactory: (errors) => {
+        const errorMessages = errors.reduce(
+          (carry: Record<string, string[]>, error) => {
+            if (error.constraints) {
+              carry[error.property] = Object.values(error.constraints).map(
+                (message) => message.trim(),
+              );
+            }
+
+            return carry;
+          },
+          {},
+        );
+        return new BadRequestException({
+          statusCode: 400,
+          messages: errorMessages,
+          error: 'Bad Request',
+        });
+      },
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('PogledajAPI')

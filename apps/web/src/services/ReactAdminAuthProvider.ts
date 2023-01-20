@@ -34,10 +34,10 @@ const ReactAdminAuthProvider: AuthProvider = {
 
     throw new Error('User not found');
   },
-  async getPermissions(): Promise<any> {
+  async getPermissions() {
     return Promise.resolve(undefined);
   },
-  async handleCallback(): Promise<any> {
+  async handleCallback() {
     return Promise.resolve(undefined);
   },
   async login({username, password}): Promise<boolean> {

@@ -31,6 +31,13 @@ export type ReturnList<T> = {
   total: number;
 };
 
+export type FilterOptions =
+  | {
+      ids: string[];
+      meta?: never;
+    }
+  | undefined;
+
 export type GetListOptions = {
   sort?: {
     field: string;
@@ -40,5 +47,5 @@ export type GetListOptions = {
     skip?: number;
     take?: number;
   };
-  filter?: Record<string, unknown>;
+  filter?: FilterOptions;
 };

@@ -64,9 +64,13 @@ const ReactAdminDataProvider: DataProvider = {
     const query = {
       filter: JSON.stringify({ids: params.ids}),
     };
-    return PogledajApi().get(resource, {
+    const res = await PogledajApi().get(resource, {
       params: query,
     });
+
+    return {
+      data: res.data.data,
+    };
   },
   async getManyReference(resource: string, params: GetManyReferenceParams): Promise<GetManyReferenceResult> {
     const {page, perPage} = params.pagination;

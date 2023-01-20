@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { CinemasService } from './cinemas.service';
 // import { CreateCinemaDto } from './dto/create-cinema.dto';
@@ -22,8 +23,16 @@ export class CinemasController {
   }
 
   @Get()
-  findAll() {
-    return this.cinemasService.findAll();
+  findAll(
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
+    @Query('filter') filter?: string,
+  ) {
+    return this.cinemasService.findAll({
+      sort: sort ? JSON.parse(sort) : undefined,
+      range: range ? JSON.parse(range) : undefined,
+      filter: filter ? JSON.parse(filter) : undefined,
+    });
   }
 
   @Get(':id')

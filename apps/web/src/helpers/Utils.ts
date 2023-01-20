@@ -1,3 +1,6 @@
+import {AxiosError} from 'axios';
+import * as _ from 'lodash';
+
 const Utils = {
   delay(time: number, value = null, rejectDelay = false): Promise<unknown> {
     return new Promise(function (resolve, reject) {
@@ -24,6 +27,12 @@ const Utils = {
   })(),
   isBetaMode() {
     return parseInt(window.localStorage.getItem('betaMode') || '') === 1;
+  },
+  convertErrorMessagesToReactAdminForm(error: AxiosError): Record<string, string> | undefined {
+    const messages: Record<string, string[]> = _.get(error, 'response.data.messages');
+    if (messages) {
+      return _.mapValues(messages, (messages) => messages.map((message) => _.upperFirst(message) + '.').join(' '));
+    }
   },
 };
 
