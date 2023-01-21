@@ -42,10 +42,24 @@ export class AdminUsersService {
     const where =
       adminUser.role === AdminRole.Manager
         ? {
-            role: AdminRole.Employee,
-            cinemaIds: {
-              array_contains: adminUser.cinemaIds as string[],
-            },
+            AND: [
+              {
+                role: {
+                  in: [AdminRole.Employee, AdminRole.Manager],
+                },
+              },
+              {
+                OR: (adminUser.cinemaIds as string[]).map(
+                  (adminUserCinemaId) => {
+                    return {
+                      cinemaIds: {
+                        array_contains: adminUserCinemaId,
+                      },
+                    };
+                  },
+                ),
+              },
+            ],
           }
         : undefined;
     const [adminUsers, adminUsersCount] = await Promise.all([

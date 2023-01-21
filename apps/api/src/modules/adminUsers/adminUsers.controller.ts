@@ -39,7 +39,7 @@ function checkUserRolePermissions(
       // super admins can do anything
       return true;
     case 'Manager': {
-      // Managers can only add Employees for their cinemas
+      // Managers can only manage Employees for their cinemas
       if (adminUserRole === AdminRole.Employee) {
         // check if logged user has all the cinemas of added employee
         if (
@@ -60,7 +60,7 @@ function checkUserRolePermissions(
       }
     }
     case 'Employee':
-      // Employees cannot add admin users
+      // Employees cannot manage admin users
       throw new ForbiddenException(FORBIDDEN_MESSAGE);
   }
 }
@@ -143,6 +143,12 @@ export class AdminUsersController {
     // it is not possible to delete SuperAdmin
     if (adminUserForDelete.role === AdminRole.SuperAdmin) {
       throw new ForbiddenException('Cannot delete SuperAdmin');
+    }
+
+    // cannot delete yourself
+    // it is not possible to delete SuperAdmin
+    if (req.user.email === adminUserForDelete.email) {
+      throw new ForbiddenException('Cannot delete yourself');
     }
 
     checkUserRolePermissions(

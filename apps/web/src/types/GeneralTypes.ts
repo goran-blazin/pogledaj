@@ -50,3 +50,20 @@ export type AdminUserJwtPayload = {
 } & JwtPayload;
 
 export const AUTH_DATA_LOCAL_STORAGE = 'authData';
+
+export type AdminUser = {
+  id: string;
+  email: string;
+  fullName: string;
+  role: AdminRole;
+  cinemaIds: string[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export const AdminRoutes = {
+  adminUsers: 'adminUsers',
+  movieTickets: 'movieTickets',
+};
+
+export type AdminRoutes = typeof AdminRoutes[keyof typeof AdminRoutes];

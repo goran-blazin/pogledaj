@@ -1,5 +1,7 @@
 import {AxiosError} from 'axios';
 import * as _ from 'lodash';
+import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData} from '../types/GeneralTypes';
+import jwt_decode from 'jwt-decode';
 
 const Utils = {
   delay(time: number, value = null, rejectDelay = false): Promise<unknown> {
@@ -33,6 +35,15 @@ const Utils = {
     if (messages) {
       return _.mapValues(messages, (messages) => messages.map((message) => _.upperFirst(message) + '.').join(' '));
     }
+  },
+
+  getLoggedUser(): AdminUserJwtPayload {
+    const authDataString = localStorage.getItem(AUTH_DATA_LOCAL_STORAGE);
+    if (authDataString) {
+      const authData: AuthData = JSON.parse(authDataString);
+      return jwt_decode<AdminUserJwtPayload>(authData.accessToken);
+    }
+    throw new Error('User not found');
   },
 };
 

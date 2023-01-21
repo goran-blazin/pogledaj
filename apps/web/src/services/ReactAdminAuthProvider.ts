@@ -1,7 +1,13 @@
 import {AuthProvider, UserIdentity} from 'react-admin';
 import AdminAuthService from './AdminAuthService';
 import jwt_decode from 'jwt-decode';
-import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData} from '../types/GeneralTypes';
+import {AdminRole, AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData} from '../types/GeneralTypes';
+
+export type CustomUserIdentity = UserIdentity & {
+  adminUserRole: AdminRole;
+  cinemaIds: string[];
+  email: string;
+};
 
 const ReactAdminAuthProvider: AuthProvider = {
   async checkAuth(): Promise<void> {
@@ -17,7 +23,7 @@ const ReactAdminAuthProvider: AuthProvider = {
     }
     // other error code (404, 500, etc.): no need to log out
   },
-  async getIdentity(): Promise<UserIdentity> {
+  async getIdentity(): Promise<CustomUserIdentity> {
     const authDataString = localStorage.getItem(AUTH_DATA_LOCAL_STORAGE);
     if (authDataString) {
       const authData: AuthData = JSON.parse(authDataString);
@@ -34,8 +40,13 @@ const ReactAdminAuthProvider: AuthProvider = {
 
     throw new Error('User not found');
   },
-  async getPermissions() {
-    return Promise.resolve(undefined);
+  async getPermissions(): Promise<AdminRole | undefined> {
+    const authDataString = localStorage.getItem(AUTH_DATA_LOCAL_STORAGE);
+    if (authDataString) {
+      const authData: AuthData = JSON.parse(authDataString);
+      const userPayload = jwt_decode<AdminUserJwtPayload>(authData.accessToken);
+      return userPayload.adminUserRole;
+    }
   },
   async handleCallback() {
     return Promise.resolve(undefined);
