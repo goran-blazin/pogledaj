@@ -60,6 +60,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "tsc": "tsc",
     "lint": "eslint ./src --ext .tsx,.ts --color --max-warnings=0",
     "format": "prettier --write ./src",
     "prepare": "cd ../../ && husky install ./apps/web/.husky"
