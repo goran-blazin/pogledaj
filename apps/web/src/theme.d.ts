@@ -26,6 +26,13 @@ declare module '@mui/material/styles' {
         color: string;
       };
     };
+    customButtons: {
+      buttonWithIcon: {
+        color: string;
+        textColor: string;
+        iconBgColor: string;
+      };
+    };
     customForm: {
       inputField: {
         color: string;
@@ -69,6 +76,13 @@ declare module '@mui/material/styles' {
       link?: {
         fontSize: React.CSSProperties['fontSize'];
         color: React.CSSProperties['color'];
+      };
+    };
+    customButtons?: {
+      buttonWithIcon: {
+        color: React.CSSProperties['color'];
+        textColor: React.CSSProperties['color'];
+        iconBgColor: React.CSSProperties['color'];
       };
     };
     customForm?: {

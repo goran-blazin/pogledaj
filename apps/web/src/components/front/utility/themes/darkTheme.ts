@@ -29,6 +29,13 @@ const darkTheme = createTheme({
       textColor: '#CEE4FF',
     },
   },
+  customButtons: {
+    buttonWithIcon: {
+      color: '#091F3E',
+      textColor: '#CEE4FF',
+      iconBgColor: '#3274F6',
+    },
+  },
   breakpoints: {
     values: {
       xs: 0,

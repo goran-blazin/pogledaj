@@ -29,6 +29,13 @@ const lightTheme = createTheme({
       textColor: '#595959',
     },
   },
+  customButtons: {
+    buttonWithIcon: {
+      color: '#F0F0F0',
+      textColor: '#595959',
+      iconBgColor: '#3274F6',
+    },
+  },
   breakpoints: {
     values: {
       xs: 0,
