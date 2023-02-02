@@ -2,31 +2,32 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   Param,
-  Delete,
   Query,
   DefaultValuePipe,
   ParseBoolPipe,
-  Patch,
   ParseUUIDPipe,
+  UseGuards,
+  Body,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { ApiOkResponse } from '@nestjs/swagger';
-import { MovieEntity } from './entities/movie.entity';
-import { UpdateMovieDto } from './dto/update-movie.dto';
+// import { CreateMovieDto } from './dto/create-movie.dto';
+// import { UpdateMovieDto } from './dto/update-movie.dto';
+import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { AdminRole } from '@prisma/client';
+import { UpsertFromExternalDto } from './dto/upsertFromExternal.dto';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
-  @Post()
-  create(@Body() createMovieDto: CreateMovieDto) {
-    return this.moviesService.create(createMovieDto);
-  }
+  // @UseGuards(JwtAdminAuthGuard)
+  // @Post()
+  // create(@Body() createMovieDto: CreateMovieDto) {
+  //   return this.moviesService.create(createMovieDto);
+  // }
 
-  @ApiOkResponse({ type: [MovieEntity] })
   @Get()
   findAll(
     @Query('includePersons', new DefaultValuePipe(false), ParseBoolPipe)
@@ -51,23 +52,39 @@ export class MoviesController {
     );
   }
 
-  @Patch(':id')
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateMovieDto: UpdateMovieDto,
-  ) {
-    return this.moviesService.update({
-      where: {
-        id: id,
-      },
-      data: updateMovieDto,
-    });
-  }
+  // @UseGuards(JwtAdminAuthGuard)
+  // @Patch(':id')
+  // update(
+  //   @Param('id', ParseUUIDPipe) id: string,
+  //   @Body() updateMovieDto: UpdateMovieDto,
+  // ) {
+  //   return this.moviesService.update({
+  //     where: {
+  //       id: id,
+  //     },
+  //     data: updateMovieDto,
+  //   });
+  // }
 
-  @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.moviesService.remove({
-      id: id,
-    });
+  // @UseGuards(JwtAdminAuthGuard)
+  // @Delete(':id')
+  // remove(@Param('id', ParseUUIDPipe) id: string) {
+  //   return this.moviesService.remove({
+  //     id: id,
+  //   });
+  // }
+
+  @UseGuards(JwtAdminAuthGuard)
+  @Post('upsertFromExternal')
+  @Roles(AdminRole.SuperAdmin)
+  upsertFromExternal(@Body() upsertFromExternalDto: UpsertFromExternalDto) {
+    return this.moviesService.upsertFromExternal(
+      upsertFromExternalDto.externalType,
+      upsertFromExternalDto.externalId,
+      {
+        localizedTitle: upsertFromExternalDto.localizedTitle,
+        localizedPlot: upsertFromExternalDto.localizedPlot,
+      },
+    );
   }
 }

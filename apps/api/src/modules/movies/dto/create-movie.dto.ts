@@ -1,70 +1,48 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsArray,
-  IsInt,
-  IsOptional,
-  Min,
-  Max,
-  IsDate,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsInt, Min, Max, IsDate } from 'class-validator';
 
 export class CreateMovieDto {
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   originalName: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   localizedName: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   plot: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
+  localizedPlot: string;
+
+  @IsString()
+  @IsNotEmpty()
   genreIds: string[];
 
   @IsNotEmpty()
-  @ApiProperty()
   @IsInt()
   runtimeMinutes: number;
 
   @IsNotEmpty()
-  @ApiProperty()
   @IsString()
   originalLanguageId: string;
 
-  @ApiProperty({ required: false, default: null })
-  @IsString()
-  @IsOptional()
-  dubbedLanguageId?: string | null;
-
   @IsNotEmpty()
-  @ApiProperty()
   @IsString()
   countryOfOriginId: string;
 
-  @ApiProperty({ required: false, default: null })
-  @IsArray()
-  @IsOptional()
+  @IsNotEmpty()
   @IsString({ each: true })
-  posterImages?: string[];
+  posterImages: string[];
 
-  @ApiProperty()
   @IsInt()
   @IsNotEmpty()
   @Min(1)
   @Max(100)
   rating: number;
 
-  @ApiProperty()
   @IsNotEmpty()
   @IsDate()
   releaseDate: Date | string;

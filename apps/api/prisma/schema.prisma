@@ -20,13 +20,6 @@ enum Gender {
   Other
 }
 
-enum ActorRoleType {
-  Main
-  Supporting
-  Extra
-  Cameo
-}
-
 enum DirectorType {
   Main
   Assistant
@@ -60,6 +53,12 @@ enum AdminRole {
   Employee
 }
 
+enum InputProvider {
+  Tmdb
+  Imdb
+  AdminInput
+}
+
 // TABLES
 
 model Genre {
@@ -77,11 +76,10 @@ model Language {
 }
 
 model Country {
-  code    String   @id
-  name    String   @unique
-  persons Person[]
-  cities  City[]
-  movies  Movie[]
+  code   String  @id
+  name   String  @unique
+  cities City[]
+  movies Movie[]
 }
 
 model City {
@@ -146,9 +144,10 @@ model CinemaSeat {
 
 model Movie {
   id                   String                @id @default(uuid()) @db.Uuid
-  originalName         String
-  localizedName        String
+  originalTitle        String
+  localizedTitle       String
   plot                 String
+  localizedPlot        String
   genres               Genre[]
   runtimeMinutes       Int
   originalLanguageId   String
@@ -165,30 +164,39 @@ model Movie {
   producers            MovieProducer[]
   movieCinemaOverrides MovieCinemaOverride[]
   movieProjections     MovieProjection[]
+  externalId           String
+  externalType         InputProvider
+  additionalData       Json                  @default("{}")
+
+  @@unique([externalId, externalType])
 }
 
 model Person {
-  id                String          @id @default(uuid()) @db.Uuid
-  countryOfOriginId String
-  countryOfOrigin   Country         @relation(fields: [countryOfOriginId], references: [code])
-  firstName         String
-  middleName        String?
-  lastName          String
-  dateOfBirth       DateTime?       @db.Date
-  gender            Gender
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime
-  actorInMovies     MovieActor[]
-  directorInMovies  MovieDirector[]
-  producerInMovies  MovieProducer[]
+  id               String          @id @default(uuid()) @db.Uuid
+  name             String
+  biography        String          @default("")
+  dateOfBirth      DateTime?       @db.Date
+  dateOfDeath      DateTime?       @db.Date
+  gender           Gender
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime
+  actorInMovies    MovieActor[]
+  directorInMovies MovieDirector[]
+  producerInMovies MovieProducer[]
+  externalId       String
+  externalType     InputProvider
+  additionalData   Json            @default("{}")
+
+  @@unique([externalId, externalType])
 }
 
 model MovieActor {
-  personId String        @db.Uuid
-  person   Person        @relation(fields: [personId], references: [id])
-  movieId  String        @db.Uuid
-  movie    Movie         @relation(fields: [movieId], references: [id])
-  role     ActorRoleType
+  personId      String @db.Uuid
+  person        Person @relation(fields: [personId], references: [id])
+  movieId       String @db.Uuid
+  movie         Movie  @relation(fields: [movieId], references: [id])
+  characterName String
+  castOrder     Int
 
   @@id([personId, movieId])
 }
