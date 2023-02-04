@@ -8,8 +8,8 @@ function MovieSmallCard({movie}: {movie: Movie}) {
 
   return (
     <SmallCard
-      title={movie.localizedName}
-      imageSrc={movie.posterImages[0]}
+      title={movie.localizedTitle}
+      imageSrc={movie.posterImages.smallPoster}
       defaultImageSrc={'movie-small-card-placeholder.png'}
       onClick={() => {
         navigate(namedRoutes.movieSingle.replace(':movieId', movie.id));

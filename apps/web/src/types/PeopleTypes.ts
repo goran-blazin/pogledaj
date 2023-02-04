@@ -1,18 +1,15 @@
-import {Country} from './GeneralTypes';
-
 export type Person = {
   id: string;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
+  name: string;
   dateOfBirth?: string;
+  dateOfDeath?: string;
   gender?: 'Male' | 'Female' | 'Other';
-  countryOfOrigin?: Country;
 };
 
 export type Actor = {
   person: Person;
-  role: 'Main' | 'Supporting' | 'Extra' | 'Cameo';
+  characterName: string;
+  castOrder: number;
 };
 
 export type Director = {

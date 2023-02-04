@@ -17,14 +17,14 @@ interface SmallCardParams {
 }
 
 function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', onClick}: SmallCardParams) {
-  const resizedImageSrc = ImageHelper.getDynamicImagePath({
+  const resizedImageSrc = ImageHelper.getImagePath({
     imageFilePath: imageSrc || defaultImageSrc,
     transformations: {
       width: 400,
       height: 656,
       defaultImage: ImageHelper.getPlaceholderImagePath({
         imageFilePath: defaultImageSrc,
-        omitCdnUrl: true,
+        omitCdnURL: true,
       }),
     },
   });

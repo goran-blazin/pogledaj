@@ -46,7 +46,7 @@ function BigCard({
   onClick,
 }: BigCardParams) {
   const fiveStarRating = rating ? _.round((rating / 100) * 5, 1) : undefined;
-  const resizedImageSrc = ImageHelper.getDynamicImagePath({
+  const resizedImageSrc = ImageHelper.getImagePath({
     imageFilePath: imageSrc || defaultImageSrc,
     transformations: {
       width: 600,
@@ -56,7 +56,7 @@ function BigCard({
       },
       defaultImage: ImageHelper.getPlaceholderImagePath({
         imageFilePath: defaultImageSrc,
-        omitCdnUrl: true,
+        omitCdnURL: true,
       }),
     },
   });

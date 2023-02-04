@@ -66,4 +66,14 @@ export const AdminRoutes = {
   movieTickets: 'movieTickets',
 };
 
+export type PosterImages = {
+  bigPoster: string;
+  smallPoster: string;
+  thumbPoster: string;
+  mediumPoster: string;
+  bigBackground: string;
+  smallBackground: string;
+  mediumBackground: string;
+};
+
 export type AdminRoutes = typeof AdminRoutes[keyof typeof AdminRoutes];

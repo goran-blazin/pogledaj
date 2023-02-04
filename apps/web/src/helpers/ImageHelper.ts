@@ -15,7 +15,7 @@ type ImageTransformations = {
 type ImageCdnParams = {
   imageFilePath: string;
   transformations?: ImageTransformations;
-  omitCdnUrl?: boolean;
+  omitCdnURL?: boolean;
 };
 
 const mapTransformation = (transformations: ImageTransformations) => {
@@ -39,25 +39,18 @@ const mapTransformation = (transformations: ImageTransformations) => {
 };
 
 const ImageHelper = {
-  getImagePath({imageFilePath, transformations, omitCdnUrl = false}: ImageCdnParams): string {
+  getImagePath({imageFilePath, transformations, omitCdnURL = false}: ImageCdnParams): string {
     const transformationsArray = transformations ? mapTransformation(transformations) : [];
     const transformationsString = transformationsArray.length ? '?tr=' + transformationsArray.join(',') : '';
 
-    return (omitCdnUrl ? '' : AppConfig.getCDNUrl()) + 'images/' + imageFilePath + transformationsString;
+    return (omitCdnURL ? '' : AppConfig.getCDNUrl()) + imageFilePath + transformationsString;
   },
 
-  getDynamicImagePath({imageFilePath, transformations}: ImageCdnParams): string {
+  getPlaceholderImagePath({imageFilePath, transformations, omitCdnURL}: ImageCdnParams): string {
     return ImageHelper.getImagePath({
-      imageFilePath: 'dynamic/' + imageFilePath,
+      imageFilePath: 'images/placeholders/' + imageFilePath,
       transformations,
-    });
-  },
-
-  getPlaceholderImagePath({imageFilePath, transformations, omitCdnUrl}: ImageCdnParams): string {
-    return ImageHelper.getImagePath({
-      imageFilePath: 'placeholders/' + imageFilePath,
-      transformations,
-      omitCdnUrl,
+      omitCdnURL,
     });
   },
 };

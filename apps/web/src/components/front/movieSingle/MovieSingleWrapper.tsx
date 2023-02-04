@@ -1,7 +1,6 @@
 import {useParams, useSearchParams} from 'react-router-dom';
 import {useMemo} from 'react';
 import {ProjectionsGroupedPerDateAndCinemaType} from '../../../types/MoviesTypes';
-import PersonHelper from '../../../helpers/PersonHelper';
 import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {Link} from 'react-router-dom';
@@ -86,17 +85,15 @@ function MovieSingleWrapper() {
     }, {});
   }, [movieProjections?.data]);
 
-  const {mainActors, supportingActors} = useMemo(() => {
+  const {orderedActors} = useMemo(() => {
     if (!movie?.data) {
       return {
-        mainActors: [],
-        supportingActors: [],
+        orderedActors: [],
       };
     }
 
     return {
-      mainActors: movie.data.actors.filter((a) => a.role === 'Main'),
-      supportingActors: movie.data.actors.filter((a) => a.role === 'Supporting'),
+      orderedActors: movie.data.actors.sort((a, b) => a.castOrder - b.castOrder),
     };
   }, [movie?.data]);
 
@@ -114,7 +111,7 @@ function MovieSingleWrapper() {
               <div>
                 <MovieTitleHolder>
                   <div className="titleWrap">
-                    <MainTitle title={movie.data.localizedName} />
+                    <MainTitle title={movie.data.localizedTitle} />
                   </div>
                   <div className="titleRating">
                     <RatingInfo rating={movie.data.rating} />
@@ -127,29 +124,31 @@ function MovieSingleWrapper() {
                     <span>{DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy LLL dd')}</span>
                   </li>
                   <li>
-                    <strong>sinopsis:</strong> {movie.data.plot}
+                    <strong>Sinopsis:</strong> {movie.data.localizedPlot}
+                  </li>
+                  <li>
+                    <strong>Sinopsis u originalu:</strong> {movie.data.plot}
                   </li>
                   <li>
                     <p>
-                      <strong>Reziser</strong> <span>{PersonHelper.concatName(movie.data.directors[0].person)}</span>
+                      <strong>Reziseri:</strong>{' '}
+                      <span>{movie.data.directors.map((director) => director.person.name).join(', ')}</span>
                     </p>
-                    {mainActors.length > 0 && (
+                    {orderedActors.length > 0 && (
                       <p>
-                        <strong>Glavni Glumci</strong>{' '}
-                        <span>{mainActors.map((actor) => PersonHelper.concatName(actor.person)).join(', ')}</span>
-                      </p>
-                    )}
-                    {supportingActors.length > 0 && (
-                      <p>
-                        <strong>Sporedni Glumci</strong>{' '}
-                        <span>{supportingActors.map((actor) => PersonHelper.concatName(actor.person)).join(', ')}</span>
+                        <strong>Glumci:</strong>{' '}
+                        <span>{orderedActors.map((actor) => actor.person.name).join(', ')}</span>
                       </p>
                     )}
                     <p>
-                      <strong>Distributer</strong> <span>MegaCom Film</span>
+                      <strong>Producenti:</strong>{' '}
+                      <span>{movie.data.producers.map((producer) => producer.person.name).join(', ')}</span>
                     </p>
                     <p>
-                      <strong>Zemlja Porekla</strong> <span>{movie.data.countryOfOrigin.name}</span>
+                      <strong>Distributer:</strong> <span>MegaCom Film</span>
+                    </p>
+                    <p>
+                      <strong>Zemlja Porekla:</strong> <span>{movie.data.countryOfOrigin.name}</span>
                     </p>
                   </li>
                 </ul>

@@ -16,7 +16,7 @@ function ProjectionsGroupedPerDateAndMovie({
         const movieProjections = groupedMovieProjections[movieId].movieProjections;
         return (
           <div key={movieId}>
-            <h5>{movie.localizedName}:</h5>
+            <h5>{movie.localizedTitle}:</h5>
             <div>
               {movieProjections.map((mp) => {
                 return (

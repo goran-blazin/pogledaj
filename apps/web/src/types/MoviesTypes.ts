@@ -1,23 +1,24 @@
-import {Country, Genre, IntRange, Language} from './GeneralTypes';
+import {Country, Genre, IntRange, Language, PosterImages} from './GeneralTypes';
 import {Actor, Director, Producer} from './PeopleTypes';
 import {Cinema, CinemaTheater} from './CinemaTypes';
 
 export type Movie = {
   id: string;
-  originalName: string;
-  localizedName: string;
+  originalTitle: string;
+  localizedTitle: string;
   plot: string;
+  localizedPlot: string;
   genres: Genre[];
   runtimeMinutes: number;
   originalLanguage: Language;
   countryOfOrigin: Country;
   releaseDate: string;
-  posterImages: string[];
+  posterImages: PosterImages;
   rating?: IntRange<0, 101>;
 };
 
 export type MovieWithPersons = Movie & {
-  producers?: Producer[];
+  producers: Producer[];
   actors: Actor[];
   directors: Director[];
 };
