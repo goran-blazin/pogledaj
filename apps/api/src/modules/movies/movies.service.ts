@@ -10,6 +10,7 @@ import {
   PersonForMovieExternal,
 } from '../../types/MovieTypes';
 import * as _ from 'lodash';
+import { GetListOptions, ReturnList } from '../../types/CommonTypes';
 
 @Injectable()
 export class MoviesService {
@@ -32,16 +33,10 @@ export class MoviesService {
   // }
 
   async findAll(
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.MovieWhereUniqueInput;
-      where?: Prisma.MovieWhereInput;
-      orderBy?: Prisma.MovieOrderByWithRelationInput;
-    } = {},
-    options: { includePersons?: boolean } = {},
-  ): Promise<Movie[]> {
-    const personInclude = options.includePersons
+    options: GetListOptions = {},
+    { includePersons }: { includePersons?: boolean },
+  ): Promise<ReturnList<Movie>> {
+    const includePersonsObject = includePersons
       ? {
           include: {
             person: true,
@@ -49,17 +44,31 @@ export class MoviesService {
         }
       : false;
 
-    return this.prismaService.movie.findMany({
-      ...params,
-      include: {
-        genres: true,
-        originalLanguage: true,
-        countryOfOrigin: true,
-        actors: personInclude,
-        directors: personInclude,
-        producers: personInclude,
-      },
-    });
+    const [movies, moviesCount] = await Promise.all([
+      this.prismaService.movie.findMany({
+        include: {
+          genres: true,
+          originalLanguage: true,
+          countryOfOrigin: true,
+          actors: includePersonsObject,
+          directors: includePersonsObject,
+          producers: includePersonsObject,
+        },
+        skip: options.range?.skip,
+        take: options.range?.take,
+        orderBy: options.sort
+          ? {
+              [options.sort.field]: options.sort.order,
+            }
+          : undefined,
+      }),
+      this.prismaService.movie.count(),
+    ]);
+
+    return {
+      data: movies,
+      total: moviesCount,
+    };
   }
 
   async findOne(
@@ -97,9 +106,16 @@ export class MoviesService {
   //   });
   // }
 
-  // remove(movieWhereUniqueInput: Prisma.MovieWhereUniqueInput) {
+  // remove(movieId: string) {
   //   return this.prismaService.movie.delete({
-  //     where: movieWhereUniqueInput,
+  //     where: {
+  //       id: movieId,
+  //     },
+  //     include: {
+  //       actors: true,
+  //       directors: true,
+  //       producers: true,
+  //     },
   //   });
   // }
 

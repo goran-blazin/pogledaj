@@ -2,6 +2,7 @@ import {AdminRole, AdminRoutes} from '../types/GeneralTypes';
 
 const AdminRoutePermissions: Record<AdminRoutes, AdminRole[]> = {
   [AdminRoutes.adminUsers]: [AdminRole.Manager],
+  [AdminRoutes.movies]: [AdminRole.Manager],
   [AdminRoutes.movieTickets]: [AdminRole.Manager, AdminRole.Employee],
 };
 

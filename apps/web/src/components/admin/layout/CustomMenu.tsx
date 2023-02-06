@@ -3,6 +3,7 @@ import {Menu, usePermissions} from 'react-admin';
 // import {MenuProps} from 'ra-ui-materialui/src/layout/Menu';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import MovieIcon from '@mui/icons-material/Movie';
 import {AdminRole, AdminRoutes} from '../../../types/GeneralTypes';
 import AdminHelper from '../../../helpers/AdminHelper';
 
@@ -22,6 +23,9 @@ export const CustomMenu = function (props) {
           primaryText="Administratori"
           leftIcon={<AdminPanelSettingsIcon />}
         />
+      ) : null}
+      {AdminHelper.checkRoutePermissions(AdminRoutes.movies, permissions) ? (
+        <Menu.Item to={getAdminRoute(AdminRoutes.movies)} primaryText="Filmovi" leftIcon={<MovieIcon />} />
       ) : null}
       {AdminHelper.checkRoutePermissions(AdminRoutes.movieTickets, permissions) ? (
         <Menu.Item

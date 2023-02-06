@@ -4,7 +4,7 @@ import {PogledajApi} from './ApiHelper';
 const MoviesService = {
   async findAll(): Promise<Movie[]> {
     const result = await PogledajApi().get('movies');
-    return result.data;
+    return result.data.data;
   },
 
   async findAllWithPersons(): Promise<MovieWithPersons[]> {
@@ -14,7 +14,7 @@ const MoviesService = {
       },
     });
 
-    return result.data;
+    return result.data.data;
   },
 
   async findById(id: string): Promise<Movie | undefined> {

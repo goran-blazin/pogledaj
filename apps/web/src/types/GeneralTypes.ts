@@ -63,6 +63,7 @@ export type AdminUser = {
 
 export const AdminRoutes = {
   adminUsers: 'adminUsers',
+  movies: 'movies',
   movieTickets: 'movieTickets',
 };
 

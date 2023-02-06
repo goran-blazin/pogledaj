@@ -32,8 +32,16 @@ export class MoviesController {
   findAll(
     @Query('includePersons', new DefaultValuePipe(false), ParseBoolPipe)
     includePersons: boolean,
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
   ) {
-    return this.moviesService.findAll({}, { includePersons });
+    return this.moviesService.findAll(
+      {
+        sort: sort ? JSON.parse(sort) : undefined,
+        range: range ? JSON.parse(range) : undefined,
+      },
+      { includePersons },
+    );
   }
 
   @Get(':id')
@@ -68,10 +76,9 @@ export class MoviesController {
 
   // @UseGuards(JwtAdminAuthGuard)
   // @Delete(':id')
+  // @Roles(AdminRole.SuperAdmin)
   // remove(@Param('id', ParseUUIDPipe) id: string) {
-  //   return this.moviesService.remove({
-  //     id: id,
-  //   });
+  //   return this.moviesService.remove(id);
   // }
 
   @UseGuards(JwtAdminAuthGuard)

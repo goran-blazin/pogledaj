@@ -2,6 +2,12 @@ import {Country, Genre, IntRange, Language, PosterImages} from './GeneralTypes';
 import {Actor, Director, Producer} from './PeopleTypes';
 import {Cinema, CinemaTheater} from './CinemaTypes';
 
+export type MovieAdditionalData = {
+  imdbId?: string;
+  homepage?: string;
+  adult?: boolean;
+};
+
 export type Movie = {
   id: string;
   originalTitle: string;
@@ -15,6 +21,7 @@ export type Movie = {
   releaseDate: string;
   posterImages: PosterImages;
   rating?: IntRange<0, 101>;
+  additionalData: MovieAdditionalData;
 };
 
 export type MovieWithPersons = Movie & {
