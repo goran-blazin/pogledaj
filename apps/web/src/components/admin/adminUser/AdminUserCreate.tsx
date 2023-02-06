@@ -13,7 +13,7 @@ import {
   useRedirect,
   Validator,
 } from 'react-admin';
-import {AdminRole} from '../../../types/GeneralTypes';
+import {AdminRole, AdminRoutes} from '../../../types/GeneralTypes';
 import {Cinema} from '../../../types/CinemaTypes';
 import {useCallback} from 'react';
 import {AxiosError} from 'axios';
@@ -46,7 +46,6 @@ function AdminUserCreate() {
   const notify = useNotify();
 
   const save = useCallback(
-    // change type with AdminUserDTO
     async (values: Record<string, unknown>) => {
       try {
         await create('adminUsers', {data: values}, {returnPromise: true});
@@ -54,7 +53,7 @@ function AdminUserCreate() {
           type: 'info',
           messageArgs: {smart_count: 1},
         });
-        redirect('list');
+        redirect('list', AdminRoutes.adminUsers);
       } catch (error) {
         if (error instanceof AxiosError) {
           return Utils.convertErrorMessagesToReactAdminForm(error);
@@ -67,11 +66,30 @@ function AdminUserCreate() {
   return (
     <Create title={'Kreiranje administratora'}>
       <SimpleForm onSubmit={save}>
-        <TextInput source={'email'} label={'Email'} validate={required()} sx={{width: '30em'}} />
-        <PasswordInput source={'password'} label={'Sifra'} validate={required()} sx={{width: '30em'}} />
-        <PasswordInput source={'repeatPassword'} label={'Potvrdi Sifru'} validate={required()} sx={{width: '30em'}} />
-        <TextInput source={'fullName'} label={'Ime i Prezime'} validate={required()} sx={{width: '30em'}} />
+        <TextInput source={'email'} name={'email'} label={'Email'} validate={required()} sx={{width: '30em'}} />
+        <PasswordInput
+          source={'password'}
+          name={'password'}
+          label={'Sifra'}
+          validate={required()}
+          sx={{width: '30em'}}
+        />
+        <PasswordInput
+          source={'repeatPassword'}
+          name={'repeatPassword'}
+          label={'Potvrdi Sifru'}
+          validate={required()}
+          sx={{width: '30em'}}
+        />
+        <TextInput
+          source={'fullName'}
+          name={'fullName'}
+          label={'Ime i Prezime'}
+          validate={required()}
+          sx={{width: '30em'}}
+        />
         <SelectInput
+          name={'role'}
           source={'role'}
           choices={AdminRoleChoices}
           label={'Rola'}
@@ -83,6 +101,7 @@ function AdminUserCreate() {
             ({formData}) =>
               formData.role !== AdminRole.SuperAdmin && (
                 <SelectArrayInput
+                  name={'cinemaIds'}
                   source={'cinemaIds'}
                   choices={cinemasSelectInput}
                   label={'Bioskopi'}

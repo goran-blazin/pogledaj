@@ -1,4 +1,4 @@
-import {Movie, MovieWithPersons} from '../types/MoviesTypes';
+import {Movie, MovieWithPersons, UpsertMovieFromExternalDTO} from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
 
 const MoviesService = {
@@ -31,6 +31,10 @@ const MoviesService = {
     });
 
     return result.data;
+  },
+
+  async upsertFromExternal(data: UpsertMovieFromExternalDTO) {
+    return PogledajApi().post('movies/upsertFromExternal', data);
   },
 };
 export default Object.freeze(MoviesService);

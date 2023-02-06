@@ -141,257 +141,265 @@ export class MoviesService {
     );
 
     // open transaction
-    await this.prismaService.$transaction(async (transactionClient) => {
-      // add country if not exist
-      const countryOfOrigin = await transactionClient.country.upsert({
-        where: {
-          code: externalMovieData.countryOfOrigin.code.toUpperCase(),
-        },
-        create: {
-          code: externalMovieData.countryOfOrigin.code.toUpperCase(),
-          name: externalMovieData.countryOfOrigin.name,
-        },
-        update: {},
-      });
+    await this.prismaService.$transaction(
+      async (transactionClient) => {
+        // add country if not exist
+        const countryOfOrigin = await transactionClient.country.upsert({
+          where: {
+            code: externalMovieData.countryOfOrigin.code.toUpperCase(),
+          },
+          create: {
+            code: externalMovieData.countryOfOrigin.code.toUpperCase(),
+            name: externalMovieData.countryOfOrigin.name,
+          },
+          update: {},
+        });
 
-      // add language
-      const originalLanguage = await transactionClient.language.upsert({
-        where: {
-          code: externalMovieData.originalLanguageCode.toUpperCase(),
-        },
-        create: {
-          code: externalMovieData.originalLanguageCode.toUpperCase(),
-          name: externalMovieData.originalLanguageCode.toUpperCase(),
-        },
-        update: {},
-      });
+        // add language
+        const originalLanguage = await transactionClient.language.upsert({
+          where: {
+            code: externalMovieData.originalLanguageCode.toUpperCase(),
+          },
+          create: {
+            code: externalMovieData.originalLanguageCode.toUpperCase(),
+            name: externalMovieData.originalLanguageCode.toUpperCase(),
+          },
+          update: {},
+        });
 
-      // upsert persons
-      const upsertPersons = (moviePersons: PersonForMovieExternal[]) =>
-        Promise.all(
-          moviePersons.map((moviePerson) => {
-            return transactionClient.person.upsert({
-              where: {
-                externalId_externalType: {
+        // upsert persons
+        const upsertPersons = (moviePersons: PersonForMovieExternal[]) =>
+          Promise.all(
+            moviePersons.map((moviePerson) => {
+              return transactionClient.person.upsert({
+                where: {
+                  externalId_externalType: {
+                    externalId: moviePerson.externalId,
+                    externalType: moviePerson.externalType,
+                  },
+                },
+                create: {
+                  name: moviePerson.name,
+                  biography: moviePerson.biography,
+                  dateOfBirth: moviePerson.dateOfBirth,
+                  dateOfDeath: moviePerson.dateOfDeath,
+                  gender: moviePerson.gender,
+                  updatedAt: new Date(),
                   externalId: moviePerson.externalId,
                   externalType: moviePerson.externalType,
+                  additionalData: moviePerson.additionalData,
                 },
-              },
-              create: {
-                name: moviePerson.name,
-                biography: moviePerson.biography,
-                dateOfBirth: moviePerson.dateOfBirth,
-                dateOfDeath: moviePerson.dateOfDeath,
-                gender: moviePerson.gender,
-                updatedAt: new Date(),
-                externalId: moviePerson.externalId,
-                externalType: moviePerson.externalType,
-                additionalData: moviePerson.additionalData,
-              },
-              update: {
-                name: moviePerson.name,
-                biography: moviePerson.biography,
-                dateOfBirth: moviePerson.dateOfBirth,
-                dateOfDeath: moviePerson.dateOfDeath,
-                gender: moviePerson.gender,
-                updatedAt: new Date(),
-                additionalData: moviePerson.additionalData,
-              },
-            });
+                update: {
+                  name: moviePerson.name,
+                  biography: moviePerson.biography,
+                  dateOfBirth: moviePerson.dateOfBirth,
+                  dateOfDeath: moviePerson.dateOfDeath,
+                  gender: moviePerson.gender,
+                  updatedAt: new Date(),
+                  additionalData: moviePerson.additionalData,
+                },
+              });
+            }),
+          );
+
+        const upsertedActors = await upsertPersons(
+          externalMovieData.actors.map((actor) => actor.person),
+        );
+
+        const upsertedDirectors = await upsertPersons(
+          externalMovieData.directors.map((actor) => actor.person),
+        );
+
+        const upsertedProducers = await upsertPersons(
+          externalMovieData.producers.map((actor) => actor.person),
+        );
+
+        // upsert movie
+        const upsertedMovie = await transactionClient.movie.upsert({
+          where: {
+            externalId_externalType: {
+              externalId: externalId,
+              externalType: externalType,
+            },
+          },
+          create: {
+            originalTitle: externalMovieData.originalTitle,
+            plot: externalMovieData.plot,
+            genres: {
+              connectOrCreate: externalMovieData.genreCodes.map((genreCode) => {
+                return {
+                  where: {
+                    systemName: genreCode.toLowerCase(),
+                  },
+                  create: {
+                    systemName: genreCode.toLowerCase(),
+                    localizedName: _.upperFirst(genreCode.toLowerCase()),
+                  },
+                };
+              }),
+            },
+            runtimeMinutes: externalMovieData.runtimeMinutes,
+            originalLanguageId: originalLanguage.code,
+            countryOfOriginId: countryOfOrigin.code,
+            posterImages: externalMovieData.posterImages,
+            rating: externalMovieData.rating,
+            releaseDate: new Date(externalMovieData.releaseDate),
+            additionalData: externalMovieData.additionalData,
+            localizedTitle: localizedData.localizedTitle,
+            localizedPlot: localizedData.localizedPlot,
+            updatedAt: new Date(),
+            externalType: externalMovieData.externalType,
+            externalId: externalMovieData.externalId,
+          },
+          update: {
+            originalTitle: externalMovieData.originalTitle,
+            plot: externalMovieData.plot,
+            genres: {
+              connectOrCreate: externalMovieData.genreCodes.map((genreCode) => {
+                return {
+                  where: {
+                    systemName: genreCode.toLowerCase(),
+                  },
+                  create: {
+                    systemName: genreCode.toLowerCase(),
+                    localizedName: _.upperFirst(genreCode.toLowerCase()),
+                  },
+                };
+              }),
+            },
+            runtimeMinutes: externalMovieData.runtimeMinutes,
+            originalLanguageId: originalLanguage.code,
+            countryOfOriginId: countryOfOrigin.code,
+            posterImages: externalMovieData.posterImages,
+            rating: externalMovieData.rating,
+            releaseDate: new Date(externalMovieData.releaseDate),
+            additionalData: externalMovieData.additionalData,
+            localizedTitle: localizedData.localizedTitle,
+            localizedPlot: localizedData.localizedPlot,
+            updatedAt: new Date(),
+          },
+        });
+
+        // upsert movie actors
+        await Promise.all(
+          externalMovieData.actors.map((externalMovieActor) => {
+            const upsertedActorPerson = upsertedActors.find(
+              (a) =>
+                a.externalId === externalMovieActor.person.externalId &&
+                a.externalType === externalMovieActor.person.externalType,
+            );
+            if (upsertedActorPerson) {
+              return transactionClient.movieActor.upsert({
+                where: {
+                  personId_movieId: {
+                    personId: upsertedActorPerson.id,
+                    movieId: upsertedMovie.id,
+                  },
+                },
+                create: {
+                  person: {
+                    connect: {
+                      id: upsertedActorPerson.id,
+                    },
+                  },
+                  movie: {
+                    connect: {
+                      id: upsertedMovie.id,
+                    },
+                  },
+                  characterName: externalMovieActor.characterName,
+                  castOrder: externalMovieActor.castOrder,
+                },
+                update: {
+                  characterName: externalMovieActor.characterName,
+                  castOrder: externalMovieActor.castOrder,
+                },
+              });
+            }
           }),
         );
 
-      const upsertedActors = await upsertPersons(
-        externalMovieData.actors.map((actor) => actor.person),
-      );
-
-      const upsertedDirectors = await upsertPersons(
-        externalMovieData.directors.map((actor) => actor.person),
-      );
-
-      const upsertedProducers = await upsertPersons(
-        externalMovieData.producers.map((actor) => actor.person),
-      );
-
-      // upsert movie
-      const upsertedMovie = await transactionClient.movie.upsert({
-        where: {
-          externalId_externalType: {
-            externalId: externalId,
-            externalType: externalType,
-          },
-        },
-        create: {
-          originalTitle: externalMovieData.originalTitle,
-          plot: externalMovieData.plot,
-          genres: {
-            connectOrCreate: externalMovieData.genreCodes.map((genreCode) => {
-              return {
+        // upsert movie directors
+        await Promise.all(
+          externalMovieData.directors.map((externalMovieDirector) => {
+            const upsertedDirectorPerson = upsertedDirectors.find(
+              (person) =>
+                person.externalId === externalMovieDirector.person.externalId &&
+                person.externalType ===
+                  externalMovieDirector.person.externalType,
+            );
+            if (upsertedDirectorPerson) {
+              return transactionClient.movieDirector.upsert({
                 where: {
-                  systemName: genreCode.toLowerCase(),
+                  personId_movieId: {
+                    personId: upsertedDirectorPerson.id,
+                    movieId: upsertedMovie.id,
+                  },
                 },
                 create: {
-                  systemName: genreCode.toLowerCase(),
-                  localizedName: _.upperFirst(genreCode.toLowerCase()),
+                  person: {
+                    connect: {
+                      id: upsertedDirectorPerson.id,
+                    },
+                  },
+                  movie: {
+                    connect: {
+                      id: upsertedMovie.id,
+                    },
+                  },
+                  type: externalMovieDirector.type,
                 },
-              };
-            }),
-          },
-          runtimeMinutes: externalMovieData.runtimeMinutes,
-          originalLanguageId: originalLanguage.code,
-          countryOfOriginId: countryOfOrigin.code,
-          posterImages: externalMovieData.posterImages,
-          rating: externalMovieData.rating,
-          releaseDate: new Date(externalMovieData.releaseDate),
-          additionalData: externalMovieData.additionalData,
-          localizedTitle: localizedData.localizedTitle,
-          localizedPlot: localizedData.localizedPlot,
-          updatedAt: new Date(),
-          externalType: externalMovieData.externalType,
-          externalId: externalMovieData.externalId,
-        },
-        update: {
-          originalTitle: externalMovieData.originalTitle,
-          plot: externalMovieData.plot,
-          genres: {
-            connectOrCreate: externalMovieData.genreCodes.map((genreCode) => {
-              return {
+                update: {
+                  type: externalMovieDirector.type,
+                },
+              });
+            }
+          }),
+        );
+
+        // upsert movie producers
+        await Promise.all(
+          externalMovieData.producers.map((externalMovieProducer) => {
+            const upsertedProducerPerson = upsertedProducers.find(
+              (person) =>
+                person.externalId === externalMovieProducer.person.externalId &&
+                person.externalType ===
+                  externalMovieProducer.person.externalType,
+            );
+            if (upsertedProducerPerson) {
+              return transactionClient.movieProducer.upsert({
                 where: {
-                  systemName: genreCode.toLowerCase(),
+                  personId_movieId: {
+                    personId: upsertedProducerPerson.id,
+                    movieId: upsertedMovie.id,
+                  },
                 },
                 create: {
-                  systemName: genreCode.toLowerCase(),
-                  localizedName: _.upperFirst(genreCode.toLowerCase()),
-                },
-              };
-            }),
-          },
-          runtimeMinutes: externalMovieData.runtimeMinutes,
-          originalLanguageId: originalLanguage.code,
-          countryOfOriginId: countryOfOrigin.code,
-          posterImages: externalMovieData.posterImages,
-          rating: externalMovieData.rating,
-          releaseDate: new Date(externalMovieData.releaseDate),
-          additionalData: externalMovieData.additionalData,
-          localizedTitle: localizedData.localizedTitle,
-          localizedPlot: localizedData.localizedPlot,
-          updatedAt: new Date(),
-        },
-      });
-
-      // upsert movie actors
-      await Promise.all(
-        externalMovieData.actors.map((externalMovieActor) => {
-          const upsertedActorPerson = upsertedActors.find(
-            (a) =>
-              a.externalId === externalMovieActor.person.externalId &&
-              a.externalType === externalMovieActor.person.externalType,
-          );
-          if (upsertedActorPerson) {
-            return transactionClient.movieActor.upsert({
-              where: {
-                personId_movieId: {
-                  personId: upsertedActorPerson.id,
-                  movieId: upsertedMovie.id,
-                },
-              },
-              create: {
-                person: {
-                  connect: {
-                    id: upsertedActorPerson.id,
+                  person: {
+                    connect: {
+                      id: upsertedProducerPerson.id,
+                    },
                   },
-                },
-                movie: {
-                  connect: {
-                    id: upsertedMovie.id,
+                  movie: {
+                    connect: {
+                      id: upsertedMovie.id,
+                    },
                   },
+                  type: externalMovieProducer.type,
                 },
-                characterName: externalMovieActor.characterName,
-                castOrder: externalMovieActor.castOrder,
-              },
-              update: {
-                characterName: externalMovieActor.characterName,
-                castOrder: externalMovieActor.castOrder,
-              },
-            });
-          }
-        }),
-      );
-
-      // upsert movie directors
-      await Promise.all(
-        externalMovieData.directors.map((externalMovieDirector) => {
-          const upsertedDirectorPerson = upsertedDirectors.find(
-            (person) =>
-              person.externalId === externalMovieDirector.person.externalId &&
-              person.externalType === externalMovieDirector.person.externalType,
-          );
-          if (upsertedDirectorPerson) {
-            return transactionClient.movieDirector.upsert({
-              where: {
-                personId_movieId: {
-                  personId: upsertedDirectorPerson.id,
-                  movieId: upsertedMovie.id,
+                update: {
+                  type: externalMovieProducer.type,
                 },
-              },
-              create: {
-                person: {
-                  connect: {
-                    id: upsertedDirectorPerson.id,
-                  },
-                },
-                movie: {
-                  connect: {
-                    id: upsertedMovie.id,
-                  },
-                },
-                type: externalMovieDirector.type,
-              },
-              update: {
-                type: externalMovieDirector.type,
-              },
-            });
-          }
-        }),
-      );
-
-      // upsert movie producers
-      await Promise.all(
-        externalMovieData.producers.map((externalMovieProducer) => {
-          const upsertedProducerPerson = upsertedProducers.find(
-            (person) =>
-              person.externalId === externalMovieProducer.person.externalId &&
-              person.externalType === externalMovieProducer.person.externalType,
-          );
-          if (upsertedProducerPerson) {
-            return transactionClient.movieProducer.upsert({
-              where: {
-                personId_movieId: {
-                  personId: upsertedProducerPerson.id,
-                  movieId: upsertedMovie.id,
-                },
-              },
-              create: {
-                person: {
-                  connect: {
-                    id: upsertedProducerPerson.id,
-                  },
-                },
-                movie: {
-                  connect: {
-                    id: upsertedMovie.id,
-                  },
-                },
-                type: externalMovieProducer.type,
-              },
-              update: {
-                type: externalMovieProducer.type,
-              },
-            });
-          }
-        }),
-      );
-    }); // closed transaction
+              });
+            }
+          }),
+        );
+      },
+      {
+        maxWait: 5000,
+        timeout: 30000,
+      },
+    ); // closed transaction
 
     this.logger.log(
       `Successfully inserted movie with id ${externalId} from ${externalType} in DB`,

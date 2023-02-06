@@ -76,3 +76,18 @@ export type ProjectionsGroupedPerDateAndMovieType = {
     groupedByMovies: ProjectionsGroupedPerMoviesType;
   };
 };
+
+export const InputProvider = {
+  Tmdb: 'Tmdb',
+  Imdb: 'Imdb',
+  AdminInput: 'AdminInput',
+};
+
+export type InputProvider = typeof InputProvider[keyof typeof InputProvider];
+
+export type UpsertMovieFromExternalDTO = {
+  externalType: InputProvider;
+  externalId: string;
+  localizedTitle: string;
+  localizedPlot: string;
+};

@@ -11,6 +11,7 @@ import React from 'react';
 import {AdminRole, AdminRoutes} from '../../types/GeneralTypes';
 import AdminHelper from '../../helpers/AdminHelper';
 import MoviesList from './movies/MoviesList';
+import MoviesCreate from './movies/MoviesCreate';
 // import Login from './authentication/Login';
 
 const dataProvider = reactAdminDataProvider;
@@ -36,12 +37,7 @@ const AdminRoot = function () {
             />
           ) : null,
           AdminHelper.checkRoutePermissions(AdminRoutes.movies, permission) ? (
-            <Resource
-              name={AdminRoutes.movies}
-              options={{label: 'Filmovi'}}
-              list={MoviesList}
-              // create={AdminUserCreate}
-            />
+            <Resource name={AdminRoutes.movies} options={{label: 'Filmovi'}} list={MoviesList} create={MoviesCreate} />
           ) : null,
           <CustomRoutes>
             {AdminHelper.checkRoutePermissions(AdminRoutes.movieTickets, permission) ? (
