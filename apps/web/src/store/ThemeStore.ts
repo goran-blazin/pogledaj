@@ -2,7 +2,6 @@ import {create} from 'zustand';
 
 type ThemeStore = {
   theme: boolean;
-  // eslint-disable-next-line no-unused-vars
   toggleTheme: (isDark: boolean) => void;
 };
 

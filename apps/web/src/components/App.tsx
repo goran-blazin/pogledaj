@@ -27,11 +27,11 @@ const queryClient = new QueryClient();
 
 function App() {
   const [searchParams] = useSearchParams();
-  if (!!searchParams.get('setBetaMode')) {
+  if (searchParams.get('setBetaMode')) {
     window.localStorage.setItem('betaMode', '1');
   }
 
-  if (!!searchParams.get('unsetBetaMode')) {
+  if (searchParams.get('unsetBetaMode')) {
     window.localStorage.removeItem('betaMode');
   }
 
