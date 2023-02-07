@@ -20,6 +20,7 @@ import Utils from '../helpers/Utils';
 import {Route, Routes, useLocation, useSearchParams} from 'react-router-dom';
 import {isAdminRoute} from '../routes';
 import AdminRoot from './admin/AdminRoot';
+import useTheme from '../store/ThemeStore';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -34,8 +35,9 @@ function App() {
     window.localStorage.removeItem('betaMode');
   }
 
-  // handle dark theme switch
-  const isDark = false;
+  // theme store
+  const themeStore = useTheme();
+
   // handle env switch
   const reactAppEnv: EnvTypes = import.meta.env.VITE_ENV as EnvTypes;
   const comingSoon = reactAppEnv === 'production' && !Utils.isBetaMode();
@@ -54,7 +56,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <div className="App">
           <CssBaseline />
-          <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+          <ThemeProvider theme={themeStore.theme ? darkTheme : lightTheme}>
             {comingSoon ? (
               <ComingSoon />
             ) : (
