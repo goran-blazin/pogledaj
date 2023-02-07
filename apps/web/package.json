@@ -64,6 +64,7 @@
     "vite": "vite",
     "dev": "npm-run-all --parallel watch-tsc vite",
     "build": "tsc && vite build",
+    "build-test": "tsc && vite build --mode test",
     "tsc": "tsc",
     "lint": "eslint ./src --ext .tsx,.ts --color --max-warnings=0",
     "lint-fix": "eslint ./src --ext .tsx,.ts --color --fix",
