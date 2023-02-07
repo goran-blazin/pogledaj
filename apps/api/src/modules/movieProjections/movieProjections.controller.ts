@@ -7,8 +7,12 @@ import {
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { MovieProjectionsService } from './movieProjections.service';
+import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { AdminRole } from '@prisma/client';
 
 @Controller('movieProjections')
 export class MovieProjectionsController {
@@ -34,10 +38,18 @@ export class MovieProjectionsController {
     return this.movieProjectionsService.findPerCinema(cinemaId);
   }
 
+  @UseGuards(JwtAdminAuthGuard)
+  @Roles(AdminRole.SuperAdmin)
   @Post('/generate')
   async generateMovieProjections(
     @Body('days', new DefaultValuePipe(30), ParseIntPipe) days: number,
+    @Body('movieId', ParseUUIDPipe) movieId: string,
+    @Body('cinemaId', ParseUUIDPipe) cinemaId: string,
   ) {
-    return this.movieProjectionsService.generate(days);
+    return this.movieProjectionsService.generateSingleMovieSingleCinema(
+      days,
+      movieId,
+      cinemaId,
+    );
   }
 }

@@ -82,8 +82,8 @@ export class MoviesController {
   // }
 
   @UseGuards(JwtAdminAuthGuard)
-  @Post('upsertFromExternal')
   @Roles(AdminRole.SuperAdmin)
+  @Post('upsertFromExternal')
   upsertFromExternal(@Body() upsertFromExternalDto: UpsertFromExternalDto) {
     return this.moviesService.upsertFromExternal(
       upsertFromExternalDto.externalType,

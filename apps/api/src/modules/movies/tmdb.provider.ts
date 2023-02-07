@@ -6,10 +6,6 @@ import { InputProvider, ProducerType } from '@prisma/client';
 import { MovieExternal, PersonForMovieExternal } from '../../types/MovieTypes';
 import { DirectorType, Gender } from '.prisma/client';
 
-function getClient() {
-  return new MovieDB(process.env.TMDB_V3_API_KEY as string, {});
-}
-
 type TmdbPersonGender = 0 | 1 | 2;
 
 const GenderMapper = {
@@ -35,14 +31,20 @@ type TmdbPerson = {
 
 @Injectable()
 export class TmdbProvider {
+  private tmdbClient;
+
+  constructor() {
+    this.tmdbClient = new MovieDB(process.env.TMDB_V3_API_KEY as string, {});
+  }
+
   async getApiConfiguration() {
-    const res = await getClient().configuration.getAPIConfiguration();
+    const res = await this.tmdbClient.configuration.getAPIConfiguration();
 
     return res.data;
   }
 
   async getPerson(personId: number): Promise<TmdbPerson> {
-    const res = await getClient().person.getDetails({
+    const res = await this.tmdbClient.person.getDetails({
       pathParameters: {
         person_id: personId,
       },
@@ -52,16 +54,15 @@ export class TmdbProvider {
   }
 
   async getMovieByTMDBId(tmdbId: string): Promise<MovieExternal> {
-    const apiClient = getClient();
     const [apiConf, externalMovieRes, externalMovieCreditsRes] =
       await Promise.all([
         this.getApiConfiguration(),
-        apiClient.movie.getDetails({
+        this.tmdbClient.movie.getDetails({
           pathParameters: {
             movie_id: tmdbId,
           },
         }),
-        apiClient.movie.getCredits({
+        this.tmdbClient.movie.getCredits({
           pathParameters: {
             movie_id: tmdbId,
           },
