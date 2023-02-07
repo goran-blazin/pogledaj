@@ -6,17 +6,24 @@
     "node": true,
     "es2021": true
   },
-  "extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "plugins": [
+    "@typescript-eslint/eslint-plugin"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 2021,
     "project": "tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
   "rules": {
     "prefer-const": ["error"],
-    "no-unused-vars": ["error"],
-    "no-console": ["warn"]
+    "no-console": ["warn"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"]
   },
   "settings": {
     "import/resolver": {
