@@ -1,0 +1,44 @@
+# builder image
+FROM node:16-slim as builder
+ENV NODE_ENV build
+RUN apt-get update && apt-get install -y openssl libssl-dev
+
+# user node
+USER node
+WORKDIR /home/node
+
+COPY package*.json ./
+COPY prisma/ ./prisma/
+
+# build node_modules
+RUN npm ci
+
+COPY --chown=node:node . .
+
+# build dist
+RUN npm run build \
+    && npm prune --omit=dev
+
+# production image
+FROM node:16-slim as development
+RUN apt-get update && apt-get install -y openssl libssl-dev
+
+# Create app directory
+ENV NODE_ENV test
+ENV APP_LISTEN_PORT 8080
+
+USER node
+WORKDIR /home/node
+
+# Copy packages
+COPY --from=builder --chown=node:node /home/node/package*.json ./
+COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
+COPY --from=builder --chown=node:node /home/node/prisma/ ./prisma/
+COPY --from=builder --chown=node:node /home/node/fly-release.sh ./fly-release.sh
+
+RUN chmod +x ./fly-release.sh
+
+EXPOSE 8080
+
+CMD [ "npm", "run", "start:prod" ]
