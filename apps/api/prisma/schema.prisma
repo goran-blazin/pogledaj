@@ -154,7 +154,8 @@ model Movie {
   originalLanguage     Language              @relation(fields: [originalLanguageId], references: [code], name: "OriginalLanguage")
   countryOfOriginId    String
   countryOfOrigin      Country               @relation(fields: [countryOfOriginId], references: [code])
-  posterImages         Json                  @default("[]")
+  posterImages         Json                  @default("{}")
+  videos               Json                  @default("[]")
   rating               Int
   releaseDate          DateTime              @db.Date
   createdAt            DateTime              @default(now())

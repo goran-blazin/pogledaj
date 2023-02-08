@@ -24,6 +24,12 @@ export type MoviePosterImages = {
   smallBackground: string;
 };
 
+export type MovieVideo = {
+  type: string;
+  site: string;
+  key: string;
+};
+
 export type PersonForMovieExternal = Omit<
   PersonExtended,
   'id' | 'createdAt' | 'updatedAt'
