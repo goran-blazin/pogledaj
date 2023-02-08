@@ -6,6 +6,27 @@ import { InputProvider, ProducerType } from '@prisma/client';
 import { MovieExternal, PersonForMovieExternal } from '../../types/MovieTypes';
 import { DirectorType, Gender } from '.prisma/client';
 
+interface ExtendedVideos {
+  id: number;
+  results: {
+    id: string;
+    iso_639_1: string;
+    iso_3166_1: string;
+    key: string;
+    name: string;
+    site: string;
+    size: 360 | 480 | 720 | 1080;
+    type:
+      | 'Trailer'
+      | 'Teaser'
+      | 'Clip'
+      | 'Featurette'
+      | 'Behind the Scenes'
+      | 'Bloopers';
+    official: boolean;
+  }[];
+}
+
 type TmdbPersonGender = 0 | 1 | 2;
 
 const GenderMapper = {
@@ -54,22 +75,32 @@ export class TmdbProvider {
   }
 
   async getMovieByTMDBId(tmdbId: string): Promise<MovieExternal> {
-    const [apiConf, externalMovieRes, externalMovieCreditsRes] =
-      await Promise.all([
-        this.getApiConfiguration(),
-        this.tmdbClient.movie.getDetails({
-          pathParameters: {
-            movie_id: tmdbId,
-          },
-        }),
-        this.tmdbClient.movie.getCredits({
-          pathParameters: {
-            movie_id: tmdbId,
-          },
-        }),
-      ]);
+    const [
+      apiConf,
+      externalMovieRes,
+      externalMovieCreditsRes,
+      externalMovieVideosRes,
+    ] = await Promise.all([
+      this.getApiConfiguration(),
+      this.tmdbClient.movie.getDetails({
+        pathParameters: {
+          movie_id: tmdbId,
+        },
+      }),
+      this.tmdbClient.movie.getCredits({
+        pathParameters: {
+          movie_id: tmdbId,
+        },
+      }),
+      this.tmdbClient.movie.getVideos({
+        pathParameters: {
+          movie_id: tmdbId,
+        },
+      }),
+    ]);
     const externalMovie = externalMovieRes.data;
     const externalMovieCredits = externalMovieCreditsRes.data;
+    const externalMovieVideos = externalMovieVideosRes.data as ExtendedVideos;
     // get first 5 actors
     const creditActors = externalMovieCredits.cast.slice(0, 5);
     const creditActorPersons = await Promise.all(
@@ -194,6 +225,17 @@ export class TmdbProvider {
           -3,
         )}${externalMovie.backdrop_path}`,
       },
+      videos: externalMovieVideos.results
+        .sort((v1, v2) => {
+          return Number(v2.official) - Number(v1.official);
+        })
+        .map((video) => {
+          return {
+            type: video.type as string,
+            site: video.site,
+            key: video.key,
+          };
+        }),
       rating: Math.ceil(
         parseFloat(externalMovie.vote_average.toString()) * 100,
       ),
