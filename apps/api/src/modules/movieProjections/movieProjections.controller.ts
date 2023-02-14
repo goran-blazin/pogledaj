@@ -7,12 +7,15 @@ import {
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { MovieProjectionsService } from './movieProjections.service';
 import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
 import { Roles } from '../../decorators/roles.decorator';
 import { AdminRole } from '@prisma/client';
+import { CreateMovieProjectionDto } from './dto/createMovieProjection.dto';
+import { ExpressRequestWithUser } from '../../types/CommonTypes';
 
 @Controller('movieProjections')
 export class MovieProjectionsController {
@@ -50,6 +53,19 @@ export class MovieProjectionsController {
       days,
       movieId,
       cinemaId,
+    );
+  }
+
+  @UseGuards(JwtAdminAuthGuard)
+  @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
+  @Post('/')
+  async createMovieProjection(
+    @Body() createMovieProjection: CreateMovieProjectionDto,
+    @Req() req: ExpressRequestWithUser,
+  ) {
+    return this.movieProjectionsService.createByUser(
+      createMovieProjection,
+      req.user,
     );
   }
 }

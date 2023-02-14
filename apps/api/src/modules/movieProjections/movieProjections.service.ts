@@ -1,12 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateMovieProjectionDto } from './dto/createMovieProjection.dto';
 import { MovieProjectionOptions } from './movieProjections.types';
 import { DateTime } from 'ts-luxon';
-import { Cinema, CinemaTheater, Movie } from '@prisma/client';
+import {
+  AdminRole,
+  Cinema,
+  CinemaTheater,
+  CurrencyCode,
+  Movie,
+} from '@prisma/client';
 import * as _ from 'lodash';
 import { Logger } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+import { AdminUserSafe } from '../../types/CommonTypes';
+import AuthHelper from '../../helpers/Auth.helper';
+import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 
 const generateProjections = (
   cinema: Cinema & { cinemaTheaters: CinemaTheater[] },
@@ -51,6 +60,8 @@ const generateProjections = (
         cinemaTheaterId: cinemaTheaterId,
         projectionDateTime: dt.toJSDate(),
         is3D: _.sample([true, false]) as boolean,
+        price: _.random(200, 500),
+        currencyCode: CurrencyCode.RSD,
       };
     })
     .filter((mp) => !!mp);
@@ -62,20 +73,76 @@ export class MovieProjectionsService {
 
   constructor(private prismaService: PrismaService) {}
 
-  create(data: CreateMovieProjectionDto) {
+  async createByUser(data: CreateMovieProjectionDto, user: AdminUserSafe) {
+    // check if manager has access to passed cinema
+    if (user.role !== AdminRole.SuperAdmin) {
+      // get cinema
+      const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+        where: {
+          id: data.cinemaTheaterId,
+        },
+      });
+      if (
+        !cinemaTheater ||
+        AuthHelper.checkAccessToCinema(user, cinemaTheater.cinemaId)
+      ) {
+        return new ForbiddenException(FORBIDDEN_MESSAGE);
+      }
+    }
+
+    return this.create(data);
+  }
+
+  async create(data: CreateMovieProjectionDto) {
+    const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+      where: {
+        id: data.cinemaTheaterId,
+      },
+      include: {
+        cinemaSeatGroups: true,
+      },
+    });
+
+    if (!cinemaTheater) {
+      throw new NotFoundException(
+        `Cinema theater ${data.cinemaTheaterId} not found`,
+      );
+    }
+
     const options: MovieProjectionOptions = {
       is3D: data.is3D,
     };
 
-    return this.prismaService.movieProjection.create({
-      data: {
-        movieId: data.movieId,
-        cinemaTheaterId: data.cinemaTheaterId,
-        projectionDateTime: data.projectionDateTime,
-        dubbedLanguageId: data.dubbedLanguageId || null,
-        updatedAt: new Date(),
-        options,
-      },
+    // open transaction
+    return this.prismaService.$transaction(async (transactionClient) => {
+      // create movie projection
+      const movieProjection = await transactionClient.movieProjection.create({
+        data: {
+          movieId: data.movieId,
+          cinemaTheaterId: data.cinemaTheaterId,
+          projectionDateTime: data.projectionDateTime,
+          dubbedLanguageId: data.dubbedLanguageId || null,
+          updatedAt: new Date(),
+          options,
+        },
+      });
+
+      // create prices
+
+      await Promise.all(
+        cinemaTheater.cinemaSeatGroups.map((seatGroup) => {
+          return transactionClient.projectionPrice.create({
+            data: {
+              projectionId: movieProjection.id,
+              groupId: seatGroup.id,
+              price: data.price,
+              currencyCode: data.currencyCode,
+            },
+          });
+        }),
+      );
+
+      return movieProjection;
     });
   }
 
