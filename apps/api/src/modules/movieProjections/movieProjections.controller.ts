@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -27,18 +28,53 @@ export class MovieProjectionsController {
   async findAllPerMovieCinema(
     @Param('movieId', ParseUUIDPipe) movieId: string,
     @Param('cinemaId', ParseUUIDPipe) cinemaId: string,
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
   ) {
-    return this.movieProjectionsService.findPerMovieCinema(movieId, cinemaId);
+    return this.movieProjectionsService.findAll(
+      {
+        movieId,
+        cinemaId,
+      },
+      {
+        sort: sort ? JSON.parse(sort) : undefined,
+        range: range ? JSON.parse(range) : undefined,
+      },
+    );
   }
 
   @Get('/movie/:movieId')
-  async findAllPerMovie(@Param('movieId', ParseUUIDPipe) movieId: string) {
-    return this.movieProjectionsService.findPerMovie(movieId);
+  async findAllPerMovie(
+    @Param('movieId', ParseUUIDPipe) movieId: string,
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
+  ) {
+    return this.movieProjectionsService.findAll(
+      {
+        movieId,
+      },
+      {
+        sort: sort ? JSON.parse(sort) : undefined,
+        range: range ? JSON.parse(range) : undefined,
+      },
+    );
   }
 
   @Get('/cinema/:cinemaId')
-  async findAllPerCinema(@Param('cinemaId', ParseUUIDPipe) cinemaId: string) {
-    return this.movieProjectionsService.findPerCinema(cinemaId);
+  async findAllPerCinema(
+    @Param('cinemaId', ParseUUIDPipe) cinemaId: string,
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
+  ) {
+    return this.movieProjectionsService.findAll(
+      {
+        cinemaId,
+      },
+      {
+        sort: sort ? JSON.parse(sort) : undefined,
+        range: range ? JSON.parse(range) : undefined,
+      },
+    );
   }
 
   @UseGuards(JwtAdminAuthGuard)

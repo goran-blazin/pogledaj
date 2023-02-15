@@ -64,6 +64,7 @@ export type AdminUser = {
 export const AdminRoutes = {
   adminUsers: 'adminUsers',
   movies: 'movies',
+  projections: 'projections',
   movieTickets: 'movieTickets',
 };
 
@@ -78,3 +79,20 @@ export type PosterImages = {
 };
 
 export type AdminRoutes = typeof AdminRoutes[keyof typeof AdminRoutes];
+
+export type PriceType = 'Normal';
+
+export const CurrencyCode = {
+  RSD: 'RSD',
+  USD: 'USD',
+  EUR: 'EUR',
+  CHF: 'CHF',
+};
+
+export type CurrencyCode = typeof CurrencyCode[keyof typeof CurrencyCode];
+
+export type ProjectionPrice = {
+  type: PriceType;
+  currencyCode: CurrencyCode;
+  price: number;
+};
