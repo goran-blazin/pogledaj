@@ -61,6 +61,10 @@ function Projections() {
               label="Ime filma"
               render={(projection) => (projection ? projection.movie.originalTitle : 'N/A')}
             />
+            <FunctionField<MovieProjection>
+              label="Sala"
+              render={(projection) => (projection ? projection.cinemaTheater.name : 'N/A')}
+            />
             <DateField label="Datum projekcije" source="projectionDateTime" showTime={true} />
             <FunctionField<MovieProjection>
               label="Cena"
