@@ -2,10 +2,10 @@ import * as React from 'react';
 import {Card, CardContent} from '@mui/material';
 import {Title} from 'react-admin';
 
-function MovieTickets() {
+function TicketValidation() {
   return (
     <Card>
-      <Title title="Validacija Karata" />
+      <Title title="Validacija Karatda" />
       <CardContent>
         <div>Validacija karata</div>
       </CardContent>
@@ -13,4 +13,4 @@ function MovieTickets() {
   );
 }
 
-export default MovieTickets;
+export default TicketValidation;

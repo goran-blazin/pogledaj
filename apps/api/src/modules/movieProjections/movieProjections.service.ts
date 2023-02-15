@@ -9,11 +9,16 @@ import {
   CinemaTheater,
   CurrencyCode,
   Movie,
+  MovieProjection,
 } from '@prisma/client';
 import * as _ from 'lodash';
 import { Logger } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
-import { AdminUserSafe } from '../../types/CommonTypes';
+import {
+  AdminUserSafe,
+  GetListOptions,
+  ReturnList,
+} from '../../types/CommonTypes';
 import AuthHelper from '../../helpers/Auth.helper';
 import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 
@@ -146,43 +151,43 @@ export class MovieProjectionsService {
     });
   }
 
-  async findPerMovieCinema(movieId: string, cinemaId: string) {
-    return this.prismaService.movieProjection.findMany({
-      where: {
-        movieId,
-        cinemaTheater: {
-          cinemaId,
-        },
-      },
-    });
-  }
+  async findAll(
+    params: { movieId?: string; cinemaId?: string },
+    options: GetListOptions = {},
+  ): Promise<ReturnList<MovieProjection>> {
+    const where = {
+      movieId: params.movieId ? params.movieId : undefined,
+      cinemaTheater: params.cinemaId
+        ? {
+            cinemaId: params.cinemaId,
+          }
+        : undefined,
+    };
 
-  async findPerMovie(movieId: string) {
-    return this.prismaService.movieProjection.findMany({
-      where: {
-        movieId,
-      },
-      include: {
-        cinemaTheater: {
-          include: {
-            cinema: true,
+    const [movieProjections, movieProjectionsCount] = await Promise.all([
+      this.prismaService.movieProjection.findMany({
+        where,
+        include: {
+          cinemaTheater: {
+            include: {
+              cinema: true,
+            },
           },
+          movie: true,
+          projectionPrices: true,
         },
-      },
-    });
-  }
+        skip: options.range?.skip,
+        take: options.range?.take,
+      }),
+      this.prismaService.movieProjection.count({
+        where,
+      }),
+    ]);
 
-  async findPerCinema(cinemaId: string) {
-    return this.prismaService.movieProjection.findMany({
-      where: {
-        cinemaTheater: {
-          cinemaId,
-        },
-      },
-      include: {
-        movie: true,
-      },
-    });
+    return {
+      data: movieProjections,
+      total: movieProjectionsCount,
+    };
   }
 
   async generateSingleMovieSingleCinema(

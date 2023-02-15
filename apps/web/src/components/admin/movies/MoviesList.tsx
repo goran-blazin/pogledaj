@@ -23,19 +23,6 @@ import {Link} from '@mui/material';
 //   ) : null;
 // }
 
-// function ImdbUrlField() {
-//   const record = useRecordContext<Movie>();
-//
-//   if (record.additionalData.imdbId) {
-//     return (
-//       <TextField source={'localizedTitle'} label="TEST" />
-//
-//     );
-//   } else {
-//     return null;
-//   }
-// }
-
 function MoviesList() {
   return (
     <List>

@@ -1,4 +1,4 @@
-import {Country, Genre, IntRange, Language, PosterImages} from './GeneralTypes';
+import {Country, Genre, IntRange, Language, PosterImages, ProjectionPrice} from './GeneralTypes';
 import {Actor, Director, Producer} from './PeopleTypes';
 import {Cinema, CinemaTheater} from './CinemaTypes';
 
@@ -41,6 +41,7 @@ export type MovieProjection = {
   projectionDateTime: string;
   dubbedLanguage?: Language;
   options: MovieProjectionOptions;
+  projectionPrices: ProjectionPrice[];
 };
 
 export type ProjectionsGroupedPerCinemaType = {
