@@ -31,7 +31,7 @@ export const CustomMenu = function (props) {
       {AdminHelper.checkRoutePermissions(AdminRoutes.projections, permissions) ? (
         <Menu.Item
           to={getAdminRoute(AdminRoutes.projections)}
-          primaryText="Uredjivanje projekcija"
+          primaryText="Projekcije"
           leftIcon={<PhotoCameraBackIcon />}
         />
       ) : null}

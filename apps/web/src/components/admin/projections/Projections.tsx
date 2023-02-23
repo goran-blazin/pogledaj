@@ -32,7 +32,7 @@ function Projections() {
 
   return (
     <Box>
-      <Title title="Uredjivanje projekcija" />
+      <Title title="Projekcije" />
       <FormControl sx={{margin: 1}} size="small">
         <InputLabel id="demo-select-small">Bioskop</InputLabel>
         <Select
