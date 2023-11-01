@@ -178,6 +178,11 @@ export class MovieProjectionsService {
         },
         skip: options.range?.skip,
         take: options.range?.take,
+        orderBy: options.sort
+          ? {
+              [options.sort.field]: options.sort.order,
+            }
+          : undefined,
       }),
       this.prismaService.movieProjection.count({
         where,
@@ -186,6 +191,7 @@ export class MovieProjectionsService {
 
     return {
       data: movieProjections,
+      dataCount: movieProjections.length,
       total: movieProjectionsCount,
     };
   }

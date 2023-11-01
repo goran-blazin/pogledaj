@@ -82,6 +82,7 @@ export class AdminUsersService {
 
     return {
       data: adminUsers,
+      dataCount: adminUsers.length,
       total: adminUsersCount,
     };
   }

@@ -1,10 +1,20 @@
 import * as React from 'react';
 import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from '@mui/material';
-import {Datagrid, DateField, FunctionField, List, Title, useGetList} from 'react-admin';
+import {
+  CreateButton,
+  Datagrid,
+  DateField,
+  ExportButton,
+  FunctionField,
+  List,
+  Title,
+  TopToolbar,
+  useGetList,
+} from 'react-admin';
 import {Cinema} from '../../../types/CinemaTypes';
 import {MovieProjection} from '../../../types/MoviesTypes';
 
-function Projections() {
+function MovieProjectionsList() {
   const [currentCinemaId, setCurrentCinemaId] = React.useState('');
 
   const {data} = useGetList<Cinema>(
@@ -29,6 +39,13 @@ function Projections() {
       name: `${cinema.name}, ${cinema.address}, ${cinema.city.name}`,
     };
   });
+
+  const ListActions = () => (
+    <TopToolbar>
+      <CreateButton />
+      <ExportButton />
+    </TopToolbar>
+  );
 
   return (
     <Box>
@@ -55,8 +72,8 @@ function Projections() {
         </Select>
       </FormControl>
       {currentCinemaId && (
-        <List resource={`movieProjections/cinema/${currentCinemaId}`}>
-          <Datagrid>
+        <List actions={<ListActions />} resource={`movieProjections/cinema/${currentCinemaId}`}>
+          <Datagrid bulkActionButtons={false}>
             <FunctionField<MovieProjection>
               label="Ime filma"
               render={(projection) => (projection ? projection.movie.originalTitle : 'N/A')}
@@ -81,4 +98,4 @@ function Projections() {
   );
 }
 
-export default Projections;
+export default MovieProjectionsList;

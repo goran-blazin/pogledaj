@@ -92,3 +92,22 @@ export type UpsertMovieFromExternalDTO = {
   localizedTitle: string;
   localizedPlot: string;
 };
+
+export const CurrencyCode = {
+  RSD: 'RSD',
+  USD: 'USD',
+  EUR: 'EUR',
+  CHF: 'CHF',
+};
+
+export type CurrencyCode = typeof CurrencyCode[keyof typeof CurrencyCode];
+
+export type CreateMovieProjectionDTO = {
+  movieId: string;
+  cinemaTheaterId: string;
+  projectionDateTime: string;
+  dubbedLanguageId?: string | null;
+  is3D: boolean;
+  price: number;
+  currencyCode: CurrencyCode;
+};

@@ -93,7 +93,7 @@ export class MovieProjectionsController {
   }
 
   @UseGuards(JwtAdminAuthGuard)
-  @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
+  @Roles(AdminRole.SuperAdmin)
   @Post('/')
   async createMovieProjection(
     @Body() createMovieProjection: CreateMovieProjectionDto,

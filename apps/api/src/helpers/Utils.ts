@@ -6,13 +6,31 @@ export const getAssetsPath = (): string => {
 };
 
 export const resolveReactAdminFilters = (filter: FilterOptions) => {
-  return filter
-    ? {
-        id: filter.ids
-          ? {
-              in: filter.ids,
-            }
-          : undefined,
-      }
-    : {};
+  if (filter) {
+    return Object.entries(filter).reduce<Record<string, unknown>>(
+      (carry, keyValue) => {
+        const [filterKey, filterValue] = keyValue;
+        // parse for getMany
+        if (filterKey === 'ids' && filterValue) {
+          carry['id'] = {
+            in: filter.ids,
+          };
+        } else {
+          // parse for filtering
+          if (Array.isArray(filterValue)) {
+            carry[filterKey] = {
+              in: filterValue,
+            };
+          } else {
+            carry[filterKey] = filterValue;
+          }
+        }
+
+        return carry;
+      },
+      {},
+    );
+  }
+
+  return {};
 };

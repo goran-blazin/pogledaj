@@ -30,10 +30,18 @@ const Utils = {
   isBetaMode() {
     return parseInt(window.localStorage.getItem('betaMode') || '') === 1;
   },
-  convertErrorMessagesToReactAdminForm(error: AxiosError): Record<string, string> | undefined {
+  convertErrorMessagesToReactAdminForm(
+    error: AxiosError,
+    keyMap?: Record<string, string>,
+  ): Record<string, string> | undefined {
     const messages: Record<string, string[]> = _.get(error, 'response.data.messages');
     if (messages) {
-      return _.mapValues(messages, (messages) => messages.map((message) => _.upperFirst(message) + '.').join(' '));
+      const mappedMessages = _.mapValues(messages, (messages) =>
+        messages.map((message) => _.upperFirst(message) + '.').join(' '),
+      );
+      return _.mapKeys(mappedMessages, (_messages, key) => {
+        return keyMap && keyMap[key] ? keyMap[key] : key;
+      });
     }
   },
 
