@@ -23,7 +23,7 @@ export class CinemasController {
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('sort') sort?: string,
     @Query('range') range?: string,
     @Query('filter') filter?: string,

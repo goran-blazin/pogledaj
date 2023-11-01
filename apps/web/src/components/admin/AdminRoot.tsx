@@ -12,7 +12,8 @@ import {AdminRole, AdminRoutes} from '../../types/GeneralTypes';
 import AdminHelper from '../../helpers/AdminHelper';
 import MoviesList from './movies/MoviesList';
 import MoviesCreate from './movies/MoviesCreate';
-import Projections from './projections/Projections';
+import MovieProjectionsList from './projections/MovieProjectionsList';
+import MovieProjectionsCreate from './projections/MovieProjectionsCreate';
 // import Login from './authentication/Login';
 
 const dataProvider = reactAdminDataProvider;
@@ -42,7 +43,10 @@ const AdminRoot = function () {
           ) : null,
           <CustomRoutes>
             {AdminHelper.checkRoutePermissions(AdminRoutes.projections, permission) ? (
-              <Route path={`/${AdminRoutes.projections}`} element={<Projections />} />
+              <React.Fragment>
+                <Route path={`/${AdminRoutes.projections}`} element={<MovieProjectionsList />} />
+                <Route path={`/${AdminRoutes.createProjection}`} element={<MovieProjectionsCreate />} />
+              </React.Fragment>
             ) : null}
             {AdminHelper.checkRoutePermissions(AdminRoutes.movieTickets, permission) ? (
               <Route path={`/${AdminRoutes.movieTickets}`} element={<TicketValidation />} />

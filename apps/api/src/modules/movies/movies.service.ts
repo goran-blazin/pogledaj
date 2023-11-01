@@ -67,6 +67,7 @@ export class MoviesService {
 
     return {
       data: movies,
+      dataCount: movies.length,
       total: moviesCount,
     };
   }

@@ -40,6 +40,7 @@ export class CinemasService {
 
     return {
       data: cinemas,
+      dataCount: cinemas.length,
       total: cinemasCount,
     };
   }

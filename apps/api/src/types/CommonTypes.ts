@@ -28,6 +28,7 @@ export type AdminUserJwtPayload = {
 
 export type ReturnList<T> = {
   data: Array<T>;
+  dataCount: number;
   total: number;
 };
 
