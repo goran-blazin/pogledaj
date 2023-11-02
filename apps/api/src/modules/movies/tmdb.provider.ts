@@ -1,7 +1,7 @@
 import MovieDB from 'node-themoviedb';
 import * as process from 'process';
 import * as _ from 'lodash';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InputProvider, ProducerType } from '@prisma/client';
 import { MovieExternal, PersonForMovieExternal } from '../../types/MovieTypes';
 import { DirectorType, Gender } from '.prisma/client';

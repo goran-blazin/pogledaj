@@ -4,6 +4,7 @@ const AdminRoutePermissions: Record<AdminRoutes, AdminRole[]> = {
   [AdminRoutes.adminUsers]: [AdminRole.Manager],
   [AdminRoutes.movies]: [AdminRole.Manager],
   [AdminRoutes.projections]: [AdminRole.Manager],
+  [AdminRoutes.cinemas]: [AdminRole.Manager],
   [AdminRoutes.movieTickets]: [AdminRole.Manager, AdminRole.Employee],
 };
 

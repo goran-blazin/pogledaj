@@ -14,7 +14,8 @@ import MoviesList from './movies/MoviesList';
 import MoviesCreate from './movies/MoviesCreate';
 import MovieProjectionsList from './projections/MovieProjectionsList';
 import MovieProjectionsCreate from './projections/MovieProjectionsCreate';
-// import Login from './authentication/Login';
+import CinemasList from './cinemas/CinemasList';
+import CinemaShow from './cinemas/CinemaShow';
 
 const dataProvider = reactAdminDataProvider;
 const authProvider = reactAdminAuthProvider;
@@ -42,6 +43,13 @@ const AdminRoot = function () {
             <Resource name={AdminRoutes.movies} options={{label: 'Filmovi'}} list={MoviesList} create={MoviesCreate} />
           ) : null,
           <CustomRoutes>
+            {AdminHelper.checkRoutePermissions(AdminRoutes.cinemas, permission) ? (
+              <React.Fragment>
+                <Route path={`/${AdminRoutes.cinemas}`} element={<CinemasList />} />
+                <Route path={`/${AdminRoutes.cinemaShow}`} element={<CinemaShow />} />
+                {/*<Route path={`/${AdminRoutes.createCinema}`} element={<MovieProjectionsCreate />} />*/}
+              </React.Fragment>
+            ) : null}
             {AdminHelper.checkRoutePermissions(AdminRoutes.projections, permission) ? (
               <React.Fragment>
                 <Route path={`/${AdminRoutes.projections}`} element={<MovieProjectionsList />} />

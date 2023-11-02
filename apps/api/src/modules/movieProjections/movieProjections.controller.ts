@@ -77,8 +77,8 @@ export class MovieProjectionsController {
     );
   }
 
-  @UseGuards(JwtAdminAuthGuard)
   @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
   @Post('/generate')
   async generateMovieProjections(
     @Body('days', new DefaultValuePipe(30), ParseIntPipe) days: number,
@@ -92,8 +92,8 @@ export class MovieProjectionsController {
     );
   }
 
-  @UseGuards(JwtAdminAuthGuard)
   @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
   @Post('/')
   async createMovieProjection(
     @Body() createMovieProjection: CreateMovieProjectionDto,

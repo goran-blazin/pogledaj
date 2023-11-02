@@ -67,6 +67,9 @@ export const AdminRoutes = {
   projections: 'movieProjections',
   createProjection: 'movieProjections/cinema/:cinemaId/create',
   movieTickets: 'movieTickets',
+  cinemas: 'cinemas',
+  cinemaShow: 'cinemas/:id/show',
+  createCinema: 'createCinema',
 };
 
 export type PosterImages = {

@@ -7,7 +7,6 @@ import {
   ExportButton,
   FunctionField,
   List,
-  Title,
   TopToolbar,
   useGetList,
 } from 'react-admin';
@@ -49,7 +48,6 @@ function MovieProjectionsList() {
 
   return (
     <Box>
-      <Title title="Projekcije" />
       <FormControl sx={{margin: 1}} size="small">
         <InputLabel id="demo-select-small">Bioskop</InputLabel>
         <Select
@@ -72,7 +70,7 @@ function MovieProjectionsList() {
         </Select>
       </FormControl>
       {currentCinemaId && (
-        <List actions={<ListActions />} resource={`movieProjections/cinema/${currentCinemaId}`}>
+        <List actions={<ListActions />} resource={`movieProjections/cinema/${currentCinemaId}`} title={'Projekcije'}>
           <Datagrid bulkActionButtons={false}>
             <FunctionField<MovieProjection>
               label="Ime filma"

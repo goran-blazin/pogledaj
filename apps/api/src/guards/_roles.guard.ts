@@ -5,7 +5,7 @@ import { AdminRole } from '@prisma/client';
 import { ExpressRequestWithUser } from '../types/CommonTypes';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class _RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {

@@ -74,15 +74,15 @@ export class MoviesController {
   //   });
   // }
 
+  // @Roles(AdminRole.SuperAdmin)
   // @UseGuards(JwtAdminAuthGuard)
   // @Delete(':id')
-  // @Roles(AdminRole.SuperAdmin)
   // remove(@Param('id', ParseUUIDPipe) id: string) {
   //   return this.moviesService.remove(id);
   // }
 
-  @UseGuards(JwtAdminAuthGuard)
   @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
   @Post('upsertFromExternal')
   upsertFromExternal(@Body() upsertFromExternalDto: UpsertFromExternalDto) {
     return this.moviesService.upsertFromExternal(

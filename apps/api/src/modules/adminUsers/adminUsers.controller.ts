@@ -17,7 +17,6 @@ import { CreateAdminUserDto } from './dto/create-admin-user.dto';
 // import { UpdateAdminUserDto } from './dto/update-admin-user.dto';
 import { AdminRole } from '@prisma/client';
 import { Roles } from '../../decorators/roles.decorator';
-import { RolesGuard } from '../../guards/roles.guard';
 import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
 import { AdminUserSafe, ExpressRequestWithUser } from '../../types/CommonTypes';
 import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
@@ -71,7 +70,7 @@ export class AdminUsersController {
 
   @Post()
   @Roles(AdminRole.Manager)
-  @UseGuards(JwtAdminAuthGuard, RolesGuard)
+  @UseGuards(JwtAdminAuthGuard)
   create(
     @Body() createAdminUserDto: CreateAdminUserDto,
     @Req() req: ExpressRequestWithUser,
@@ -85,8 +84,8 @@ export class AdminUsersController {
   }
 
   @Get()
-  @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
-  @UseGuards(JwtAdminAuthGuard, RolesGuard)
+  @Roles(AdminRole.Manager)
+  @UseGuards(JwtAdminAuthGuard)
   async findAll(
     @Req() req: ExpressRequestWithUser,
     @Query('sort') sort?: string,
@@ -98,6 +97,7 @@ export class AdminUsersController {
     });
   }
 
+  @Roles(AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard)
   @Get(':id')
   async findOne(
@@ -119,7 +119,7 @@ export class AdminUsersController {
   }
 
   // @Roles(AdminRole.Manager)
-  // @UseGuards(JwtAdminAuthGuard, RolesGuard)
+  // @UseGuards(JwtAdminAuthGuard)
   // @Patch(':id')
   // update(
   //   @Param('id') id: string,
@@ -129,7 +129,7 @@ export class AdminUsersController {
   // }
 
   @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
-  @UseGuards(JwtAdminAuthGuard, RolesGuard)
+  @UseGuards(JwtAdminAuthGuard)
   @Delete(':id')
   async remove(
     @Param('id', ParseUUIDPipe) id: string,

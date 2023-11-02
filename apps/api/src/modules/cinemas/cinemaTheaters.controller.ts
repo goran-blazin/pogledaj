@@ -1,5 +1,16 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { CinemaTheatersService } from './cinemaTheaters.service';
+import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
+import { CreateCinemaTheaterDto } from './dto/createCinemaTheater.dto';
 
 @Controller('cinemaTheaters')
 export class CinemaTheatersController {
@@ -16,5 +27,17 @@ export class CinemaTheatersController {
       range: range ? JSON.parse(range) : undefined,
       filter: filter ? JSON.parse(filter) : undefined,
     });
+  }
+
+  @Post()
+  @UseGuards(JwtAdminAuthGuard)
+  createCinemaTheater(@Body() createCinemaTheaterDto: CreateCinemaTheaterDto) {
+    return this.cinemaTheatersService.create(createCinemaTheaterDto);
+  }
+
+  @Delete('/:cinemaTheaterId')
+  @UseGuards(JwtAdminAuthGuard)
+  deleteCinemaTheater(@Param('cinemaTheaterId') cinemaTheaterId: string) {
+    return this.cinemaTheatersService.delete(cinemaTheaterId);
   }
 }

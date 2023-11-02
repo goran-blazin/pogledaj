@@ -2,24 +2,27 @@ import {
   Controller,
   Get,
   Post,
-  Patch,
   Param,
-  Delete,
   ParseUUIDPipe,
   Query,
+  Body,
+  UseGuards,
 } from '@nestjs/common';
 import { CinemasService } from './cinemas.service';
-// import { CreateCinemaDto } from './dto/create-cinema.dto';
-// import { UpdateCinemaDto } from './dto/update-cinema.dto';
+import { CreateCinemaDto } from './dto/createCinema.dto';
+import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { AdminRole } from '@prisma/client';
 
 @Controller('cinemas')
 export class CinemasController {
   constructor(private readonly cinemasService: CinemasService) {}
 
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
   @Post()
-  // create(@Body() createCinemaDto: CreateCinemaDto) {
-  create() {
-    return this.cinemasService.create();
+  create(@Body() createCinemaDto: CreateCinemaDto) {
+    return this.cinemasService.create(createCinemaDto);
   }
 
   @Get()
@@ -42,14 +45,14 @@ export class CinemasController {
     });
   }
 
-  @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCinemaDto: UpdateCinemaDto) {
-  update(@Param('id') id: string) {
-    return this.cinemasService.update(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cinemasService.remove(+id);
-  }
+  // @Patch(':id')
+  // // update(@Param('id') id: string, @Body() updateCinemaDto: UpdateCinemaDto) {
+  // update(@Param('id') id: string) {
+  //   return this.cinemasService.update(+id);
+  // }
+  //
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.cinemasService.remove(+id);
+  // }
 }

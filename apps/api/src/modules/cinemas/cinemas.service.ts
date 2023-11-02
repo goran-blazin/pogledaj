@@ -5,14 +5,24 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Cinema, Prisma } from '@prisma/client';
 import { GetListOptions, ReturnList } from '../../types/CommonTypes';
 import { resolveReactAdminFilters } from '../../helpers/Utils';
+import { CreateCinemaDto } from './dto/createCinema.dto';
 
 @Injectable()
 export class CinemasService {
   constructor(private prismaService: PrismaService) {}
 
-  // create(createCinemaDto: CreateCinemaDto) {
-  create() {
-    return 'This action adds a new cinema ';
+  create(createCinemaDto: CreateCinemaDto) {
+    return this.prismaService.cinema.create({
+      data: {
+        name: createCinemaDto.name,
+        description: createCinemaDto.description,
+        address: createCinemaDto.address,
+        rating: 0,
+        phone: createCinemaDto.phone ? [createCinemaDto.phone] : [],
+        posterImages: [],
+        cityId: createCinemaDto.cityId,
+      },
+    });
   }
 
   async findAll(options: GetListOptions = {}): Promise<ReturnList<Cinema>> {

@@ -4,6 +4,7 @@ import {Menu, usePermissions} from 'react-admin';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
+import ChairIcon from '@mui/icons-material/Chair';
 import MovieIcon from '@mui/icons-material/Movie';
 import {AdminRole, AdminRoutes} from '../../../types/GeneralTypes';
 import AdminHelper from '../../../helpers/AdminHelper';
@@ -27,6 +28,9 @@ export const CustomMenu = function (props) {
       ) : null}
       {AdminHelper.checkRoutePermissions(AdminRoutes.movies, permissions) ? (
         <Menu.Item to={getAdminRoute(AdminRoutes.movies)} primaryText="Filmovi" leftIcon={<MovieIcon />} />
+      ) : null}
+      {AdminHelper.checkRoutePermissions(AdminRoutes.cinemas, permissions) ? (
+        <Menu.Item to={getAdminRoute(AdminRoutes.cinemas)} primaryText="Bioskopi" leftIcon={<ChairIcon />} />
       ) : null}
       {AdminHelper.checkRoutePermissions(AdminRoutes.projections, permissions) ? (
         <Menu.Item
