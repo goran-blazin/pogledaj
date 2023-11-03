@@ -25,6 +25,13 @@ export class CinemaTheatersService {
         where: {
           ...resolveReactAdminFilters(options.filter),
         },
+        include: {
+          cinemaSeatGroups: {
+            include: {
+              cinemaSeats: true,
+            },
+          },
+        },
         skip: options.range?.skip,
         take: options.range?.take,
         orderBy: options.sort

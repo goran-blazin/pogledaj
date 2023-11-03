@@ -29,6 +29,23 @@ export class CinemaTheatersController {
     });
   }
 
+  @Get('/cinema/:cinemaId')
+  findAllByCinema(
+    @Param('cinemaId') cinemaId: string,
+    @Query('sort') sort?: string,
+    @Query('range') range?: string,
+    @Query('filter') filter?: string,
+  ) {
+    return this.cinemaTheatersService.findAll({
+      sort: sort ? JSON.parse(sort) : undefined,
+      range: range ? JSON.parse(range) : undefined,
+      filter: {
+        cinemaId,
+        ...(filter ? JSON.parse(filter) : {}),
+      },
+    });
+  }
+
   @Post()
   @UseGuards(JwtAdminAuthGuard)
   createCinemaTheater(@Body() createCinemaTheaterDto: CreateCinemaTheaterDto) {

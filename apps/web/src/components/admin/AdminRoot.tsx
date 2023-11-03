@@ -15,7 +15,8 @@ import MoviesCreate from './movies/MoviesCreate';
 import MovieProjectionsList from './projections/MovieProjectionsList';
 import MovieProjectionsCreate from './projections/MovieProjectionsCreate';
 import CinemasList from './cinemas/CinemasList';
-import CinemaShow from './cinemas/CinemaShow';
+import CinemasShow from './cinemas/CinemasShow';
+import CinemasCreate from './cinemas/CinemasCreate';
 
 const dataProvider = reactAdminDataProvider;
 const authProvider = reactAdminAuthProvider;
@@ -46,14 +47,15 @@ const AdminRoot = function () {
             {AdminHelper.checkRoutePermissions(AdminRoutes.cinemas, permission) ? (
               <React.Fragment>
                 <Route path={`/${AdminRoutes.cinemas}`} element={<CinemasList />} />
-                <Route path={`/${AdminRoutes.cinemaShow}`} element={<CinemaShow />} />
+                <Route path={`/${AdminRoutes.cinemasShow}`} element={<CinemasShow />} />
+                <Route path={`/${AdminRoutes.cinemasCreate}`} element={<CinemasCreate />} />
                 {/*<Route path={`/${AdminRoutes.createCinema}`} element={<MovieProjectionsCreate />} />*/}
               </React.Fragment>
             ) : null}
             {AdminHelper.checkRoutePermissions(AdminRoutes.projections, permission) ? (
               <React.Fragment>
                 <Route path={`/${AdminRoutes.projections}`} element={<MovieProjectionsList />} />
-                <Route path={`/${AdminRoutes.createProjection}`} element={<MovieProjectionsCreate />} />
+                <Route path={`/${AdminRoutes.projectionsCreate}`} element={<MovieProjectionsCreate />} />
               </React.Fragment>
             ) : null}
             {AdminHelper.checkRoutePermissions(AdminRoutes.movieTickets, permission) ? (

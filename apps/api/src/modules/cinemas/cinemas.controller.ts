@@ -7,6 +7,7 @@ import {
   Query,
   Body,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { CinemasService } from './cinemas.service';
 import { CreateCinemaDto } from './dto/createCinema.dto';
@@ -51,8 +52,9 @@ export class CinemasController {
   //   return this.cinemasService.update(+id);
   // }
   //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.cinemasService.remove(+id);
-  // }
+  @UseGuards(JwtAdminAuthGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.cinemasService.remove(id);
+  }
 }

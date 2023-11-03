@@ -1,5 +1,15 @@
 import {Box} from '@mui/material';
-import {CreateButton, Datagrid, ExportButton, List, ShowButton, TextField, TopToolbar, WrapperField} from 'react-admin';
+import {
+  CreateButton,
+  Datagrid,
+  DeleteButton,
+  ExportButton,
+  List,
+  ShowButton,
+  TextField,
+  TopToolbar,
+  WrapperField,
+} from 'react-admin';
 import * as React from 'react';
 
 function CinemasList() {
@@ -18,6 +28,12 @@ function CinemasList() {
           <TextField label="Grad" source="city.name" />
           <WrapperField>
             <ShowButton label="Detalji" />
+            <DeleteButton
+              label="Brisanje"
+              confirmContent={'Jeste li sigurni da zelite da kompletno obrisete ovaj bioskop!?'}
+              confirmTitle={'Brisanje bioskopa'}
+              mutationMode={'pessimistic'}
+            />
           </WrapperField>
         </Datagrid>
       </List>

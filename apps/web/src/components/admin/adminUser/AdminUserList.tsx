@@ -47,6 +47,7 @@ function DeleteUserButton() {
       confirmContent={'Jeste li sigurni da zelite da obrisete ovog administratora?'}
       confirmTitle={'Brisanje administratora'}
       mutationMode={'pessimistic'}
+      label="Brisanje"
     />
   ) : loggedUser.email === record.email ? (
     <span>Prijavljeni administrator</span>

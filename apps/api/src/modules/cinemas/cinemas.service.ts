@@ -75,7 +75,11 @@ export class CinemasService {
     return `This action updates a #${id} cinema`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cinema`;
+  remove(id: string) {
+    return this.prismaService.cinema.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

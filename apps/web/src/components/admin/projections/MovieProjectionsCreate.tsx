@@ -25,6 +25,7 @@ import {ApiErrors} from '../../../types/ErrorTypes';
 import {DateTime} from 'ts-luxon';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {AdminRoutes} from '../../../types/GeneralTypes';
+import LoadingBox from '../utility/LoadingBox';
 
 function MovieProjectionsCreate() {
   const params = useParams();
@@ -134,7 +135,7 @@ function MovieProjectionsCreate() {
       </SimpleForm>
     </Create>
   ) : (
-    <Box>Loading...</Box>
+    <LoadingBox />
   );
 }
 

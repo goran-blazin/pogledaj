@@ -24,6 +24,7 @@ export type Country = {
 };
 
 export type City = {
+  id: string;
   name: string;
   code: string;
   postalCode: string;
@@ -65,11 +66,11 @@ export const AdminRoutes = {
   adminUsers: 'adminUsers',
   movies: 'movies',
   projections: 'movieProjections',
-  createProjection: 'movieProjections/cinema/:cinemaId/create',
+  projectionsCreate: 'movieProjections/cinema/:cinemaId/create',
   movieTickets: 'movieTickets',
   cinemas: 'cinemas',
-  cinemaShow: 'cinemas/:id/show',
-  createCinema: 'createCinema',
+  cinemasShow: 'cinemas/:id/show',
+  cinemasCreate: 'cinemas/create',
 };
 
 export type PosterImages = {

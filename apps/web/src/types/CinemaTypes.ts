@@ -1,5 +1,19 @@
 import {City, IntRange} from './GeneralTypes';
 
+export const CinemaSeatGroupPosition = {
+  TopLeft: 'TopLeft',
+  TopCenter: 'TopCenter',
+  TopRight: 'TopRight',
+  CenterLeft: 'CenterLeft',
+  Center: 'Center',
+  CenterRight: 'CenterRight',
+  BottomLeft: 'BottomLeft',
+  BottomCenter: 'BottomCenter',
+  BottomRight: 'BottomRight',
+} as const;
+
+export type CinemaSeatGroupPosition = typeof CinemaSeatGroupPosition[keyof typeof CinemaSeatGroupPosition];
+
 export type Cinema = {
   id: string;
   name: string;
@@ -18,6 +32,7 @@ export type CinemaTheater = {
   seatLayout: SeatGroup[];
   supports3D: boolean;
   posterImages: string[];
+  cinemaSeatGroups: SeatGroup[];
 };
 
 export type SeatGroup = {
@@ -25,10 +40,11 @@ export type SeatGroup = {
   name: string;
   rowCount: number;
   columnCount: number;
-  seats: Seat[];
+  position: CinemaSeatGroupPosition;
+  cinemaSeats: CinemaSeats[];
 };
 
-export type Seat = {
+export type CinemaSeats = {
   id: string;
   seatRow: string;
   seatColumn: string;
