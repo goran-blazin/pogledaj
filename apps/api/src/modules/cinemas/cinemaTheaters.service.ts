@@ -90,10 +90,44 @@ export class CinemaTheatersService {
   }
 
   async delete(cinemaTheaterId: string) {
-    return this.prismaService.cinemaTheater.delete({
-      where: {
-        id: cinemaTheaterId,
-      },
+    return this.prismaService.$transaction(async (transactionClient) => {
+      // first delete all seats
+      await transactionClient.cinemaSeat.deleteMany({
+        where: {
+          cinemaSeatGroup: {
+            cinemaTheaterId,
+          },
+        },
+      });
+
+      // now delete all projection and prices
+      await transactionClient.projectionPrice.deleteMany({
+        where: {
+          cinemaSeatGroup: {
+            cinemaTheaterId,
+          },
+        },
+      });
+
+      await transactionClient.movieProjection.deleteMany({
+        where: {
+          cinemaTheaterId,
+        },
+      });
+
+      // then delete all seat groups
+      await transactionClient.cinemaSeatGroup.deleteMany({
+        where: {
+          cinemaTheaterId,
+        },
+      });
+
+      // finally delete cinemaTheater
+      await transactionClient.cinemaTheater.delete({
+        where: {
+          id: cinemaTheaterId,
+        },
+      });
     });
   }
 }

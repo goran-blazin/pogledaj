@@ -1,6 +1,7 @@
 import {Box} from '@mui/material';
 import {
   CreateButton,
+  DeleteButton,
   FunctionField,
   List,
   Show,
@@ -30,6 +31,18 @@ function CinemasShow() {
     </TopToolbar>
   );
 
+  const DeleteTheaterButton = () => (
+    <DeleteButton
+      confirmContent={
+        'Jeste li sigurni da zelite da obrisete ovu salu? PAZNJA - ova akcija ce obrisati i sve projekcije zajedno sa salom!'
+      }
+      confirmTitle={'Brisanje bioskopske sale'}
+      mutationMode={'pessimistic'}
+      label="Brisanje"
+      redirect={false}
+    />
+  );
+
   return (
     <Box>
       <Box>
@@ -48,7 +61,11 @@ function CinemasShow() {
       </Box>
       <Box>
         <h2>Bioskopske sale</h2>
-        <List actions={<ListCinemaTheatersActions />} resource={`cinemaTheaters/cinema/${params.id}`}>
+        <List
+          actions={<ListCinemaTheatersActions />}
+          resource={`cinemaTheaters/cinema/${params.id}`}
+          empty={<ListCinemaTheatersActions />}
+        >
           <SimpleList<CinemaTheater>
             linkType={false}
             rowStyle={() => ({
@@ -66,11 +83,13 @@ function CinemasShow() {
                   <p>Broj kolona: {centerSeatGroup.columnCount}</p>
                   <p>Broj sedista: {centerSeatGroup.rowCount * centerSeatGroup.columnCount}</p>
                   <p>Podrzava 3D: {cinemaTheater.supports3D ? 'DA' : 'NE'}</p>
+                  <DeleteTheaterButton />
                 </Box>
               ) : (
                 <Box>
                   <h3>{cinemaTheater.name}:</h3>
                   <p>POSTOJI GRESKA! OBRATITE SE ADMINISTRATORU!</p>
+                  <DeleteTheaterButton />
                 </Box>
               );
             }}

@@ -70,7 +70,12 @@ function MovieProjectionsList() {
         </Select>
       </FormControl>
       {currentCinemaId && (
-        <List actions={<ListActions />} resource={`movieProjections/cinema/${currentCinemaId}`} title={'Projekcije'}>
+        <List
+          actions={<ListActions />}
+          resource={`movieProjections/cinema/${currentCinemaId}`}
+          title={'Projekcije'}
+          empty={<ListActions />}
+        >
           <Datagrid bulkActionButtons={false}>
             <FunctionField<MovieProjection>
               label="Ime filma"

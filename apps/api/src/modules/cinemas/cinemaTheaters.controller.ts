@@ -52,7 +52,7 @@ export class CinemaTheatersController {
     return this.cinemaTheatersService.create(createCinemaTheaterDto);
   }
 
-  @Delete('/:cinemaTheaterId')
+  @Delete(['/:cinemaTheaterId', '/cinema/:cinemaId/:cinemaTheaterId'])
   @UseGuards(JwtAdminAuthGuard)
   deleteCinemaTheater(@Param('cinemaTheaterId') cinemaTheaterId: string) {
     return this.cinemaTheatersService.delete(cinemaTheaterId);
