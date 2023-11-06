@@ -12,7 +12,7 @@ export const CinemaSeatGroupPosition = {
   BottomRight: 'BottomRight',
 } as const;
 
-export type CinemaSeatGroupPosition = typeof CinemaSeatGroupPosition[keyof typeof CinemaSeatGroupPosition];
+export type CinemaSeatGroupPosition = (typeof CinemaSeatGroupPosition)[keyof typeof CinemaSeatGroupPosition];
 
 export type Cinema = {
   id: string;

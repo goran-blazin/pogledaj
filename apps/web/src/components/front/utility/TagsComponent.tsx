@@ -27,9 +27,7 @@ function TagsComponent({genres}: RatingInfoProps) {
   return (
     <TagsComponentStyled>
       <Stack direction="row" spacing={0} flexWrap="wrap" gap={'14px'}>
-        {genres?.map((genre, index) => (
-          <ChipStyled label={genre.localizedName} variant="outlined" key={index} />
-        ))}
+        {genres?.map((genre, index) => <ChipStyled label={genre.localizedName} variant="outlined" key={index} />)}
       </Stack>
     </TagsComponentStyled>
   );

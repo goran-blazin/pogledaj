@@ -29,7 +29,7 @@ function AdminUserCreate() {
   const {data} = useGetList<Cinema>('cinemas', {
     filter: undefined,
     pagination: {page: 1, perPage: 100},
-    sort: {field: 'name', order: 'desc'},
+    sort: {field: 'name', order: 'DESC'},
   });
 
   const cinemasSelectInput = (data || []).map((cinema) => {

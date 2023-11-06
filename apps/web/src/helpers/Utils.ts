@@ -34,7 +34,10 @@ const Utils = {
     error: AxiosError,
     keyMap?: Record<string, string>,
   ): Record<string, string> | undefined {
-    const messages: Record<string, string[]> = _.get(error, 'response.data.messages');
+    const messages: Record<string, string[]> | undefined = _.get(error, 'response.data.messages') as unknown as Record<
+      string,
+      string[]
+    >;
     if (messages) {
       const mappedMessages = _.mapValues(messages, (messages) =>
         messages.map((message) => _.upperFirst(message) + '.').join(' '),

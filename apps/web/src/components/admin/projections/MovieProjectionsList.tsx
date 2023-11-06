@@ -21,7 +21,7 @@ function MovieProjectionsList() {
     {
       filter: undefined,
       pagination: {page: 1, perPage: 100},
-      sort: {field: 'name', order: 'desc'},
+      sort: {field: 'name', order: 'DESC'},
     },
     {
       onSuccess(result) {

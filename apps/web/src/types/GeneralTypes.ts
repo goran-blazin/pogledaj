@@ -40,7 +40,7 @@ export const AdminRole = {
   Employee: 'Employee',
 };
 
-export type AdminRole = typeof AdminRole[keyof typeof AdminRole];
+export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole];
 
 export type AdminUserJwtPayload = {
   adminUserRole: AdminRole;
@@ -84,7 +84,7 @@ export type PosterImages = {
   mediumBackground: string;
 };
 
-export type AdminRoutes = typeof AdminRoutes[keyof typeof AdminRoutes];
+export type AdminRoutes = (typeof AdminRoutes)[keyof typeof AdminRoutes];
 
 export type PriceType = 'Normal';
 
@@ -95,7 +95,7 @@ export const CurrencyCode = {
   CHF: 'CHF',
 };
 
-export type CurrencyCode = typeof CurrencyCode[keyof typeof CurrencyCode];
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
 
 export type ProjectionPrice = {
   type: PriceType;

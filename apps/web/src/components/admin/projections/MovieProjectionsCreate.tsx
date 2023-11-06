@@ -39,11 +39,11 @@ function MovieProjectionsCreate() {
       cinemaId: params.cinemaId,
     },
     pagination: {page: 1, perPage: 100},
-    sort: {field: 'name', order: 'asc'},
+    sort: {field: 'name', order: 'ASC'},
   });
   const {data: movies, isSuccess: moviesIsSuccess} = useGetList<Movie>('movies', {
     pagination: {page: 1, perPage: 10000},
-    sort: {field: 'localizedTitle', order: 'asc'},
+    sort: {field: 'localizedTitle', order: 'ASC'},
   });
 
   const cinemaTheatersSelectInput = (cinemaTheaters || []).map((cinemaTheater) => {

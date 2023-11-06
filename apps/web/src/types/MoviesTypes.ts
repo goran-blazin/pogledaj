@@ -84,7 +84,7 @@ export const InputProvider = {
   AdminInput: 'AdminInput',
 };
 
-export type InputProvider = typeof InputProvider[keyof typeof InputProvider];
+export type InputProvider = (typeof InputProvider)[keyof typeof InputProvider];
 
 export type UpsertMovieFromExternalDTO = {
   externalType: InputProvider;
@@ -100,7 +100,7 @@ export const CurrencyCode = {
   CHF: 'CHF',
 };
 
-export type CurrencyCode = typeof CurrencyCode[keyof typeof CurrencyCode];
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
 
 export type CreateMovieProjectionDTO = {
   movieId: string;
