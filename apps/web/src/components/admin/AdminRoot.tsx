@@ -17,6 +17,7 @@ import MovieProjectionsCreate from './projections/MovieProjectionsCreate';
 import CinemasList from './cinemas/CinemasList';
 import CinemasShow from './cinemas/CinemasShow';
 import CinemasCreate from './cinemas/CinemasCreate';
+import CinemaTheatersCreate from './cinemas/CinemaTheatersCreate';
 
 const dataProvider = reactAdminDataProvider;
 const authProvider = reactAdminAuthProvider;
@@ -49,6 +50,7 @@ const AdminRoot = function () {
                 <Route path={`/${AdminRoutes.cinemas}`} element={<CinemasList />} />
                 <Route path={`/${AdminRoutes.cinemasShow}`} element={<CinemasShow />} />
                 <Route path={`/${AdminRoutes.cinemasCreate}`} element={<CinemasCreate />} />
+                <Route path={`/${AdminRoutes.cinemaTheatersCreate}`} element={<CinemaTheatersCreate />} />
                 {/*<Route path={`/${AdminRoutes.createCinema}`} element={<MovieProjectionsCreate />} />*/}
               </React.Fragment>
             ) : null}

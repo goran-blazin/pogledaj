@@ -111,3 +111,11 @@ export type CreateMovieProjectionDTO = {
   price: number;
   currencyCode: CurrencyCode;
 };
+
+export type CreateCinemaTheaterDTO = {
+  name: string;
+  supports3D: boolean;
+  cinemaId: string;
+  rowCount: number;
+  columnCount: number;
+};

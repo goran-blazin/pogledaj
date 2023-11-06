@@ -71,6 +71,7 @@ export const AdminRoutes = {
   cinemas: 'cinemas',
   cinemasShow: 'cinemas/:id/show',
   cinemasCreate: 'cinemas/create',
+  cinemaTheatersCreate: 'cinemaTheaters/cinema/:cinemaId/create',
 };
 
 export type PosterImages = {
