@@ -17,6 +17,12 @@ const MovieProjectionsService = {
   async createMovieProjection(data: CreateMovieProjectionDTO) {
     return PogledajApi().post(`movieProjections`, data);
   },
+
+  async findOneById(id: string): Promise<MovieProjection> {
+    const result = await PogledajApi().get(`movieProjections/${id}`);
+
+    return result.data;
+  },
 };
 
 export default Object.freeze(MovieProjectionsService);

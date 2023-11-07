@@ -102,7 +102,7 @@ function MovieSingleWrapper() {
       {movie?.isLoading ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
-        <>
+        <React.Fragment>
           {movie?.data ? (
             <React.Fragment>
               <MovieSinglePreview>
@@ -185,7 +185,7 @@ function MovieSingleWrapper() {
           ) : (
             <h2>Film nije pronadjen</h2>
           )}
-        </>
+        </React.Fragment>
       )}
     </div>
   );

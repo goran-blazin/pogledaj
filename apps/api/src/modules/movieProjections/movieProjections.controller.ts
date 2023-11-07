@@ -104,4 +104,11 @@ export class MovieProjectionsController {
       req.user,
     );
   }
+
+  @Get(':movieProjectionId')
+  async findSingleMovieProjection(
+    @Param('movieProjectionId') movieProjectionId: string,
+  ) {
+    return this.movieProjectionsService.findById(movieProjectionId);
+  }
 }

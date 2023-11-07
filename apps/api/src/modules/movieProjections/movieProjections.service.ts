@@ -78,6 +78,27 @@ export class MovieProjectionsService {
 
   constructor(private prismaService: PrismaService) {}
 
+  async findById(movieProjectionId: string) {
+    return this.prismaService.movieProjection.findUnique({
+      where: {
+        id: movieProjectionId,
+      },
+      include: {
+        movie: true,
+        cinemaTheater: {
+          include: {
+            cinema: true,
+            cinemaSeatGroups: {
+              include: {
+                cinemaSeats: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async createByUser(data: CreateMovieProjectionDto, user: AdminUserSafe) {
     // check if manager has access to passed cinema
     if (user.role !== AdminRole.SuperAdmin) {
