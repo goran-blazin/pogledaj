@@ -26,23 +26,36 @@ type BoardProps = {
   reserveSeat: (row: number, column: number) => void;
 };
 
-type SeatState = 'available' | 'reserved' | 'unavailable' | 'disabled';
+type SeatState = 'available' | 'chosen' | 'unavailable' | 'disabled';
 type Seat = {
   state: SeatState;
   rowIndex: number;
   colIndex: number;
 };
 
+const seatColorMap: Record<SeatState, {color: string; verboseName: string}> = {
+  available: {
+    color: '#D6D6D6',
+    verboseName: 'Slobodno',
+  },
+  chosen: {
+    color: '#3274F6',
+    verboseName: 'Vaš izbor',
+  },
+  unavailable: {
+    color: '#F7DA68',
+    verboseName: 'Zauzeto',
+  },
+  disabled: {
+    color: '#FFFFFF',
+    verboseName: 'Nedostupno',
+  },
+};
+
 const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPercentage, seats, reserveSeat}) => {
   const cols = columns + 1;
   const margin = `${squareMarginPercentage / cols}%`;
   const containerWidth = `calc(${100 / cols}% - ${margin})`;
-  const seatColorMap: Record<SeatState, string> = {
-    available: '#D6D6D6',
-    reserved: '#3274F6',
-    unavailable: '#F7DA68',
-    disabled: '#ffffff',
-  };
 
   // Generate column headers
   const columnHeaders = Array.from({length: cols}, (_, i) => i);
@@ -57,7 +70,7 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
             sx={{
               width: containerWidth,
               margin: `0 ${margin} ${margin} 0`,
-              fontSize: '0.6rem',
+              fontSize: '3vw',
               alignItems: 'center',
               display: 'flex',
               justifyContent: 'center', // Center the text horizontally
@@ -90,7 +103,7 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
                 alignItems: 'center',
                 display: 'flex',
                 justifyContent: 'center', // Center the text horizontally
-                fontSize: '0.6rem',
+                fontSize: '3vw',
               }}
             >
               {rowIndex + 1}
@@ -108,7 +121,7 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
                   paddingBottom: `calc(100% - ${margin})`, // Maintain aspect ratio
                 },
                 position: 'relative',
-                backgroundColor: seatColorMap[seats[rowIndex][colIndex - 1].state],
+                backgroundColor: seatColorMap[seats[rowIndex][colIndex - 1].state].color,
                 borderRadius: '30%', // Rounded corners
               }}
             >
@@ -131,9 +144,43 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
   );
 };
 
+function StatusIndicator() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '100%', // Set the width you prefer
+        padding: '2vh 5px',
+        borderRadius: '12px', // Adjust as needed
+        backgroundColor: '#F0F0F0', // Adjust as needed
+      }}
+    >
+      {Object.values(seatColorMap).map((seatColor, i) => {
+        return (
+          <Box sx={{display: 'flex', alignItems: 'center'}} key={i}>
+            <Box
+              sx={{
+                width: '4vw',
+                height: '4vw',
+                borderRadius: '30%',
+                backgroundColor: seatColor.color, // Use the correct color
+                marginRight: '4px',
+              }}
+            />
+            <Typography sx={{fontSize: '3vw'}}>{seatColor.verboseName}</Typography>
+          </Box>
+        );
+      })}
+    </Box>
+  );
+}
+
 function MovieProjectionSingle() {
   const {movieProjectionId} = useParams();
   const [seats, setSeats] = useState<Seat[][]>();
+  const getAllSeats = () => seats?.flat();
 
   const movieProjection = movieProjectionId
     ? useQuery(['movieProjection', movieProjectionId], () => MovieProjectionsService.findOneById(movieProjectionId), {
@@ -155,14 +202,16 @@ function MovieProjectionSingle() {
         },
       })
     : undefined;
+
   const movieProjectionData = movieProjection?.data;
+
   const reserveSeat = (row: number, column: number) => {
     if (seats) {
       const seat = seats[row][column];
       const newSeatState = (() => {
         if (seat.state === 'available') {
-          return 'reserved';
-        } else if (seat.state === 'reserved') {
+          return 'chosen';
+        } else if (seat.state === 'chosen') {
           return 'available';
         } else {
           return seat.state;
@@ -189,7 +238,7 @@ function MovieProjectionSingle() {
         <React.Fragment>
           {movieProjectionData && seats ? (
             <React.Fragment>
-              <div className="movie-projection-single-header">
+              <Box className="movie-projection-single-header">
                 <p>{movieProjectionData.movie.localizedTitle}</p>
                 <p>
                   <span>Bioskop: </span> {movieProjectionData.cinemaTheater.cinema.name}
@@ -200,11 +249,11 @@ function MovieProjectionSingle() {
                 <p>
                   <span>Sala: </span> {movieProjectionData.cinemaTheater.name}
                 </p>
-              </div>
+              </Box>
               <CinemaCanvasHolder>
                 <img src="/img/cinemaCanvas.svg" alt="cinema canvas" className="container" />
               </CinemaCanvasHolder>
-              <div style={{maxWidth: '100%', margin: 'auto'}}>
+              <Box style={{maxWidth: '100%', margin: 'auto'}}>
                 <CinemaSeatBoard
                   rows={movieProjectionData.cinemaTheater.cinemaSeatGroups[0].rowCount}
                   columns={movieProjectionData.cinemaTheater.cinemaSeatGroups[0].columnCount}
@@ -212,7 +261,26 @@ function MovieProjectionSingle() {
                   seats={seats}
                   reserveSeat={reserveSeat}
                 />
-              </div>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  width: '100%',
+                  padding: '2vh 5px',
+                }}
+              >
+                <Typography sx={{fontSize: '3vw'}}>
+                  Broj slobodnih mesta: {getAllSeats()?.filter((seat) => seat.state === 'available').length}
+                </Typography>
+                <Typography sx={{fontSize: '3vw'}}>
+                  Broj izabranih mesta: {getAllSeats()?.filter((seat) => seat.state === 'chosen').length}
+                </Typography>
+              </Box>
+              <Box>
+                <StatusIndicator />
+              </Box>
             </React.Fragment>
           ) : (
             <Typography color={'text.primary'}>Filmska projekcija nije pronadjena</Typography>
