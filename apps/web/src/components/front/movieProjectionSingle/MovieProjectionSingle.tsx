@@ -2,7 +2,7 @@ import {useParams} from 'react-router-dom';
 import {useQuery} from 'react-query';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {Typography, styled, Box} from '@mui/material';
-import React from 'react';
+import React, {useState} from 'react';
 import {DateTime} from 'ts-luxon';
 
 const formatDate = (date: string) => DateTime.fromISO(date).toFormat('dd.MM.yyyy / HH:mm');
@@ -18,19 +18,30 @@ const CinemaCanvasHolder = styled('div')({
   },
 });
 
-interface BoardProps {
+type BoardProps = {
   rows: number;
   columns: number;
   squareMarginPercentage: number;
-}
+  seats: Seat[][];
+  reserveSeat: (row: number, column: number) => void;
+};
 
-const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPercentage}) => {
+type SeatState = 'available' | 'reserved' | 'unavailable' | 'disabled';
+type Seat = {
+  state: SeatState;
+  rowIndex: number;
+  colIndex: number;
+};
+
+const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPercentage, seats, reserveSeat}) => {
   const cols = columns + 1;
   const margin = `${squareMarginPercentage / cols}%`;
   const containerWidth = `calc(${100 / cols}% - ${margin})`;
-
-  const getSquareColor = (rowIndex: number, colIndex: number): string => {
-    return (rowIndex + colIndex) % 2 === 0 ? 'lightgray' : 'darkgray';
+  const seatColorMap: Record<SeatState, string> = {
+    available: '#D6D6D6',
+    reserved: '#3274F6',
+    unavailable: '#F7DA68',
+    disabled: '#ffffff',
   };
 
   // Generate column headers
@@ -86,6 +97,7 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
             </Box>
           ) : (
             <Box
+              onClick={() => reserveSeat(rowIndex, colIndex - 1)}
               key={index}
               sx={{
                 width: containerWidth,
@@ -96,7 +108,7 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
                   paddingBottom: `calc(100% - ${margin})`, // Maintain aspect ratio
                 },
                 position: 'relative',
-                backgroundColor: getSquareColor(rowIndex, colIndex),
+                backgroundColor: seatColorMap[seats[rowIndex][colIndex - 1].state],
                 borderRadius: '30%', // Rounded corners
               }}
             >
@@ -121,10 +133,53 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
 
 function MovieProjectionSingle() {
   const {movieProjectionId} = useParams();
+  const [seats, setSeats] = useState<Seat[][]>();
+
   const movieProjection = movieProjectionId
-    ? useQuery(['movieProjection', movieProjectionId], () => MovieProjectionsService.findOneById(movieProjectionId))
+    ? useQuery(['movieProjection', movieProjectionId], () => MovieProjectionsService.findOneById(movieProjectionId), {
+        onSuccess(movieProjection) {
+          // set initial seats
+          const seats: Seat[][] = Array.from({
+            length: movieProjection.cinemaTheater.cinemaSeatGroups[0].rowCount,
+          }).map((_, row) =>
+            Array.from({length: movieProjection.cinemaTheater.cinemaSeatGroups[0].columnCount}).map((_, col) => {
+              return {
+                state: 'available',
+                rowIndex: row,
+                colIndex: col,
+              };
+            }),
+          );
+
+          setSeats(seats);
+        },
+      })
     : undefined;
   const movieProjectionData = movieProjection?.data;
+  const reserveSeat = (row: number, column: number) => {
+    if (seats) {
+      const seat = seats[row][column];
+      const newSeatState = (() => {
+        if (seat.state === 'available') {
+          return 'reserved';
+        } else if (seat.state === 'reserved') {
+          return 'available';
+        } else {
+          return seat.state;
+        }
+      })();
+
+      const newSeats: Seat[][] = seats.map((seatRow) =>
+        seatRow.map((seat) => {
+          return {
+            ...seat,
+            state: row === seat.rowIndex && column === seat.colIndex ? newSeatState : seat.state,
+          };
+        }),
+      );
+      setSeats(newSeats);
+    }
+  };
 
   return (
     <div className="movie-projection-single-wrapper">
@@ -132,7 +187,7 @@ function MovieProjectionSingle() {
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <React.Fragment>
-          {movieProjectionData ? (
+          {movieProjectionData && seats ? (
             <React.Fragment>
               <div className="movie-projection-single-header">
                 <p>{movieProjectionData.movie.localizedTitle}</p>
@@ -154,6 +209,8 @@ function MovieProjectionSingle() {
                   rows={movieProjectionData.cinemaTheater.cinemaSeatGroups[0].rowCount}
                   columns={movieProjectionData.cinemaTheater.cinemaSeatGroups[0].columnCount}
                   squareMarginPercentage={30}
+                  seats={seats}
+                  reserveSeat={reserveSeat}
                 />
               </div>
             </React.Fragment>
