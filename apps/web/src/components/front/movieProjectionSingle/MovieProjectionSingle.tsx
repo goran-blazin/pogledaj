@@ -2,8 +2,11 @@ import {useParams} from 'react-router-dom';
 import {useQuery} from 'react-query';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {Typography, styled, Box} from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import React, {useState} from 'react';
 import {DateTime} from 'ts-luxon';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import IconButton from '@mui/material/IconButton';
 
 const formatDate = (date: string) => DateTime.fromISO(date).toFormat('dd.MM.yyyy / HH:mm');
 const CinemaCanvasHolder = styled('div')({
@@ -18,12 +21,14 @@ const CinemaCanvasHolder = styled('div')({
   },
 });
 
+type ToggleSeat = (row: number, column: number) => void;
+
 type BoardProps = {
   rows: number;
   columns: number;
   squareMarginPercentage: number;
   seats: Seat[][];
-  reserveSeat: (row: number, column: number) => void;
+  toggleSeat: ToggleSeat;
 };
 
 type SeatState = 'available' | 'chosen' | 'unavailable' | 'disabled';
@@ -52,7 +57,7 @@ const seatColorMap: Record<SeatState, {color: string; verboseName: string}> = {
   },
 };
 
-const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPercentage, seats, reserveSeat}) => {
+const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPercentage, seats, toggleSeat}) => {
   const cols = columns + 1;
   const margin = `${squareMarginPercentage / cols}%`;
   const containerWidth = `calc(${100 / cols}% - ${margin})`;
@@ -110,7 +115,7 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
             </Box>
           ) : (
             <Box
-              onClick={() => reserveSeat(rowIndex, colIndex - 1)}
+              onClick={() => toggleSeat(rowIndex, colIndex - 1)}
               key={index}
               sx={{
                 width: containerWidth,
@@ -177,35 +182,59 @@ function StatusIndicator() {
   );
 }
 
+const SeatsSelected: React.FC<{seats: Seat[]; toggleSeat: ToggleSeat}> = ({seats, toggleSeat}) => {
+  return (
+    <Box>
+      {seats.map((seat, index) => {
+        return (
+          <Box key={index}>
+            Mesto {index + 1}: red {seat.rowIndex + 1} sedište {seat.colIndex + 1}
+            <IconButton aria-label="remove" color="primary" onClick={() => toggleSeat(seat.rowIndex, seat.colIndex)}>
+              <HighlightOffIcon />
+            </IconButton>
+          </Box>
+        );
+      })}
+    </Box>
+  );
+};
+
 function MovieProjectionSingle() {
   const {movieProjectionId} = useParams();
   const [seats, setSeats] = useState<Seat[][]>();
-  const getAllSeats = () => seats?.flat();
+  const [reserveButtonLoading, setReserveButtonLoading] = React.useState(false);
+
+  const getAllSeats = (state?: SeatState) => {
+    const allSeats = seats?.flat() || [];
+    return state ? allSeats.filter((seat) => seat.state === state) : allSeats;
+  };
 
   const movieProjection = movieProjectionId
     ? useQuery(['movieProjection', movieProjectionId], () => MovieProjectionsService.findOneById(movieProjectionId), {
         onSuccess(movieProjection) {
           // set initial seats
-          const seats: Seat[][] = Array.from({
+          const seatsFromApi: Seat[][] = Array.from({
             length: movieProjection.cinemaTheater.cinemaSeatGroups[0].rowCount,
           }).map((_, row) =>
             Array.from({length: movieProjection.cinemaTheater.cinemaSeatGroups[0].columnCount}).map((_, col) => {
+              const currentSeat = getAllSeats().find((s) => s.colIndex === col && s.rowIndex === row);
+
               return {
-                state: 'available',
+                state: currentSeat ? currentSeat.state : 'available',
                 rowIndex: row,
                 colIndex: col,
               };
             }),
           );
 
-          setSeats(seats);
+          setSeats(seatsFromApi);
         },
       })
     : undefined;
 
   const movieProjectionData = movieProjection?.data;
 
-  const reserveSeat = (row: number, column: number) => {
+  const toggleSeat = (row: number, column: number) => {
     if (seats) {
       const seat = seats[row][column];
       const newSeatState = (() => {
@@ -227,6 +256,15 @@ function MovieProjectionSingle() {
         }),
       );
       setSeats(newSeats);
+    }
+  };
+
+  const reserveSeats = () => {
+    const chosenSeats = getAllSeats('chosen');
+    if (chosenSeats.length) {
+      setReserveButtonLoading(true);
+    } else {
+      alert('Nijedno sediste nije izabrano');
     }
   };
 
@@ -259,7 +297,7 @@ function MovieProjectionSingle() {
                   columns={movieProjectionData.cinemaTheater.cinemaSeatGroups[0].columnCount}
                   squareMarginPercentage={30}
                   seats={seats}
-                  reserveSeat={reserveSeat}
+                  toggleSeat={toggleSeat}
                 />
               </Box>
               <Box
@@ -271,15 +309,24 @@ function MovieProjectionSingle() {
                   padding: '2vh 5px',
                 }}
               >
-                <Typography sx={{fontSize: '3vw'}}>
-                  Broj slobodnih mesta: {getAllSeats()?.filter((seat) => seat.state === 'available').length}
-                </Typography>
-                <Typography sx={{fontSize: '3vw'}}>
-                  Broj izabranih mesta: {getAllSeats()?.filter((seat) => seat.state === 'chosen').length}
-                </Typography>
+                <Typography sx={{fontSize: '3vw'}}>Broj slobodnih mesta: {getAllSeats('available').length}</Typography>
+                <Typography sx={{fontSize: '3vw'}}>Broj izabranih mesta: {getAllSeats('chosen').length}</Typography>
               </Box>
               <Box>
                 <StatusIndicator />
+              </Box>
+              <Box>
+                <SeatsSelected seats={getAllSeats('chosen')} toggleSeat={toggleSeat} />
+              </Box>
+              <Box>
+                <LoadingButton
+                  loading={reserveButtonLoading}
+                  color={'primary'}
+                  variant="outlined"
+                  onClick={reserveSeats}
+                >
+                  Rezervacija
+                </LoadingButton>
               </Box>
             </React.Fragment>
           ) : (
