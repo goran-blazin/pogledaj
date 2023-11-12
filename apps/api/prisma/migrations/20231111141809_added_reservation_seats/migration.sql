@@ -8,7 +8,7 @@
 ALTER TABLE "Reservation" DROP CONSTRAINT "Reservation_seatId_fkey";
 
 -- AlterTable
-ALTER TABLE "Reservation" DROP COLUMN "seatId",
+ALTER TABLE "Reservation" DROP COLUMN "seatId";
 
 -- CreateTable
 CREATE TABLE "ReservationSeats" (
