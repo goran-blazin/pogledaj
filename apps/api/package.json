@@ -10,6 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" && prisma format",
     "migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "migrate:test": "dotenv -e .env.local-test -- prisma migrate deploy",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
