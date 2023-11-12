@@ -1,6 +1,12 @@
 import {Link, useLocation} from 'react-router-dom';
 import {BottomNavigation, BottomNavigationAction} from '@mui/material';
-import {HomeOutlined, TheatersOutlined, Tune, VideoCameraBackOutlined} from '@mui/icons-material';
+import {
+  HomeOutlined,
+  TheatersOutlined,
+  Tune,
+  VideoCameraBackOutlined,
+  LocalActivityOutlined,
+} from '@mui/icons-material';
 import {SxProps} from '@mui/system';
 import {namedRoutes} from '../../../routes';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -75,6 +81,13 @@ function FooterMenuWrapper() {
           to={namedRoutes.moviesListing}
           label="Filmovi"
           icon={<TheatersOutlined />}
+        />
+        <BottomNavigationAction
+          sx={navActionStyles(location.pathname.startsWith('/reservations'))}
+          component={Link}
+          to={namedRoutes.reservations}
+          label="Rezervacije"
+          icon={<LocalActivityOutlined />}
         />
         <BottomNavigationAction
           sx={navActionStyles(location.pathname.startsWith('/cinema'))}

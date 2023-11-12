@@ -16,6 +16,7 @@ import { MovieProjectionsModule } from './modules/movieProjections/movieProjecti
 import { AdminAuthModule } from './modules/adminAuth/adminAuth.module';
 import { AdminUsersModule } from './modules/adminUsers/adminUsers.module';
 import { GeolocationModule } from './modules/geolocation/geolocation.module';
+import { ReservationsModule } from './modules/reservations/reservations.module';
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
   ? (process.env.NODE_ENV as NodeEnv)
   : 'local';
@@ -53,6 +54,7 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv)
     AdminAuthModule,
     AdminUsersModule,
     GeolocationModule,
+    ReservationsModule,
   ],
   controllers: [],
   providers: [],

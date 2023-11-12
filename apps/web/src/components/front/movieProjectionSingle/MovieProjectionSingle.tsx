@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useQuery} from 'react-query';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {Typography, styled, Box} from '@mui/material';
@@ -7,6 +7,8 @@ import React, {useState} from 'react';
 import {DateTime} from 'ts-luxon';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import IconButton from '@mui/material/IconButton';
+import ReservationsService from '../../../services/ReservationsService';
+import {namedRoutes} from '../../../routes';
 
 const formatDate = (date: string) => DateTime.fromISO(date).toFormat('dd.MM.yyyy / HH:mm');
 const CinemaCanvasHolder = styled('div')({
@@ -32,7 +34,14 @@ type BoardProps = {
 };
 
 type SeatState = 'available' | 'chosen' | 'unavailable' | 'disabled';
+
+// type ReservedSeat = {
+//   seatId: string;
+//   reservationId: string;
+// };
+
 type Seat = {
+  seatId?: string;
   state: SeatState;
   rowIndex: number;
   colIndex: number;
@@ -200,8 +209,10 @@ const SeatsSelected: React.FC<{seats: Seat[]; toggleSeat: ToggleSeat}> = ({seats
 };
 
 function MovieProjectionSingle() {
+  const navigate = useNavigate();
   const {movieProjectionId} = useParams();
   const [seats, setSeats] = useState<Seat[][]>();
+  // const [reservedSeats, setReservedSeats] = useState<ReservedSeat[]>([]);
   const [reserveButtonLoading, setReserveButtonLoading] = React.useState(false);
 
   const getAllSeats = (state?: SeatState) => {
@@ -212,18 +223,52 @@ function MovieProjectionSingle() {
   const movieProjection = movieProjectionId
     ? useQuery(['movieProjection', movieProjectionId], () => MovieProjectionsService.findOneById(movieProjectionId), {
         onSuccess(movieProjection) {
-          // set initial seats
-          const seatsFromApi: Seat[][] = Array.from({
-            length: movieProjection.cinemaTheater.cinemaSeatGroups[0].rowCount,
-          }).map((_, row) =>
-            Array.from({length: movieProjection.cinemaTheater.cinemaSeatGroups[0].columnCount}).map((_, col) => {
-              const currentSeat = getAllSeats().find((s) => s.colIndex === col && s.rowIndex === row);
+          // set reserved seats
+          const _reservedSeats = movieProjection.reservations
+            .map((reservation) => {
+              return reservation.reservationSeats.map((reservedSeat) => {
+                return {
+                  seatId: reservedSeat.seatId,
+                  reservationId: reservation.id,
+                };
+              });
+            })
+            .flat();
+          const reservedSeatIds = _reservedSeats.map((rs) => rs.seatId);
+          // setReservedSeats(_reservedSeats);
 
-              return {
-                state: currentSeat ? currentSeat.state : 'available',
-                rowIndex: row,
-                colIndex: col,
-              };
+          // set initial seats
+          const cinemaSeatGroups = movieProjection.cinemaTheater.cinemaSeatGroups[0];
+          const seatsFromApi: Seat[][] = Array.from({
+            length: cinemaSeatGroups.rowCount,
+          }).map((_, row) =>
+            Array.from({length: cinemaSeatGroups.columnCount}).map((_, col) => {
+              const cinemaSeat = cinemaSeatGroups.cinemaSeats.find(
+                (s) => s.seatColumn === col.toString() && s.seatRow === row.toString(),
+              );
+              if (cinemaSeat) {
+                const currentLocalSeat = getAllSeats().find((s) => s.seatId === cinemaSeat.id);
+
+                return {
+                  seatId: cinemaSeat.id,
+                  state: (() => {
+                    if (reservedSeatIds.includes(cinemaSeat.id)) {
+                      return 'unavailable';
+                    }
+
+                    return currentLocalSeat ? currentLocalSeat.state : 'available';
+                  })(),
+                  rowIndex: row,
+                  colIndex: col,
+                };
+              } else {
+                return {
+                  seatId: undefined,
+                  state: 'unavailable',
+                  rowIndex: row,
+                  colIndex: col,
+                };
+              }
             }),
           );
 
@@ -259,10 +304,26 @@ function MovieProjectionSingle() {
     }
   };
 
-  const reserveSeats = () => {
+  const reserveSeats = async () => {
     const chosenSeats = getAllSeats('chosen');
-    if (chosenSeats.length) {
+    if (chosenSeats.length && movieProjectionData) {
       setReserveButtonLoading(true);
+      try {
+        await ReservationsService.createNewReservation({
+          eventId: movieProjectionData.id,
+          seatIds: chosenSeats.map((s) => {
+            if (!s.seatId) {
+              throw new Error(`Seat ${s.rowIndex} ${s.colIndex} missing id!`);
+            }
+
+            return s.seatId;
+          }),
+        });
+
+        navigate(namedRoutes.reservations);
+      } finally {
+        setReserveButtonLoading(false);
+      }
     } else {
       alert('Nijedno sediste nije izabrano');
     }

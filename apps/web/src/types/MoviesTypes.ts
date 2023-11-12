@@ -1,6 +1,7 @@
 import {Country, Genre, IntRange, Language, PosterImages, ProjectionPrice} from './GeneralTypes';
 import {Actor, Director, Producer} from './PeopleTypes';
 import {Cinema, CinemaTheater} from './CinemaTypes';
+import {Reservation} from './ReservationTypes';
 
 export type MovieAdditionalData = {
   imdbId?: string;
@@ -42,6 +43,7 @@ export type MovieProjection = {
   dubbedLanguage?: Language;
   options: MovieProjectionOptions;
   projectionPrices: ProjectionPrice[];
+  reservations: Reservation[];
 };
 
 export type ProjectionsGroupedPerCinemaType = {

@@ -95,6 +95,11 @@ export class MovieProjectionsService {
             },
           },
         },
+        reservations: {
+          include: {
+            reservationSeats: true,
+          },
+        },
       },
     });
   }
