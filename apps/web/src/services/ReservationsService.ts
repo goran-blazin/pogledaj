@@ -11,6 +11,10 @@ const ReservationsService = {
   },
 
   async findByIds(reservationIds: string[]): Promise<ReservationWithMovieProjection[]> {
+    if (reservationIds.length === 0) {
+      return [];
+    }
+
     const res = await PogledajApi().get(`/reservations/for-customer?filter=${JSON.stringify({ids: reservationIds})}`);
 
     return res.data?.data;
