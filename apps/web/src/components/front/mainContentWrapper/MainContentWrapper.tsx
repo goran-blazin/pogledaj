@@ -6,7 +6,7 @@ import MoviesListingWrapper from '../moviesListing/MoviesListingWrapper';
 import MovieSingleWrapper from '../movieSingle/MovieSingleWrapper';
 import MovieProjectionSingle from '../movieProjectionSingle/MovieProjectionSingle';
 import SettingsWrapper from '../settings/settingsWrapper';
-import Reservations from '../reservations/Reservations';
+import ReservationsWrapper from '../reservations/ReservationsWrapper';
 import {namedRoutes} from '../../../routes';
 
 import {Box, Container} from '@mui/material';
@@ -21,7 +21,7 @@ function MainContentWrapper() {
       <Route path={namedRoutes.moviesListing} element={<MoviesListingWrapper />} />
       <Route path={namedRoutes.movieSingle} element={<MovieSingleWrapper />} />
       <Route path={namedRoutes.movieProjectionSingle} element={<MovieProjectionSingle />} />
-      <Route path={namedRoutes.reservations} element={<Reservations />} />
+      <Route path={namedRoutes.reservations} element={<ReservationsWrapper />} />
     </Routes>
   );
 

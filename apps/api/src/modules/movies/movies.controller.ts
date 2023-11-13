@@ -11,8 +11,6 @@ import {
   Body,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
-// import { CreateMovieDto } from './dto/create-movie.dto';
-// import { UpdateMovieDto } from './dto/update-movie.dto';
 import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
 import { Roles } from '../../decorators/roles.decorator';
 import { AdminRole } from '@prisma/client';

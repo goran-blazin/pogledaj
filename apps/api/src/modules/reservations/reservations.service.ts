@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReservationDto } from './dto/createReservation.dto';
+import { GetListOptions, ReturnList } from '../../types/CommonTypes';
+import { Reservation } from '@prisma/client';
+import { resolveReactAdminFilters } from '../../helpers/Utils';
 
 @Injectable()
 export class ReservationsService {
@@ -30,9 +33,48 @@ export class ReservationsService {
     });
   }
 
-  // async findAll() {
-  //   return this.prismaService.reservation.findMany();
-  // }
+  async findAll(
+    options: GetListOptions = {},
+  ): Promise<ReturnList<Reservation>> {
+    const [reservations, reservationsCount] = await Promise.all([
+      this.prismaService.reservation.findMany({
+        where: {
+          ...resolveReactAdminFilters(options.filter),
+        },
+        include: {
+          reservationSeats: true,
+          movieProjection: {
+            include: {
+              movie: true,
+              cinemaTheater: {
+                include: {
+                  cinema: true,
+                },
+              },
+            },
+          },
+        },
+        skip: options.range?.skip,
+        take: options.range?.take,
+        orderBy: options.sort
+          ? {
+              [options.sort.field]: options.sort.order,
+            }
+          : undefined,
+      }),
+      this.prismaService.reservation.count({
+        where: {
+          ...resolveReactAdminFilters(options.filter),
+        },
+      }),
+    ]);
+
+    return {
+      data: reservations,
+      dataCount: reservations.length,
+      total: reservationsCount,
+    };
+  }
   //
   // async findOne(id: string) {
   //   return this.prismaService.reservation.findUnique({ where: { id } });

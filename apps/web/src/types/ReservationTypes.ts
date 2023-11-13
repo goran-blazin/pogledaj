@@ -1,3 +1,5 @@
+import {MovieProjection} from './MoviesTypes';
+
 export type Reservation = {
   id: string; // uuid
   eventId: string; // uuid, references MovieProjection
@@ -12,9 +14,21 @@ export type Reservation = {
   reservationSeats: ReservationSeats[];
 };
 
+export type ReservationWithMovieProjection = Reservation & {
+  movieProjection: MovieProjection;
+};
+
 interface ReservationSeats {
   reservationId: string; // uuid, references Reservation
   eventId: string; // uuid, not null
   seatId: string; // uuid, references CinemaSeat
   options: Record<string, unknown>; // jsonb
 }
+
+export type CreateReservation = {
+  eventId: string;
+  seatIds: string[];
+  customerEmail?: string;
+  customerName?: string;
+  customerPhone?: string;
+};

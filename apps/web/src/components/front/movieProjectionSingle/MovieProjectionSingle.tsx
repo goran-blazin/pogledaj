@@ -4,13 +4,12 @@ import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {Typography, styled, Box} from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import React, {useState} from 'react';
-import {DateTime} from 'ts-luxon';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import IconButton from '@mui/material/IconButton';
-import ReservationsService from '../../../services/ReservationsService';
 import {namedRoutes} from '../../../routes';
+import useReservationsStore from '../../../store/ReservationsStore';
+import CustomerHelper from '../../../helpers/CustomerHelper';
 
-const formatDate = (date: string) => DateTime.fromISO(date).toFormat('dd.MM.yyyy / HH:mm');
 const CinemaCanvasHolder = styled('div')({
   display: 'flex',
   width: '100%',
@@ -214,6 +213,7 @@ function MovieProjectionSingle() {
   const [seats, setSeats] = useState<Seat[][]>();
   // const [reservedSeats, setReservedSeats] = useState<ReservedSeat[]>([]);
   const [reserveButtonLoading, setReserveButtonLoading] = React.useState(false);
+  const reservationsStore = useReservationsStore();
 
   const getAllSeats = (state?: SeatState) => {
     const allSeats = seats?.flat() || [];
@@ -309,7 +309,7 @@ function MovieProjectionSingle() {
     if (chosenSeats.length && movieProjectionData) {
       setReserveButtonLoading(true);
       try {
-        await ReservationsService.createNewReservation({
+        await reservationsStore.createNewReservation({
           eventId: movieProjectionData.id,
           seatIds: chosenSeats.map((s) => {
             if (!s.seatId) {
@@ -343,7 +343,8 @@ function MovieProjectionSingle() {
                   <span>Bioskop: </span> {movieProjectionData.cinemaTheater.cinema.name}
                 </p>
                 <p>
-                  <span>Termin: </span> {formatDate(movieProjectionData.projectionDateTime)}
+                  <span>Termin: </span>{' '}
+                  {CustomerHelper.formatDateMovieProjection(movieProjectionData.projectionDateTime)}
                 </p>
                 <p>
                   <span>Sala: </span> {movieProjectionData.cinemaTheater.name}

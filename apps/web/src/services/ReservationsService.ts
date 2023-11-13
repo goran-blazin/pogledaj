@@ -1,12 +1,5 @@
 import {PogledajApi} from './ApiHelper';
-
-type CreateReservation = {
-  eventId: string;
-  seatIds: string[];
-  customerEmail?: string;
-  customerName?: string;
-  customerPhone?: string;
-};
+import {CreateReservation, ReservationWithMovieProjection} from '../types/ReservationTypes';
 
 const ReservationsService = {
   async createNewReservation(data: CreateReservation) {
@@ -15,6 +8,12 @@ const ReservationsService = {
     });
 
     return res.data;
+  },
+
+  async findByIds(reservationIds: string[]): Promise<ReservationWithMovieProjection[]> {
+    const res = await PogledajApi().get(`/reservations/for-customer?filter=${JSON.stringify({ids: reservationIds})}`);
+
+    return res.data?.data;
   },
 };
 
