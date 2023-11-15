@@ -19,6 +19,11 @@ const ReservationsService = {
 
     return res.data?.data;
   },
+
+  async deleteReservation(reservationId: string) {
+    const res = await PogledajApi().delete(`/reservations/${reservationId}`);
+    return res.data;
+  },
 };
 
 export default Object.freeze(ReservationsService);

@@ -9,7 +9,8 @@ function ReservationsWrapper() {
   const reservationsStore = useReservationsStore();
 
   const {isSuccess, data} = useQuery({
-    queryFn: () => ReservationsService.findByIds(Object.keys(reservationsStore.reservations)),
+    queryKey: ['reservations', reservationsStore.reservations],
+    queryFn: () => ReservationsService.findByIds(reservationsStore.reservations),
   });
 
   return (

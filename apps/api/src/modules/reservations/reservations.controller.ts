@@ -6,6 +6,8 @@ import {
   Query,
   UseGuards,
   ForbiddenException,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/createReservation.dto';
@@ -29,9 +31,11 @@ export class ReservationsController {
     @Query('filter') filter?: string,
   ) {
     return this.reservationsService.findAll({
-      sort: sort ? JSON.parse(sort) : undefined,
-      range: range ? JSON.parse(range) : undefined,
-      filter: filter ? JSON.parse(filter) : undefined,
+      options: {
+        sort: sort ? JSON.parse(sort) : undefined,
+        range: range ? JSON.parse(range) : undefined,
+        filter: filter ? JSON.parse(filter) : undefined,
+      },
     });
   }
 
@@ -44,12 +48,13 @@ export class ReservationsController {
       filterParsed.ids.length
     ) {
       return this.reservationsService.findAll({
-        filter: filterParsed,
+        options: { filter: filterParsed },
       });
     }
 
     throw new ForbiddenException('Please provide reservation ids in filter');
   }
+
   //
   // @Get(':id')
   // findOne(@Param('id') id: string) {
@@ -61,8 +66,8 @@ export class ReservationsController {
   //   return this.reservationsService.update(id, updateReservationDto);
   // }
   //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.reservationsService.remove(id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.reservationsService.remove(id);
+  }
 }

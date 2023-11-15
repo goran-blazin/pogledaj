@@ -33,13 +33,22 @@ export class ReservationsService {
     });
   }
 
-  async findAll(
-    options: GetListOptions = {},
-  ): Promise<ReturnList<Reservation>> {
+  async findAll({
+    options = {},
+    includeSoftDeleted = false,
+  }: {
+    options: GetListOptions;
+    includeSoftDeleted?: boolean;
+  }): Promise<ReturnList<Reservation>> {
+    const includeSoftDeletedWhere = includeSoftDeleted
+      ? {}
+      : { deletedAt: null };
+
     const [reservations, reservationsCount] = await Promise.all([
       this.prismaService.reservation.findMany({
         where: {
           ...resolveReactAdminFilters(options.filter),
+          ...includeSoftDeletedWhere,
         },
         include: {
           reservationSeats: true,
@@ -65,6 +74,7 @@ export class ReservationsService {
       this.prismaService.reservation.count({
         where: {
           ...resolveReactAdminFilters(options.filter),
+          ...includeSoftDeletedWhere,
         },
       }),
     ]);
@@ -87,7 +97,17 @@ export class ReservationsService {
   //   });
   // }
 
-  // async remove(id: string) {
-  //   return this.prismaService.reservation.delete({ where: { id } });
-  // }
+  async remove(id: string) {
+    return this.prismaService.$transaction(async (transactionClient) => {
+      await transactionClient.reservationSeats.updateMany({
+        where: { reservationId: id },
+        data: { deletedAt: new Date() },
+      });
+
+      await transactionClient.reservation.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+    });
+  }
 }

@@ -29,7 +29,7 @@ type BoardProps = {
   columns: number;
   squareMarginPercentage: number;
   seats: Seat[][];
-  toggleSeat: ToggleSeat;
+  toggleSeat: (row: number, column: number) => void;
 };
 
 type SeatState = 'available' | 'chosen' | 'unavailable' | 'disabled';

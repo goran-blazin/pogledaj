@@ -96,6 +96,9 @@ export class MovieProjectionsService {
           },
         },
         reservations: {
+          where: {
+            deletedAt: null,
+          },
           include: {
             reservationSeats: true,
           },

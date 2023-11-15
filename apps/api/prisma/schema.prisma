@@ -295,6 +295,7 @@ model Reservation {
   updatedAt           DateTime
   options             Json               @default("{}")
   reservationSeats    ReservationSeats[]
+  deletedAt           DateTime?
 
   @@index([eventId])
 }
@@ -306,8 +307,9 @@ model ReservationSeats {
   reservation   Reservation @relation(fields: [reservationId], references: [id])
   cinemaSeat    CinemaSeat  @relation("CinemaSeatReservations", fields: [seatId], references: [id])
   options       Json        @default("{}")
+  deletedAt     DateTime?
 
   @@id([reservationId, seatId])
-  @@unique([seatId, eventId])
+  @@unique([seatId, eventId, deletedAt])
   @@index([reservationId])
 }
