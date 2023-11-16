@@ -13,6 +13,8 @@ COPY prisma/ ./prisma/
 # build node_modules
 RUN npm ci
 
+RUN npx prisma generate
+
 COPY --chown=node:node . .
 
 # build dist
