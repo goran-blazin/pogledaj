@@ -126,10 +126,19 @@ function ReservationSingle({reservation}: {reservation: ReservationWithMovieProj
 
   return (
     <React.Fragment>
-      <Card sx={{display: 'flex', backgroundColor: 'white', border: 'none', boxShadow: 'none', pb: 3, borderRadius: 0}}>
+      <Card
+        sx={{
+          display: 'flex',
+          backgroundColor: 'transparent',
+          border: 'none',
+          boxShadow: 'none',
+          pb: 3,
+          borderRadius: 0,
+        }}
+      >
         <CardMedia
           component="img"
-          sx={{width: '40%', borderRadius: '12%', mr: 2}}
+          sx={{width: '40%', maxWidth: '200px', borderRadius: '12%', mr: 2}}
           image={resizedImageSrc}
           alt="Live from space album cover"
         />
