@@ -28,7 +28,7 @@ function CancelReservationDialog({open, handleClose}: {open: boolean; handleClos
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{'Brisanje rezervacije'}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{'Otkazivanje rezervacije'}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description" sx={{color: 'rgba(0, 0, 0, 0.6)'}}>
           Da li ste sigurni da želite da otkažete rezervaciju?
