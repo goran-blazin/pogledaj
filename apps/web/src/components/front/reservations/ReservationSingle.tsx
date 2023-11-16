@@ -16,6 +16,7 @@ import CustomerHelper from '../../../helpers/CustomerHelper';
 import ImageHelper from '../../../helpers/ImageHelper';
 import useReservationsStore from '../../../store/ReservationsStore';
 import LoadingButton from '@mui/lab/LoadingButton';
+import QRCode from 'react-qr-code';
 import {useState} from 'react';
 import React from 'react';
 
@@ -43,12 +44,52 @@ function CancelReservationDialog({open, handleClose}: {open: boolean; handleClos
   );
 }
 
+function QRCodeDialog({
+  open,
+  handleClose,
+  reservationId,
+}: {
+  open: boolean;
+  handleClose: () => void;
+  reservationId: string;
+}) {
+  return (
+    <Dialog
+      onClose={() => handleClose()}
+      open={open}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{'QR kod rezervacije'}</DialogTitle>
+      <DialogContent>
+        <Box>
+          <QRCode
+            fgColor={'#3274F6'}
+            size={256}
+            style={{height: 'auto', maxWidth: '100%', width: '100%'}}
+            value={reservationId}
+            viewBox={`0 0 256 256`}
+          />
+        </Box>
+        <DialogContentText sx={{color: 'rgba(0, 0, 0, 0.6)'}}>Ovo je QR kod vaše rezervacije.</DialogContentText>
+        <DialogContentText sx={{color: 'rgba(0, 0, 0, 0.6)'}}>
+          Pokažite osoblju pri preuzimanju karata.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => handleClose()}>Zatvori</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 function ReservationSingle({reservation}: {reservation: ReservationWithMovieProjection}) {
   const reservationsStore = useReservationsStore();
   const movie = reservation.movieProjection.movie;
   const cinemaTheater = reservation.movieProjection.cinemaTheater;
   const [loadingButtonCancel, setLoadingButtonCancel] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [QRDialogOpen, setQRDialogOpen] = useState<boolean>(false);
 
   const resizedImageSrc = ImageHelper.getImagePath({
     imageFilePath: movie.posterImages.mediumPoster || 'movie-big-card-placeholder.png',
@@ -104,12 +145,13 @@ function ReservationSingle({reservation}: {reservation: ReservationWithMovieProj
             <Typography sx={typoStyle}>Placeno: Ne</Typography>
           </CardContent>
           <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
-            <Button sx={buttonStyle} variant={'outlined'}>
+            <Button onClick={() => setQRDialogOpen(true)} sx={buttonStyle} variant={'outlined'}>
               Prikaži QR kod
             </Button>
             <LoadingButton
               loading={loadingButtonCancel}
               onClick={() => setCancelDialogOpen(true)}
+              color={'error'}
               sx={buttonStyle}
               variant={'outlined'}
             >
@@ -118,6 +160,7 @@ function ReservationSingle({reservation}: {reservation: ReservationWithMovieProj
           </Box>
         </Box>
       </Card>
+
       <CancelReservationDialog
         open={cancelDialogOpen}
         handleClose={(cancel) => {
@@ -128,6 +171,8 @@ function ReservationSingle({reservation}: {reservation: ReservationWithMovieProj
           setCancelDialogOpen(false);
         }}
       />
+
+      <QRCodeDialog open={QRDialogOpen} handleClose={() => setQRDialogOpen(false)} reservationId={reservation.id} />
     </React.Fragment>
   );
 }

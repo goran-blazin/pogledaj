@@ -4,6 +4,8 @@ import ReservationSingle from './ReservationSingle';
 import {useQuery} from 'react-query';
 import ReservationsService from '../../../services/ReservationsService';
 import LoadingBox from '../utility/LoadingBox';
+import PageHeader from '../utility/PageHeader';
+import React from 'react';
 
 function ReservationsWrapper() {
   const reservationsStore = useReservationsStore();
@@ -15,7 +17,7 @@ function ReservationsWrapper() {
 
   return (
     <Box>
-      <h2>Rezervacije</h2>
+      <PageHeader headerText={'Rezervacije'} />
       {isSuccess && Array.isArray(data) ? (
         data.length ? (
           data.map((reservation) => {
