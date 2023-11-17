@@ -38,6 +38,11 @@ declare module '@mui/material/styles' {
         color: string;
         textColor: string;
       };
+      selectField: {
+        color: string;
+        textColor: string;
+        startAdornmentTextColor: string;
+      };
     };
     colorPalette: {
       darkGrey: {
@@ -89,6 +94,11 @@ declare module '@mui/material/styles' {
       inputField?: {
         color: React.CSSProperties['color'];
         textColor: React.CSSProperties['color'];
+      };
+      selectField: {
+        color: React.CSSProperties['color'];
+        textColor: React.CSSProperties['color'];
+        startAdornmentTextColor: React.CSSProperties['color'];
       };
     };
     colorPalette?: {

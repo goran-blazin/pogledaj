@@ -49,10 +49,7 @@ export type MovieProjection = {
 export type ProjectionsGroupedPerCinemaType = {
   [cinemaId: string]: {
     cinema: Cinema;
-    movieProjections: {
-      movieProjectionId: string;
-      time: string;
-    }[];
+    movieProjections: MovieProjection[];
   };
 };
 

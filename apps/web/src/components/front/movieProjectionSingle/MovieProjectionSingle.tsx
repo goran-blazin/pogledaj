@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import {namedRoutes} from '../../../routes';
 import useReservationsStore from '../../../store/ReservationsStore';
 import CustomerHelper from '../../../helpers/CustomerHelper';
+import BigInfoDialog from '../utility/BigInfoDialog';
 
 const CinemaCanvasHolder = styled('div')({
   display: 'flex',
@@ -211,7 +212,7 @@ function MovieProjectionSingle() {
   const navigate = useNavigate();
   const {movieProjectionId} = useParams();
   const [seats, setSeats] = useState<Seat[][]>();
-  // const [reservedSeats, setReservedSeats] = useState<ReservedSeat[]>([]);
+  const [successReservationDialogOpen, setSuccessReservationDialogOpen] = useState(false);
   const [reserveButtonLoading, setReserveButtonLoading] = React.useState(false);
   const reservationsStore = useReservationsStore();
 
@@ -320,7 +321,7 @@ function MovieProjectionSingle() {
           }),
         });
 
-        navigate(namedRoutes.reservations);
+        setSuccessReservationDialogOpen(true);
       } finally {
         setReserveButtonLoading(false);
       }
@@ -390,6 +391,13 @@ function MovieProjectionSingle() {
                   Rezervacija
                 </LoadingButton>
               </Box>
+              <BigInfoDialog
+                open={successReservationDialogOpen}
+                imgSrc={'/img/couchPopcorn.svg'}
+                header={'Uspešna rezervacija!'}
+                text={`Uspešno ste rezervisali vaša mesta za željenu projekciju! Pri preuzimanju karata pokažite osoblju QR kod rezervacije.`}
+                buttons={[{text: 'U redu', onClick: () => navigate(namedRoutes.reservations)}]}
+              />
             </React.Fragment>
           ) : (
             <Typography color={'text.primary'}>Filmska projekcija nije pronadjena</Typography>

@@ -1,10 +1,10 @@
 import {Box, styled} from '@mui/material';
 import PageTitle from '../utility/typography/PageTitle';
 import ButtonWithIcon from '../utility/buttons/ButtonWithIcon';
-import Button from '../utility/buttons/Button';
 import ButtonSwitch from '../utility/buttons/ButtonSwitch';
 import React from 'react';
 import useTheme from '../../../store/ThemeStore';
+import ButtonStyled from '../utility/buttons/Button';
 
 const ButtonWrap = styled('div')(() => ({
   marginBottom: '12px',
@@ -31,7 +31,7 @@ function settingsWrapper() {
     <Box>
       <PageTitle title="Podešavanja" marginBottom={'22px'} />
       <ButtonWrap>
-        <Button onClick={handleLogin} text={'Uloguj se'} type={'button'} />
+        <ButtonStyled onClick={handleLogin}>Uloguj se</ButtonStyled>
       </ButtonWrap>
       <ButtonWrap>
         <ButtonWithIcon text={'Prati nas'} type={'button'} icon={'connect_without_contact'} />
@@ -63,6 +63,24 @@ function settingsWrapper() {
           <ButtonSwitch checked={themeStore.theme} onChange={(e) => handleSwitchChange(e)} />
         </Box>
       </ButtonWrap>
+      {!import.meta.env.PROD && (
+        <React.Fragment>
+          <PageTitle title="DEV TOOLS" marginBottom={'22px'} />
+          <ButtonWrap>
+            <ButtonWithIcon
+              text={'Obrisi sve podatke sa aplikacije'}
+              type={'button'}
+              icon={'delete_forever'}
+              onClick={() => {
+                if (window.confirm('Obrisi sve podatke i vrati na pocetnu stranu?')) {
+                  window.localStorage.clear();
+                  window.location.href = '/';
+                }
+              }}
+            />
+          </ButtonWrap>
+        </React.Fragment>
+      )}
     </Box>
   );
 }

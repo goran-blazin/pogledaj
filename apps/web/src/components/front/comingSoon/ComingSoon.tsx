@@ -3,7 +3,6 @@ import {Form, useForm} from '../utility/form/useForm';
 import PageTitle from '../utility/typography/PageTitle';
 import InputField from '../utility/form/InputField';
 import Textarea from '../utility/form/Textarea';
-import Button from '../utility/buttons/Button';
 import MovingBackground from './MovingBackground';
 import Paragraph from '../utility/typography/Paragraph';
 import Link from '../utility/typography/Link';
@@ -12,6 +11,7 @@ import EmailService from '../../../services/EmailService';
 import {SupportEmail} from '../../../types/EmailTypes';
 import {AxiosError} from 'axios';
 import {ApiErrors} from '../../../types/ErrorTypes';
+import ButtonStyled from '../utility/buttons/Button';
 
 const GridStyled = styled(Box)(({theme}) => ({
   width: '100%',
@@ -145,7 +145,9 @@ function ComingSoon() {
               />
             </InputWrap>
             <InputWrap>
-              <Button onClick={handleFormSubmit} text={'Posalji'} type={'button'} />
+              <ButtonStyled onClick={handleFormSubmit} type={'button'}>
+                Pošalji
+              </ButtonStyled>
             </InputWrap>
             {isError && error.response && (
               <InputWrap>

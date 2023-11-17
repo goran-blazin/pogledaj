@@ -28,6 +28,11 @@ const darkTheme = createTheme({
       color: '#091F3E',
       textColor: '#CEE4FF',
     },
+    selectField: {
+      color: '#091F3E',
+      textColor: '#CEE4FF',
+      startAdornmentTextColor: '#3274F6',
+    },
   },
   customButtons: {
     buttonWithIcon: {

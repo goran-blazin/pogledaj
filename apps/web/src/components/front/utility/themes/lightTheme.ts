@@ -28,6 +28,11 @@ const lightTheme = createTheme({
       color: '#F0F0F0',
       textColor: '#595959',
     },
+    selectField: {
+      color: '#F0F0F0',
+      textColor: '#595959',
+      startAdornmentTextColor: '#8A8A8A',
+    },
   },
   customButtons: {
     buttonWithIcon: {

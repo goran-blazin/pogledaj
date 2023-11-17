@@ -1,4 +1,4 @@
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import ReservationSingle from './ReservationSingle';
 import LoadingBox from '../utility/LoadingBox';
 import React from 'react';
@@ -22,7 +22,9 @@ function ReservationsList() {
             return <ReservationSingle key={reservation.id} reservation={reservation} />;
           })
         ) : (
-          <Box sx={{pb: 3}}>Trenutno ne postoji nijedna rezervacija</Box>
+          <Typography variant={'body1'} sx={{pb: 3}}>
+            Trenutno ne postoji nijedna rezervacija
+          </Typography>
         )
       ) : (
         <LoadingBox />

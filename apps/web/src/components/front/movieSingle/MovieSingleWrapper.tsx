@@ -1,13 +1,11 @@
-import {useParams, useSearchParams} from 'react-router-dom';
-import {useMemo} from 'react';
-import {ProjectionsGroupedPerDateAndCinemaType} from '../../../types/MoviesTypes';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useMemo, useState} from 'react';
+import {ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
-import {Link} from 'react-router-dom';
-import ProjectionsGroupedPerDateAndCinema from './ProjectionsGroupedPerDateAndCinema';
 import MovieSinglePreview from '../EventPreview/EventPreview';
 import {DateTime} from 'ts-luxon';
-import {Typography} from '@mui/material';
+import {Box, FormControl, InputAdornment, MenuItem, SelectChangeEvent, Typography} from '@mui/material';
 import {styled} from '@mui/material';
 
 import MainTitle from '../utility/typography/MainTitle';
@@ -15,6 +13,12 @@ import RatingInfo from '../utility/RatingInfo';
 import TagsComponent from '../utility/TagsComponent';
 import {useQuery} from 'react-query';
 import React from 'react';
+import PageSubHeader from '../utility/PageSubHeader';
+import SelectBoxStyled from '../utility/form/SelectBoxStyled';
+import ButtonStyled from '../utility/buttons/Button';
+import {namedRoutes} from '../../../routes';
+
+const movieProjectionDateTimeFormat = 'dd.MM.yyyy / HH:mm';
 
 const MovieTitleHolder = styled('div')({
   // consult about margin bottom and gap
@@ -31,10 +35,12 @@ const MovieTitleHolder = styled('div')({
 });
 
 function MovieSingleWrapper() {
-  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const {movieId} = useParams();
 
-  const selectedDate = searchParams.get('selectedDate');
+  const [selectedCinema, setSelectedCinema] = useState('');
+  const [selectedMovieProjection, setSelectedMovieProjection] = useState('');
+
   const movie = movieId
     ? useQuery(['movie.includePersons', movieId], () => MoviesService.findByIdWithPersons(movieId))
     : undefined;
@@ -43,42 +49,23 @@ function MovieSingleWrapper() {
     ? useQuery(['movieProjections.findAllByMovie', movieId], () => MovieProjectionsService.findAllByMovie(movieId))
     : undefined;
 
-  const projectionsGroupedPerDateAndCinema = useMemo(() => {
+  const projectionsGroupedPerCinema = useMemo(() => {
     if (!movieProjections?.data) {
       return {};
     }
 
-    return movieProjections.data.reduce((carry: ProjectionsGroupedPerDateAndCinemaType, mp) => {
-      // first try to find existing date
-      const dateString = DateTime.fromISO(mp.projectionDateTime).toFormat('yyyy-MM-dd');
+    return movieProjections.data.reduce((carry: ProjectionsGroupedPerCinemaType, mp) => {
       const cinema = mp.cinemaTheater.cinema;
-      const timeObject = {
-        movieProjectionId: mp.id,
-        time: DateTime.fromISO(mp.projectionDateTime).toFormat('HH:mm'),
-      };
 
-      if (carry[dateString]) {
-        if (carry[dateString].groupedByCinemas[cinema.id]) {
-          // both date and cinema objects exist
-          carry[dateString].groupedByCinemas[cinema.id].movieProjections.push(timeObject);
-        } else {
-          // date cinema objects exists but not cinema
-          carry[dateString].groupedByCinemas[cinema.id] = {
-            cinema,
-            movieProjections: [timeObject],
-          };
-        }
-      } else {
-        // create whole new date object
-        carry[dateString] = {
-          groupedByCinemas: {
-            [cinema.id]: {
-              cinema,
-              movieProjections: [timeObject],
-            },
-          },
-          formattedDate: DateTime.fromISO(mp.projectionDateTime).toFormat('LLL dd'),
+      if (!carry[cinema.id]) {
+        carry[cinema.id] = {
+          cinema,
+          movieProjections: [],
         };
+      }
+
+      if (carry[cinema.id]) {
+        carry[cinema.id].movieProjections.push(mp);
       }
 
       return carry;
@@ -154,41 +141,76 @@ function MovieSingleWrapper() {
                 </ul>
               </div>
               <div>
-                {Object.keys(projectionsGroupedPerDateAndCinema).length > 0 ? (
-                  <div>
-                    <h2>Projekcije:</h2>
-                    <div>
-                      {Object.keys(projectionsGroupedPerDateAndCinema).map((date) => {
-                        return (
-                          <span key={date}>
-                            <Link to={`/movies/${movie?.data?.id}?selectedDate=${date}`}>
-                              {projectionsGroupedPerDateAndCinema[date].formattedDate}
-                            </Link>
-                            &nbsp;
-                          </span>
-                        );
-                      })}
-                    </div>
-                    {selectedDate && (
-                      <div>
-                        <ProjectionsGroupedPerDateAndCinema
-                          groupedMovieProjections={projectionsGroupedPerDateAndCinema[selectedDate].groupedByCinemas}
-                        />
-                      </div>
-                    )}
-                  </div>
+                {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
+                  <Box>
+                    <PageSubHeader headerText={'Rezervacija karata:'} />
+                    <FormControl fullWidth sx={{mt: 2}}>
+                      <SelectBoxStyled
+                        value={selectedCinema}
+                        startAdornment={
+                          <InputAdornment className={'select-adornment'} position="start">
+                            Bioskop
+                          </InputAdornment>
+                        }
+                        onChange={(event: SelectChangeEvent) => setSelectedCinema(event.target.value)}
+                      >
+                        {Object.keys(projectionsGroupedPerCinema).map((cinemaId, i) => {
+                          return (
+                            <MenuItem key={i} value={cinemaId}>
+                              {projectionsGroupedPerCinema[cinemaId].cinema.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </SelectBoxStyled>
+                    </FormControl>
+                    <FormControl fullWidth sx={{mt: 2}}>
+                      <SelectBoxStyled
+                        value={selectedMovieProjection}
+                        startAdornment={
+                          <InputAdornment className={'select-adornment'} position="start">
+                            Termin
+                          </InputAdornment>
+                        }
+                        onChange={(event: SelectChangeEvent) => setSelectedMovieProjection(event.target.value)}
+                      >
+                        {selectedCinema &&
+                          projectionsGroupedPerCinema[selectedCinema].movieProjections.map((mp, i) => {
+                            return (
+                              <MenuItem key={i} value={mp.id}>
+                                {DateTime.fromISO(mp.projectionDateTime).toFormat(movieProjectionDateTimeFormat)} (
+                                {mp.cinemaTheater.name})
+                              </MenuItem>
+                            );
+                          })}
+                      </SelectBoxStyled>
+                    </FormControl>
+                    <Box sx={{mt: 2}}>
+                      <ButtonStyled
+                        onClick={() => {
+                          if (selectedMovieProjection) {
+                            navigate(
+                              namedRoutes.movieProjectionSingle.replace(':movieProjectionId', selectedMovieProjection),
+                            );
+                          } else {
+                            alert('Izaberite termin');
+                          }
+                        }}
+                      >
+                        Rezerviši karte
+                      </ButtonStyled>
+                    </Box>
+                  </Box>
                 ) : (
-                  <h2>Projekcije nisu pronadjene</h2>
+                  <PageSubHeader headerText={'Projekcije nisu pronadjene'} />
                 )}
               </div>
             </React.Fragment>
           ) : (
-            <h2>Film nije pronadjen</h2>
+            <PageSubHeader headerText={'Film nije pronadjen'} />
           )}
         </React.Fragment>
       )}
     </div>
   );
 }
-
 export default MovieSingleWrapper;

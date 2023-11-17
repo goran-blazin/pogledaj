@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Box, Typography} from '@mui/material';
 import SearchTextField from '../utility/SearchTextField';
 import PageSubHeader from '../utility/PageSubHeader';
 import {LocalActivityOutlined, LocalFireDepartmentOutlined, LocationOnOutlined} from '@mui/icons-material';
@@ -12,11 +12,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useReservationsStore from '../../../store/ReservationsStore';
 import ReservationsList from '../reservations/ReservationsList';
 import {namedRoutes} from '../../../routes';
-
+import useAppStore from '../../../store/AppStore';
+import BigInfoDialog from '../utility/BigInfoDialog';
+import ButtonStyled from '../utility/buttons/Button';
 function Homepage() {
   const movies = useQuery(['movies', 'findAll'], MoviesService.findAll);
   const cinemas = useQuery(['cinemas', 'findAll'], CinemasService.findAll);
   const reservationStore = useReservationsStore();
+  const appStore = useAppStore();
 
   return (
     <Box>
@@ -34,9 +37,9 @@ function Homepage() {
           <AccordionDetails>
             <ReservationsList />
             <Box textAlign="center">
-              <Button variant="contained" href={namedRoutes.moviesListing}>
+              <ButtonStyled variant="contained" href={namedRoutes.moviesListing}>
                 {reservationStore.reservations.length === 0 ? 'Rezerviši kartu' : 'Nova rezervacija'}
-              </Button>
+              </ButtonStyled>
             </Box>
           </AccordionDetails>
         </Accordion>
@@ -65,6 +68,17 @@ function Homepage() {
           </HorizontalCardsCarousel>
         )}
       </Box>
+      <BigInfoDialog
+        open={appStore.firstTimeVisitor}
+        imgSrc={'/img/couchPopcorn.svg'}
+        header={'Dobrodošli na pogledaj!'}
+        text={`
+        Čestitamo, postali ste deo budućnosti bioskopa! 
+        Svi vaši omiljeni filmski titlovi, omiljeni bioskopi od sada se nalaze na jednom mestu, na dohvat ruke! 
+        Neka uživanje počne!
+    `}
+        buttons={[{text: 'Pristupi platformi', onClick: appStore.setNotFirstTimeVisitor}]}
+      />
     </Box>
   );
 }
