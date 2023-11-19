@@ -1,6 +1,6 @@
 import {AxiosError} from 'axios';
 import * as _ from 'lodash';
-import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData} from '../types/GeneralTypes';
+import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData, EnvTypes} from '../types/GeneralTypes';
 import jwt_decode from 'jwt-decode';
 
 const Utils = {
@@ -55,6 +55,9 @@ const Utils = {
       return jwt_decode<AdminUserJwtPayload>(authData.accessToken);
     }
     throw new Error('User not found');
+  },
+  get env() {
+    return import.meta.env.VITE_ENV as EnvTypes;
   },
 };
 

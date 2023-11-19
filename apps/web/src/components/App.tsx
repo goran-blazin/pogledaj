@@ -10,7 +10,6 @@ import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
 import './App.scss';
 import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
 import ComingSoon from './front/comingSoon/ComingSoon';
-import {EnvTypes} from '../types/GeneralTypes';
 
 // theme
 import lightTheme from './front/utility/themes/lightTheme';
@@ -39,8 +38,7 @@ function App() {
   const themeStore = useTheme();
 
   // handle env switch
-  const reactAppEnv: EnvTypes = import.meta.env.VITE_ENV as EnvTypes;
-  const comingSoon = reactAppEnv === 'production' && !Utils.isBetaMode();
+  const comingSoon = Utils.env === 'production' && !Utils.isBetaMode();
   const location = useLocation();
 
   return isAdminRoute(location.pathname) ? (

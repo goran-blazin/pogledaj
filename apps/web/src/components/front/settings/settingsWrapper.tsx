@@ -5,6 +5,7 @@ import ButtonSwitch from '../utility/buttons/ButtonSwitch';
 import React from 'react';
 import useTheme from '../../../store/ThemeStore';
 import ButtonStyled from '../utility/buttons/Button';
+import Utils from '../../../helpers/Utils';
 
 const ButtonWrap = styled('div')(() => ({
   marginBottom: '12px',
@@ -63,7 +64,7 @@ function settingsWrapper() {
           <ButtonSwitch checked={themeStore.theme} onChange={(e) => handleSwitchChange(e)} />
         </Box>
       </ButtonWrap>
-      {!import.meta.env.PROD && (
+      {Utils.env !== 'production' && (
         <React.Fragment>
           <PageTitle title="DEV TOOLS" marginBottom={'22px'} />
           <ButtonWrap>
