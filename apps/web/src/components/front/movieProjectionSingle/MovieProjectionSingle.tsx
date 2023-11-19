@@ -161,15 +161,15 @@ const CinemaSeatBoard: React.FC<BoardProps> = ({rows, columns, squareMarginPerce
 function StatusIndicator() {
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
         width: '100%', // Set the width you prefer
         padding: '2vh 5px',
         borderRadius: '12px', // Adjust as needed
-        backgroundColor: '#F0F0F0', // Adjust as needed
-      }}
+        backgroundColor: theme.customBackground.primary, // Adjust as needed
+      })}
     >
       {Object.values(seatColorMap).map((seatColor, i) => {
         return (

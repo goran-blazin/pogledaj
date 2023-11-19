@@ -34,6 +34,9 @@ const darkTheme = createTheme({
       startAdornmentTextColor: '#3274F6',
     },
   },
+  customBackground: {
+    primary: '#091F3E',
+  },
   customButtons: {
     buttonWithIcon: {
       color: '#091F3E',

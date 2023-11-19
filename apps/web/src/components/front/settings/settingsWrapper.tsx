@@ -24,10 +24,6 @@ function settingsWrapper() {
     return console.log('should handle login');
   };
 
-  const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    themeStore.toggleTheme(e.target.checked);
-  };
-
   return (
     <Box>
       <PageTitle title="Podešavanja" marginBottom={'22px'} />
@@ -61,7 +57,7 @@ function settingsWrapper() {
           >
             Tamni mod
           </Box>
-          <ButtonSwitch checked={themeStore.theme} onChange={(e) => handleSwitchChange(e)} />
+          <ButtonSwitch checked={themeStore.darkTheme} onChange={() => themeStore.toggleTheme()} />
         </Box>
       </ButtonWrap>
       {Utils.env !== 'production' && (

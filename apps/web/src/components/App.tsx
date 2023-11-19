@@ -54,7 +54,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <div className="App">
           <CssBaseline />
-          <ThemeProvider theme={themeStore.theme ? darkTheme : lightTheme}>
+          <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
             {comingSoon ? (
               <ComingSoon />
             ) : (

@@ -9,7 +9,10 @@ import {
 } from '@mui/icons-material';
 import {SxProps} from '@mui/system';
 import {namedRoutes} from '../../../routes';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
+import darkTheme from '../utility/themes/darkTheme';
+import lightTheme from '../utility/themes/lightTheme';
+import useTheme from '../../../store/ThemeStore';
 
 function FooterMenuWrapper() {
   const navActionStyles: SxProps = (isSelected = false) => {
@@ -33,20 +36,11 @@ function FooterMenuWrapper() {
   };
 
   const location = useLocation();
+  // theme store
+  const themeStore = useTheme();
 
   return (
-    <ThemeProvider
-      theme={createTheme({
-        palette: {
-          primary: {
-            main: '#3274F6',
-          },
-          text: {
-            primary: '#595959',
-          },
-        },
-      })}
-    >
+    <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
       <BottomNavigation
         component={'footer'}
         showLabels

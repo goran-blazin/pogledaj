@@ -44,6 +44,9 @@ declare module '@mui/material/styles' {
         startAdornmentTextColor: string;
       };
     };
+    customBackground: {
+      primary: string;
+    };
     colorPalette: {
       darkGrey: {
         color: string;
@@ -114,6 +117,9 @@ declare module '@mui/material/styles' {
       lightBlue?: {
         color: React.CSSProperties['color'];
       };
+    };
+    customBackground: {
+      primary: React.CSSProperties['color'];
     };
   }
 }

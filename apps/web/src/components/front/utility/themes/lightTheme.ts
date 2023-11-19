@@ -34,6 +34,9 @@ const lightTheme = createTheme({
       startAdornmentTextColor: '#8A8A8A',
     },
   },
+  customBackground: {
+    primary: '#F0F0F0',
+  },
   customButtons: {
     buttonWithIcon: {
       color: '#F0F0F0',
