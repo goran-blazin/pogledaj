@@ -34,6 +34,19 @@ const MovieTitleHolder = styled('div')({
   },
 });
 
+const EventInformation = styled('ul')(({theme}) => ({
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+  li: {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: theme.colorPalette.lightGrey.color,
+    marginBottom: '16px',
+    paddingBottom: '16px',
+  },
+}));
+
 function MovieSingleWrapper() {
   const navigate = useNavigate();
   const {movieId} = useParams();
@@ -104,8 +117,10 @@ function MovieSingleWrapper() {
                     <RatingInfo rating={movie.data.rating} />
                   </div>
                 </MovieTitleHolder>
-                <TagsComponent genres={movie.data.genres} />
-                <ul>
+                <EventInformation>
+                  <li>
+                    <TagsComponent genres={movie.data.genres} />
+                  </li>
                   <li>
                     <span>{movie.data.runtimeMinutes}min</span>{' '}
                     <span>{DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy LLL dd')}</span>
@@ -138,7 +153,7 @@ function MovieSingleWrapper() {
                       <strong>Zemlja Porekla:</strong> <span>{movie.data.countryOfOrigin.name}</span>
                     </p>
                   </li>
-                </ul>
+                </EventInformation>
               </div>
               <div>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (

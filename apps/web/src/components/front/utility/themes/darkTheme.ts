@@ -60,6 +60,9 @@ const darkTheme = createTheme({
     grey: {
       color: '#A4A4A4',
     },
+    lightGrey: {
+      color: '#F0F0F0',
+    },
     darkBlue: {
       color: '#091F3E',
     },

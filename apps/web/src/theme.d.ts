@@ -54,6 +54,9 @@ declare module '@mui/material/styles' {
       grey: {
         color: string;
       };
+      lightGrey: {
+        color: string;
+      };
       darkBlue: {
         color: string;
       };
@@ -109,6 +112,9 @@ declare module '@mui/material/styles' {
         color: React.CSSProperties['color'];
       };
       grey?: {
+        color: React.CSSProperties['color'];
+      };
+      lightGrey?: {
         color: React.CSSProperties['color'];
       };
       darkBlue?: {
