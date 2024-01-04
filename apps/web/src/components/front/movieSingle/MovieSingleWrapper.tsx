@@ -178,6 +178,7 @@ function MovieSingleWrapper() {
                     </div>
                   </li>
                   <li className="event-info-section">
+                    {/* TODO - missing rating in API */}
                     <div>{'IMDB RATING'}</div>
                   </li>
                 </EventInformation>
