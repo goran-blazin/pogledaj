@@ -21,7 +21,6 @@ import {namedRoutes} from '../../../routes';
 const movieProjectionDateTimeFormat = 'dd.MM.yyyy / HH:mm';
 
 const MovieTitleHolder = styled('div')({
-  // consult about margin bottom and gap
   display: 'flex',
   marginBottom: '16px',
   gap: '10px',
@@ -34,16 +33,32 @@ const MovieTitleHolder = styled('div')({
   },
 });
 
+// TODO maybe move this in separate component, might be used in other components
 const EventInformation = styled('ul')(({theme}) => ({
   listStyle: 'none',
   padding: 0,
   margin: 0,
-  li: {
+  color: theme.colorPalette.darkGrey.color,
+  '.event-info-section': {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
     borderBottomColor: theme.colorPalette.lightGrey.color,
     marginBottom: '16px',
     paddingBottom: '16px',
+    '.event-info-subtitle': {
+      display: 'block',
+      fontWeight: 'bold',
+      '&.inline': {
+        display: 'inline',
+        marginRight: '5px'
+      }
+    },
+    '.event-section-description': {
+      margin: 0,
+      '&.inline': {
+        display: 'inline'
+      }
+    }
   },
 }));
 
@@ -97,6 +112,8 @@ function MovieSingleWrapper() {
     };
   }, [movie?.data]);
 
+  console.log(movie)
+
   return (
     <div className="movie-single-wrapper">
       {movie?.isLoading ? (
@@ -118,42 +135,64 @@ function MovieSingleWrapper() {
                   </div>
                 </MovieTitleHolder>
                 <EventInformation>
-                  <li>
+                  <li className="event-info-section">
                     <TagsComponent genres={movie.data.genres} />
                   </li>
-                  <li>
-                    <span>{movie.data.runtimeMinutes}min</span>{' '}
-                    <span>{DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy LLL dd')}</span>
+                  <li className="event-info-section">
+                    {/* TODO missing clock icon - style this */}
+                    <span>{movie.data.runtimeMinutes} min</span>
+                    {' | '}
+                    <span>{DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}</span>
                   </li>
-                  <li>
-                    <strong>Sinopsis:</strong> {movie.data.localizedPlot}
-                  </li>
-                  <li>
-                    <strong>Sinopsis u originalu:</strong> {movie.data.plot}
-                  </li>
-                  <li>
-                    <p>
-                      <strong>Reziseri:</strong>{' '}
-                      <span>{movie.data.directors.map((director) => director.person.name).join(', ')}</span>
+                  <li className="event-info-section">
+                    <span className="event-info-subtitle">Sinopsis:</span>
+                    <p className='event-section-description'>
+                      {movie.data.localizedPlot}
                     </p>
-                    {orderedActors.length > 0 && (
-                      <p>
-                        <strong>Glumci:</strong>{' '}
-                        <span>{orderedActors.map((actor) => actor.person.name).join(', ')}</span>
+                  </li>
+                  <li className="event-info-section">
+                    <span className="event-info-subtitle">Sinopsis u originalu:</span>
+                    <p className='event-section-description'>
+                      {movie.data.plot}
+                    </p>
+                  </li>
+                  <li className="event-info-section">
+                    <div>
+                      <span className="event-info-subtitle inline">Reziseri:</span>
+                      <p className='event-section-description inline'>
+                        {movie.data.directors.map((director) => director.person.name).join(', ')}
                       </p>
+                    </div>
+                    {orderedActors.length > 0 && (
+                      <div>
+                        <span className="event-info-subtitle inline">Glumci:</span>
+                        <p className='event-section-description inline'>
+                          {orderedActors.map((actor) => actor.person.name).join(', ')}
+                        </p>
+                      </div>
                     )}
-                    <p>
-                      <strong>Producenti:</strong>{' '}
-                      <span>{movie.data.producers.map((producer) => producer.person.name).join(', ')}</span>
-                    </p>
-                    <p>
-                      <strong>Distributer:</strong> <span>MegaCom Film</span>
-                    </p>
-                    <p>
-                      <strong>Zemlja Porekla:</strong> <span>{movie.data.countryOfOrigin.name}</span>
-                    </p>
+                    <div>
+                      <span className="event-info-subtitle inline">Distributer:</span>
+                      <p className='event-section-description inline'>
+                        {/* TODO missing distributor in API */}
+                        MegaCom Film
+                      </p>
+                    </div>
+                    <div>
+                      <span className="event-info-subtitle inline">Zemlja Porekla:</span>
+                      <p className='event-section-description inline'>
+                      {movie.data.countryOfOrigin.name}
+                      </p>
+                    </div>
+                  </li>
+                  <li className="event-info-section">
+                    <div>{'IMDB RATING'}</div>
                   </li>
                 </EventInformation>
+              </div>
+              <div>
+                {/* TODO missing in API */}
+                KOMENTARI
               </div>
               <div>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
