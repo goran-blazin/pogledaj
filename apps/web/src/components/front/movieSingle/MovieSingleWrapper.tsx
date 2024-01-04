@@ -50,15 +50,15 @@ const EventInformation = styled('ul')(({theme}) => ({
       fontWeight: 'bold',
       '&.inline': {
         display: 'inline',
-        marginRight: '5px'
-      }
+        marginRight: '5px',
+      },
     },
     '.event-section-description': {
       margin: 0,
       '&.inline': {
-        display: 'inline'
-      }
-    }
+        display: 'inline',
+      },
+    },
   },
 }));
 
@@ -112,8 +112,6 @@ function MovieSingleWrapper() {
     };
   }, [movie?.data]);
 
-  console.log(movie)
-
   return (
     <div className="movie-single-wrapper">
       {movie?.isLoading ? (
@@ -146,43 +144,37 @@ function MovieSingleWrapper() {
                   </li>
                   <li className="event-info-section">
                     <span className="event-info-subtitle">Sinopsis:</span>
-                    <p className='event-section-description'>
-                      {movie.data.localizedPlot}
-                    </p>
+                    <p className="event-section-description">{movie.data.localizedPlot}</p>
                   </li>
                   <li className="event-info-section">
                     <span className="event-info-subtitle">Sinopsis u originalu:</span>
-                    <p className='event-section-description'>
-                      {movie.data.plot}
-                    </p>
+                    <p className="event-section-description">{movie.data.plot}</p>
                   </li>
                   <li className="event-info-section">
                     <div>
                       <span className="event-info-subtitle inline">Reziseri:</span>
-                      <p className='event-section-description inline'>
+                      <p className="event-section-description inline">
                         {movie.data.directors.map((director) => director.person.name).join(', ')}
                       </p>
                     </div>
                     {orderedActors.length > 0 && (
                       <div>
                         <span className="event-info-subtitle inline">Glumci:</span>
-                        <p className='event-section-description inline'>
+                        <p className="event-section-description inline">
                           {orderedActors.map((actor) => actor.person.name).join(', ')}
                         </p>
                       </div>
                     )}
                     <div>
                       <span className="event-info-subtitle inline">Distributer:</span>
-                      <p className='event-section-description inline'>
+                      <p className="event-section-description inline">
                         {/* TODO missing distributor in API */}
                         MegaCom Film
                       </p>
                     </div>
                     <div>
                       <span className="event-info-subtitle inline">Zemlja Porekla:</span>
-                      <p className='event-section-description inline'>
-                      {movie.data.countryOfOrigin.name}
-                      </p>
+                      <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
                     </div>
                   </li>
                   <li className="event-info-section">
