@@ -59,6 +59,10 @@ const Utils = {
   get env() {
     return import.meta.env.VITE_ENV as EnvTypes;
   },
+
+  get luxonDateTimeFormat() {
+    return 'dd.MM.yyyy / HH:mm';
+  },
 };
 
 export default Utils;

@@ -276,14 +276,15 @@ model ProjectionPrice {
 }
 
 model AdminUser {
-  id        String    @id @default(uuid()) @db.Uuid
-  email     String    @unique
-  password  String
-  fullName  String
-  role      AdminRole
-  cinemaIds Json      @default("[]")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime
+  id                        String             @id @default(uuid()) @db.Uuid
+  email                     String             @unique
+  password                  String
+  fullName                  String
+  role                      AdminRole
+  cinemaIds                 Json               @default("[]")
+  createdAt                 DateTime           @default(now())
+  updatedAt                 DateTime
+  ValidatedReservationSeats ReservationSeats[]
 }
 
 model Reservation {
@@ -301,15 +302,19 @@ model Reservation {
 }
 
 model ReservationSeats {
-  reservationId String      @db.Uuid
-  eventId       String      @db.Uuid
-  seatId        String      @db.Uuid
-  reservation   Reservation @relation(fields: [reservationId], references: [id])
-  cinemaSeat    CinemaSeat  @relation("CinemaSeatReservations", fields: [seatId], references: [id])
-  options       Json        @default("{}")
-  deletedAt     DateTime?
+  id                     String      @id @default(uuid()) @db.Uuid
+  reservationId          String      @db.Uuid
+  eventId                String      @db.Uuid
+  seatId                 String      @db.Uuid
+  reservation            Reservation @relation(fields: [reservationId], references: [id])
+  cinemaSeat             CinemaSeat  @relation("CinemaSeatReservations", fields: [seatId], references: [id])
+  options                Json        @default("{}")
+  deletedAt              DateTime?
+  validatedAt            DateTime?
+  validatedByAdminUserId String?     @db.Uuid
+  validatedByAdminUser   AdminUser?  @relation(fields: [validatedByAdminUserId], references: [id])
 
-  @@id([reservationId, seatId])
+  @@unique([reservationId, seatId])
   @@unique([seatId, eventId, deletedAt])
   @@index([reservationId])
 }

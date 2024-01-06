@@ -24,6 +24,15 @@ const ReservationsService = {
     const res = await PogledajApi().delete(`/reservations/${reservationId}`);
     return res.data;
   },
+
+  async validateTicketReservation(reservationId: string) {
+    type ValidateResult = {
+      count: number;
+    };
+
+    const res = await PogledajApi().post<ValidateResult>(`/reservations/${reservationId}/validate`);
+    return res.data;
+  },
 };
 
 export default Object.freeze(ReservationsService);

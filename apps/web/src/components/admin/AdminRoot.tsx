@@ -18,6 +18,7 @@ import CinemasList from './cinemas/CinemasList';
 import CinemasShow from './cinemas/CinemasShow';
 import CinemasCreate from './cinemas/CinemasCreate';
 import CinemaTheatersCreate from './cinemas/CinemaTheatersCreate';
+import ReservationsAndTicketsList from './reservationsAndTickets/ReservationsAndTicketsList';
 
 const dataProvider = reactAdminDataProvider;
 const authProvider = reactAdminAuthProvider;
@@ -61,7 +62,10 @@ const AdminRoot = function () {
               </React.Fragment>
             ) : null}
             {AdminHelper.checkRoutePermissions(AdminRoutes.movieTickets, permission) ? (
-              <Route path={`/${AdminRoutes.movieTickets}`} element={<TicketValidation />} />
+              <React.Fragment>
+                <Route path={`/${AdminRoutes.movieTickets}`} element={<ReservationsAndTicketsList />} />
+                <Route path={`/${AdminRoutes.ticketValidation}`} element={<TicketValidation />} />
+              </React.Fragment>
             ) : null}
           </CustomRoutes>,
           null,

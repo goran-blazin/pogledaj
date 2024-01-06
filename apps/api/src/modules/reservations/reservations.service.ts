@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReservationDto } from './dto/createReservation.dto';
-import { GetListOptions, ReturnList } from '../../types/CommonTypes';
-import { Reservation } from '@prisma/client';
+import {
+  AdminUserSafe,
+  GetListOptions,
+  ReturnList,
+} from '../../types/CommonTypes';
+import { Reservation, ReservationSeats } from '@prisma/client';
 import { resolveReactAdminFilters } from '../../helpers/Utils';
 
 @Injectable()
@@ -51,7 +55,11 @@ export class ReservationsService {
           ...includeSoftDeletedWhere,
         },
         include: {
-          reservationSeats: true,
+          reservationSeats: {
+            include: {
+              cinemaSeat: true,
+            },
+          },
           movieProjection: {
             include: {
               movie: true,
@@ -85,6 +93,64 @@ export class ReservationsService {
       total: reservationsCount,
     };
   }
+
+  async findAllSeats({
+    options = {},
+    includeSoftDeleted = false,
+  }: {
+    options: GetListOptions;
+    includeSoftDeleted?: boolean;
+  }): Promise<ReturnList<ReservationSeats>> {
+    const includeSoftDeletedWhere = includeSoftDeleted
+      ? {}
+      : { deletedAt: null };
+
+    const [reservationSeats, reservationSeatsCount] = await Promise.all([
+      this.prismaService.reservationSeats.findMany({
+        where: {
+          ...resolveReactAdminFilters(options.filter),
+          ...includeSoftDeletedWhere,
+        },
+        include: {
+          cinemaSeat: true,
+          validatedByAdminUser: true,
+          reservation: {
+            include: {
+              movieProjection: {
+                include: {
+                  movie: true,
+                  cinemaTheater: {
+                    include: {
+                      cinema: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        skip: options.range?.skip,
+        take: options.range?.take,
+        orderBy: options.sort
+          ? {
+              [options.sort.field]: options.sort.order,
+            }
+          : undefined,
+      }),
+      this.prismaService.reservationSeats.count({
+        where: {
+          ...resolveReactAdminFilters(options.filter),
+          ...includeSoftDeletedWhere,
+        },
+      }),
+    ]);
+
+    return {
+      data: reservationSeats,
+      dataCount: reservationSeats.length,
+      total: reservationSeatsCount,
+    };
+  }
   //
   // async findOne(id: string) {
   //   return this.prismaService.reservation.findUnique({ where: { id } });
@@ -108,6 +174,22 @@ export class ReservationsService {
         where: { id },
         data: { deletedAt: new Date() },
       });
+    });
+  }
+
+  /**
+   * Validate all seats for whole reservation
+   */
+  async validateReservation(reservationId: string, adminUser: AdminUserSafe) {
+    return this.prismaService.reservationSeats.updateMany({
+      where: {
+        reservationId,
+        validatedAt: null,
+      },
+      data: {
+        validatedAt: new Date(),
+        validatedByAdminUserId: adminUser.id,
+      },
     });
   }
 }

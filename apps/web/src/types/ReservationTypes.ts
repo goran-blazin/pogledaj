@@ -1,4 +1,6 @@
 import {MovieProjection} from './MoviesTypes';
+import {CinemaSeats} from './CinemaTypes';
+import {AdminUser} from './GeneralTypes';
 
 export type Reservation = {
   id: string; // uuid
@@ -11,19 +13,26 @@ export type Reservation = {
   createdAt: Date; // timestamp without time zone
   updatedAt: Date | null; // timestamp without time zone, nullable
   options: Record<string, unknown>; // jsonb
-  reservationSeats: ReservationSeats[];
+  reservationSeats: ReservationSeat[];
 };
 
 export type ReservationWithMovieProjection = Reservation & {
   movieProjection: MovieProjection;
 };
 
-interface ReservationSeats {
+export type ReservationSeat = {
   reservationId: string; // uuid, references Reservation
   eventId: string; // uuid, not null
   seatId: string; // uuid, references CinemaSeat
   options: Record<string, unknown>; // jsonb
-}
+  cinemaSeat: CinemaSeats;
+  validatedAt: string;
+  validatedByAdminUser?: AdminUser;
+};
+
+export type ReservationSeatWithMovieProjection = ReservationSeat & {
+  reservation: ReservationWithMovieProjection;
+};
 
 export type CreateReservation = {
   eventId: string;

@@ -6,6 +6,7 @@ import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import PhotoCameraBackIcon from '@mui/icons-material/PhotoCameraBack';
 import ChairIcon from '@mui/icons-material/Chair';
 import MovieIcon from '@mui/icons-material/Movie';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import {AdminRole, AdminRoutes} from '../../../types/GeneralTypes';
 import AdminHelper from '../../../helpers/AdminHelper';
 
@@ -42,10 +43,15 @@ export const CustomMenu = function (props) {
       {AdminHelper.checkRoutePermissions(AdminRoutes.movieTickets, permissions) ? (
         <Menu.Item
           to={getAdminRoute(AdminRoutes.movieTickets)}
-          primaryText="Validacija Karata"
+          primaryText="Rezervacije"
           leftIcon={<ConfirmationNumberIcon />}
         />
       ) : null}
+      <Menu.Item
+        to={getAdminRoute(AdminRoutes.ticketValidation)}
+        primaryText="Validacija Karata"
+        leftIcon={<QrCodeScannerIcon />}
+      />
     </Menu>
   );
 };
