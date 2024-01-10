@@ -17,6 +17,7 @@ import PageSubHeader from '../utility/PageSubHeader';
 import SelectBoxStyled from '../utility/form/SelectBoxStyled';
 import ButtonStyled from '../utility/buttons/Button';
 import {namedRoutes} from '../../../routes';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const movieProjectionDateTimeFormat = 'dd.MM.yyyy / HH:mm';
 
@@ -59,6 +60,10 @@ const EventInformation = styled('ul')(({theme}) => ({
         display: 'inline',
       },
     },
+    '.event-info-section-with-icons': {
+      display: 'flex',
+      alignItems: 'center',
+    },
   },
 }));
 
@@ -100,15 +105,32 @@ function MovieSingleWrapper() {
     }, {});
   }, [movieProjections?.data]);
 
-  const {orderedActors} = useMemo(() => {
-    if (!movie?.data) {
+  const {orderedActors, trailerUrl, posterUrl} = useMemo(() => {
+    const movieData = movie?.data;
+    if (!movieData) {
       return {
         orderedActors: [],
+        trailerUrl: undefined,
+        posterUrl: undefined,
       };
     }
 
     return {
-      orderedActors: movie.data.actors.sort((a, b) => a.castOrder - b.castOrder),
+      orderedActors: movieData.actors.sort((a, b) => a.castOrder - b.castOrder),
+      trailerUrl: (() => {
+        const makeUrl = (key: string) => `https://www.youtube.com/embed/${key}?controls=0`;
+        const movieTrailer = movieData.videos.find((video) => video.type === 'Trailer');
+        if (movieTrailer) {
+          return makeUrl(movieTrailer.key);
+        }
+        const movieTeaser = movieData.videos.find((video) => video.type === 'Teaser');
+        if (movieTeaser) {
+          return makeUrl(movieTeaser.key);
+        }
+
+        return undefined;
+      })(),
+      posterUrl: movieData.posterImages.bigPoster,
     };
   }, [movie?.data]);
 
@@ -121,7 +143,13 @@ function MovieSingleWrapper() {
           {movie?.data ? (
             <React.Fragment>
               <MovieSinglePreview>
-                <iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY?controls=0"></iframe>
+                {trailerUrl ? (
+                  <iframe width="420" height="315" src={trailerUrl}></iframe>
+                ) : posterUrl ? (
+                  <img src={posterUrl} alt={'POSTER IMAGE'} />
+                ) : (
+                  <div>NO POSTER IMAGE</div>
+                )}
               </MovieSinglePreview>
               <div>
                 <MovieTitleHolder>
@@ -137,10 +165,20 @@ function MovieSingleWrapper() {
                     <TagsComponent genres={movie.data.genres} />
                   </li>
                   <li className="event-info-section">
-                    {/* TODO missing clock icon - style this */}
-                    <span>{movie.data.runtimeMinutes} min</span>
-                    {' | '}
-                    <span>{DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}</span>
+                    <div className="event-info-section-with-icons">
+                      <span>
+                        <AccessTimeIcon
+                          fontSize={'small'}
+                          sx={{
+                            display: 'flex',
+                            color: (theme) => theme.palette.primary.main,
+                          }}
+                        />
+                      </span>
+                      <span>
+                        {movie.data.runtimeMinutes} min | {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
+                      </span>
+                    </div>
                   </li>
                   <li className="event-info-section">
                     <span className="event-info-subtitle">Sinopsis:</span>
@@ -152,7 +190,7 @@ function MovieSingleWrapper() {
                   </li>
                   <li className="event-info-section">
                     <div>
-                      <span className="event-info-subtitle inline">Reziseri:</span>
+                      <span className="event-info-subtitle inline">Režiseri:</span>
                       <p className="event-section-description inline">
                         {movie.data.directors.map((director) => director.person.name).join(', ')}
                       </p>
@@ -165,28 +203,25 @@ function MovieSingleWrapper() {
                         </p>
                       </div>
                     )}
-                    <div>
-                      <span className="event-info-subtitle inline">Distributer:</span>
-                      <p className="event-section-description inline">
-                        {/* TODO missing distributor in API */}
-                        MegaCom Film
-                      </p>
-                    </div>
+                    {/*<div>*/}
+                    {/*  <span className="event-info-subtitle inline">Distributer:</span>*/}
+                    {/*  <p className="event-section-description inline">*/}
+                    {/*    MegaCom Film*/}
+                    {/*  </p>*/}
+                    {/*</div>*/}
                     <div>
                       <span className="event-info-subtitle inline">Zemlja Porekla:</span>
                       <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
                     </div>
                   </li>
-                  <li className="event-info-section">
-                    {/* TODO - missing rating in API */}
-                    <div>{'IMDB RATING'}</div>
-                  </li>
+                  {/*<li className="event-info-section">*/}
+                  {/*  <div>{'IMDB RATING'}</div>*/}
+                  {/*</li>*/}
                 </EventInformation>
               </div>
-              <div>
-                {/* TODO missing in API */}
-                KOMENTARI
-              </div>
+              {/*<div>*/}
+              {/*  KOMENTARI*/}
+              {/*</div>*/}
               <div>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
                   <Box>

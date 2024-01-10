@@ -30,14 +30,14 @@ function TicketValidation() {
         .then((result) => {
           if (result.count > 0) {
             setNotificationTextColor('green');
-            setNotificationText(`USPESNO VALIDIRANA REZERVACIJA ID ${decodedText}`);
+            setNotificationText(`USPESNO VALIDIRANA REZERVACIJA ID ${decodedText}!`);
 
             setTimeout(() => {
               resetScan();
             }, delay);
           } else {
             setNotificationTextColor('red');
-            setNotificationText(`GRESKA! REZERVACIJA ID ${decodedText} JE NEVAZECA`);
+            setNotificationText(`REZERVACIJA ID ${decodedText} JE NEVAZECA, POKUSAJTE SA DRUGOM REZERVACIJOM!`);
 
             setTimeout(() => {
               resetScan();
@@ -48,7 +48,7 @@ function TicketValidation() {
           // eslint-disable-next-line no-console
           console.error(err);
           setNotificationTextColor('red');
-          setNotificationText(`GRESKA! POKUSAJTE PONOVO`);
+          setNotificationText(`GRESKA! POKUSAJTE PONOVO ILI SE OBRATITE ADMINISTRATORU! REZERVACIJA ID ${decodedText}`);
 
           setTimeout(() => {
             resetScan();

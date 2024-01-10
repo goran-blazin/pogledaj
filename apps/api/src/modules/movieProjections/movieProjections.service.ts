@@ -22,6 +22,8 @@ import {
 import AuthHelper from '../../helpers/Auth.helper';
 import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 
+const RESERVATION_TIME_OFFSET_MINUTES = 30;
+
 const generateProjections = (
   cinema: Cinema & { cinemaTheaters: CinemaTheater[] },
   movie: Movie,
@@ -181,9 +183,10 @@ export class MovieProjectionsService {
   }
 
   async findAll(
-    params: { movieId?: string; cinemaId?: string },
+    params: { movieId?: string; cinemaId?: string; includeArchived: boolean },
     options: GetListOptions = {},
   ): Promise<ReturnList<MovieProjection>> {
+    const { includeArchived = false } = params;
     const where = {
       movieId: params.movieId ? params.movieId : undefined,
       cinemaTheater: params.cinemaId
@@ -191,6 +194,13 @@ export class MovieProjectionsService {
             cinemaId: params.cinemaId,
           }
         : undefined,
+      projectionDateTime: includeArchived
+        ? undefined
+        : {
+            gt: DateTime.now()
+              .plus({ minute: RESERVATION_TIME_OFFSET_MINUTES })
+              .toJSDate(),
+          },
     };
 
     const [movieProjections, movieProjectionsCount] = await Promise.all([

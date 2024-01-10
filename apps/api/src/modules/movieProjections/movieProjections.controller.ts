@@ -4,6 +4,7 @@ import {
   DefaultValuePipe,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
@@ -28,6 +29,8 @@ export class MovieProjectionsController {
   async findAllPerMovieCinema(
     @Param('movieId', ParseUUIDPipe) movieId: string,
     @Param('cinemaId', ParseUUIDPipe) cinemaId: string,
+    @Query('includeArchived', new DefaultValuePipe(false), ParseBoolPipe)
+    includeArchived?: boolean,
     @Query('sort') sort?: string,
     @Query('range') range?: string,
   ) {
@@ -35,6 +38,7 @@ export class MovieProjectionsController {
       {
         movieId,
         cinemaId,
+        includeArchived: includeArchived === true,
       },
       {
         sort: sort ? JSON.parse(sort) : undefined,
@@ -46,12 +50,15 @@ export class MovieProjectionsController {
   @Get('/movie/:movieId')
   async findAllPerMovie(
     @Param('movieId', ParseUUIDPipe) movieId: string,
+    @Query('includeArchived', new DefaultValuePipe(false), ParseBoolPipe)
+    includeArchived?: boolean,
     @Query('sort') sort?: string,
     @Query('range') range?: string,
   ) {
     return this.movieProjectionsService.findAll(
       {
         movieId,
+        includeArchived: includeArchived === true,
       },
       {
         sort: sort ? JSON.parse(sort) : undefined,
@@ -63,12 +70,15 @@ export class MovieProjectionsController {
   @Get('/cinema/:cinemaId')
   async findAllPerCinema(
     @Param('cinemaId', ParseUUIDPipe) cinemaId: string,
+    @Query('includeArchived', new DefaultValuePipe(false), ParseBoolPipe)
+    includeArchived?: boolean,
     @Query('sort') sort?: string,
     @Query('range') range?: string,
   ) {
     return this.movieProjectionsService.findAll(
       {
         cinemaId,
+        includeArchived: includeArchived === true,
       },
       {
         sort: sort ? JSON.parse(sort) : undefined,

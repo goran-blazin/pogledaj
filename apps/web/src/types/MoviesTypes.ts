@@ -23,6 +23,11 @@ export type Movie = {
   posterImages: PosterImages;
   rating?: IntRange<0, 101>;
   additionalData: MovieAdditionalData;
+  videos: {
+    key: string;
+    site: 'YouTube';
+    type: 'Teaser' | 'Trailer' | 'Behind the Scenes';
+  }[];
 };
 
 export type MovieWithPersons = Movie & {
