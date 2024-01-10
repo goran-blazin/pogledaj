@@ -3,7 +3,7 @@ name: pogledajAPI Test Fly Deploy
 on:
   push:
     branches:
-      - test
+      - main
     paths:
       - apps/api/**
 
