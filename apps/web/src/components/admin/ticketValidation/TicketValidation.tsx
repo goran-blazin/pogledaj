@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {Box} from '@mui/material';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import QrReader from 'react-qr-scanner';
+import {QrScanner} from '@yudiel/react-qr-scanner';
 import {useState} from 'react';
 import ReservationsService from '../../../services/ReservationsService';
 
@@ -11,7 +9,7 @@ function TicketValidation() {
   const [notificationTextColor, setNotificationTextColor] = useState<'red' | 'green' | 'black'>('black');
   const [readyForScan, setReadyForScan] = useState(true);
 
-  function handleError(err: unknown) {
+  function handleError(err: Error) {
     // eslint-disable-next-line no-console
     console.error(err);
   }
@@ -19,24 +17,30 @@ function TicketValidation() {
   const delay = 1500;
   const delayError = 3000;
 
-  function handleScan(data: {text: string; timestamp: number}) {
-    if (data && readyForScan) {
+  function resetScan() {
+    setReadyForScan(true);
+    setNotificationText('SPREMNO ZA SKENIRANJE...');
+    setNotificationTextColor('black');
+  }
+
+  function handleScan(decodedText: string) {
+    if (decodedText && readyForScan) {
       setReadyForScan(false);
-      ReservationsService.validateTicketReservation(data.text)
+      ReservationsService.validateTicketReservation(decodedText)
         .then((result) => {
           if (result.count > 0) {
             setNotificationTextColor('green');
-            setNotificationText(`USPESNO VALIDIRANA REZERVACIJA ID ${data.text}`);
+            setNotificationText(`USPESNO VALIDIRANA REZERVACIJA ID ${decodedText}`);
 
             setTimeout(() => {
-              location.reload();
+              resetScan();
             }, delay);
           } else {
             setNotificationTextColor('red');
-            setNotificationText(`GRESKA! REZERVACIJA ID ${data.text} JE NEVAZECA`);
+            setNotificationText(`GRESKA! REZERVACIJA ID ${decodedText} JE NEVAZECA`);
 
             setTimeout(() => {
-              location.reload();
+              resetScan();
             }, delayError);
           }
         })
@@ -47,7 +51,7 @@ function TicketValidation() {
           setNotificationText(`GRESKA! POKUSAJTE PONOVO`);
 
           setTimeout(() => {
-            location.reload();
+            resetScan();
           }, delayError);
         });
     }
@@ -56,14 +60,12 @@ function TicketValidation() {
   return (
     <Box>
       <Box>SKENIRAJ QR KOD RADI VALIDACIJE</Box>
-      <QrReader
-        delay={2000}
-        style={{
-          height: 240,
-          width: 320,
+      <QrScanner
+        constraints={{
+          facingMode: 'environment',
         }}
         onError={handleError}
-        onScan={handleScan}
+        onDecode={handleScan}
       />
       <Box style={{color: notificationTextColor}}>{notificationText}</Box>
     </Box>
