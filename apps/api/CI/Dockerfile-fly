@@ -1,5 +1,5 @@
 # builder image
-FROM node:18-slim as builder
+FROM node:20-slim as builder
 ENV NODE_ENV build
 RUN apt-get update && apt-get install -y openssl libssl-dev
 
