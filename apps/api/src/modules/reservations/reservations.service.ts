@@ -1,13 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateReservationDto } from './dto/createReservation.dto';
-import {
-  AdminUserSafe,
-  GetListOptions,
-  ReturnList,
-} from '../../types/CommonTypes';
-import { Reservation, ReservationSeats } from '@prisma/client';
-import { resolveReactAdminFilters } from '../../helpers/Utils';
+import {Injectable} from '@nestjs/common';
+import {PrismaService} from '../prisma/prisma.service';
+import {CreateReservationDto} from './dto/createReservation.dto';
+import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';
+import {Reservation, ReservationSeats} from '@prisma/client';
+import {resolveReactAdminFilters} from '../../helpers/Utils';
+import {excludeArchivedMovieProjectionsQuery} from '../movieProjections/movieProjections.service';
 
 @Injectable()
 export class ReservationsService {
@@ -40,20 +37,25 @@ export class ReservationsService {
   async findAll({
     options = {},
     includeSoftDeleted = false,
+    includeArchived = false,
   }: {
     options: GetListOptions;
     includeSoftDeleted?: boolean;
+    includeArchived?: boolean;
   }): Promise<ReturnList<Reservation>> {
-    const includeSoftDeletedWhere = includeSoftDeleted
-      ? {}
-      : { deletedAt: null };
+    const includeSoftDeletedWhere = includeSoftDeleted ? {} : {deletedAt: null};
+
+    const where = {
+      ...resolveReactAdminFilters(options.filter),
+      ...includeSoftDeletedWhere,
+      movieProjection: {
+        projectionDateTime: includeArchived ? undefined : excludeArchivedMovieProjectionsQuery(),
+      },
+    };
 
     const [reservations, reservationsCount] = await Promise.all([
       this.prismaService.reservation.findMany({
-        where: {
-          ...resolveReactAdminFilters(options.filter),
-          ...includeSoftDeletedWhere,
-        },
+        where,
         include: {
           reservationSeats: {
             include: {
@@ -80,10 +82,7 @@ export class ReservationsService {
           : undefined,
       }),
       this.prismaService.reservation.count({
-        where: {
-          ...resolveReactAdminFilters(options.filter),
-          ...includeSoftDeletedWhere,
-        },
+        where,
       }),
     ]);
 
@@ -101,9 +100,7 @@ export class ReservationsService {
     options: GetListOptions;
     includeSoftDeleted?: boolean;
   }): Promise<ReturnList<ReservationSeats>> {
-    const includeSoftDeletedWhere = includeSoftDeleted
-      ? {}
-      : { deletedAt: null };
+    const includeSoftDeletedWhere = includeSoftDeleted ? {} : {deletedAt: null};
 
     const [reservationSeats, reservationSeatsCount] = await Promise.all([
       this.prismaService.reservationSeats.findMany({
@@ -166,13 +163,13 @@ export class ReservationsService {
   async remove(id: string) {
     return this.prismaService.$transaction(async (transactionClient) => {
       await transactionClient.reservationSeats.updateMany({
-        where: { reservationId: id },
-        data: { deletedAt: new Date() },
+        where: {reservationId: id},
+        data: {deletedAt: new Date()},
       });
 
       await transactionClient.reservation.update({
-        where: { id },
-        data: { deletedAt: new Date() },
+        where: {id},
+        data: {deletedAt: new Date()},
       });
     });
   }

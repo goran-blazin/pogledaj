@@ -1,10 +1,10 @@
 import MovieDB from 'node-themoviedb';
 import * as process from 'process';
 import * as _ from 'lodash';
-import { Injectable } from '@nestjs/common';
-import { InputProvider, ProducerType } from '@prisma/client';
-import { MovieExternal, PersonForMovieExternal } from '../../types/MovieTypes';
-import { DirectorType, Gender } from '.prisma/client';
+import {Injectable} from '@nestjs/common';
+import {InputProvider, ProducerType} from '@prisma/client';
+import {MovieExternal, PersonForMovieExternal} from '../../types/MovieTypes';
+import {DirectorType, Gender} from '.prisma/client';
 
 interface ExtendedVideos {
   id: number;
@@ -16,13 +16,7 @@ interface ExtendedVideos {
     name: string;
     site: string;
     size: 360 | 480 | 720 | 1080;
-    type:
-      | 'Trailer'
-      | 'Teaser'
-      | 'Clip'
-      | 'Featurette'
-      | 'Behind the Scenes'
-      | 'Bloopers';
+    type: 'Trailer' | 'Teaser' | 'Clip' | 'Featurette' | 'Behind the Scenes' | 'Bloopers';
     official: boolean;
   }[];
 }
@@ -75,12 +69,7 @@ export class TmdbProvider {
   }
 
   async getMovieByTMDBId(tmdbId: string): Promise<MovieExternal> {
-    const [
-      apiConf,
-      externalMovieRes,
-      externalMovieCreditsRes,
-      externalMovieVideosRes,
-    ] = await Promise.all([
+    const [apiConf, externalMovieRes, externalMovieCreditsRes, externalMovieVideosRes] = await Promise.all([
       this.getApiConfiguration(),
       this.tmdbClient.movie.getDetails({
         pathParameters: {
@@ -138,9 +127,7 @@ export class TmdbProvider {
       }),
     );
 
-    const getMoviePersonFromTmdbPerson = (
-      tmdbPerson: TmdbPerson,
-    ): PersonForMovieExternal => ({
+    const getMoviePersonFromTmdbPerson = (tmdbPerson: TmdbPerson): PersonForMovieExternal => ({
       name: tmdbPerson.name,
       biography: tmdbPerson.biography,
       dateOfBirth: tmdbPerson.birthday ? new Date(tmdbPerson.birthday) : null,
@@ -155,29 +142,23 @@ export class TmdbProvider {
     });
 
     return {
-      actors: creditActorPersons.map(({ creditActor, tmdbPerson }) => {
+      actors: creditActorPersons.map(({creditActor, tmdbPerson}) => {
         return {
           person: getMoviePersonFromTmdbPerson(tmdbPerson),
           characterName: creditActor.character,
           castOrder: creditActor.order,
         };
       }),
-      directors: creditDirectorPersons.map(({ creditDirector, tmdbPerson }) => {
+      directors: creditDirectorPersons.map(({creditDirector, tmdbPerson}) => {
         return {
           person: getMoviePersonFromTmdbPerson(tmdbPerson),
-          type:
-            creditDirector.job.toLowerCase() === 'director'
-              ? DirectorType.Main
-              : DirectorType.Assistant,
+          type: creditDirector.job.toLowerCase() === 'director' ? DirectorType.Main : DirectorType.Assistant,
         };
       }),
-      producers: creditProducerPersons.map(({ creditProducer, tmdbPerson }) => {
+      producers: creditProducerPersons.map(({creditProducer, tmdbPerson}) => {
         return {
           person: getMoviePersonFromTmdbPerson(tmdbPerson),
-          type:
-            creditProducer.job.toLowerCase() === 'producer'
-              ? ProducerType.Executive
-              : ProducerType.Assistant,
+          type: creditProducer.job.toLowerCase() === 'producer' ? ProducerType.Executive : ProducerType.Assistant,
         };
       }),
       additionalData: {
@@ -196,34 +177,19 @@ export class TmdbProvider {
       originalTitle: externalMovie.original_title,
       plot: externalMovie.overview || '',
       posterImages: {
-        bigPoster: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.poster_sizes,
-          -1,
-        )}${externalMovie.poster_path}`,
-        mediumPoster: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.poster_sizes,
-          -2,
-        )}${externalMovie.poster_path}`,
-        smallPoster: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.poster_sizes,
-          -3,
-        )}${externalMovie.poster_path}`,
-        thumbPoster: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.poster_sizes,
-          1,
-        )}${externalMovie.poster_path}`,
-        bigBackground: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.backdrop_sizes,
-          -1,
-        )}${externalMovie.backdrop_path}`,
-        mediumBackground: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.backdrop_sizes,
-          -2,
-        )}${externalMovie.backdrop_path}`,
-        smallBackground: `${apiConf.images.base_url}${_.nth(
-          apiConf.images.backdrop_sizes,
-          -3,
-        )}${externalMovie.backdrop_path}`,
+        bigPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, -1)}${externalMovie.poster_path}`,
+        mediumPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, -2)}${externalMovie.poster_path}`,
+        smallPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, -3)}${externalMovie.poster_path}`,
+        thumbPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, 1)}${externalMovie.poster_path}`,
+        bigBackground: `${apiConf.images.base_url}${_.nth(apiConf.images.backdrop_sizes, -1)}${
+          externalMovie.backdrop_path
+        }`,
+        mediumBackground: `${apiConf.images.base_url}${_.nth(apiConf.images.backdrop_sizes, -2)}${
+          externalMovie.backdrop_path
+        }`,
+        smallBackground: `${apiConf.images.base_url}${_.nth(apiConf.images.backdrop_sizes, -3)}${
+          externalMovie.backdrop_path
+        }`,
       },
       videos: externalMovieVideos.results
         .sort((v1, v2) => {
@@ -236,9 +202,7 @@ export class TmdbProvider {
             key: video.key,
           };
         }),
-      rating: Math.ceil(
-        parseFloat(externalMovie.vote_average.toString()) * 100,
-      ),
+      rating: Math.ceil(parseFloat(externalMovie.vote_average.toString()) * 100),
       releaseDate: externalMovie.release_date,
       runtimeMinutes: externalMovie.runtime || 0,
     };

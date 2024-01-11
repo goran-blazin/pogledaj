@@ -1,11 +1,8 @@
-import {
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
-import { PrismaService } from '../../prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import {ValidatorConstraint, ValidatorConstraintInterface} from 'class-validator';
+import {PrismaService} from '../../prisma/prisma.service';
+import {Injectable} from '@nestjs/common';
 
-@ValidatorConstraint({ name: 'AdminUserExistsRule', async: true })
+@ValidatorConstraint({name: 'AdminUserExistsRule', async: true})
 @Injectable()
 export class AdminUserExistsRule implements ValidatorConstraintInterface {
   constructor(private prismaService: PrismaService) {}

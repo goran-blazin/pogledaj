@@ -1,7 +1,7 @@
-import { MovieExtended } from '../modules/movies/entities/movie.entity';
-import { MovieActor } from '@prisma/client';
-import { MovieDirector, MovieProducer } from '.prisma/client';
-import { PersonExtended } from '../modules/persons/entities/person.entity';
+import {MovieExtended} from '../modules/movies/entities/movie.entity';
+import {MovieActor} from '@prisma/client';
+import {MovieDirector, MovieProducer} from '.prisma/client';
+import {PersonExtended} from '../modules/persons/entities/person.entity';
 
 export type MovieLocalizedData = {
   localizedTitle: string;
@@ -30,10 +30,7 @@ export type MovieVideo = {
   key: string;
 };
 
-export type PersonForMovieExternal = Omit<
-  PersonExtended,
-  'id' | 'createdAt' | 'updatedAt'
->;
+export type PersonForMovieExternal = Omit<PersonExtended, 'id' | 'createdAt' | 'updatedAt'>;
 
 export type MovieExternal = Omit<
   MovieExtended,

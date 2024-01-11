@@ -12,6 +12,13 @@ function ReservationsList() {
   const {isSuccess, data} = useQuery({
     queryKey: ['reservations', reservationsStore.reservations],
     queryFn: () => ReservationsService.findByIds(reservationsStore.reservations),
+    onSuccess: (data) => {
+      const reservationsFromServer = data.map((r) => r.id);
+      const reservationsStoreForDelete = reservationsStore.reservations.filter(
+        (resStore) => !reservationsFromServer.includes(resStore),
+      );
+      reservationsStore.removeReservationsFromStore(reservationsStoreForDelete);
+    },
   });
 
   return (

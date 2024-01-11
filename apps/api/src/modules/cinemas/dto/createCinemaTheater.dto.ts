@@ -1,13 +1,6 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  Min,
-  Validate,
-} from 'class-validator';
-import { Transform } from 'class-transformer';
-import { CinemaExistsRule } from './cinemaExistsRule';
+import {IsBoolean, IsInt, IsNotEmpty, IsString, Min, Validate} from 'class-validator';
+import {Transform} from 'class-transformer';
+import {CinemaExistsRule} from './cinemaExistsRule';
 
 export class CreateCinemaTheaterDto {
   @IsNotEmpty()
@@ -15,7 +8,7 @@ export class CreateCinemaTheaterDto {
   name: string;
 
   @IsNotEmpty()
-  @Transform(({ value }) => {
+  @Transform(({value}) => {
     if (value === 'true') return true;
     if (value === 'false') return false;
     return value;

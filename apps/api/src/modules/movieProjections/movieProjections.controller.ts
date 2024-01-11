@@ -12,18 +12,16 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { MovieProjectionsService } from './movieProjections.service';
-import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
-import { Roles } from '../../decorators/roles.decorator';
-import { AdminRole } from '@prisma/client';
-import { CreateMovieProjectionDto } from './dto/createMovieProjection.dto';
-import { ExpressRequestWithUser } from '../../types/CommonTypes';
+import {MovieProjectionsService} from './movieProjections.service';
+import {JwtAdminAuthGuard} from '../../guards/jwtAdminAuth.guard';
+import {Roles} from '../../decorators/roles.decorator';
+import {AdminRole} from '@prisma/client';
+import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
+import {ExpressRequestWithUser} from '../../types/CommonTypes';
 
 @Controller('movieProjections')
 export class MovieProjectionsController {
-  constructor(
-    private readonly movieProjectionsService: MovieProjectionsService,
-  ) {}
+  constructor(private readonly movieProjectionsService: MovieProjectionsService) {}
 
   @Get('/movie/:movieId/cinema/:cinemaId')
   async findAllPerMovieCinema(
@@ -95,11 +93,7 @@ export class MovieProjectionsController {
     @Body('movieId', ParseUUIDPipe) movieId: string,
     @Body('cinemaId', ParseUUIDPipe) cinemaId: string,
   ) {
-    return this.movieProjectionsService.generateSingleMovieSingleCinema(
-      days,
-      movieId,
-      cinemaId,
-    );
+    return this.movieProjectionsService.generateSingleMovieSingleCinema(days, movieId, cinemaId);
   }
 
   @Roles(AdminRole.SuperAdmin)
@@ -109,16 +103,11 @@ export class MovieProjectionsController {
     @Body() createMovieProjection: CreateMovieProjectionDto,
     @Req() req: ExpressRequestWithUser,
   ) {
-    return this.movieProjectionsService.createByUser(
-      createMovieProjection,
-      req.user,
-    );
+    return this.movieProjectionsService.createByUser(createMovieProjection, req.user);
   }
 
   @Get(':movieProjectionId')
-  async findSingleMovieProjection(
-    @Param('movieProjectionId') movieProjectionId: string,
-  ) {
+  async findSingleMovieProjection(@Param('movieProjectionId') movieProjectionId: string) {
     return this.movieProjectionsService.findById(movieProjectionId);
   }
 }

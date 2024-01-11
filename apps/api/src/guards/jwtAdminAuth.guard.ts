@@ -1,9 +1,9 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Reflector } from '@nestjs/core';
-import { AdminRole } from '@prisma/client';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { ExpressRequestWithUser } from '../types/CommonTypes';
+import {ExecutionContext, Injectable} from '@nestjs/common';
+import {AuthGuard} from '@nestjs/passport';
+import {Reflector} from '@nestjs/core';
+import {AdminRole} from '@prisma/client';
+import {ROLES_KEY} from '../decorators/roles.decorator';
+import {ExpressRequestWithUser} from '../types/CommonTypes';
 
 @Injectable()
 export class JwtAdminAuthGuard extends AuthGuard('jwt-admin') {
@@ -14,10 +14,10 @@ export class JwtAdminAuthGuard extends AuthGuard('jwt-admin') {
   async canActivate(context: ExecutionContext) {
     await super.canActivate(context);
 
-    const requiredRoles = this.reflector.getAllAndOverride<AdminRole[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredRoles = this.reflector.getAllAndOverride<AdminRole[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
     const req: ExpressRequestWithUser = context.switchToHttp().getRequest();
 

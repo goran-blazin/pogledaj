@@ -1,6 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AdminUsersController } from './adminUsers.controller';
-import { AdminUsersService } from './adminUsers.service';
+import {Test, TestingModule} from '@nestjs/testing';
+import {AdminUsersController} from './adminUsers.controller';
+import {AdminUsersService} from './adminUsers.service';
 
 describe('AdminUsersController', () => {
   let controller: AdminUsersController;

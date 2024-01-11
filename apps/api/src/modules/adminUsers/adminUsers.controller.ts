@@ -12,15 +12,15 @@ import {
   Req,
   Query,
 } from '@nestjs/common';
-import { AdminUsersService } from './adminUsers.service';
-import { CreateAdminUserDto } from './dto/create-admin-user.dto';
+import {AdminUsersService} from './adminUsers.service';
+import {CreateAdminUserDto} from './dto/create-admin-user.dto';
 // import { UpdateAdminUserDto } from './dto/update-admin-user.dto';
-import { AdminRole } from '@prisma/client';
-import { Roles } from '../../decorators/roles.decorator';
-import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
-import { AdminUserSafe, ExpressRequestWithUser } from '../../types/CommonTypes';
-import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
-import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+import {AdminRole} from '@prisma/client';
+import {Roles} from '../../decorators/roles.decorator';
+import {JwtAdminAuthGuard} from '../../guards/jwtAdminAuth.guard';
+import {AdminUserSafe, ExpressRequestWithUser} from '../../types/CommonTypes';
+import {FORBIDDEN_MESSAGE} from '@nestjs/core/guards';
+import {NotFoundException} from '@nestjs/common/exceptions/not-found.exception';
 
 function checkUserRolePermissions(
   loggedUser: AdminUserSafe,
@@ -41,21 +41,13 @@ function checkUserRolePermissions(
       // Managers can only manage Employees for their cinemas
       if (adminUserRole === AdminRole.Employee) {
         // check if logged user has all the cinemas of added employee
-        if (
-          cinemaIds.every((id) =>
-            (loggedUser.cinemaIds as string[]).includes(id),
-          )
-        ) {
+        if (cinemaIds.every((id) => (loggedUser.cinemaIds as string[]).includes(id))) {
           return true;
         } else {
-          throw new ForbiddenException(
-            'Not possible to manage Employee for cinemas you are not the Manager of',
-          );
+          throw new ForbiddenException('Not possible to manage Employee for cinemas you are not the Manager of');
         }
       } else {
-        throw new ForbiddenException(
-          'Only SuperAdmin can manage SuperAdmin and Manager roles',
-        );
+        throw new ForbiddenException('Only SuperAdmin can manage SuperAdmin and Manager roles');
       }
     }
     case 'Employee':
@@ -71,26 +63,15 @@ export class AdminUsersController {
   @Post()
   @Roles(AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard)
-  create(
-    @Body() createAdminUserDto: CreateAdminUserDto,
-    @Req() req: ExpressRequestWithUser,
-  ) {
-    checkUserRolePermissions(
-      req.user,
-      createAdminUserDto.role,
-      createAdminUserDto.cinemaIds,
-    );
+  create(@Body() createAdminUserDto: CreateAdminUserDto, @Req() req: ExpressRequestWithUser) {
+    checkUserRolePermissions(req.user, createAdminUserDto.role, createAdminUserDto.cinemaIds);
     return this.adminUsersService.create(createAdminUserDto);
   }
 
   @Get()
   @Roles(AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard)
-  async findAll(
-    @Req() req: ExpressRequestWithUser,
-    @Query('sort') sort?: string,
-    @Query('range') range?: string,
-  ) {
+  async findAll(@Req() req: ExpressRequestWithUser, @Query('sort') sort?: string, @Query('range') range?: string) {
     return await this.adminUsersService.findAllForAdminUser(req.user, {
       sort: sort ? JSON.parse(sort) : undefined,
       range: range ? JSON.parse(range) : undefined,
@@ -100,17 +81,10 @@ export class AdminUsersController {
   @Roles(AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard)
   @Get(':id')
-  async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: ExpressRequestWithUser,
-  ) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Req() req: ExpressRequestWithUser) {
     const adminUserSafe = await this.adminUsersService.findOne(id);
     if (adminUserSafe) {
-      checkUserRolePermissions(
-        req.user,
-        adminUserSafe.role,
-        adminUserSafe.cinemaIds as string[],
-      );
+      checkUserRolePermissions(req.user, adminUserSafe.role, adminUserSafe.cinemaIds as string[]);
 
       return adminUserSafe;
     }
@@ -131,10 +105,7 @@ export class AdminUsersController {
   @Roles(AdminRole.SuperAdmin, AdminRole.Manager)
   @UseGuards(JwtAdminAuthGuard)
   @Delete(':id')
-  async remove(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: ExpressRequestWithUser,
-  ) {
+  async remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: ExpressRequestWithUser) {
     const adminUserForDelete = await this.adminUsersService.findOne(id);
     if (!adminUserForDelete) {
       throw new NotFoundException();

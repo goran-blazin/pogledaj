@@ -1,12 +1,7 @@
-import { AdminRole, AdminUser } from '@prisma/client';
+import {AdminRole, AdminUser} from '@prisma/client';
 import e from 'express';
 
-export type NodeEnv =
-  | 'local'
-  | 'development'
-  | 'test'
-  | 'staging'
-  | 'production';
+export type NodeEnv = 'local' | 'development' | 'test' | 'staging' | 'production';
 
 export type AdminUserSafe = Omit<AdminUser, 'password'>;
 

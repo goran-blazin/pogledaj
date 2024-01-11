@@ -1,5 +1,5 @@
-import { InputProvider } from '@prisma/client';
-import { IsIn, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {InputProvider} from '@prisma/client';
+import {IsIn, IsNotEmpty, IsString, MinLength} from 'class-validator';
 
 export class UpsertFromExternalDto {
   @IsNotEmpty()

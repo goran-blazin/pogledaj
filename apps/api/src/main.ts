@@ -1,10 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { BadRequestException, Logger } from '@nestjs/common';
-import { PrismaService } from './modules/prisma/prisma.service';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
-import { useContainer } from 'class-validator';
+import {NestFactory} from '@nestjs/core';
+import {AppModule} from './app.module';
+import {BadRequestException, Logger} from '@nestjs/common';
+import {PrismaService} from './modules/prisma/prisma.service';
+import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
+import {ValidationPipe} from '@nestjs/common';
+import {useContainer} from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,18 +13,13 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       exceptionFactory: (errors) => {
-        const errorMessages = errors.reduce(
-          (carry: Record<string, string[]>, error) => {
-            if (error.constraints) {
-              carry[error.property] = Object.values(error.constraints).map(
-                (message) => message.trim(),
-              );
-            }
+        const errorMessages = errors.reduce((carry: Record<string, string[]>, error) => {
+          if (error.constraints) {
+            carry[error.property] = Object.values(error.constraints).map((message) => message.trim());
+          }
 
-            return carry;
-          },
-          {},
-        );
+          return carry;
+        }, {});
         return new BadRequestException({
           statusCode: 400,
           messages: errorMessages,
@@ -50,7 +45,7 @@ async function bootstrap() {
     `Started listening Pogledaj-api Nest app on port ${process.env['APP_LISTEN_PORT']}`,
     'MainBootstrapFunction',
   );
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  useContainer(app.select(AppModule), {fallbackOnErrors: true});
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);

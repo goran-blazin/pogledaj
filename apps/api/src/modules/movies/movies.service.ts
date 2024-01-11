@@ -1,25 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Movie, InputProvider, Prisma } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
+import {Injectable, Logger} from '@nestjs/common';
+import {Movie, InputProvider, Prisma} from '@prisma/client';
+import {PrismaService} from '../prisma/prisma.service';
 // import { CreateMovieDto } from './dto/create-movie.dto';
 // import { UpdateMovieDto } from './dto/update-movie.dto';
-import { TmdbProvider } from './tmdb.provider';
-import {
-  MovieExternal,
-  MovieLocalizedData,
-  PersonForMovieExternal,
-} from '../../types/MovieTypes';
+import {TmdbProvider} from './tmdb.provider';
+import {MovieExternal, MovieLocalizedData, PersonForMovieExternal} from '../../types/MovieTypes';
 import * as _ from 'lodash';
-import { GetListOptions, ReturnList } from '../../types/CommonTypes';
+import {GetListOptions, ReturnList} from '../../types/CommonTypes';
+import {excludeArchivedMovieProjectionsQuery} from '../movieProjections/movieProjections.service';
 
 @Injectable()
 export class MoviesService {
   private readonly logger = new Logger(MoviesService.name);
 
-  constructor(
-    private prismaService: PrismaService,
-    private tmdbProvider: TmdbProvider,
-  ) {}
+  constructor(private prismaService: PrismaService, private tmdbProvider: TmdbProvider) {}
 
   // createByAdmin(data: CreateMovieDto) {
   //   return this.prismaService.movie.create({
@@ -34,7 +28,10 @@ export class MoviesService {
 
   async findAll(
     options: GetListOptions = {},
-    { includePersons }: { includePersons?: boolean },
+    {
+      includePersons = false,
+      onlyWithActiveProjections = false,
+    }: {includePersons?: boolean; onlyWithActiveProjections?: boolean} = {},
   ): Promise<ReturnList<Movie>> {
     const includePersonsObject = includePersons
       ? {
@@ -43,6 +40,16 @@ export class MoviesService {
           },
         }
       : false;
+
+    const where = {
+      movieProjections: onlyWithActiveProjections
+        ? {
+            some: {
+              projectionDateTime: excludeArchivedMovieProjectionsQuery(),
+            },
+          }
+        : undefined,
+    };
 
     const [movies, moviesCount] = await Promise.all([
       this.prismaService.movie.findMany({
@@ -53,6 +60,18 @@ export class MoviesService {
           actors: includePersonsObject,
           directors: includePersonsObject,
           producers: includePersonsObject,
+          movieProjections: {
+            where: {
+              projectionDateTime: excludeArchivedMovieProjectionsQuery(),
+            },
+            include: {
+              reservations: {
+                include: {
+                  reservationSeats: true,
+                },
+              },
+            },
+          },
         },
         skip: options.range?.skip,
         take: options.range?.take,
@@ -61,8 +80,11 @@ export class MoviesService {
               [options.sort.field]: options.sort.order,
             }
           : undefined,
+        where,
       }),
-      this.prismaService.movie.count(),
+      this.prismaService.movie.count({
+        where,
+      }),
     ]);
 
     return {
@@ -74,7 +96,7 @@ export class MoviesService {
 
   async findOne(
     movieWhereUniqueInput: Prisma.MovieWhereUniqueInput,
-    options: { includePersons?: boolean } = {},
+    options: {includePersons?: boolean} = {},
   ): Promise<Movie | null> {
     const personInclude = options.includePersons
       ? {
@@ -120,14 +142,8 @@ export class MoviesService {
   //   });
   // }
 
-  async upsertFromExternal(
-    externalType: InputProvider,
-    externalId: string,
-    localizedData: MovieLocalizedData,
-  ) {
-    this.logger.log(
-      `Trying to retrieve movie with id ${externalId} from ${externalType} provider`,
-    );
+  async upsertFromExternal(externalType: InputProvider, externalId: string, localizedData: MovieLocalizedData) {
+    this.logger.log(`Trying to retrieve movie with id ${externalId} from ${externalType} provider`);
     const externalMovieData: MovieExternal = await (() => {
       switch (externalType) {
         case InputProvider.Tmdb:
@@ -203,17 +219,11 @@ export class MoviesService {
             }),
           );
 
-        const upsertedActors = await upsertPersons(
-          externalMovieData.actors.map((actor) => actor.person),
-        );
+        const upsertedActors = await upsertPersons(externalMovieData.actors.map((actor) => actor.person));
 
-        const upsertedDirectors = await upsertPersons(
-          externalMovieData.directors.map((actor) => actor.person),
-        );
+        const upsertedDirectors = await upsertPersons(externalMovieData.directors.map((actor) => actor.person));
 
-        const upsertedProducers = await upsertPersons(
-          externalMovieData.producers.map((actor) => actor.person),
-        );
+        const upsertedProducers = await upsertPersons(externalMovieData.producers.map((actor) => actor.person));
 
         // upsert movie
         const upsertedMovie = await transactionClient.movie.upsert({
@@ -328,8 +338,7 @@ export class MoviesService {
             const upsertedDirectorPerson = upsertedDirectors.find(
               (person) =>
                 person.externalId === externalMovieDirector.person.externalId &&
-                person.externalType ===
-                  externalMovieDirector.person.externalType,
+                person.externalType === externalMovieDirector.person.externalType,
             );
             if (upsertedDirectorPerson) {
               return transactionClient.movieDirector.upsert({
@@ -366,8 +375,7 @@ export class MoviesService {
             const upsertedProducerPerson = upsertedProducers.find(
               (person) =>
                 person.externalId === externalMovieProducer.person.externalId &&
-                person.externalType ===
-                  externalMovieProducer.person.externalType,
+                person.externalType === externalMovieProducer.person.externalType,
             );
             if (upsertedProducerPerson) {
               return transactionClient.movieProducer.upsert({
@@ -404,9 +412,7 @@ export class MoviesService {
       },
     ); // closed transaction
 
-    this.logger.log(
-      `Successfully inserted movie with id ${externalId} from ${externalType} in DB`,
-    );
+    this.logger.log(`Successfully inserted movie with id ${externalId} from ${externalType} in DB`);
 
     return this.prismaService.movie.findUnique({
       where: {

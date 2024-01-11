@@ -1,9 +1,9 @@
-import { PrismaService } from '../prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
-import { GetListOptions, ReturnList } from '../../types/CommonTypes';
-import { CinemaTheater } from '@prisma/client';
-import { resolveReactAdminFilters } from '../../helpers/Utils';
-import { CreateCinemaTheaterDto } from './dto/createCinemaTheater.dto';
+import {PrismaService} from '../prisma/prisma.service';
+import {Injectable} from '@nestjs/common';
+import {GetListOptions, ReturnList} from '../../types/CommonTypes';
+import {CinemaTheater} from '@prisma/client';
+import {resolveReactAdminFilters} from '../../helpers/Utils';
+import {CreateCinemaTheaterDto} from './dto/createCinemaTheater.dto';
 
 @Injectable()
 export class CinemaTheatersService {
@@ -17,9 +17,7 @@ export class CinemaTheatersService {
     });
   }
 
-  async findAll(
-    options: GetListOptions = {},
-  ): Promise<ReturnList<CinemaTheater>> {
+  async findAll(options: GetListOptions = {}): Promise<ReturnList<CinemaTheater>> {
     const [cinemaTheaters, cinemaTheatersCount] = await Promise.all([
       this.prismaService.cinemaTheater.findMany({
         where: {
@@ -68,20 +66,14 @@ export class CinemaTheatersService {
             columnCount: createCinemaTheaterDto.columnCount,
             position: 'Center',
             cinemaSeats: {
-              create: Array.from(
-                { length: createCinemaTheaterDto.rowCount },
-                (_, rowCount) => {
-                  return Array.from(
-                    { length: createCinemaTheaterDto.columnCount },
-                    (_, columnCount) => {
-                      return {
-                        seatRow: rowCount.toString(),
-                        seatColumn: columnCount.toString(),
-                      };
-                    },
-                  );
-                },
-              ).flat(), // we will for now hardcode the number of seats to row X column
+              create: Array.from({length: createCinemaTheaterDto.rowCount}, (_, rowCount) => {
+                return Array.from({length: createCinemaTheaterDto.columnCount}, (_, columnCount) => {
+                  return {
+                    seatRow: rowCount.toString(),
+                    seatColumn: columnCount.toString(),
+                  };
+                });
+              }).flat(), // we will for now hardcode the number of seats to row X column
             },
           },
         },

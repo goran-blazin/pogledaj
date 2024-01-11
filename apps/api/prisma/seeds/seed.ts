@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import {PrismaClient} from '@prisma/client';
+import {v4 as uuidv4} from 'uuid';
 
 const prisma = new PrismaClient();
 
@@ -93,8 +93,7 @@ async function main() {
       {
         id: cinemaBigBelgrade,
         name: 'Bioskop Demo Beograd',
-        description:
-          'Bioskop demo Beograd je veliki bioskop u nasem glavnom gradu',
+        description: 'Bioskop demo Beograd je veliki bioskop u nasem glavnom gradu',
         cityId: belgradeUUID,
         address: 'Glavna 88',
         phone: ['011/555-1111', '011/555-2222'],
@@ -104,8 +103,7 @@ async function main() {
       {
         id: cinemaSmallBelgrade,
         name: 'Bioskop Demo Beograd Mali',
-        description:
-          'Bioskop demo Beograd Mali je mali bioskop u nasem glavnom gradu',
+        description: 'Bioskop demo Beograd Mali je mali bioskop u nasem glavnom gradu',
         cityId: belgradeUUID,
         address: 'Sporedna 99',
         phone: ['011/555-3333'],
@@ -115,8 +113,7 @@ async function main() {
       {
         id: cinemaNoviSad,
         name: 'Bioskop Demo Novi Sad',
-        description:
-          'Bioskop demo Novi Sad je u Novom Sad, poznatoj i kao srpska Atina',
+        description: 'Bioskop demo Novi Sad je u Novom Sad, poznatoj i kao srpska Atina',
         cityId: noviSadUUID,
         address: 'Dunavska 99',
         phone: ['021/555-8888', '021/555-9999'],

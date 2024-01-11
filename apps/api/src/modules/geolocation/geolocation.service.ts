@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { ReturnList } from '../../types/CommonTypes';
-import { City } from '@prisma/client';
+import {Injectable} from '@nestjs/common';
+import {PrismaService} from '../prisma/prisma.service';
+import {ReturnList} from '../../types/CommonTypes';
+import {City} from '@prisma/client';
 
 @Injectable()
 export class GeolocationService {

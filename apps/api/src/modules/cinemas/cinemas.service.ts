@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 // import { CreateCinemaDto } from './dto/create-cinema.dto';
 // import { UpdateCinemaDto } from './dto/update-cinema.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { Cinema, Prisma } from '@prisma/client';
-import { GetListOptions, ReturnList } from '../../types/CommonTypes';
-import { resolveReactAdminFilters } from '../../helpers/Utils';
-import { CreateCinemaDto } from './dto/createCinema.dto';
+import {PrismaService} from '../prisma/prisma.service';
+import {Cinema, Prisma} from '@prisma/client';
+import {GetListOptions, ReturnList} from '../../types/CommonTypes';
+import {resolveReactAdminFilters} from '../../helpers/Utils';
+import {CreateCinemaDto} from './dto/createCinema.dto';
 
 @Injectable()
 export class CinemasService {
@@ -55,9 +55,7 @@ export class CinemasService {
     };
   }
 
-  findOne(
-    cinemaWhereUniqueInput: Prisma.CinemaWhereUniqueInput,
-  ): Promise<Cinema | null> {
+  findOne(cinemaWhereUniqueInput: Prisma.CinemaWhereUniqueInput): Promise<Cinema | null> {
     return this.prismaService.cinema.findUnique({
       where: cinemaWhereUniqueInput,
       include: {

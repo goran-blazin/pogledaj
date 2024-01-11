@@ -10,11 +10,11 @@ import {
   MinDate,
   Validate,
 } from 'class-validator';
-import { DateTime } from 'ts-luxon';
-import { CurrencyCode } from '@prisma/client';
-import { CinemaTheaterExistsRule } from '../../cinemas/dto/cinemaTheaterExistsRule';
-import { MovieExistsRule } from '../../movies/dto/movieExistsRule';
-import { Transform, Type } from 'class-transformer';
+import {DateTime} from 'ts-luxon';
+import {CurrencyCode} from '@prisma/client';
+import {CinemaTheaterExistsRule} from '../../cinemas/dto/cinemaTheaterExistsRule';
+import {MovieExistsRule} from '../../movies/dto/movieExistsRule';
+import {Transform, Type} from 'class-transformer';
 
 export class CreateMovieProjectionDto {
   @IsNotEmpty()
@@ -30,7 +30,7 @@ export class CreateMovieProjectionDto {
   @IsNotEmpty()
   @Type(() => Date)
   @IsDate()
-  @MinDate(DateTime.now().plus({ days: 1 }).startOf('day').toJSDate())
+  @MinDate(DateTime.now().plus({days: 1}).startOf('day').toJSDate())
   projectionDateTime: Date;
 
   @IsString()
@@ -38,7 +38,7 @@ export class CreateMovieProjectionDto {
   dubbedLanguageId?: string | null;
 
   @IsNotEmpty()
-  @Transform(({ value }) => {
+  @Transform(({value}) => {
     if (value === 'true') return true;
     if (value === 'false') return false;
     return value;

@@ -10,7 +10,9 @@ import FilterButton from '../utility/FilterButton';
 import {useQuery} from 'react-query';
 
 function MoviesListingWrapper() {
-  const movies = useQuery(['movies', 'findAll'], MoviesService.findAll);
+  const movies = useQuery(['movies', 'findAll'], () => {
+    return MoviesService.findAll();
+  });
 
   return (
     <Box>

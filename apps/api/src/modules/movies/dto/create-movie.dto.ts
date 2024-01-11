@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsInt, Min, Max, IsDate } from 'class-validator';
+import {IsString, IsNotEmpty, IsInt, Min, Max, IsDate} from 'class-validator';
 
 export class CreateMovieDto {
   @IsString()
@@ -34,7 +34,7 @@ export class CreateMovieDto {
   countryOfOriginId: string;
 
   @IsNotEmpty()
-  @IsString({ each: true })
+  @IsString({each: true})
   posterImages: string[];
 
   @IsInt()

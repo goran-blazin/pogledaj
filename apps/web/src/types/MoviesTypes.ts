@@ -36,6 +36,10 @@ export type MovieWithPersons = Movie & {
   directors: Director[];
 };
 
+export type MovieWithMovieProjection = Movie & {
+  movieProjections: MovieProjection[];
+};
+
 type MovieProjectionOptions = {
   is3D: boolean;
 };

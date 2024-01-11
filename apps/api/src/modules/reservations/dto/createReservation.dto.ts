@@ -1,11 +1,4 @@
-import {
-  IsArray,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import {IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID} from 'class-validator';
 
 export class CreateReservationDto {
   @IsUUID(4)
@@ -13,7 +6,7 @@ export class CreateReservationDto {
   eventId: string;
 
   @IsArray()
-  @IsUUID(4, { each: true })
+  @IsUUID(4, {each: true})
   seatIds: string[];
 
   @IsEmail()

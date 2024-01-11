@@ -1,14 +1,10 @@
-import {
-  ValidationArguments,
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
-import { PrismaService } from '../../prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
-import { AdminRole } from '@prisma/client';
-import { CreateAdminUserDto } from './create-admin-user.dto';
+import {ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface} from 'class-validator';
+import {PrismaService} from '../../prisma/prisma.service';
+import {Injectable} from '@nestjs/common';
+import {AdminRole} from '@prisma/client';
+import {CreateAdminUserDto} from './create-admin-user.dto';
 
-@ValidatorConstraint({ name: 'ValidateCinemaExistence', async: true })
+@ValidatorConstraint({name: 'ValidateCinemaExistence', async: true})
 @Injectable()
 export class ValidateCinemaExistence implements ValidatorConstraintInterface {
   constructor(private prismaService: PrismaService) {}
@@ -36,17 +32,11 @@ export class ValidateCinemaExistence implements ValidatorConstraintInterface {
   }
 }
 
-@ValidatorConstraint({ name: 'ValidateCinemaForPassedRole' })
+@ValidatorConstraint({name: 'ValidateCinemaForPassedRole'})
 @Injectable()
-export class ValidateCinemaForPassedRole
-  implements ValidatorConstraintInterface
-{
-  validate(
-    cinemaIds: string[],
-    validationArguments: ValidationArguments,
-  ): boolean {
-    const role: AdminRole = (validationArguments.object as CreateAdminUserDto)
-      .role;
+export class ValidateCinemaForPassedRole implements ValidatorConstraintInterface {
+  validate(cinemaIds: string[], validationArguments: ValidationArguments): boolean {
+    const role: AdminRole = (validationArguments.object as CreateAdminUserDto).role;
 
     if (role === 'SuperAdmin') {
       // we don't care about number of cinema for SuperAdmin

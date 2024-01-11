@@ -1,31 +1,26 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateMovieProjectionDto } from './dto/createMovieProjection.dto';
-import { MovieProjectionOptions } from './movieProjections.types';
-import { DateTime } from 'ts-luxon';
-import {
-  AdminRole,
-  Cinema,
-  CinemaTheater,
-  CurrencyCode,
-  Movie,
-  MovieProjection,
-} from '@prisma/client';
+import {ForbiddenException, Injectable} from '@nestjs/common';
+import {PrismaService} from '../prisma/prisma.service';
+import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
+import {MovieProjectionOptions} from './movieProjections.types';
+import {DateTime} from 'ts-luxon';
+import {AdminRole, Cinema, CinemaTheater, CurrencyCode, Movie, MovieProjection} from '@prisma/client';
 import * as _ from 'lodash';
-import { Logger } from '@nestjs/common';
-import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
-import {
-  AdminUserSafe,
-  GetListOptions,
-  ReturnList,
-} from '../../types/CommonTypes';
+import {Logger} from '@nestjs/common';
+import {NotFoundException} from '@nestjs/common/exceptions/not-found.exception';
+import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';
 import AuthHelper from '../../helpers/Auth.helper';
-import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
+import {FORBIDDEN_MESSAGE} from '@nestjs/core/guards';
 
 const RESERVATION_TIME_OFFSET_MINUTES = 30;
 
+export const excludeArchivedMovieProjectionsQuery = () => {
+  return {
+    gt: DateTime.now().plus({minute: RESERVATION_TIME_OFFSET_MINUTES}).toJSDate(),
+  };
+};
+
 const generateProjections = (
-  cinema: Cinema & { cinemaTheaters: CinemaTheater[] },
+  cinema: Cinema & {cinemaTheaters: CinemaTheater[]},
   movie: Movie,
   daysCount: number,
 ): CreateMovieProjectionDto[] => {
@@ -118,10 +113,7 @@ export class MovieProjectionsService {
           id: data.cinemaTheaterId,
         },
       });
-      if (
-        !cinemaTheater ||
-        AuthHelper.checkAccessToCinema(user, cinemaTheater.cinemaId)
-      ) {
+      if (!cinemaTheater || AuthHelper.checkAccessToCinema(user, cinemaTheater.cinemaId)) {
         return new ForbiddenException(FORBIDDEN_MESSAGE);
       }
     }
@@ -140,9 +132,7 @@ export class MovieProjectionsService {
     });
 
     if (!cinemaTheater) {
-      throw new NotFoundException(
-        `Cinema theater ${data.cinemaTheaterId} not found`,
-      );
+      throw new NotFoundException(`Cinema theater ${data.cinemaTheaterId} not found`);
     }
 
     const options: MovieProjectionOptions = {
@@ -183,10 +173,10 @@ export class MovieProjectionsService {
   }
 
   async findAll(
-    params: { movieId?: string; cinemaId?: string; includeArchived: boolean },
+    params: {movieId?: string; cinemaId?: string; includeArchived: boolean},
     options: GetListOptions = {},
   ): Promise<ReturnList<MovieProjection>> {
-    const { includeArchived = false } = params;
+    const {includeArchived = false} = params;
     const where = {
       movieId: params.movieId ? params.movieId : undefined,
       cinemaTheater: params.cinemaId
@@ -194,13 +184,7 @@ export class MovieProjectionsService {
             cinemaId: params.cinemaId,
           }
         : undefined,
-      projectionDateTime: includeArchived
-        ? undefined
-        : {
-            gt: DateTime.now()
-              .plus({ minute: RESERVATION_TIME_OFFSET_MINUTES })
-              .toJSDate(),
-          },
+      projectionDateTime: includeArchived ? undefined : excludeArchivedMovieProjectionsQuery(),
     };
 
     const [movieProjections, movieProjectionsCount] = await Promise.all([
@@ -235,11 +219,7 @@ export class MovieProjectionsService {
     };
   }
 
-  async generateSingleMovieSingleCinema(
-    days = 30,
-    movieId: string,
-    cinemaId: string,
-  ) {
+  async generateSingleMovieSingleCinema(days = 30, movieId: string, cinemaId: string) {
     // first delete all MovieProjections for passed movie and cinema
     const [movie, cinema] = await Promise.all([
       this.prismaService.movie.findUnique({

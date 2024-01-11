@@ -7,6 +7,7 @@ type ReservationsStore = {
   reservations: string[];
   createNewReservation: (params: CreateReservation) => Promise<void>;
   cancelReservation: (reservationId: string) => Promise<void>;
+  removeReservationsFromStore: (reservationIdsForDelete: string[]) => void;
 };
 
 const useReservationsStore = create<ReservationsStore>()(
@@ -28,6 +29,13 @@ const useReservationsStore = create<ReservationsStore>()(
             } else {
               throw new Error('ReservationCreateFailed');
             }
+          },
+          removeReservationsFromStore: (reservationIdsForDelete: string[]) => {
+            set((state) => {
+              return {
+                reservations: state.reservations.filter((r) => !reservationIdsForDelete.includes(r)),
+              };
+            });
           },
           cancelReservation: async (reservationId: string) => {
             await ReservationsService.deleteReservation(reservationId);

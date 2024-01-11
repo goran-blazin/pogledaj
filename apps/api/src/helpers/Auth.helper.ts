@@ -1,5 +1,5 @@
-import { AdminRole } from '@prisma/client';
-import { AdminUserSafe } from '../types/CommonTypes';
+import {AdminRole} from '@prisma/client';
+import {AdminUserSafe} from '../types/CommonTypes';
 
 export default {
   checkAccessToCinema(user: AdminUserSafe, cinemaId: string) {

@@ -1,19 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  ParseUUIDPipe,
-  Query,
-  Body,
-  UseGuards,
-  Delete,
-} from '@nestjs/common';
-import { CinemasService } from './cinemas.service';
-import { CreateCinemaDto } from './dto/createCinema.dto';
-import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
-import { Roles } from '../../decorators/roles.decorator';
-import { AdminRole } from '@prisma/client';
+import {Controller, Get, Post, Param, ParseUUIDPipe, Query, Body, UseGuards, Delete} from '@nestjs/common';
+import {CinemasService} from './cinemas.service';
+import {CreateCinemaDto} from './dto/createCinema.dto';
+import {JwtAdminAuthGuard} from '../../guards/jwtAdminAuth.guard';
+import {Roles} from '../../decorators/roles.decorator';
+import {AdminRole} from '@prisma/client';
 
 @Controller('cinemas')
 export class CinemasController {
@@ -27,11 +17,7 @@ export class CinemasController {
   }
 
   @Get()
-  async findAll(
-    @Query('sort') sort?: string,
-    @Query('range') range?: string,
-    @Query('filter') filter?: string,
-  ) {
+  async findAll(@Query('sort') sort?: string, @Query('range') range?: string, @Query('filter') filter?: string) {
     return this.cinemasService.findAll({
       sort: sort ? JSON.parse(sort) : undefined,
       range: range ? JSON.parse(range) : undefined,

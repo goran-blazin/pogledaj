@@ -1,4 +1,4 @@
-import { MovieProjection } from '@prisma/client';
+import {MovieProjection} from '@prisma/client';
 
 export type MovieProjectionExtended = Omit<MovieProjection, 'options'> & {
   options: MovieProjectionOptions;

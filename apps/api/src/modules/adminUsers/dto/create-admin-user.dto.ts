@@ -1,25 +1,9 @@
-import {
-  PasswordValidation,
-  PasswordValidationRequirement,
-} from 'class-validator-password-check';
-import {
-  IsEmail,
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  MinLength,
-  Validate,
-} from 'class-validator';
-import { AdminRole } from '@prisma/client';
-import { Match } from '../../../decorators/customValidation/match.decorator';
-import { AdminUserExistsRule } from './adminUserExistsRule';
-import {
-  ValidateCinemaExistence,
-  ValidateCinemaForPassedRole,
-} from './validateCinemaIdsRules';
+import {PasswordValidation, PasswordValidationRequirement} from 'class-validator-password-check';
+import {IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength, MinLength, Validate} from 'class-validator';
+import {AdminRole} from '@prisma/client';
+import {Match} from '../../../decorators/customValidation/match.decorator';
+import {AdminUserExistsRule} from './adminUserExistsRule';
+import {ValidateCinemaExistence, ValidateCinemaForPassedRole} from './validateCinemaIdsRules';
 
 const passwordRequirement: PasswordValidationRequirement = {
   mustContainLowerLetter: true,
@@ -52,7 +36,7 @@ export class CreateAdminUserDto {
   readonly role: AdminRole;
 
   @IsOptional()
-  @IsUUID(4, { each: true })
+  @IsUUID(4, {each: true})
   @Validate(ValidateCinemaExistence)
   @Validate(ValidateCinemaForPassedRole)
   readonly cinemaIds: string[] = [];

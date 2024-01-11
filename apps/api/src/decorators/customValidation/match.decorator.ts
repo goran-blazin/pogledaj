@@ -18,7 +18,7 @@ export function Match(property: string, validationOptions?: ValidationOptions) {
   };
 }
 
-@ValidatorConstraint({ name: 'Match' })
+@ValidatorConstraint({name: 'Match'})
 export class MatchConstraint implements ValidatorConstraintInterface {
   validate(value: Record<string, unknown>, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;

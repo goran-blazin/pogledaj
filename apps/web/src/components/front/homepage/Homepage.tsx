@@ -15,11 +15,61 @@ import {namedRoutes} from '../../../routes';
 import useAppStore from '../../../store/AppStore';
 import BigInfoDialog from '../utility/BigInfoDialog';
 import ButtonStyled from '../utility/buttons/Button';
+import {useMemo} from 'react';
+import {MovieProjection} from '../../../types/MoviesTypes';
+import ReservationsHelper from '../../../helpers/ReservationsHelper';
+import {DateTime} from 'ts-luxon';
+import React from 'react';
+
 function Homepage() {
-  const movies = useQuery(['movies', 'findAll'], MoviesService.findAll);
+  const movies = useQuery(['movies', 'findAllOnlyWithActiveProjections'], () => {
+    return MoviesService.findAll({onlyWithActiveProjections: true});
+  });
   const cinemas = useQuery(['cinemas', 'findAll'], CinemasService.findAll);
   const reservationStore = useReservationsStore();
   const appStore = useAppStore();
+
+  const MAX_ITEMS_PER_SLIDER = 10;
+
+  const {dontMissTheseMoviesSlider, lastChanceMoviesSlider} = useMemo(() => {
+    if (movies.data) {
+      return {
+        dontMissTheseMoviesSlider: movies.data.slice(0, MAX_ITEMS_PER_SLIDER).sort((movie1, movie2) => {
+          const reducer = (sum: number, mp: MovieProjection) => {
+            return sum + ReservationsHelper.calculateNumberOfReservationSeats(mp.reservations);
+          };
+          const movie1SoldCount = movie1.movieProjections.reduce(reducer, 0);
+          const movie2SoldCount = movie2.movieProjections.reduce(reducer, 0);
+          return movie2SoldCount - movie1SoldCount;
+        }), // sort by most made reservations
+        lastChanceMoviesSlider: movies.data
+          .filter((movie) => {
+            // filter all movies that will be here only in the next 7 days
+            return !movie.movieProjections.some((mp) => {
+              return DateTime.now().plus({day: 7}) < DateTime.fromISO(mp.projectionDateTime);
+            });
+          })
+          .slice(0, MAX_ITEMS_PER_SLIDER)
+          .sort((movie1, movie2) => {
+            const reducer = (latest: MovieProjection, current: MovieProjection) =>
+              DateTime.fromISO(current.projectionDateTime) > DateTime.fromISO(latest.projectionDateTime)
+                ? current
+                : latest;
+            const latestDateMovie1 = movie1.movieProjections.reduce(reducer);
+            const latestDateMovie2 = movie2.movieProjections.reduce(reducer);
+            return DateTime.fromISO(latestDateMovie1.projectionDateTime) >
+              DateTime.fromISO(latestDateMovie2.projectionDateTime)
+              ? 1
+              : -1;
+          }), // sort by earliest archive date,
+      };
+    } else {
+      return {
+        dontMissTheseMoviesSlider: [],
+        lastChanceMoviesSlider: [],
+      };
+    }
+  }, [movies?.data]);
 
   return (
     <Box>
@@ -50,12 +100,24 @@ function Homepage() {
           <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
         ) : (
           <HorizontalCardsCarousel>
-            {(movies.data || []).map((movie, i) => (
+            {dontMissTheseMoviesSlider.map((movie, i) => (
               <MovieBigCard movie={movie} key={i} />
             ))}
           </HorizontalCardsCarousel>
         )}
       </Box>
+      {lastChanceMoviesSlider.length > 0 && (
+        <React.Fragment>
+          <PageSubHeader headerText={'Iskoristi poslednju priliku'} Icon={LocalFireDepartmentOutlined} />
+          <Box mb={'20px'}>
+            <HorizontalCardsCarousel>
+              {lastChanceMoviesSlider.map((movie, i) => (
+                <MovieBigCard movie={movie} key={i} />
+              ))}
+            </HorizontalCardsCarousel>
+          </Box>
+        </React.Fragment>
+      )}
       <PageSubHeader headerText={'Bioskopi u tvojoj blizini'} Icon={LocationOnOutlined} />
       <Box mb={'20px'}>
         {movies.isLoading ? (

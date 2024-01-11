@@ -1,16 +1,25 @@
-import {Movie, MovieWithPersons, UpsertMovieFromExternalDTO} from '../types/MoviesTypes';
+import {Movie, MovieWithMovieProjection, MovieWithPersons, UpsertMovieFromExternalDTO} from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
 
 const MoviesService = {
-  async findAll(): Promise<Movie[]> {
-    const result = await PogledajApi().get('movies');
+  async findAll({onlyWithActiveProjections}: {onlyWithActiveProjections?: boolean} = {}): Promise<
+    MovieWithMovieProjection[]
+  > {
+    const result = await PogledajApi().get('movies', {
+      params: {
+        onlyWithActiveProjections: onlyWithActiveProjections,
+      },
+    });
     return result.data.data;
   },
 
-  async findAllWithPersons(): Promise<MovieWithPersons[]> {
+  async findAllWithPersons({onlyWithActiveProjections}: {onlyWithActiveProjections?: boolean} = {}): Promise<
+    MovieWithPersons[]
+  > {
     const result = await PogledajApi().get('movies', {
       params: {
         includePersons: 'true',
+        onlyWithActiveProjections: onlyWithActiveProjections,
       },
     });
 

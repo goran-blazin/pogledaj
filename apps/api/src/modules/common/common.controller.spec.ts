@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CommonController } from './common.controller';
+import {Test, TestingModule} from '@nestjs/testing';
+import {CommonController} from './common.controller';
 
 describe('CommonController', () => {
   let controller: CommonController;

@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { CommonController } from './common.controller';
-import { BullModule } from '@nestjs/bull';
+import {Module} from '@nestjs/common';
+import {CommonController} from './common.controller';
+import {BullModule} from '@nestjs/bull';
 
 @Module({
   imports: [

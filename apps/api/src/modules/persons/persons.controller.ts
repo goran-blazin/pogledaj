@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { PersonsService } from './persons.service';
+import {PersonsService} from './persons.service';
 // import { CreatePersonDto } from './dto/create-person.dto';
 // import { UpdatePersonDto } from './dto/update-person.dto';
 

@@ -11,10 +11,10 @@ import {
   ParseUUIDPipe,
   Request,
 } from '@nestjs/common';
-import { ReservationsService } from './reservations.service';
-import { CreateReservationDto } from './dto/createReservation.dto';
-import { JwtAdminAuthGuard } from '../../guards/jwtAdminAuth.guard';
-import { ExpressRequestWithUser, FilterOptions } from '../../types/CommonTypes';
+import {ReservationsService} from './reservations.service';
+import {CreateReservationDto} from './dto/createReservation.dto';
+import {JwtAdminAuthGuard} from '../../guards/jwtAdminAuth.guard';
+import {ExpressRequestWithUser, FilterOptions} from '../../types/CommonTypes';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -27,11 +27,7 @@ export class ReservationsController {
 
   @Get()
   @UseGuards(JwtAdminAuthGuard)
-  findAll(
-    @Query('sort') sort?: string,
-    @Query('range') range?: string,
-    @Query('filter') filter?: string,
-  ) {
+  findAll(@Query('sort') sort?: string, @Query('range') range?: string, @Query('filter') filter?: string) {
     return this.reservationsService.findAll({
       options: {
         sort: sort ? JSON.parse(sort) : undefined,
@@ -70,13 +66,9 @@ export class ReservationsController {
   @Get('for-customer')
   findAllForCustomer(@Query('filter') filter: string) {
     const filterParsed = JSON.parse(filter) as FilterOptions;
-    if (
-      filterParsed?.ids &&
-      Array.isArray(filterParsed.ids) &&
-      filterParsed.ids.length
-    ) {
+    if (filterParsed?.ids && Array.isArray(filterParsed.ids) && filterParsed.ids.length) {
       return this.reservationsService.findAll({
-        options: { filter: filterParsed },
+        options: {filter: filterParsed},
       });
     }
 
@@ -89,10 +81,7 @@ export class ReservationsController {
     @Request() req: ExpressRequestWithUser,
     @Param('reservationId', ParseUUIDPipe) reservationId: string,
   ) {
-    return this.reservationsService.validateReservation(
-      reservationId,
-      req.user,
-    );
+    return this.reservationsService.validateReservation(reservationId, req.user);
   }
 
   //

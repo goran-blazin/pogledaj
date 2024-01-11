@@ -1,11 +1,8 @@
-import {
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import {ValidatorConstraint, ValidatorConstraintInterface} from 'class-validator';
+import {Injectable} from '@nestjs/common';
+import {PrismaService} from '../../prisma/prisma.service';
 
-@ValidatorConstraint({ name: 'CinemaExistsRule', async: true })
+@ValidatorConstraint({name: 'CinemaExistsRule', async: true})
 @Injectable()
 export class CinemaExistsRule implements ValidatorConstraintInterface {
   constructor(private prismaService: PrismaService) {}

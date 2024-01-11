@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { SupportEmailDto } from './dto/supportEmail.dto';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { EmailJobData } from './email.types';
+import {Injectable} from '@nestjs/common';
+import {SupportEmailDto} from './dto/supportEmail.dto';
+import {InjectQueue} from '@nestjs/bull';
+import {Queue} from 'bull';
+import {EmailJobData} from './email.types';
 const sendSupportEmailsTo: string[] = [
   'goran.blazin@gmail.com',
   'pedjalaya@gmail.com',
@@ -12,9 +12,7 @@ const sendSupportEmailsTo: string[] = [
 
 @Injectable()
 export class EmailService {
-  constructor(
-    @InjectQueue('email') private readonly emailQueue: Queue<EmailJobData>,
-  ) {}
+  constructor(@InjectQueue('email') private readonly emailQueue: Queue<EmailJobData>) {}
   async sendSupportEmail(supportEmailDto: SupportEmailDto) {
     const html = `
       <html>
