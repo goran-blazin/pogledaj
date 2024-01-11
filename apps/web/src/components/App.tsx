@@ -7,7 +7,7 @@ import FooterMenuWrapper from './front/footer/FooterMenuWrapper';
 import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
 
 // scss
-import './App.scss';
+import '../styles/App.scss';
 import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
 import ComingSoon from './front/comingSoon/ComingSoon';
 

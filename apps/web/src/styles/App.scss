@@ -1,0 +1,16 @@
+@import './variables.scss';
+
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  font-family: var(--ff-open-sans) !important; // TODO figure out to apply this without !important
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+}
+
+.App-link {
+  //color: #61dafb;
+}

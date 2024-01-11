@@ -1,4 +1,7 @@
 import {createTheme} from '@mui/material/styles';
+import '../../../../styles/App.scss'
+
+// TODO remove commented lines once tested
 
 const lightTheme = createTheme({
   customTypography: {
@@ -10,7 +13,8 @@ const lightTheme = createTheme({
     pageTitle: {
       fontSize: '20px',
       fontWeight: 'bold',
-      color: '#3274F6',
+      color: `var(--light-blue)`,
+      // color: '#3274F6',
       marginBottom: '30px',
     },
     paragraph: {
@@ -20,7 +24,8 @@ const lightTheme = createTheme({
     },
     link: {
       fontSize: '14px',
-      color: '#3274F6',
+      color: `var(--light-blue)`,
+      // color: '#3274F6',
     },
   },
   customForm: {
@@ -64,10 +69,12 @@ const lightTheme = createTheme({
       color: '#F0F0F0',
     },
     darkBlue: {
-      color: '#091F3E',
+      // color: '#091F3E',
+      color: `var(--dark-blue)`,
     },
     lightBlue: {
-      color: '#3274F6',
+      color: `var(--light-blue)`,
+      // color: '#3274F6',
     },
   },
   typography: {
@@ -79,7 +86,8 @@ const lightTheme = createTheme({
       paper: '#F5F5F5',
     },
     primary: {
-      main: '#3274F6',
+      main: `var(--light-blue)`,
+      // main: '#3274F6',
     },
     secondary: {
       main: '#F5F5F5',
