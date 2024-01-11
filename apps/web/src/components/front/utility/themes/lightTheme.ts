@@ -1,5 +1,5 @@
 import {createTheme} from '@mui/material/styles';
-import '../../../../styles/App.scss'
+import '../../../../styles/App.scss';
 
 // TODO remove commented lines once tested
 
