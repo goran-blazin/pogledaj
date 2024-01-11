@@ -1,8 +1,6 @@
 import {createTheme} from '@mui/material/styles';
 import '../../../../styles/App.scss';
 
-// TODO remove commented lines once tested
-
 const lightTheme = createTheme({
   customTypography: {
     mainTitle: {
@@ -28,23 +26,23 @@ const lightTheme = createTheme({
   },
   customForm: {
     inputField: {
-      color: '#F0F0F0',
+      color: `var(--input-field-grey)`,
       textColor: `var(--dark-grey)`,
     },
     selectField: {
-      color: '#F0F0F0',
+      color: `var(--input-field-grey)`,
       textColor: `var(--dark-grey)`,
       startAdornmentTextColor: '#8A8A8A',
     },
   },
   customBackground: {
-    primary: '#F0F0F0',
+    primary: `var(--input-field-grey)`,
   },
   customButtons: {
     buttonWithIcon: {
-      color: '#F0F0F0',
+      color: `var(--input-field-grey)`,
       textColor: `var(--dark-grey)`,
-      iconBgColor: '#3274F6',
+      iconBgColor: `var(--light-blue)`,
     },
   },
   breakpoints: {
@@ -61,10 +59,10 @@ const lightTheme = createTheme({
       color: `var(--dark-grey)`,
     },
     grey: {
-      color: '#A4A4A4',
+      color: `var(--light-grey)`,
     },
     lightGrey: {
-      color: '#F0F0F0',
+      color: `var(--input-field-grey)`,
     },
     darkBlue: {
       color: `var(--dark-blue)`,
@@ -82,7 +80,6 @@ const lightTheme = createTheme({
       paper: '#F5F5F5',
     },
     primary: {
-      // main: `var(--light-blue)`, // var not supported ??
       main: '#3274F6',
     },
     secondary: {

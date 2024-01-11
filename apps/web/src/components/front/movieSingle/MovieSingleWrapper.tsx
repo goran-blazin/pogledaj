@@ -48,7 +48,7 @@ const EventInformation = styled('ul')(({theme}) => ({
     paddingBottom: '16px',
     '.event-info-subtitle': {
       display: 'block',
-      fontWeight: 'bold',
+      fontWeight: 600,
       '&.inline': {
         display: 'inline',
         marginRight: '5px',

@@ -5,43 +5,43 @@ const darkTheme = createTheme({
     mainTitle: {
       fontSize: '22px',
       fontWeight: 'bold',
-      color: '#ffffff',
+      color: `var(--white)`,
     },
     pageTitle: {
       fontSize: '20px',
       fontWeight: 'bold',
-      color: '#3274F6',
+      color: `var(--light-blue)`,
       marginBottom: '30px',
     },
     paragraph: {
       fontSize: '14px',
-      color: '#595959',
+      color: `var(--dark-grey)`,
       marginBottom: '30px',
     },
     link: {
       fontSize: '14px',
-      color: '#3274F6',
+      color: `var(--light-blue)`,
     },
   },
   customForm: {
     inputField: {
-      color: '#091F3E',
-      textColor: '#CEE4FF',
+      color: `var(--dark-blue)`,
+      textColor: `var(--dark-mode-text)`,
     },
     selectField: {
-      color: '#091F3E',
-      textColor: '#CEE4FF',
-      startAdornmentTextColor: '#3274F6',
+      color: `var(--dark-blue)`,
+      textColor: `var(--dark-mode-text)`,
+      startAdornmentTextColor: `var(--light-blue)`,
     },
   },
   customBackground: {
-    primary: '#091F3E',
+    primary: `var(--dark-blue)`,
   },
   customButtons: {
     buttonWithIcon: {
-      color: '#091F3E',
-      textColor: '#CEE4FF',
-      iconBgColor: '#3274F6',
+      color: `var(--dark-blue)`,
+      textColor: `var(--dark-mode-text)`,
+      iconBgColor: `var(--light-blue)`,
     },
   },
   breakpoints: {
@@ -55,19 +55,19 @@ const darkTheme = createTheme({
   },
   colorPalette: {
     darkGrey: {
-      color: '#595959',
+      color: `var(--dark-grey)`,
     },
     grey: {
-      color: '#A4A4A4',
+      color: `var(--light-grey)`,
     },
     lightGrey: {
-      color: '#F0F0F0',
+      color: `var(--input-field-grey)`,
     },
     darkBlue: {
-      color: '#091F3E',
+      color: `var(--dark-blue)`,
     },
     lightBlue: {
-      color: '#3274F6',
+      color: `var(--light-blue)`,
     },
   },
   typography: {

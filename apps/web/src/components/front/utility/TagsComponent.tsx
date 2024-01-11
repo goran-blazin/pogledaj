@@ -14,6 +14,7 @@ const ChipStyled = styled(Chip)(({theme}) => ({
   padding: '0 18px',
   fontSize: '12px',
   lineHeight: '20px',
+  fontWeight: 600,
   '& span': {
     padding: 0,
   },
