@@ -8,34 +8,32 @@ const lightTheme = createTheme({
     mainTitle: {
       fontSize: '22px',
       fontWeight: 'bold',
-      color: '#595959',
+      color: `var(--dark-grey)`,
     },
     pageTitle: {
       fontSize: '20px',
       fontWeight: 'bold',
       color: `var(--light-blue)`,
-      // color: '#3274F6',
       marginBottom: '30px',
     },
     paragraph: {
       fontSize: '14px',
-      color: '#595959',
+      color: `var(--dark-grey)`,
       marginBottom: '30px',
     },
     link: {
       fontSize: '14px',
       color: `var(--light-blue)`,
-      // color: '#3274F6',
     },
   },
   customForm: {
     inputField: {
       color: '#F0F0F0',
-      textColor: '#595959',
+      textColor: `var(--dark-grey)`,
     },
     selectField: {
       color: '#F0F0F0',
-      textColor: '#595959',
+      textColor: `var(--dark-grey)`,
       startAdornmentTextColor: '#8A8A8A',
     },
   },
@@ -45,7 +43,7 @@ const lightTheme = createTheme({
   customButtons: {
     buttonWithIcon: {
       color: '#F0F0F0',
-      textColor: '#595959',
+      textColor: `var(--dark-grey)`,
       iconBgColor: '#3274F6',
     },
   },
@@ -60,7 +58,7 @@ const lightTheme = createTheme({
   },
   colorPalette: {
     darkGrey: {
-      color: '#595959',
+      color: `var(--dark-grey)`,
     },
     grey: {
       color: '#A4A4A4',
@@ -69,12 +67,10 @@ const lightTheme = createTheme({
       color: '#F0F0F0',
     },
     darkBlue: {
-      // color: '#091F3E',
       color: `var(--dark-blue)`,
     },
     lightBlue: {
       color: `var(--light-blue)`,
-      // color: '#3274F6',
     },
   },
   typography: {
@@ -86,8 +82,8 @@ const lightTheme = createTheme({
       paper: '#F5F5F5',
     },
     primary: {
-      main: `var(--light-blue)`,
-      // main: '#3274F6',
+      // main: `var(--light-blue)`, // var not supported ??
+      main: '#3274F6',
     },
     secondary: {
       main: '#F5F5F5',
