@@ -7,6 +7,58 @@ import {DateTime} from 'ts-luxon';
 import ProjectionsGroupedPerDateAndMovie from './ProjectionsGroupedPerDateAndMovie';
 import {Typography} from '@mui/material';
 import {useQuery} from 'react-query';
+import CinemaSinglePreview from '../EventPreview/EventPreview';
+import MainTitle from '../utility/typography/MainTitle';
+import RatingInfo from '../utility/RatingInfo';
+import LinkComponent from '../utility/typography/Link';
+
+import {styled} from '@mui/material';
+
+const CinemaTitleHolder = styled('div')({
+  display: 'flex',
+  marginBottom: '16px',
+  gap: '10px',
+  '& .titleWrap': {
+    flex: '1 1 auto',
+  },
+  '& .titleRating': {
+    flex: '0 0 auto',
+    paddingTop: '4px',
+  },
+});
+
+// TODO maybe move this in separate component, might be used in other components
+const EventInformation = styled('ul')(({theme}) => ({
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+  color: theme.colorPalette.darkGrey.color,
+  '.event-info-section': {
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: theme.colorPalette.lightGrey.color,
+    marginBottom: '16px',
+    paddingBottom: '16px',
+    '.event-info-subtitle': {
+      display: 'block',
+      fontWeight: 600,
+      '&.inline': {
+        display: 'inline',
+        marginRight: '5px',
+      },
+    },
+    '.event-section-description': {
+      margin: 0,
+      '&.inline': {
+        display: 'inline',
+      },
+    },
+    '.event-info-section-with-icons': {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  },
+}));
 
 function CinemaSingleWrapper() {
   const [searchParams] = useSearchParams();
@@ -67,16 +119,32 @@ function CinemaSingleWrapper() {
         <div>
           {cinema?.data ? (
             <div>
-              <div>
-                <p>Ime: {cinema.data.name}</p>
-                <p>Opis: {cinema.data.description}</p>
-                <p>Grad: {cinema.data.city.name}</p>
-                <p>Adresa: {cinema.data.address}</p>
-                <p>
-                  Telefon:{' '}
-                  {cinema.data.phone.length ? cinema.data.phone.join(', ') : <template>Nema telefona</template>}
-                </p>
-              </div>
+              <CinemaSinglePreview>
+                {/* TODO add cinema image */}
+                <img src={'/iron-man.png'} alt={'POSTER IMAGE'} />
+              </CinemaSinglePreview>
+              <CinemaTitleHolder>
+                <div className="titleWrap">
+                  <MainTitle title={cinema.data.name} />
+                </div>
+                <div className="titleRating">
+                  <RatingInfo rating={cinema.data.rating} />
+                </div>
+              </CinemaTitleHolder>
+              <EventInformation>
+                <li className="event-info-section">
+                  <div>
+                    <span className="event-info-subtitle inline">Adresa:</span>
+                    <p className="event-section-description inline">
+                      {`${cinema.data.address}, ${cinema.data.city.postalCode} ${cinema.data.city.name}`}
+                    </p>
+                    {/* TODO cinema website */}
+                    <p>
+                      <LinkComponent text={'www.arenacineplex.com'} link={'www.arenacineplex.com'} />
+                    </p>
+                  </div>
+                </li>
+              </EventInformation>
               <div>
                 {Object.keys(projectionsGroupedPerDateAndMovie).length > 0 ? (
                   <div>
