@@ -74,6 +74,12 @@ const lightTheme = createTheme({
   typography: {
     fontFamily: ['Open Sans'].join(','),
   },
+  eventPreviewAction: {
+    backgroundColor: `var(--white)`,
+    iconColor: `var(--light-grey)`,
+    iconHolderBorderColor: `var(--input-field-grey-light)`,
+    iconHolderBackgroundColor: `var(--input-field-grey-light)`,
+  },
   palette: {
     background: {
       default: '#FFFFFF',

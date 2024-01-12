@@ -1,8 +1,9 @@
 import {ReactElement} from 'react';
 import Box from '@mui/material/Box';
-import {styled} from '@mui/system';
+// import {styled} from '@mui/system';
+import {styled} from '@mui/material';
 
-const ShapeRightBottom = styled('div')({
+const ShapeRightBottom = styled('div')(({theme}) => ({
   width: 14 + 'px',
   height: 14 + 'px',
   position: 'absolute',
@@ -18,10 +19,10 @@ const ShapeRightBottom = styled('div')({
     borderRadius: 50 + '%',
     bottom: 0,
     left: 0,
-    boxShadow: '-7px 7px 0 0 white',
+    boxShadow: `-7px 7px 0 0 ${theme.eventPreviewAction.backgroundColor}`,
   },
-});
-const ShapeTopLeft = styled('div')({
+}));
+const ShapeTopLeft = styled('div')(({theme}) => ({
   width: 14 + 'px',
   height: 14 + 'px',
   position: 'absolute',
@@ -37,10 +38,10 @@ const ShapeTopLeft = styled('div')({
     borderRadius: 50 + '%',
     bottom: 0,
     left: 0,
-    boxShadow: '-7px 7px 0 0 white',
+    boxShadow: `-7px 7px 0 0 ${theme.eventPreviewAction.backgroundColor}`,
   },
-});
-const ShapeLeftBottom = styled('div')({
+}));
+const ShapeLeftBottom = styled('div')(({theme}) => ({
   width: 14 + 'px',
   height: 14 + 'px',
   position: 'absolute',
@@ -56,10 +57,10 @@ const ShapeLeftBottom = styled('div')({
     borderRadius: 50 + '%',
     bottom: 0,
     right: 0,
-    boxShadow: '7px 7px 0 0 white',
+    boxShadow: `7px 7px 0 0 ${theme.eventPreviewAction.backgroundColor}`,
   },
-});
-const ShapeTopRight = styled('div')({
+}));
+const ShapeTopRight = styled('div')(({theme}) => ({
   width: 14 + 'px',
   height: 14 + 'px',
   position: 'absolute',
@@ -75,9 +76,9 @@ const ShapeTopRight = styled('div')({
     borderRadius: 50 + '%',
     bottom: 0,
     right: 0,
-    boxShadow: '7px 7px 0 0 white',
+    boxShadow: `7px 7px 0 0 ${theme.eventPreviewAction.backgroundColor}`,
   },
-});
+}));
 
 type EventPreviewActionProps = {
   position: string;
@@ -93,7 +94,7 @@ function EventPreviewAction(props: EventPreviewActionProps) {
           height: 62,
           position: 'absolute',
           bottom: 0,
-          backgroundColor: 'background.default',
+          backgroundColor: (theme) => theme.eventPreviewAction.backgroundColor,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -113,8 +114,8 @@ function EventPreviewAction(props: EventPreviewActionProps) {
           width: 32,
           height: 32,
           boxSizing: 'border-box',
-          backgroundColor: 'rgba(245, 245, 245, .9)',
-          border: '1px solid rgba(233, 233, 233, .5)',
+          backgroundColor: (theme) => theme.eventPreviewAction.iconHolderBackgroundColor,
+          border: (theme) => `1px solid ${theme.eventPreviewAction.iconHolderBorderColor}`,
           borderRadius: 10 + 'px',
           display: 'flex',
           justifyContent: 'center',

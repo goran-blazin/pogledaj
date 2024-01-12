@@ -76,7 +76,7 @@ function EventPreview({children}: {children: ReactElement}) {
         <IconButton aria-label="Share" onClick={handleClickFavorites}>
           <FavoriteIconStyle
             sx={{
-              color: (theme) => theme.colorPalette.grey,
+              color: (theme) => theme.eventPreviewAction.iconColor,
             }}
           />
         </IconButton>
@@ -86,7 +86,7 @@ function EventPreview({children}: {children: ReactElement}) {
         <IconButton aria-label="Share" onClick={handleClickShare}>
           <ShareIconStyle
             sx={{
-              color: (theme) => theme.colorPalette.grey,
+              color: (theme) => theme.eventPreviewAction.iconColor,
             }}
           />
         </IconButton>

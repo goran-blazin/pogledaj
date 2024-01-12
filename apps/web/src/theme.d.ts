@@ -64,6 +64,12 @@ declare module '@mui/material/styles' {
         color: string;
       };
     };
+    eventPreviewAction: {
+      backgroundColor: string;
+      iconColor: string;
+      iconHolderBorderColor: string;
+      iconHolderBackgroundColor: string;
+    };
   }
 
   interface ThemeOptions {
@@ -126,6 +132,12 @@ declare module '@mui/material/styles' {
     };
     customBackground: {
       primary: React.CSSProperties['color'];
+    };
+    eventPreviewAction: {
+      backgroundColor: React.CSSProperties['backgroundColor'];
+      iconColor: React.CSSProperties['color'];
+      iconHolderBorderColor: React.CSSProperties['borderColor'];
+      iconHolderBackgroundColor: React.CSSProperties['backgroundColor'];
     };
   }
 }

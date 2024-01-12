@@ -73,6 +73,12 @@ const darkTheme = createTheme({
   typography: {
     fontFamily: ['Open Sans'].join(','),
   },
+  eventPreviewAction: {
+    backgroundColor: `var(--dark-mode-background)`,
+    iconColor: `var(--light-blue)`,
+    iconHolderBorderColor: `var(--dark-blue-bright)`,
+    iconHolderBackgroundColor: `var(--dark-blue)`,
+  },
   palette: {
     background: {
       default: '#FFFFFF',
