@@ -9,7 +9,7 @@ export class CommonController {
 
   @Get()
   main() {
-    return `Welcome to pogledajApi - ${process.env.NODE_ENV} environment!`;
+    return `Welcome to pogledajApi - ${process.env.NODE_ENV} environment`;
   }
 
   @Get('monitoring')

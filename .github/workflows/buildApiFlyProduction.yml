@@ -14,8 +14,11 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
           ref: production
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy ./apps/api/ --remote-only
+      - name: Init fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Run fly CLI deploy
+        run: flyctl deploy ./apps/api/ --remote-only
