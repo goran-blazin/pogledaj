@@ -20,12 +20,17 @@ import {MovieProjection} from '../../../types/MoviesTypes';
 import ReservationsHelper from '../../../helpers/ReservationsHelper';
 import {DateTime} from 'ts-luxon';
 import React from 'react';
+import Utils from '../../../helpers/Utils';
 
 function Homepage() {
   const movies = useQuery(['movies', 'findAllOnlyWithActiveProjections'], () => {
     return MoviesService.findAll({onlyWithActiveProjections: true});
   });
   const cinemas = useQuery(['cinemas', 'findAll'], CinemasService.findAll);
+  const userLocation = useQuery('userLocation', Utils.getUserLocation, {
+    retry: 0,
+    cacheTime: 0,
+  });
   const reservationStore = useReservationsStore();
   const appStore = useAppStore();
 
@@ -70,6 +75,48 @@ function Homepage() {
       };
     }
   }, [movies?.data]);
+
+  const {sortedCinemasByProximity} = useMemo(() => {
+    if (cinemas.data) {
+      return {
+        sortedCinemasByProximity: cinemas.data
+          .sort((cinema1, cinema2) => {
+            const cinema1HasGeolocation = !!cinema1.geoLatitude && !!cinema1.geoLongitude;
+            const cinema2HasGeolocation = !!cinema2.geoLatitude && !!cinema2.geoLongitude;
+            if (cinema1HasGeolocation && cinema2HasGeolocation) {
+              if (userLocation.data) {
+                const distanceCinema1 = Utils.calculateDistance(
+                  userLocation.data.coords.latitude,
+                  userLocation.data.coords.longitude,
+                  cinema1.geoLatitude,
+                  cinema1.geoLongitude,
+                );
+
+                const distanceCinema2 = Utils.calculateDistance(
+                  userLocation.data.coords.latitude,
+                  userLocation.data.coords.longitude,
+                  cinema2.geoLatitude,
+                  cinema2.geoLongitude,
+                );
+
+                return distanceCinema1 - distanceCinema2;
+              }
+            } else if (cinema1HasGeolocation) {
+              return -1;
+            } else if (cinema2HasGeolocation) {
+              return 1;
+            }
+
+            return 0;
+          })
+          .slice(0, MAX_ITEMS_PER_SLIDER),
+      };
+    } else {
+      return {
+        sortedCinemasByProximity: [],
+      };
+    }
+  }, [cinemas?.data, userLocation?.data]);
 
   return (
     <Box>
@@ -118,13 +165,16 @@ function Homepage() {
           </Box>
         </React.Fragment>
       )}
-      <PageSubHeader headerText={'Bioskopi u tvojoj blizini'} Icon={LocationOnOutlined} />
+      <PageSubHeader
+        headerText={userLocation.error ? ' Bioskopi (geolokacija isključena)' : 'Bioskopi u tvojoj blizini'}
+        Icon={LocationOnOutlined}
+      />
       <Box mb={'20px'}>
-        {movies.isLoading ? (
+        {cinemas.isLoading ? (
           <Typography color={'text.primary'}>Bioskopi se učitavaju, molimo sačekajte...</Typography>
         ) : (
           <HorizontalCardsCarousel>
-            {(cinemas.data || []).map((cinema, i) => (
+            {sortedCinemasByProximity.map((cinema, i) => (
               <CinemaBigCard cinema={cinema} key={i} />
             ))}
           </HorizontalCardsCarousel>

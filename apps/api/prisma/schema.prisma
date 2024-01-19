@@ -115,6 +115,8 @@ model Cinema {
   rating               Int
   phone                Json                  @default("[]")
   posterImages         Json                  @default("[]")
+  geoLatitude          Decimal?              @db.Decimal(10, 6)
+  geoLongitude         Decimal?              @db.Decimal(10, 6)
   cinemaTheaters       CinemaTheater[]
   movieCinemaOverrides MovieCinemaOverride[]
 }

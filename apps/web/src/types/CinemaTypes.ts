@@ -23,6 +23,8 @@ export type Cinema = {
   rating?: IntRange<0, 101>;
   phone: string[];
   posterImages: string[];
+  geoLatitude: number;
+  geoLongitude: number;
 };
 
 export type CinemaTheater = {
