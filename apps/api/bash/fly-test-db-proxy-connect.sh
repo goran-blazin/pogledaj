@@ -1,0 +1,1 @@
+flyctl proxy 5433 -a pogledaj-api-test-db

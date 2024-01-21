@@ -42,6 +42,11 @@ export class MoviesController {
     );
   }
 
+  @Get('soon')
+  findSoon() {
+    return this.moviesService.findSoon();
+  }
+
   @Get(':id')
   findOne(
     @Param('id', ParseUUIDPipe) id: string,

@@ -12,6 +12,7 @@ export type MovieAdditionalData = {
   imdbId?: string;
   homepage?: string;
   adult?: boolean;
+  forChildren: boolean;
 };
 
 export type MoviePosterImages = {

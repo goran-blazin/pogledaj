@@ -44,6 +44,10 @@ type TmdbPerson = {
   homepage?: string;
 };
 
+const forChildrenCertificationsMap: Record<string, string[]> = {
+  US: ['G', 'PG'],
+};
+
 @Injectable()
 export class TmdbProvider {
   private tmdbClient;
@@ -69,27 +73,34 @@ export class TmdbProvider {
   }
 
   async getMovieByTMDBId(tmdbId: string): Promise<MovieExternal> {
-    const [apiConf, externalMovieRes, externalMovieCreditsRes, externalMovieVideosRes] = await Promise.all([
-      this.getApiConfiguration(),
-      this.tmdbClient.movie.getDetails({
-        pathParameters: {
-          movie_id: tmdbId,
-        },
-      }),
-      this.tmdbClient.movie.getCredits({
-        pathParameters: {
-          movie_id: tmdbId,
-        },
-      }),
-      this.tmdbClient.movie.getVideos({
-        pathParameters: {
-          movie_id: tmdbId,
-        },
-      }),
-    ]);
+    const [apiConf, externalMovieRes, externalMovieCreditsRes, externalMovieVideosRes, externalMovieReleaseDatesRes] =
+      await Promise.all([
+        this.getApiConfiguration(),
+        this.tmdbClient.movie.getDetails({
+          pathParameters: {
+            movie_id: tmdbId,
+          },
+        }),
+        this.tmdbClient.movie.getCredits({
+          pathParameters: {
+            movie_id: tmdbId,
+          },
+        }),
+        this.tmdbClient.movie.getVideos({
+          pathParameters: {
+            movie_id: tmdbId,
+          },
+        }),
+        this.tmdbClient.movie.getReleaseDates({
+          pathParameters: {
+            movie_id: tmdbId,
+          },
+        }),
+      ]);
     const externalMovie = externalMovieRes.data;
     const externalMovieCredits = externalMovieCreditsRes.data;
     const externalMovieVideos = externalMovieVideosRes.data as ExtendedVideos;
+    const externalMovieReleaseDates = externalMovieReleaseDatesRes.data;
     // get first 5 actors
     const creditActors = externalMovieCredits.cast.slice(0, 5);
     const creditActorPersons = await Promise.all(
@@ -165,6 +176,27 @@ export class TmdbProvider {
         imdbId: externalMovie.imdb_id || undefined,
         homepage: externalMovie.homepage || undefined,
         adult: externalMovie.adult,
+        forChildren: (() => {
+          for (const countryCode of Object.keys(forChildrenCertificationsMap)) {
+            const releaseDateCountry = externalMovieReleaseDates.results.find((r) => r.iso_3166_1 === countryCode);
+
+            if (
+              releaseDateCountry &&
+              Array.isArray(releaseDateCountry.release_dates) &&
+              releaseDateCountry.release_dates.length > 0
+            ) {
+              const isForChildren = forChildrenCertificationsMap[countryCode].includes(
+                releaseDateCountry.release_dates[0].certification,
+              );
+
+              if (isForChildren) {
+                return true;
+              }
+            }
+          }
+
+          return false;
+        })(),
       },
       countryOfOrigin: {
         code: externalMovie.production_countries[0].iso_3166_1,

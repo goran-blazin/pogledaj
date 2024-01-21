@@ -39,14 +39,16 @@ function Homepage() {
   const {dontMissTheseMoviesSlider, lastChanceMoviesSlider} = useMemo(() => {
     if (movies.data) {
       return {
-        dontMissTheseMoviesSlider: movies.data.slice(0, MAX_ITEMS_PER_SLIDER).sort((movie1, movie2) => {
-          const reducer = (sum: number, mp: MovieProjection) => {
-            return sum + ReservationsHelper.calculateNumberOfReservationSeats(mp.reservations);
-          };
-          const movie1SoldCount = movie1.movieProjections.reduce(reducer, 0);
-          const movie2SoldCount = movie2.movieProjections.reduce(reducer, 0);
-          return movie2SoldCount - movie1SoldCount;
-        }), // sort by most made reservations
+        dontMissTheseMoviesSlider: movies.data
+          .sort((movie1, movie2) => {
+            const reducer = (sum: number, mp: MovieProjection) => {
+              return sum + ReservationsHelper.calculateNumberOfReservationSeats(mp.reservations);
+            };
+            const movie1SoldCount = movie1.movieProjections.reduce(reducer, 0);
+            const movie2SoldCount = movie2.movieProjections.reduce(reducer, 0);
+            return movie2SoldCount - movie1SoldCount;
+          })
+          .slice(0, MAX_ITEMS_PER_SLIDER), // sort by most made reservations
         lastChanceMoviesSlider: movies.data
           .filter((movie) => {
             // filter all movies that will be here only in the next 7 days
@@ -54,7 +56,6 @@ function Homepage() {
               return DateTime.now().plus({day: 7}) < DateTime.fromISO(mp.projectionDateTime);
             });
           })
-          .slice(0, MAX_ITEMS_PER_SLIDER)
           .sort((movie1, movie2) => {
             const reducer = (latest: MovieProjection, current: MovieProjection) =>
               DateTime.fromISO(current.projectionDateTime) > DateTime.fromISO(latest.projectionDateTime)
@@ -66,7 +67,8 @@ function Homepage() {
               DateTime.fromISO(latestDateMovie2.projectionDateTime)
               ? 1
               : -1;
-          }), // sort by earliest archive date,
+          })
+          .slice(0, MAX_ITEMS_PER_SLIDER), // sort by earliest archive date,
       };
     } else {
       return {

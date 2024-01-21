@@ -7,6 +7,7 @@ export type MovieAdditionalData = {
   imdbId?: string;
   homepage?: string;
   adult?: boolean;
+  forChildren: boolean;
 };
 
 export type Movie = {
@@ -28,6 +29,7 @@ export type Movie = {
     site: 'YouTube';
     type: 'Teaser' | 'Trailer' | 'Behind the Scenes';
   }[];
+  createdAt: string;
 };
 
 export type MovieWithPersons = Movie & {

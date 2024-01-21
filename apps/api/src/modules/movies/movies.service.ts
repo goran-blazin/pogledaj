@@ -94,6 +94,31 @@ export class MoviesService {
     };
   }
 
+  /**
+   * This method return all movies who are considered to be soon on the repertoire meaning all moveis without any projections yet
+   */
+  findSoon(options: GetListOptions = {}) {
+    return this.prismaService.movie.findMany({
+      include: {
+        genres: true,
+        originalLanguage: true,
+        countryOfOrigin: true,
+      },
+      skip: options.range?.skip,
+      take: options.range?.take,
+      orderBy: options.sort
+        ? {
+            [options.sort.field]: options.sort.order,
+          }
+        : undefined,
+      where: {
+        movieProjections: {
+          none: {},
+        },
+      },
+    });
+  }
+
   async findOne(
     movieWhereUniqueInput: Prisma.MovieWhereUniqueInput,
     options: {includePersons?: boolean} = {},

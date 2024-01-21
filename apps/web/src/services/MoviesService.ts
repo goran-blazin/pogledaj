@@ -13,6 +13,11 @@ const MoviesService = {
     return result.data.data;
   },
 
+  async findSoonMovies(): Promise<Movie[]> {
+    const result = await PogledajApi().get('movies/soon');
+    return result.data;
+  },
+
   async findAllWithPersons({onlyWithActiveProjections}: {onlyWithActiveProjections?: boolean} = {}): Promise<
     MovieWithPersons[]
   > {
