@@ -3,8 +3,9 @@ import {Box, Typography} from '@mui/material';
 import PageHeader from '../utility/PageHeader';
 import SearchTextField from '../utility/SearchTextField';
 import CinemaBigCard from '../utility/cards/CinemaBigCard';
-import FilterButton from '../utility/FilterButton';
 import {useQuery} from 'react-query';
+import FilterLinkButton from '../utility/FilterLinkButton';
+import {namedRoutes} from '../../../routes';
 
 function CinemasListingWrapper() {
   const cinemas = useQuery(['cinemas', 'findAll'], CinemasService.findAll);
@@ -13,7 +14,11 @@ function CinemasListingWrapper() {
     <Box>
       <PageHeader headerText={'Bioskopi'} />
       <Box mb={'20px'}>
-        <SearchTextField id={'search-cinemas'} placeholder={'Pronađi bioskop'} EndAdornment={<FilterButton />} />
+        <SearchTextField
+          id={'search-cinemas'}
+          placeholder={'Pronađi bioskop'}
+          EndAdornment={<FilterLinkButton navigateTo={namedRoutes.moviesFilters} />}
+        />
       </Box>
       {cinemas.isLoading ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>

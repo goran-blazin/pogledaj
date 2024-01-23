@@ -1,28 +1,37 @@
 import {Injectable} from '@nestjs/common';
-// import { CreatePersonDto } from './dto/create-person.dto';
-// import { UpdatePersonDto } from './dto/update-person.dto';
+import {PrismaService} from '../prisma/prisma.service';
 
 @Injectable()
 export class PersonsService {
-  // create(createPersonDto: CreatePersonDto) {
-  create() {
-    return 'This action adds a new person';
+  constructor(private prismaService: PrismaService) {}
+
+  searchActorsByName({take, searchText}: {take: number; searchText: string}) {
+    return this.prismaService.person.findMany({
+      where: {
+        name: {
+          contains: searchText,
+          mode: 'insensitive',
+        },
+        actorInMovies: {
+          some: {},
+        },
+      },
+      take,
+    });
   }
 
-  findAll() {
-    return `This action returns all persons TEST`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} person`;
-  }
-
-  // update(id: number, updatePersonDto: UpdatePersonDto) {
-  update(id: number) {
-    return `This action updates a #${id} person`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} person`;
+  searchDirectorsByName({take, searchText}: {take: number; searchText: string}) {
+    return this.prismaService.person.findMany({
+      where: {
+        name: {
+          contains: searchText,
+          mode: 'insensitive',
+        },
+        directorInMovies: {
+          some: {},
+        },
+      },
+      take,
+    });
   }
 }

@@ -204,6 +204,7 @@ model Person {
   additionalData   Json            @default("{}")
 
   @@unique([externalId, externalType])
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
 }
 
 model MovieActor {

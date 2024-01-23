@@ -1,10 +1,19 @@
 import {FilterAltOutlined} from '@mui/icons-material';
 import {Button} from '@mui/material';
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 
-function FilterButton() {
+function FilterLinkButton({navigateTo}: {navigateTo: string}) {
+  const navigate = useNavigate();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate(navigateTo); // Path to your component
+  };
+
   return (
     <Button
+      href={navigateTo}
       sx={{
         maxWidth: '32px',
         maxHeight: '32px',
@@ -12,6 +21,7 @@ function FilterButton() {
         minHeight: '32px',
         borderRadius: '8px',
       }}
+      onClick={handleClick}
       variant="contained"
     >
       <FilterAltOutlined fontSize="small" />
@@ -19,4 +29,4 @@ function FilterButton() {
   );
 }
 
-export default FilterButton;
+export default FilterLinkButton;

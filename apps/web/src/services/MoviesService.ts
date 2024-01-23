@@ -1,5 +1,6 @@
 import {Movie, MovieWithMovieProjection, MovieWithPersons, UpsertMovieFromExternalDTO} from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
+import {Country, Genre} from '../types/GeneralTypes';
 
 const MoviesService = {
   async findAll({onlyWithActiveProjections}: {onlyWithActiveProjections?: boolean} = {}): Promise<
@@ -49,6 +50,16 @@ const MoviesService = {
 
   async upsertFromExternal(data: UpsertMovieFromExternalDTO) {
     return PogledajApi().post('movies/upsertFromExternal', data);
+  },
+
+  async getAllGenresForMoviesFilter(): Promise<Genre[]> {
+    const result = await PogledajApi().get('moviesFilters/getAllGenres');
+    return result.data;
+  },
+
+  async getAllCountriesForMoviesFilter(): Promise<Country[]> {
+    const result = await PogledajApi().get('moviesFilters/getAllCountries');
+    return result.data;
   },
 };
 export default Object.freeze(MoviesService);

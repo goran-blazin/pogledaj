@@ -18,6 +18,7 @@ import SelectBoxStyled from '../utility/form/SelectBoxStyled';
 import ButtonStyled from '../utility/buttons/Button';
 import {namedRoutes} from '../../../routes';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import {LocalActivityOutlined} from '@mui/icons-material';
 
 const movieProjectionDateTimeFormat = 'dd.MM.yyyy / HH:mm';
 
@@ -225,8 +226,9 @@ function MovieSingleWrapper() {
               <div>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
                   <Box>
-                    <PageSubHeader headerText={'Rezervacija karata:'} />
+                    <PageSubHeader headerText={'Rezervacija karata:'} Icon={LocalActivityOutlined} />
                     <FormControl fullWidth sx={{mt: 2}}>
+                      <Typography>Izaberi bioskop:</Typography>
                       <SelectBoxStyled
                         value={selectedCinema}
                         startAdornment={
@@ -246,6 +248,7 @@ function MovieSingleWrapper() {
                       </SelectBoxStyled>
                     </FormControl>
                     <FormControl fullWidth sx={{mt: 2}}>
+                      <Typography>Izaberi termin:</Typography>
                       <SelectBoxStyled
                         value={selectedMovieProjection}
                         startAdornment={

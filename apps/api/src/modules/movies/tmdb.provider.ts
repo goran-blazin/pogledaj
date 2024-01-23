@@ -198,10 +198,20 @@ export class TmdbProvider {
           return false;
         })(),
       },
-      countryOfOrigin: {
-        code: externalMovie.production_countries[0].iso_3166_1,
-        name: externalMovie.production_countries[0].name,
-      },
+      countryOfOrigin: (() => {
+        // check if there are any priority countries first
+        const firstProductionCompanyOriginCountry = externalMovie.production_companies[0]?.origin_country;
+
+        const priorityCountry = externalMovie.production_countries.find(
+          (productionCountry) => productionCountry.iso_3166_1 === firstProductionCompanyOriginCountry,
+        );
+        const countryOfOrigin = priorityCountry || externalMovie.production_countries[0];
+
+        return {
+          code: countryOfOrigin.iso_3166_1,
+          name: countryOfOrigin.name,
+        };
+      })(),
       externalId: externalMovie.id.toString(),
       externalType: InputProvider.Tmdb,
       genreCodes: externalMovie.genres.map((genre) => genre.name.toLowerCase()),

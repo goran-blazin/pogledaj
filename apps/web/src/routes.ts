@@ -5,6 +5,7 @@ export const namedRoutes = {
   cinemasListing: '/cinemas',
   cinemaSingle: '/cinemas/:cinemaId',
   moviesListing: '/movies',
+  moviesFilters: '/moviesFilters',
   movieSingle: '/movies/:movieId',
   movieProjectionSingle: '/movie-projections/:movieProjectionId',
   reservations: '/reservations',
