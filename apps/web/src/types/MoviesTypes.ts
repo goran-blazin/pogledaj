@@ -129,3 +129,12 @@ export type CreateCinemaTheaterDTO = {
   rowCount: number;
   columnCount: number;
 };
+
+export const MovieLengthCategory = {
+  to90Minutes: 'to90Minutes',
+  from90To120Minutes: 'from90To120Minutes',
+  from120To180Minutes: 'from120To180Minutes',
+  over180Minutes: 'over180Minutes',
+} as const;
+
+export type MovieLengthCategory = (typeof MovieLengthCategory)[keyof typeof MovieLengthCategory];

@@ -12,6 +12,7 @@ import TextFieldStyled from '../utility/form/TextFieldStyled';
 import StyledPopper from '../utility/form/StyledPopper';
 import PersonsService from '../../../services/PersonsService';
 import {useDebounce} from '@uidotdev/usehooks';
+import {MovieLengthCategory} from '../../../types/MoviesTypes';
 
 function MoviesFiltersWrapper() {
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
@@ -50,7 +51,6 @@ function MoviesFiltersWrapper() {
     queryFn: () => {
       return PersonsService.searchDirectorsByName(debouncedDirectorAutocompleteInputValue);
     },
-    enabled: !!debouncedDirectorAutocompleteInputValue,
   });
 
   const directorAutocompleteOptions = useMemo(() => {
@@ -72,7 +72,6 @@ function MoviesFiltersWrapper() {
     queryFn: () => {
       return PersonsService.searchActorsByName(debouncedActorsAutocompleteInputValue);
     },
-    enabled: !!debouncedActorsAutocompleteInputValue,
   });
 
   const actorsAutocompleteOptions = useMemo(() => {
@@ -84,6 +83,24 @@ function MoviesFiltersWrapper() {
 
     return [...actorsAutocompleteValue, ...serverArray];
   }, [actorsRQ?.data]);
+
+  const [movieLengths, setMovieLengths] = useState<MovieLengthCategory[]>([]);
+  const movieLengthsMap = {
+    [MovieLengthCategory.to90Minutes]: 'do 90 minuta',
+    [MovieLengthCategory.from90To120Minutes]: 'od 90 do 120 minuta',
+    [MovieLengthCategory.from120To180Minutes]: 'od 120 do 180 minuta',
+    [MovieLengthCategory.over180Minutes]: 'preko 180 minuta',
+  };
+
+  const handleMovieLengthsChange = (event: SelectChangeEvent<typeof movieLengths>) => {
+    const {
+      target: {value},
+    } = event;
+    setMovieLengths(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? (value.split(',') as MovieLengthCategory[]) : value,
+    );
+  };
 
   return (
     <Box>
@@ -145,37 +162,11 @@ function MoviesFiltersWrapper() {
           </SelectBoxStyled>
         </FormControl>
         <FormControl fullWidth sx={{mt: 2}}>
-          <Autocomplete<Person>
-            id="choose-director-filter"
-            filterOptions={(x) => x}
-            options={directorAutocompleteOptions}
-            autoComplete
-            includeInputInList
-            loading={directorsRQ.isLoading}
-            PopperComponent={StyledPopper}
-            renderInput={(params) => {
-              params.InputProps.startAdornment = <InputAdornment position="start">Režiser</InputAdornment>;
-              return <TextFieldStyled {...params} fullWidth />;
-            }}
-            noOptionsText="Nije nadjeno"
-            onInputChange={(event, newInputValue) => {
-              setDirectorAutocompleteInputValue(newInputValue);
-            }}
-            onChange={(event: React.SyntheticEvent, newValue: Person | null) => {
-              setDirectorAutocompleteValue(newValue);
-            }}
-            value={directorAutocompleteValue}
-            getOptionLabel={(director) => director.name}
-            isOptionEqualToValue={(option, value) => {
-              return option.id === value.id;
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
           <Autocomplete<Person, true>
             id="choose-actors-filter"
             multiple
             filterOptions={(x) => x}
+            filterSelectedOptions
             options={actorsAutocompleteOptions}
             autoComplete
             includeInputInList
@@ -206,9 +197,64 @@ function MoviesFiltersWrapper() {
             }}
           />
         </FormControl>
+        <FormControl fullWidth sx={{mt: 2}}>
+          <Autocomplete<Person>
+            id="choose-director-filter"
+            filterOptions={(x) => x}
+            filterSelectedOptions
+            options={directorAutocompleteOptions}
+            autoComplete
+            includeInputInList
+            loading={directorsRQ.isLoading}
+            PopperComponent={StyledPopper}
+            renderInput={(params) => {
+              params.InputProps.startAdornment = <InputAdornment position="start">Režiser</InputAdornment>;
+              return <TextFieldStyled {...params} fullWidth />;
+            }}
+            noOptionsText="Nije nadjeno"
+            onInputChange={(event, newInputValue) => {
+              setDirectorAutocompleteInputValue(newInputValue);
+            }}
+            onChange={(event: React.SyntheticEvent, newValue: Person | null) => {
+              setDirectorAutocompleteValue(newValue);
+            }}
+            value={directorAutocompleteValue}
+            getOptionLabel={(director) => director.name}
+            isOptionEqualToValue={(option, value) => {
+              return option.id === value.id;
+            }}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{mt: 2}}>
+          <SelectBoxStyled
+            multiple
+            value={movieLengths}
+            startAdornment={
+              <InputAdornment className={'select-adornment'} position="start">
+                Trajanje filma
+              </InputAdornment>
+            }
+            onChange={handleMovieLengthsChange}
+            renderValue={(selected) => (
+              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                {selected.map((value) => (
+                  <Chip key={value} label={movieLengthsMap[value]} />
+                ))}
+              </Box>
+            )}
+          >
+            {(Object.keys(movieLengthsMap) as MovieLengthCategory[]).map((movieLengthCategory, i) => {
+              return (
+                <MenuItem key={i} value={movieLengthCategory}>
+                  {movieLengthsMap[movieLengthCategory]}
+                </MenuItem>
+              );
+            })}
+          </SelectBoxStyled>
+        </FormControl>
       </Box>
       <Box sx={{mt: 5}}>
-        <PageSubHeader headerText={`Projekcija`} Icon={PersonalVideoOutlinedIcon} />
+        <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
       </Box>
     </Box>
   );

@@ -16,6 +16,9 @@ export class PersonsService {
           some: {},
         },
       },
+      orderBy: {
+        name: 'asc',
+      },
       take,
     });
   }
@@ -30,6 +33,9 @@ export class PersonsService {
         directorInMovies: {
           some: {},
         },
+      },
+      orderBy: {
+        name: 'asc',
       },
       take,
     });

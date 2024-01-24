@@ -7,7 +7,11 @@ export class MoviesFiltersService {
   constructor(private prismaService: PrismaService) {}
 
   getGenres(): Promise<Genre[]> {
-    return this.prismaService.genre.findMany();
+    return this.prismaService.genre.findMany({
+      orderBy: {
+        localizedName: 'asc',
+      },
+    });
   }
 
   getCountriesWithMovies(): Promise<Country[]> {
@@ -16,6 +20,9 @@ export class MoviesFiltersService {
         movies: {
           some: {},
         },
+      },
+      orderBy: {
+        name: 'asc',
       },
     });
   }

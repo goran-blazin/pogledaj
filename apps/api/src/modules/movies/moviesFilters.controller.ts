@@ -1,4 +1,4 @@
-import {Controller, DefaultValuePipe, Get, ParseIntPipe, Query} from '@nestjs/common';
+import {Controller, Get} from '@nestjs/common';
 import {MoviesFiltersService} from './moviesFilters.service';
 
 @Controller('moviesFilters')
