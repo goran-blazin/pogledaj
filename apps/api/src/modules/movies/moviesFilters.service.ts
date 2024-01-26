@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
-import {Country, Genre} from '@prisma/client';
+import {City, Country, Genre} from '@prisma/client';
 
 @Injectable()
 export class MoviesFiltersService {
@@ -18,6 +18,19 @@ export class MoviesFiltersService {
     return this.prismaService.country.findMany({
       where: {
         movies: {
+          some: {},
+        },
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+  }
+
+  getAllCitiesWithCinemas(): Promise<City[]> {
+    return this.prismaService.city.findMany({
+      where: {
+        cinemas: {
           some: {},
         },
       },

@@ -14,4 +14,9 @@ export class MoviesFiltersController {
   getCountries() {
     return this.moviesFiltersService.getCountriesWithMovies();
   }
+
+  @Get('getAllCitiesWithCinemas')
+  getAllCitiesWithCinemas() {
+    return this.moviesFiltersService.getAllCitiesWithCinemas();
+  }
 }

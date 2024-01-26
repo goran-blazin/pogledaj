@@ -13,6 +13,11 @@ import StyledPopper from '../utility/form/StyledPopper';
 import PersonsService from '../../../services/PersonsService';
 import {useDebounce} from '@uidotdev/usehooks';
 import {MovieLengthCategory} from '../../../types/MoviesTypes';
+import GeolocationService from '../../../services/GeolocationService';
+import CinemasService from '../../../services/CinemasService';
+import {DatePicker, DatePickerToolbar} from '@mui/x-date-pickers/DatePicker';
+import {DateTime} from 'ts-luxon';
+import Utils from '../../../helpers/Utils';
 
 function MoviesFiltersWrapper() {
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
@@ -64,7 +69,7 @@ function MoviesFiltersWrapper() {
     return [...valuesArray, ...serverArray];
   }, [directorsRQ?.data]);
 
-  // director autocomplete data
+  // actor autocomplete data
   const [actorsAutocompleteInputValue, setActorsAutocompleteInputValue] = React.useState('');
   const [actorsAutocompleteValue, setActorsAutocompleteValue] = React.useState<Person[]>([]);
   const debouncedActorsAutocompleteInputValue = useDebounce(actorsAutocompleteInputValue, 400);
@@ -102,10 +107,147 @@ function MoviesFiltersWrapper() {
     );
   };
 
+  // city select
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const handleCityChange = (event: SelectChangeEvent<typeof selectedCity>) => {
+    const {
+      target: {value},
+    } = event;
+    setSelectedCinemas([]);
+    setSelectedCity(value);
+  };
+
+  const citiesRQ = useQuery('cities', () => {
+    return GeolocationService.findCitiesForMoviesFilter();
+  });
+
+  // cinema select
+  const [selectedCinemas, setSelectedCinemas] = useState<string[]>([]);
+  const handleCinemasChange = (event: SelectChangeEvent<typeof selectedCinemas>) => {
+    const {
+      target: {value},
+    } = event;
+    setSelectedCinemas(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const cinemasRQ = useQuery(['cinemas', selectedCity], () => {
+    return CinemasService.findAllByCity(selectedCity);
+  });
+
+  // dates
+  const [selectedDateFrom, setSelectedDateFrom] = useState<DateTime>(DateTime.now());
+  const [selectedDateTo, setSelectedDateTo] = useState<DateTime>(DateTime.now());
+
   return (
     <Box>
       <PageHeader headerText={'Filteri'} />
-      <Box>
+      <Box sx={{mt: 5}}>
+        <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
+        <FormControl fullWidth sx={{mt: 2}}>
+          <SelectBoxStyled
+            value={selectedCity}
+            startAdornment={
+              <InputAdornment className={'select-adornment'} position="start">
+                Grad
+              </InputAdornment>
+            }
+            onChange={handleCityChange}
+          >
+            {(citiesRQ.data || []).map((city, i) => {
+              return (
+                <MenuItem key={i} value={city.id}>
+                  {city.name}
+                </MenuItem>
+              );
+            })}
+          </SelectBoxStyled>
+        </FormControl>
+        <FormControl fullWidth sx={{mt: 2}}>
+          <SelectBoxStyled
+            multiple
+            value={selectedCinemas}
+            startAdornment={
+              <InputAdornment className={'select-adornment'} position="start">
+                Bioskopi
+              </InputAdornment>
+            }
+            onChange={handleCinemasChange}
+            renderValue={(selected) => (
+              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                {selected.map((value) => (
+                  <Chip key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
+                ))}
+              </Box>
+            )}
+          >
+            {(cinemasRQ.data || []).map((cinema, i) => {
+              return (
+                <MenuItem key={i} value={cinema.id}>
+                  {cinema.name}
+                </MenuItem>
+              );
+            })}
+          </SelectBoxStyled>
+        </FormControl>
+        <FormControl fullWidth sx={{mt: 2}}>
+          <DatePicker
+            format={Utils.luxonDateFormat}
+            value={selectedDateFrom}
+            slots={{
+              toolbar: (params) => {
+                return <DatePickerToolbar {...params} hidden={true} />;
+              },
+              textField: (params) => {
+                if (params.InputProps) {
+                  params.InputProps.startAdornment = <InputAdornment position="start">Datum Od</InputAdornment>;
+                }
+                return (
+                  <TextFieldStyled
+                    {...params}
+                    fullWidth
+                    placeholder={''}
+                    value={selectedDateFrom.toFormat(Utils.luxonDateFormat)}
+                  />
+                );
+              },
+            }}
+            onAccept={(value) => {
+              setSelectedDateFrom(value as DateTime);
+            }}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{mt: 2}}>
+          <DatePicker
+            format={Utils.luxonDateFormat}
+            value={selectedDateTo}
+            slots={{
+              toolbar: (params) => {
+                return <DatePickerToolbar {...params} hidden={true} />;
+              },
+              textField: (params) => {
+                if (params.InputProps) {
+                  params.InputProps.startAdornment = <InputAdornment position="start">Datum Do</InputAdornment>;
+                }
+                return (
+                  <TextFieldStyled
+                    {...params}
+                    fullWidth
+                    placeholder={''}
+                    value={selectedDateTo.toFormat(Utils.luxonDateFormat)}
+                  />
+                );
+              },
+            }}
+            onAccept={(value) => {
+              setSelectedDateTo(value as DateTime);
+            }}
+          />
+        </FormControl>
+      </Box>
+      <Box sx={{mt: 5}}>
         <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
         <FormControl fullWidth sx={{mt: 2}}>
           <SelectBoxStyled
@@ -252,9 +394,6 @@ function MoviesFiltersWrapper() {
             })}
           </SelectBoxStyled>
         </FormControl>
-      </Box>
-      <Box sx={{mt: 5}}>
-        <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
       </Box>
     </Box>
   );

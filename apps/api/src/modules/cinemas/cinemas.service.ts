@@ -55,6 +55,14 @@ export class CinemasService {
     };
   }
 
+  async findAllByCityId(cityId: string): Promise<Cinema[]> {
+    return this.prismaService.cinema.findMany({
+      where: {
+        cityId,
+      },
+    });
+  }
+
   findOne(cinemaWhereUniqueInput: Prisma.CinemaWhereUniqueInput): Promise<Cinema | null> {
     return this.prismaService.cinema.findUnique({
       where: cinemaWhereUniqueInput,

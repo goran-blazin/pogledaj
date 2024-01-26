@@ -25,6 +25,11 @@ export class CinemasController {
     });
   }
 
+  @Get('findByCity/:cityId')
+  findAllByCity(@Param('cityId', ParseUUIDPipe) cityId: string) {
+    return this.cinemasService.findAllByCityId(cityId);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.cinemasService.findOne({

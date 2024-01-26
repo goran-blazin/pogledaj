@@ -64,6 +64,10 @@ const Utils = {
     return 'dd.MM.yyyy / HH:mm';
   },
 
+  get luxonDateFormat() {
+    return 'dd.MM.yyyy';
+  },
+
   getUserLocation(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {

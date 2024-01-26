@@ -19,5 +19,14 @@ const CinemasService = {
     const result = await PogledajApi().get(`cinemas/${id}`);
     return result.data;
   },
+
+  async findAllByCity(cityId?: string): Promise<Cinema[]> {
+    if (!cityId) {
+      return [];
+    }
+
+    const result = await PogledajApi().get(`cinemas/findByCity/${cityId}`);
+    return result.data;
+  },
 };
 export default Object.freeze(CinemasService);

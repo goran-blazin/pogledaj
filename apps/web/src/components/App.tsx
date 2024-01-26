@@ -1,6 +1,8 @@
 import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
+import {AdapterLuxon} from '@mui/x-date-pickers/AdapterLuxon';
+import {LocalizationProvider, PickersLocaleText} from '@mui/x-date-pickers';
 
 // components
 import FooterMenuWrapper from './front/footer/FooterMenuWrapper';
@@ -23,6 +25,11 @@ import useTheme from '../store/ThemeStore';
 
 // Create a client
 const queryClient = new QueryClient();
+
+const customLocaleText: Partial<PickersLocaleText<Record<string, string>>> = {
+  okButtonLabel: 'OK',
+  cancelButtonLabel: 'OTKAŽI',
+};
 
 function App() {
   const [searchParams] = useSearchParams();
@@ -52,20 +59,22 @@ function App() {
     // customer front
     <React.Fragment>
       <QueryClientProvider client={queryClient}>
-        <div className="App">
-          <CssBaseline />
-          <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
-            {comingSoon ? (
-              <ComingSoon />
-            ) : (
-              <React.Fragment>
-                <HeaderMenuWrapper />
-                <MainContentWrapper />
-                <FooterMenuWrapper />
-              </React.Fragment>
-            )}
-          </ThemeProvider>
-        </div>
+        <LocalizationProvider dateAdapter={AdapterLuxon} localeText={customLocaleText}>
+          <div className="App">
+            <CssBaseline />
+            <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
+              {comingSoon ? (
+                <ComingSoon />
+              ) : (
+                <React.Fragment>
+                  <HeaderMenuWrapper />
+                  <MainContentWrapper />
+                  <FooterMenuWrapper />
+                </React.Fragment>
+              )}
+            </ThemeProvider>
+          </div>
+        </LocalizationProvider>
       </QueryClientProvider>
     </React.Fragment>
   );
