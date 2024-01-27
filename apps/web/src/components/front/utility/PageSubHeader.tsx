@@ -5,7 +5,7 @@ import {SvgIconComponent} from '@mui/icons-material';
 const StyledTypography = styled(Typography)((theme) => ({
   color: theme.theme.customTypography.mainTitle.color,
   fontWeight: '600',
-  fontSize: '16px',
+  fontSize: '1em',
   lineHeight: '22px',
 }));
 

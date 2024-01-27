@@ -18,6 +18,10 @@ import CinemasService from '../../../services/CinemasService';
 import {DatePicker, DatePickerToolbar} from '@mui/x-date-pickers/DatePicker';
 import {DateTime} from 'ts-luxon';
 import Utils from '../../../helpers/Utils';
+import useMoviesFiltersStore from '../../../store/MoviesFiltersStore';
+import ButtonStyled from '../utility/buttons/Button';
+import {namedRoutes} from '../../../routes';
+import {useNavigate} from 'react-router-dom';
 
 function MoviesFiltersWrapper() {
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
@@ -138,8 +142,27 @@ function MoviesFiltersWrapper() {
   });
 
   // dates
-  const [selectedDateFrom, setSelectedDateFrom] = useState<DateTime>(DateTime.now());
-  const [selectedDateTo, setSelectedDateTo] = useState<DateTime>(DateTime.now());
+  const [selectedDateFrom, setSelectedDateFrom] = useState<DateTime | null>(null);
+  const [selectedDateTo, setSelectedDateTo] = useState<DateTime | null>(null);
+
+  const moviesFiltersStore = useMoviesFiltersStore();
+  const navigate = useNavigate();
+
+  const buttonClickHandler = () => {
+    moviesFiltersStore.applyMoviesFilters({
+      selectedGenres: selectedGenres,
+      selectedCountries: selectedCountries,
+      selectedDirectorPersonId: directorAutocompleteValue?.id,
+      selectedActorsPersonIds: actorsAutocompleteValue.map((a) => a.id),
+      movieLengths: movieLengths,
+      selectedCityId: selectedCity,
+      selectedCinemasIds: selectedCinemas,
+      selectedDateFrom: selectedDateFrom || undefined,
+      selectedDateTo: selectedDateTo || undefined,
+    });
+
+    navigate(namedRoutes.moviesSearch);
+  };
 
   return (
     <Box>
@@ -165,7 +188,7 @@ function MoviesFiltersWrapper() {
             })}
           </SelectBoxStyled>
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <SelectBoxStyled
             multiple
             value={selectedCinemas}
@@ -192,7 +215,7 @@ function MoviesFiltersWrapper() {
             })}
           </SelectBoxStyled>
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <DatePicker
             format={Utils.luxonDateFormat}
             value={selectedDateFrom}
@@ -204,14 +227,7 @@ function MoviesFiltersWrapper() {
                 if (params.InputProps) {
                   params.InputProps.startAdornment = <InputAdornment position="start">Datum Od</InputAdornment>;
                 }
-                return (
-                  <TextFieldStyled
-                    {...params}
-                    fullWidth
-                    placeholder={''}
-                    value={selectedDateFrom.toFormat(Utils.luxonDateFormat)}
-                  />
-                );
+                return <TextFieldStyled {...params} fullWidth placeholder={''} />;
               },
             }}
             onAccept={(value) => {
@@ -219,7 +235,7 @@ function MoviesFiltersWrapper() {
             }}
           />
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <DatePicker
             format={Utils.luxonDateFormat}
             value={selectedDateTo}
@@ -231,14 +247,7 @@ function MoviesFiltersWrapper() {
                 if (params.InputProps) {
                   params.InputProps.startAdornment = <InputAdornment position="start">Datum Do</InputAdornment>;
                 }
-                return (
-                  <TextFieldStyled
-                    {...params}
-                    fullWidth
-                    placeholder={''}
-                    value={selectedDateTo.toFormat(Utils.luxonDateFormat)}
-                  />
-                );
+                return <TextFieldStyled {...params} fullWidth placeholder={''} />;
               },
             }}
             onAccept={(value) => {
@@ -276,7 +285,7 @@ function MoviesFiltersWrapper() {
             })}
           </SelectBoxStyled>
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <SelectBoxStyled
             multiple
             value={selectedCountries}
@@ -303,7 +312,7 @@ function MoviesFiltersWrapper() {
             })}
           </SelectBoxStyled>
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <Autocomplete<Person, true>
             id="choose-actors-filter"
             multiple
@@ -339,7 +348,7 @@ function MoviesFiltersWrapper() {
             }}
           />
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <Autocomplete<Person>
             id="choose-director-filter"
             filterOptions={(x) => x}
@@ -367,7 +376,7 @@ function MoviesFiltersWrapper() {
             }}
           />
         </FormControl>
-        <FormControl fullWidth sx={{mt: 2}}>
+        <FormControl fullWidth sx={{mt: 1}}>
           <SelectBoxStyled
             multiple
             value={movieLengths}
@@ -394,6 +403,11 @@ function MoviesFiltersWrapper() {
             })}
           </SelectBoxStyled>
         </FormControl>
+      </Box>
+      <Box sx={{mt: 5}} textAlign="center">
+        <ButtonStyled variant="contained" onClick={buttonClickHandler}>
+          {'Primeni filtere'}
+        </ButtonStyled>
       </Box>
     </Box>
   );

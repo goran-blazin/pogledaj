@@ -11,6 +11,7 @@ import {namedRoutes} from '../../../routes';
 
 import {Box, Container} from '@mui/material';
 import MoviesFiltersWrapper from '../moviesListing/MoviesFiltersWrapper';
+import MoviesSearchWrapper from '../moviesListing/MoviesSearchWrapper';
 
 function MainContentWrapper() {
   const routes = (
@@ -21,6 +22,7 @@ function MainContentWrapper() {
       <Route path={namedRoutes.cinemaSingle} element={<CinemaSingleWrapper />} />
       <Route path={namedRoutes.moviesListing} element={<MoviesListingWrapper />} />
       <Route path={namedRoutes.moviesFilters} element={<MoviesFiltersWrapper />} />
+      <Route path={namedRoutes.moviesSearch} element={<MoviesSearchWrapper />} />
       <Route path={namedRoutes.movieSingle} element={<MovieSingleWrapper />} />
       <Route path={namedRoutes.movieProjectionSingle} element={<MovieProjectionSingle />} />
       <Route path={namedRoutes.reservations} element={<ReservationsWrapper />} />
