@@ -1,18 +1,20 @@
 import {Injectable} from '@nestjs/common';
 import {SupportEmailDto} from './dto/supportEmail.dto';
-import {InjectQueue} from '@nestjs/bull';
-import {Queue} from 'bull';
 import {EmailJobData} from './email.types';
+import {QueuesDefinition} from '../../helpers/QueuesHelper';
+import {InjectQueue} from '@nestjs/bullmq';
+import {Queue} from 'bullmq';
 const sendSupportEmailsTo: string[] = [
   'goran.blazin@gmail.com',
   'pedjalaya@gmail.com',
   'danijel.avramov@gmail.com',
   'igor.jockovic@gmail.com',
+  'milosblazin@gmail.com',
 ];
 
 @Injectable()
 export class EmailService {
-  constructor(@InjectQueue('email') private readonly emailQueue: Queue<EmailJobData>) {}
+  constructor(@InjectQueue(QueuesDefinition.EMAIL.name) private readonly emailQueue: Queue<EmailJobData>) {}
   async sendSupportEmail(supportEmailDto: SupportEmailDto) {
     const html = `
       <html>
@@ -24,7 +26,7 @@ export class EmailService {
       </html>
     `;
 
-    return this.emailQueue.add('supportEmail', {
+    return this.emailQueue.add(QueuesDefinition.EMAIL.jobs.SUPPORT_EMAIL, {
       html: html,
       subject: `Nova poruka za podrsku od ${supportEmailDto.email}`,
       toEmails: sendSupportEmailsTo,

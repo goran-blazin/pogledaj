@@ -1,11 +1,15 @@
 import {Controller, Get} from '@nestjs/common';
-import {InjectQueue} from '@nestjs/bull';
-import {Queue} from 'bull';
 import {EmailJobData} from '../email/email.types';
+import {QueuesDefinition} from '../../helpers/QueuesHelper';
+import {InjectQueue} from '@nestjs/bullmq';
+import {Queue} from 'bullmq';
 
 @Controller('/')
 export class CommonController {
-  constructor(@InjectQueue('email') private readonly emailQueue: Queue<EmailJobData>) {}
+  constructor(
+    @InjectQueue(QueuesDefinition.EMAIL.name) private readonly emailQueue: Queue<EmailJobData>,
+    @InjectQueue(QueuesDefinition.INSERT_MOVIES.name) private readonly insertMoviesQueue: Queue,
+  ) {}
 
   @Get()
   main() {
@@ -13,10 +17,13 @@ export class CommonController {
   }
 
   @Get('monitoring')
-  monitoring() {
+  async monitoring() {
     return {
       NODE_ENV: process.env.NODE_ENV,
-      emailQueueConnected: this.emailQueue.client.status,
+      QueueStatus: {
+        [QueuesDefinition.EMAIL.name]: (await this.emailQueue.client).status,
+        [QueuesDefinition.INSERT_MOVIES.name]: (await this.insertMoviesQueue.client).status,
+      },
     };
   }
 }

@@ -9,7 +9,6 @@ import configuration from './config/configuration';
 import {PrismaModule} from './modules/prisma/prisma.module';
 import * as process from 'process';
 import {NodeEnv} from './types/CommonTypes';
-import {BullModule} from '@nestjs/bull';
 import {EmailModule} from './modules/email/email.module';
 import {CommonModule} from './modules/common/common.module';
 import {MovieProjectionsModule} from './modules/movieProjections/movieProjections.module';
@@ -17,7 +16,12 @@ import {AdminAuthModule} from './modules/adminAuth/adminAuth.module';
 import {AdminUsersModule} from './modules/adminUsers/adminUsers.module';
 import {GeolocationModule} from './modules/geolocation/geolocation.module';
 import {ReservationsModule} from './modules/reservations/reservations.module';
+import {BullModule} from '@nestjs/bullmq';
+import IORedis from 'ioredis';
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv) ? (process.env.NODE_ENV as NodeEnv) : 'local';
+const redisConnection = new IORedis(process.env.REDIS_URL as string, {
+  maxRetriesPerRequest: null,
+});
 
 @Module({
   imports: [
@@ -30,14 +34,10 @@ const env: NodeEnv = (process.env.NODE_ENV as NodeEnv) ? (process.env.NODE_ENV a
       rootPath: Utils.getAssetsPath(),
     }),
     BullModule.forRoot({
-      url: process.env.REDIS_URL,
-      redis: {
-        family: 6,
-      },
+      connection: redisConnection,
       prefix: 'PogledajRedisQueue',
       defaultJobOptions: {
         attempts: 3,
-        timeout: 60000,
         removeOnComplete: true,
         removeOnFail: false,
       },

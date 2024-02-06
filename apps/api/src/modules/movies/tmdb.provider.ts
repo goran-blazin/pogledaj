@@ -72,6 +72,25 @@ export class TmdbProvider {
     return res.data as unknown as TmdbPerson;
   }
 
+  async getNewPopularMovies(): Promise<string[]> {
+    const [nowPlaying, popular, topRated, upcoming] = await Promise.all([
+      this.tmdbClient.movie.getNowPlaying({query: {page: 1}}),
+      this.tmdbClient.movie.getPopular({query: {page: 1}}),
+      this.tmdbClient.movie.getTopRated({query: {page: 1}}),
+      this.tmdbClient.movie.getUpcoming({query: {page: 1}}),
+    ]);
+
+    const getIdFromResults = (results: MovieDB.Objects.Movie[] | undefined) =>
+      (Array.isArray(results) ? results : []).map((movie) => movie.id.toString());
+
+    return _.uniq([
+      ...getIdFromResults(nowPlaying?.data?.results),
+      ...getIdFromResults(popular?.data?.results),
+      ...getIdFromResults(topRated?.data?.results),
+      ...getIdFromResults(upcoming?.data?.results),
+    ]);
+  }
+
   async getMovieByTMDBId(tmdbId: string): Promise<MovieExternal> {
     const [apiConf, externalMovieRes, externalMovieCreditsRes, externalMovieVideosRes, externalMovieReleaseDatesRes] =
       await Promise.all([
@@ -138,19 +157,21 @@ export class TmdbProvider {
       }),
     );
 
-    const getMoviePersonFromTmdbPerson = (tmdbPerson: TmdbPerson): PersonForMovieExternal => ({
-      name: tmdbPerson.name,
-      biography: tmdbPerson.biography,
-      dateOfBirth: tmdbPerson.birthday ? new Date(tmdbPerson.birthday) : null,
-      dateOfDeath: tmdbPerson.deathday ? new Date(tmdbPerson.deathday) : null,
-      gender: GenderMapper[tmdbPerson.gender],
-      externalId: tmdbPerson.id.toString(),
-      externalType: InputProvider.Tmdb,
-      additionalData: {
-        imdbId: tmdbPerson.imdb_id,
-        homepage: tmdbPerson.homepage,
-      },
-    });
+    const getMoviePersonFromTmdbPerson = (tmdbPerson: TmdbPerson): PersonForMovieExternal => {
+      return {
+        name: tmdbPerson.name,
+        biography: tmdbPerson.biography,
+        dateOfBirth: tmdbPerson.birthday ? new Date(tmdbPerson.birthday) : null,
+        dateOfDeath: tmdbPerson.deathday ? new Date(tmdbPerson.deathday) : null,
+        gender: GenderMapper[tmdbPerson.gender] || Gender.Other,
+        externalId: tmdbPerson.id.toString(),
+        externalType: InputProvider.Tmdb,
+        additionalData: {
+          imdbId: tmdbPerson.imdb_id,
+          homepage: tmdbPerson.homepage,
+        },
+      };
+    };
 
     return {
       actors: creditActorPersons.map(({creditActor, tmdbPerson}) => {
@@ -207,10 +228,15 @@ export class TmdbProvider {
         );
         const countryOfOrigin = priorityCountry || externalMovie.production_countries[0];
 
-        return {
-          code: countryOfOrigin.iso_3166_1,
-          name: countryOfOrigin.name,
-        };
+        return countryOfOrigin
+          ? {
+              code: countryOfOrigin.iso_3166_1,
+              name: countryOfOrigin.name,
+            }
+          : {
+              code: 'UNKNOWN',
+              name: 'UNKNOWN',
+            };
       })(),
       externalId: externalMovie.id.toString(),
       externalType: InputProvider.Tmdb,

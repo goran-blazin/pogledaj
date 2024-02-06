@@ -92,4 +92,11 @@ export class MoviesController {
       localizedPlot: upsertFromExternalDto.localizedPlot,
     });
   }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Post('upsertNewPopular')
+  upsertNewPopular() {
+    return this.moviesService.upsertNewPopularMovies();
+  }
 }

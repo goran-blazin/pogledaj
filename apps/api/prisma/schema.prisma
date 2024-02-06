@@ -160,9 +160,9 @@ model CinemaSeat {
 model Movie {
   id                   String                @id @default(uuid()) @db.Uuid
   originalTitle        String
-  localizedTitle       String
+  localizedTitle       String?
   plot                 String
-  localizedPlot        String
+  localizedPlot        String?
   genres               Genre[]
   runtimeMinutes       Int
   originalLanguageId   String

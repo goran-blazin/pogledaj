@@ -1,24 +1,32 @@
 import {Logger} from '@nestjs/common';
-import {Process, Processor} from '@nestjs/bull';
-import {Job} from 'bull';
 import {SendGridService} from './sendGrid.service';
 import {EmailJobData} from './email.types';
+import {Job} from 'bullmq';
+import {QueuesDefinition} from '../../helpers/QueuesHelper';
+import {OnWorkerEvent, Processor, WorkerHost} from '@nestjs/bullmq';
 
-@Processor('email')
-export class EmailProcessor {
+@Processor(QueuesDefinition.EMAIL.name)
+export class EmailProcessor extends WorkerHost {
   private readonly logger = new Logger(EmailProcessor.name);
-  constructor(private readonly sendGridService: SendGridService) {}
+  constructor(private readonly sendGridService: SendGridService) {
+    super();
+  }
 
-  @Process('supportEmail')
-  async handleSendingEmail(job: Job<EmailJobData>) {
+  process(job: Job<EmailJobData>) {
     const data = job.data;
 
     this.logger.debug(`Started sending ${data.emailType} emails...`);
-    try {
-      await this.sendGridService.sendNewEmail(data);
-      this.logger.debug('Sending support emails completed');
-    } catch (e) {
-      this.logger.error(e);
-    }
+
+    return this.sendGridService.sendNewEmail(data);
+  }
+
+  @OnWorkerEvent('error')
+  onFailed(failedReason: Error) {
+    this.logger.error(failedReason);
+  }
+
+  @OnWorkerEvent('completed')
+  onCompleted(job: Job<EmailJobData>) {
+    this.logger.debug(`Sending ${job.data.emailType} emails completed`);
   }
 }

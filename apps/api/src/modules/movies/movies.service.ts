@@ -1,19 +1,44 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {Movie, InputProvider, Prisma} from '@prisma/client';
+import {Injectable, Logger, OnModuleInit} from '@nestjs/common';
+import {Prisma, Movie, InputProvider} from '@prisma/client';
 import {PrismaService} from '../prisma/prisma.service';
-// import { CreateMovieDto } from './dto/create-movie.dto';
-// import { UpdateMovieDto } from './dto/update-movie.dto';
 import {TmdbProvider} from './tmdb.provider';
 import {MovieExternal, MovieLocalizedData, PersonForMovieExternal} from '../../types/MovieTypes';
 import * as _ from 'lodash';
 import {GetListOptions, ReturnList} from '../../types/CommonTypes';
 import {excludeArchivedMovieProjectionsQuery} from '../movieProjections/movieProjections.service';
+import {QueuesDefinition} from '../../helpers/QueuesHelper';
+import {Queue} from 'bullmq';
+import {InjectQueue} from '@nestjs/bullmq';
 
 @Injectable()
-export class MoviesService {
+export class MoviesService implements OnModuleInit {
   private readonly logger = new Logger(MoviesService.name);
 
-  constructor(private prismaService: PrismaService, private tmdbProvider: TmdbProvider) {}
+  constructor(
+    private prismaService: PrismaService,
+    private tmdbProvider: TmdbProvider,
+    @InjectQueue(QueuesDefinition.INSERT_MOVIES.name) private readonly automaticDataInsertQueue: Queue,
+  ) {}
+
+  async onModuleInit() {
+    // Get all repeatable jobs
+    const repeatableJobs = await this.automaticDataInsertQueue.getRepeatableJobs();
+    // Iterate over the jobs and remove each one
+    for (const job of repeatableJobs) {
+      await this.automaticDataInsertQueue.removeRepeatableByKey(job.key);
+    }
+
+    await this.automaticDataInsertQueue.add(
+      QueuesDefinition.INSERT_MOVIES.jobs.INSERT_NEW_POPULAR_MOVIES,
+      {},
+      {
+        repeat: {
+          pattern: '0 5 * * 1',
+        },
+        jobId: QueuesDefinition.INSERT_MOVIES.jobs.INSERT_NEW_POPULAR_MOVIES, // Ensure the job ID is unique to prevent multiple instances
+      },
+    );
+  }
 
   // createByAdmin(data: CreateMovieDto) {
   //   return this.prismaService.movie.create({
@@ -167,7 +192,37 @@ export class MoviesService {
   //   });
   // }
 
-  async upsertFromExternal(externalType: InputProvider, externalId: string, localizedData: MovieLocalizedData) {
+  async upsertNewPopularMovies(externalType: InputProvider = InputProvider.Tmdb) {
+    const newPopularMovies = await (() => {
+      switch (externalType) {
+        case InputProvider.Tmdb:
+          return this.tmdbProvider.getNewPopularMovies();
+        default:
+          throw new Error('Invalid InputProvider ' + externalType);
+      }
+    })();
+
+    const upsertedMovies: string[] = [];
+    const failedMovies: string[] = [];
+
+    for (const id of newPopularMovies) {
+      try {
+        await this.upsertFromExternal(externalType, id);
+        upsertedMovies.push(id);
+        this.logger.log(`Upserted automatically movie from ${externalType} with ID: ${id}`);
+      } catch (e) {
+        failedMovies.push(id);
+        this.logger.error(`Error upserting movie from ${externalType} with ID: ${id}`, (e as Error).stack, e);
+      }
+    }
+
+    return {
+      upsertedMovies,
+      failedMovies,
+    };
+  }
+
+  async upsertFromExternal(externalType: InputProvider, externalId: string, localizedData?: MovieLocalizedData) {
     this.logger.log(`Trying to retrieve movie with id ${externalId} from ${externalType} provider`);
     const externalMovieData: MovieExternal = await (() => {
       switch (externalType) {
@@ -282,8 +337,8 @@ export class MoviesService {
             rating: externalMovieData.rating,
             releaseDate: new Date(externalMovieData.releaseDate),
             additionalData: externalMovieData.additionalData,
-            localizedTitle: localizedData.localizedTitle,
-            localizedPlot: localizedData.localizedPlot,
+            localizedTitle: localizedData?.localizedTitle,
+            localizedPlot: localizedData?.localizedPlot,
             updatedAt: new Date(),
             externalType: externalMovieData.externalType,
             externalId: externalMovieData.externalId,
@@ -312,8 +367,8 @@ export class MoviesService {
             rating: externalMovieData.rating,
             releaseDate: new Date(externalMovieData.releaseDate),
             additionalData: externalMovieData.additionalData,
-            localizedTitle: localizedData.localizedTitle,
-            localizedPlot: localizedData.localizedPlot,
+            localizedTitle: localizedData?.localizedTitle,
+            localizedPlot: localizedData?.localizedPlot,
             updatedAt: new Date(),
           },
         });
