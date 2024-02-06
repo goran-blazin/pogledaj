@@ -17,11 +17,15 @@ import {AdminUsersModule} from './modules/adminUsers/adminUsers.module';
 import {GeolocationModule} from './modules/geolocation/geolocation.module';
 import {ReservationsModule} from './modules/reservations/reservations.module';
 import {BullModule} from '@nestjs/bullmq';
-import IORedis from 'ioredis';
+import Redis from 'ioredis';
+
 const env: NodeEnv = (process.env.NODE_ENV as NodeEnv) ? (process.env.NODE_ENV as NodeEnv) : 'local';
-const redisConnection = new IORedis(process.env.REDIS_URL as string, {
+const redisConnString = process.env.REDIS_URL as string;
+const redisConnection = new Redis(redisConnString, {
   maxRetriesPerRequest: null,
 });
+
+const REDIS_APP_PREFIX = `POGLEDAJ-ENV-${env}`;
 
 @Module({
   imports: [
@@ -35,7 +39,7 @@ const redisConnection = new IORedis(process.env.REDIS_URL as string, {
     }),
     BullModule.forRoot({
       connection: redisConnection,
-      prefix: 'PogledajRedisQueue',
+      prefix: `${REDIS_APP_PREFIX}-BULLMQ`,
       defaultJobOptions: {
         attempts: 3,
         removeOnComplete: true,
