@@ -110,4 +110,11 @@ export class MovieProjectionsController {
   async findSingleMovieProjection(@Param('movieProjectionId') movieProjectionId: string) {
     return this.movieProjectionsService.findById(movieProjectionId);
   }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Post('generateDemoProjections')
+  async generateDemoProjections() {
+    return (await this.movieProjectionsService.generateDemoProjections()).flat(2);
+  }
 }

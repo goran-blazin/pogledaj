@@ -1,4 +1,4 @@
-import {ForbiddenException, Injectable} from '@nestjs/common';
+import {ForbiddenException, Injectable, OnModuleInit} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
 import {MovieProjectionOptions} from './movieProjections.types';
@@ -10,6 +10,10 @@ import {NotFoundException} from '@nestjs/common/exceptions/not-found.exception';
 import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';
 import AuthHelper from '../../helpers/Auth.helper';
 import {FORBIDDEN_MESSAGE} from '@nestjs/core/guards';
+import {QueuesDefinition} from '../../helpers/QueuesHelper';
+import {InjectQueue} from '@nestjs/bullmq';
+import {Queue} from 'bullmq';
+import {getRandomInt} from '../../helpers/Utils';
 
 const RESERVATION_TIME_OFFSET_MINUTES = 30;
 
@@ -70,10 +74,33 @@ const generateProjections = (
 };
 
 @Injectable()
-export class MovieProjectionsService {
+export class MovieProjectionsService implements OnModuleInit {
   private readonly logger = new Logger(MovieProjectionsService.name);
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    @InjectQueue(QueuesDefinition.INSERT_MOVIE_PROJECTIONS.name) private readonly automaticDataInsertQueue: Queue,
+  ) {}
+
+  async onModuleInit() {
+    // Get all repeatable jobs
+    const repeatableJobs = await this.automaticDataInsertQueue.getRepeatableJobs();
+    // Iterate over the jobs and remove each one
+    for (const job of repeatableJobs) {
+      await this.automaticDataInsertQueue.removeRepeatableByKey(job.key);
+    }
+
+    await this.automaticDataInsertQueue.add(
+      QueuesDefinition.INSERT_MOVIE_PROJECTIONS.jobs.INSERT_MOVIE_PROJECTIONS,
+      {},
+      {
+        repeat: {
+          pattern: '0 6 * * *',
+        },
+        jobId: QueuesDefinition.INSERT_MOVIE_PROJECTIONS.jobs.INSERT_MOVIE_PROJECTIONS, // Ensure the job ID is unique to prevent multiple instances
+      },
+    );
+  }
 
   async findById(movieProjectionId: string) {
     return this.prismaService.movieProjection.findUnique({
@@ -289,5 +316,64 @@ export class MovieProjectionsService {
     }
 
     return mpIds;
+  }
+
+  async generateDemoProjections() {
+    const cinemas = await this.prismaService.cinema.findMany({
+      include: {
+        cinemaTheaters: true,
+      },
+    });
+    const movies = await this.prismaService.movie.findMany({
+      orderBy: {
+        releaseDate: 'desc',
+      },
+      take: 20,
+    });
+
+    return Promise.all(
+      cinemas.map(async (cinema) => {
+        const projections = await Promise.all(
+          cinema.cinemaTheaters.map((ct) => {
+            return Promise.all([
+              this.create({
+                cinemaTheaterId: ct.id,
+                currencyCode: 'RSD',
+                is3D: Date.now() % 2 === 0,
+                movieId: (_.sample(movies) as Movie).id,
+                price: getRandomInt(400, 1000),
+                projectionDateTime: DateTime.now().plus({days: 1}).set({hour: 18, minute: 0, second: 0}).toJSDate(),
+              }),
+              this.create({
+                cinemaTheaterId: ct.id,
+                currencyCode: 'RSD',
+                is3D: Date.now() % 2 === 0,
+                movieId: (_.sample(movies) as Movie).id,
+                price: getRandomInt(400, 1000),
+                projectionDateTime: DateTime.now().plus({days: 10}).set({hour: 14, minute: 0, second: 0}).toJSDate(),
+              }),
+              this.create({
+                cinemaTheaterId: ct.id,
+                currencyCode: 'RSD',
+                is3D: Date.now() % 2 === 0,
+                movieId: (_.sample(movies) as Movie).id,
+                price: getRandomInt(400, 1000),
+                projectionDateTime: DateTime.now().plus({days: 8}).set({hour: 10, minute: 0, second: 0}).toJSDate(),
+              }),
+            ]);
+          }),
+        );
+
+        return projections.map((cinemaP) => {
+          return cinemaP.map((p) => {
+            this.logger.log(
+              `Inserted automatic demo projection ${p.id} for cinema theater ${p.cinemaTheaterId} and movie ${p.movieId}`,
+            );
+
+            return p.id;
+          });
+        });
+      }),
+    );
   }
 }
