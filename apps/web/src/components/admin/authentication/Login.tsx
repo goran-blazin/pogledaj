@@ -1,5 +1,5 @@
 // in src/MyLoginPage.js
-import * as React from 'react';
+import React from 'react';
 import {useState} from 'react';
 import {useLogin, useNotify} from 'react-admin';
 

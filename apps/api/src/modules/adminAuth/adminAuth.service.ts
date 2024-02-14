@@ -1,15 +1,18 @@
 import {Injectable} from '@nestjs/common';
 import {AdminUsersService} from '../adminUsers/adminUsers.service';
 import {AdminUserJwtPayload, AdminUserSafe, LoginOutputData} from '../../types/CommonTypes';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {v4 as uuidv4} from 'uuid';
-import * as process from 'process';
-import * as bcrypt from 'bcrypt';
+import process from 'process';
+import bcrypt from 'bcrypt';
 import {JwtService} from '@nestjs/jwt';
 
 @Injectable()
 export class AdminAuthService {
-  constructor(private adminUsersService: AdminUsersService, private jwtService: JwtService) {}
+  constructor(
+    private adminUsersService: AdminUsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateAdminUserForLocal(email: string, password: string): Promise<AdminUserSafe | null> {
     const adminUser = await this.adminUsersService.findByEmailUnsafe(email);

@@ -4,7 +4,7 @@ import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
 import {MovieProjectionOptions} from './movieProjections.types';
 import {DateTime} from 'ts-luxon';
 import {AdminRole, Cinema, CinemaTheater, CurrencyCode, Movie, MovieProjection} from '@prisma/client';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Logger} from '@nestjs/common';
 import {NotFoundException} from '@nestjs/common/exceptions/not-found.exception';
 import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';

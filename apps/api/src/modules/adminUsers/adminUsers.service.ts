@@ -4,8 +4,8 @@ import {UpdateAdminUserDto} from './dto/update-admin-user.dto';
 import {PrismaService} from '../prisma/prisma.service';
 import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';
 import {AdminRole, AdminUser} from '@prisma/client';
-import * as _ from 'lodash';
-import * as bcrypt from 'bcrypt';
+import _ from 'lodash';
+import bcrypt from 'bcrypt';
 
 function makeAdminUserSafe(adminUser: AdminUser): AdminUserSafe {
   return _.omit(adminUser, ['password']);

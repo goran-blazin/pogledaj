@@ -7,7 +7,7 @@ import {CinemasModule} from './modules/cinemas/cinemas.module';
 import * as Utils from './helpers/Utils';
 import configuration from './config/configuration';
 import {PrismaModule} from './modules/prisma/prisma.module';
-import * as process from 'process';
+import process from 'process';
 import {NodeEnv} from './types/CommonTypes';
 import {EmailModule} from './modules/email/email.module';
 import {CommonModule} from './modules/common/common.module';

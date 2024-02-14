@@ -2,7 +2,7 @@ import {AdminUserJwtPayload, AdminUserSafe} from '../../../types/CommonTypes';
 import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {ExtractJwt, Strategy} from 'passport-jwt';
 import {PassportStrategy} from '@nestjs/passport';
-import * as process from 'process';
+import process from 'process';
 import {AdminAuthService} from '../adminAuth.service';
 
 @Injectable()

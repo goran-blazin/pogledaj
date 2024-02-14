@@ -1,5 +1,5 @@
 import {AxiosError} from 'axios';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData, EnvTypes} from '../types/GeneralTypes';
 import jwt_decode from 'jwt-decode';
 

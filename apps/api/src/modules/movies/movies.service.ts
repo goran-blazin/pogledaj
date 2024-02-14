@@ -3,7 +3,7 @@ import {Prisma, Movie, InputProvider} from '@prisma/client';
 import {PrismaService} from '../prisma/prisma.service';
 import {TmdbProvider} from './tmdb.provider';
 import {MovieExternal, MovieLocalizedData, PersonForMovieExternal} from '../../types/MovieTypes';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {GetListOptions, ReturnList} from '../../types/CommonTypes';
 import {excludeArchivedMovieProjectionsQuery} from '../movieProjections/movieProjections.service';
 import {QueuesDefinition} from '../../helpers/QueuesHelper';
