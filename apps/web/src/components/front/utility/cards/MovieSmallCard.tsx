@@ -8,7 +8,7 @@ function MovieSmallCard({movie}: {movie: Movie}) {
 
   return (
     <SmallCard
-      title={movie.localizedTitle}
+      title={movie.localizedTitle || movie.originalTitle}
       imageSrc={movie.posterImages.smallPoster}
       defaultImageSrc={'movie-small-card-placeholder.png'}
       onClick={() => {

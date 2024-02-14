@@ -8,7 +8,7 @@ function MovieBigCard({movie}: {movie: Movie}) {
 
   return (
     <BigCard
-      title={movie.localizedTitle}
+      title={movie.localizedTitle || movie.originalTitle}
       imageSrc={movie.posterImages.bigPoster}
       defaultImageSrc={'movie-big-card-placeholder.png'}
       descFirstRow={'Žanr: ' + movie.genres.map((genre) => genre.localizedName).join(', ')}

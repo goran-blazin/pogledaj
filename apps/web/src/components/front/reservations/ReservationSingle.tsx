@@ -144,7 +144,7 @@ function ReservationSingle({reservation}: {reservation: ReservationWithMovieProj
         />
         <Box sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
           <CardContent sx={{flex: '1 0 auto', padding: '0'}}>
-            <Typography sx={typoStyle}>{movie.localizedTitle}</Typography>
+            <Typography sx={typoStyle}>{movie.localizedTitle || movie.originalTitle}</Typography>
             <Typography sx={typoStyle}>Bioskop: {cinemaTheater.cinema.name}</Typography>
             <Typography sx={typoStyle}>
               Termin: {CustomerHelper.formatDateMovieProjection(reservation.movieProjection.projectionDateTime)}
