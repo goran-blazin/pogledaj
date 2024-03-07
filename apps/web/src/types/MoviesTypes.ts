@@ -138,3 +138,15 @@ export const MovieLengthCategory = {
 } as const;
 
 export type MovieLengthCategory = (typeof MovieLengthCategory)[keyof typeof MovieLengthCategory];
+
+export type MoviesFilters = Partial<{
+  selectedGenres: string[];
+  selectedCountries: string[];
+  selectedDirectorPersonId: string;
+  selectedActorPersonIds: string[];
+  movieLengths: MovieLengthCategory[];
+  selectedCityId: string;
+  selectedCinemasIds: string[];
+  selectedDateFrom: string;
+  selectedDateTo: string;
+}>;

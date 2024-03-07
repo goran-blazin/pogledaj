@@ -1,20 +1,7 @@
-import {MovieLengthCategory} from '../types/MoviesTypes';
-import {DateTime} from 'ts-luxon';
+import {MoviesFilters} from '../types/MoviesTypes';
 import {create} from 'zustand';
 import {devtools} from 'zustand/middleware';
 import _ from 'lodash';
-
-type MoviesFilters = Partial<{
-  selectedGenres: string[];
-  selectedCountries: string[];
-  selectedDirectorPersonId: string;
-  selectedActorsPersonIds: string[];
-  movieLengths: MovieLengthCategory[];
-  selectedCityId: string;
-  selectedCinemasIds: string[];
-  selectedDateFrom: DateTime;
-  selectedDateTo: DateTime;
-}>;
 
 type MoviesFiltersStore = {
   moviesFilters: Partial<MoviesFilters>;

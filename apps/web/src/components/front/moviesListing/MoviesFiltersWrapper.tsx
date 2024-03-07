@@ -153,12 +153,12 @@ function MoviesFiltersWrapper() {
       selectedGenres: selectedGenres,
       selectedCountries: selectedCountries,
       selectedDirectorPersonId: directorAutocompleteValue?.id,
-      selectedActorsPersonIds: actorsAutocompleteValue.map((a) => a.id),
+      selectedActorPersonIds: actorsAutocompleteValue.map((a) => a.id),
       movieLengths: movieLengths,
-      selectedCityId: selectedCity,
+      selectedCityId: selectedCity.length > 0 ? selectedCity : undefined,
       selectedCinemasIds: selectedCinemas,
-      selectedDateFrom: selectedDateFrom || undefined,
-      selectedDateTo: selectedDateTo || undefined,
+      selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
+      selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
     });
 
     navigate(namedRoutes.moviesSearch);

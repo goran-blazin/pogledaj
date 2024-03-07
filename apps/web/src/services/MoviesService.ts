@@ -1,4 +1,10 @@
-import {Movie, MovieWithMovieProjection, MovieWithPersons, UpsertMovieFromExternalDTO} from '../types/MoviesTypes';
+import {
+  Movie,
+  MoviesFilters,
+  MovieWithMovieProjection,
+  MovieWithPersons,
+  UpsertMovieFromExternalDTO,
+} from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
 import {Country, Genre} from '../types/GeneralTypes';
 
@@ -59,6 +65,14 @@ const MoviesService = {
 
   async getAllCountriesForMoviesFilter(): Promise<Country[]> {
     const result = await PogledajApi().get('moviesFilters/getAllCountries');
+    return result.data;
+  },
+
+  async getMoviesByFilter(moviesFilters: MoviesFilters): Promise<MovieWithMovieProjection[]> {
+    const result = await PogledajApi().get('moviesFilters/searchFilter', {
+      params: moviesFilters,
+    });
+
     return result.data;
   },
 };

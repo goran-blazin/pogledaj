@@ -2,7 +2,6 @@ import MoviesService from '../../../services/MoviesService';
 import {Box, Typography} from '@mui/material';
 import React, {useMemo} from 'react';
 import PageHeader from '../utility/PageHeader';
-import SearchTextField from '../utility/SearchTextField';
 import HorizontalSmallCardsCarousel from '../utility/reels/HorizontalSmallCardsCarousel';
 import MovieSmallCard from '../utility/cards/MovieSmallCard';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -10,8 +9,7 @@ import {useQuery} from 'react-query';
 import {MovieProjection, MovieWithMovieProjection} from '../../../types/MoviesTypes';
 import ReservationsHelper from '../../../helpers/ReservationsHelper';
 import {DateTime} from 'ts-luxon';
-import FilterLinkButton from '../utility/FilterLinkButton';
-import {namedRoutes} from '../../../routes';
+import MoviesSearchTextbox from './MoviesSearchTextbox';
 
 function MoviesListingWrapper() {
   const movies = useQuery(['movies', 'findAll'], () => {
@@ -94,11 +92,7 @@ function MoviesListingWrapper() {
     <Box>
       <PageHeader headerText={'Filmovi'} />
       <Box mb={'20px'}>
-        <SearchTextField
-          id={'search-movies'}
-          placeholder={'Pronađi filmski naslov'}
-          EndAdornment={<FilterLinkButton navigateTo={namedRoutes.moviesFilters} />}
-        />
+        <MoviesSearchTextbox />
       </Box>
       {movies.isLoading ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
