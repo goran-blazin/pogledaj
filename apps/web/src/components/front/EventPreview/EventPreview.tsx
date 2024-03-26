@@ -10,6 +10,24 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import EventPreviewAction from './EventPreviewAction';
 
+const EventPreviewMainWrap = styled(Box)({
+  width: '100%',
+  height: '70vh',
+  backgroundColor: 'primary.default', // TODO fix this
+  position: 'relative',
+  marginBottom: '30px',
+  '&::before': {
+    content: '""',
+    display: 'block',
+    position: 'absolute',
+    boxSizing: 'border-Box',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '152px',
+    background: 'linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,0))',
+  },
+});
 const EventPreviewHolder = styled('div')({
   width: '100%',
   height: '100%',
@@ -23,24 +41,6 @@ const EventPreviewHolder = styled('div')({
     outline: 'none',
     padding: 0,
     margin: 0,
-  },
-});
-const EventPreviewMainWrap = styled(Box)({
-  width: 100 + 'wv',
-  height: 70 + 'vh',
-  backgroundColor: 'primary.default',
-  position: 'relative',
-  marginBottom: '30px',
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    boxSizing: 'border-Box',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '152px',
-    background: 'linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,0))',
   },
 });
 

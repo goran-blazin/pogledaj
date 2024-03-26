@@ -9,7 +9,7 @@ import SettingsWrapper from '../settings/settingsWrapper';
 import ReservationsWrapper from '../reservations/ReservationsWrapper';
 import {namedRoutes} from '../../../routes';
 
-import {Box, Container} from '@mui/material';
+import {Box} from '@mui/material';
 import MoviesFiltersWrapper from '../moviesListing/MoviesFiltersWrapper';
 import MoviesSearchWrapper from '../moviesListing/MoviesSearchWrapper';
 
@@ -35,17 +35,15 @@ function MainContentWrapper() {
   }
 
   return (
-    <Container>
-      <Box
-        sx={{
-          mt: '35px',
-          mb: '85px',
-          pb: '50px',
-        }}
-      >
-        <main>{routes}</main>
-      </Box>
-    </Container>
+    <Box
+      sx={{
+        mt: '35px',
+        mb: '85px',
+        pb: '50px',
+      }}
+    >
+      <main>{routes}</main>
+    </Box>
   );
 }
 

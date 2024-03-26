@@ -21,6 +21,7 @@ import ReservationsHelper from '../../../helpers/ReservationsHelper';
 import {DateTime} from 'ts-luxon';
 import React from 'react';
 import Utils from '../../../helpers/Utils';
+import ContentWrapper from '../layout/ContentWrapper';
 
 function Homepage() {
   const movies = useQuery(['movies', 'findAllOnlyWithActiveProjections'], () => {
@@ -121,67 +122,83 @@ function Homepage() {
   }, [cinemas?.data, userLocation?.data]);
 
   return (
-    <Box>
-      <Box mb={'20px'}>
-        <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
-      </Box>
-      <Box mb={'20px'}>
-        <Accordion defaultExpanded={true}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-            <PageSubHeader
-              headerText={`Tvoje rezervacije (${reservationStore.reservations.length})`}
-              Icon={LocalActivityOutlined}
-            />
-          </AccordionSummary>
-          <AccordionDetails>
-            <ReservationsList />
-            <Box textAlign="center">
-              <ButtonStyled variant="contained" href={namedRoutes.moviesListing}>
-                {reservationStore.reservations.length === 0 ? 'Rezerviši kartu' : 'Nova rezervacija'}
-              </ButtonStyled>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Box>
-      <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
-      <Box mb={'20px'}>
-        {movies.isLoading ? (
-          <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
-        ) : (
-          <HorizontalCardsCarousel>
-            {dontMissTheseMoviesSlider.map((movie, i) => (
-              <MovieBigCard movie={movie} key={i} />
-            ))}
-          </HorizontalCardsCarousel>
-        )}
-      </Box>
-      {lastChanceMoviesSlider.length > 0 && (
-        <React.Fragment>
-          <PageSubHeader headerText={'Iskoristi poslednju priliku'} Icon={LocalFireDepartmentOutlined} />
+    <>
+      <ContentWrapper padding>
+        <>
           <Box mb={'20px'}>
+            <SearchTextField id={'search-all'} placeholder={'Pronađi bioskop ili filmski naslov'} />
+          </Box>
+          <Box mb={'20px'}>
+            <Accordion defaultExpanded={true}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                <PageSubHeader
+                  headerText={`Tvoje rezervacije (${reservationStore.reservations.length})`}
+                  Icon={LocalActivityOutlined}
+                />
+              </AccordionSummary>
+              <AccordionDetails>
+                <ReservationsList />
+                <Box textAlign="center">
+                  <ButtonStyled variant="contained" href={namedRoutes.moviesListing}>
+                    {reservationStore.reservations.length === 0 ? 'Rezerviši kartu' : 'Nova rezervacija'}
+                  </ButtonStyled>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        </>
+      </ContentWrapper>
+      <ContentWrapper padding>
+        <PageSubHeader headerText={'Ne propusti ove filmove'} Icon={LocalFireDepartmentOutlined} />
+      </ContentWrapper>
+      <ContentWrapper>
+        <Box mb={'20px'}>
+          {movies.isLoading ? (
+            <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+          ) : (
             <HorizontalCardsCarousel>
-              {lastChanceMoviesSlider.map((movie, i) => (
+              {dontMissTheseMoviesSlider.map((movie, i) => (
                 <MovieBigCard movie={movie} key={i} />
               ))}
             </HorizontalCardsCarousel>
-          </Box>
-        </React.Fragment>
+          )}
+        </Box>
+      </ContentWrapper>
+      {lastChanceMoviesSlider.length > 0 && (
+        <>
+          <ContentWrapper padding>
+            <PageSubHeader headerText={'Iskoristi poslednju priliku'} Icon={LocalFireDepartmentOutlined} />
+          </ContentWrapper>
+          <ContentWrapper>
+            <Box mb={'20px'}>
+              <HorizontalCardsCarousel>
+                {lastChanceMoviesSlider.map((movie, i) => (
+                  <MovieBigCard movie={movie} key={i} />
+                ))}
+              </HorizontalCardsCarousel>
+            </Box>
+          </ContentWrapper>
+        </>
       )}
-      <PageSubHeader
-        headerText={userLocation.error ? ' Bioskopi (geolokacija isključena)' : 'Bioskopi u tvojoj blizini'}
-        Icon={LocationOnOutlined}
-      />
-      <Box mb={'20px'}>
-        {cinemas.isLoading ? (
-          <Typography color={'text.primary'}>Bioskopi se učitavaju, molimo sačekajte...</Typography>
-        ) : (
-          <HorizontalCardsCarousel>
-            {sortedCinemasByProximity.map((cinema, i) => (
-              <CinemaBigCard cinema={cinema} key={i} />
-            ))}
-          </HorizontalCardsCarousel>
-        )}
-      </Box>
+      <ContentWrapper padding>
+        <PageSubHeader
+          headerText={userLocation.error ? ' Bioskopi (geolokacija isključena)' : 'Bioskopi u tvojoj blizini'}
+          Icon={LocationOnOutlined}
+        />
+      </ContentWrapper>
+      <ContentWrapper>
+        <Box mb={'20px'}>
+          {cinemas.isLoading ? (
+            <Typography color={'text.primary'}>Bioskopi se učitavaju, molimo sačekajte...</Typography>
+          ) : (
+            <HorizontalCardsCarousel>
+              {sortedCinemasByProximity.map((cinema, i) => (
+                <CinemaBigCard cinema={cinema} key={i} />
+              ))}
+            </HorizontalCardsCarousel>
+          )}
+        </Box>
+      </ContentWrapper>
       <BigInfoDialog
         open={appStore.firstTimeVisitor}
         imgSrc={'/img/couchPopcorn.svg'}
@@ -193,7 +210,7 @@ function Homepage() {
     `}
         buttons={[{text: 'Pristupi platformi', onClick: appStore.setNotFirstTimeVisitor}]}
       />
-    </Box>
+    </>
   );
 }
 

@@ -11,6 +11,7 @@ import {styled} from '@mui/material';
 import MainTitle from '../utility/typography/MainTitle';
 import RatingInfo from '../utility/RatingInfo';
 import TagsComponent from '../utility/TagsComponent';
+import ContentWrapper from '../layout/ContentWrapper';
 import {useQuery} from 'react-query';
 import React from 'react';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -152,78 +153,80 @@ function MovieSingleWrapper() {
                   <div>NO POSTER IMAGE</div>
                 )}
               </MovieSinglePreview>
-              <div>
-                <MovieTitleHolder>
-                  <div className="titleWrap">
-                    <MainTitle title={movie.data.localizedTitle} />
-                  </div>
-                  <div className="titleRating">
-                    <RatingInfo rating={movie.data.rating} />
-                  </div>
-                </MovieTitleHolder>
-                <EventInformation>
-                  <li className="event-info-section">
-                    <TagsComponent genres={movie.data.genres} />
-                  </li>
-                  <li className="event-info-section">
-                    <div className="event-info-section-with-icons">
-                      <span>
-                        <AccessTimeIcon
-                          fontSize={'small'}
-                          sx={{
-                            display: 'flex',
-                            color: (theme) => theme.palette.primary.main,
-                          }}
-                        />
-                      </span>
-                      <span>
-                        {movie.data.runtimeMinutes} min | {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
-                      </span>
+              <ContentWrapper padding>
+                <>
+                  <MovieTitleHolder>
+                    <div className="titleWrap">
+                      <MainTitle title={movie.data.localizedTitle} />
                     </div>
-                  </li>
-                  <li className="event-info-section">
-                    <span className="event-info-subtitle">Sinopsis:</span>
-                    <p className="event-section-description">{movie.data.localizedPlot}</p>
-                  </li>
-                  <li className="event-info-section">
-                    <span className="event-info-subtitle">Sinopsis u originalu:</span>
-                    <p className="event-section-description">{movie.data.plot}</p>
-                  </li>
-                  <li className="event-info-section">
-                    <div>
-                      <span className="event-info-subtitle inline">Režiseri:</span>
-                      <p className="event-section-description inline">
-                        {movie.data.directors.map((director) => director.person.name).join(', ')}
-                      </p>
+                    <div className="titleRating">
+                      <RatingInfo rating={movie.data.rating} />
                     </div>
-                    {orderedActors.length > 0 && (
+                  </MovieTitleHolder>
+                  <EventInformation>
+                    <li className="event-info-section">
+                      <TagsComponent genres={movie.data.genres} />
+                    </li>
+                    <li className="event-info-section">
+                      <div className="event-info-section-with-icons">
+                        <span>
+                          <AccessTimeIcon
+                            fontSize={'small'}
+                            sx={{
+                              display: 'flex',
+                              color: (theme) => theme.palette.primary.main,
+                            }}
+                          />
+                        </span>
+                        <span>
+                          {movie.data.runtimeMinutes} min | {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
+                        </span>
+                      </div>
+                    </li>
+                    <li className="event-info-section">
+                      <span className="event-info-subtitle">Sinopsis:</span>
+                      <p className="event-section-description">{movie.data.localizedPlot}</p>
+                    </li>
+                    <li className="event-info-section">
+                      <span className="event-info-subtitle">Sinopsis u originalu:</span>
+                      <p className="event-section-description">{movie.data.plot}</p>
+                    </li>
+                    <li className="event-info-section">
                       <div>
-                        <span className="event-info-subtitle inline">Glumci:</span>
+                        <span className="event-info-subtitle inline">Režiseri:</span>
                         <p className="event-section-description inline">
-                          {orderedActors.map((actor) => actor.person.name).join(', ')}
+                          {movie.data.directors.map((director) => director.person.name).join(', ')}
                         </p>
                       </div>
-                    )}
-                    {/*<div>*/}
-                    {/*  <span className="event-info-subtitle inline">Distributer:</span>*/}
-                    {/*  <p className="event-section-description inline">*/}
-                    {/*    MegaCom Film*/}
-                    {/*  </p>*/}
-                    {/*</div>*/}
-                    <div>
-                      <span className="event-info-subtitle inline">Zemlja Porekla:</span>
-                      <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
-                    </div>
-                  </li>
-                  {/*<li className="event-info-section">*/}
-                  {/*  <div>{'IMDB RATING'}</div>*/}
-                  {/*</li>*/}
-                </EventInformation>
-              </div>
+                      {orderedActors.length > 0 && (
+                        <div>
+                          <span className="event-info-subtitle inline">Glumci:</span>
+                          <p className="event-section-description inline">
+                            {orderedActors.map((actor) => actor.person.name).join(', ')}
+                          </p>
+                        </div>
+                      )}
+                      {/*<div>*/}
+                      {/*  <span className="event-info-subtitle inline">Distributer:</span>*/}
+                      {/*  <p className="event-section-description inline">*/}
+                      {/*    MegaCom Film*/}
+                      {/*  </p>*/}
+                      {/*</div>*/}
+                      <div>
+                        <span className="event-info-subtitle inline">Zemlja Porekla:</span>
+                        <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
+                      </div>
+                    </li>
+                    {/*<li className="event-info-section">*/}
+                    {/*  <div>{'IMDB RATING'}</div>*/}
+                    {/*</li>*/}
+                  </EventInformation>
+                </>
+              </ContentWrapper>
               {/*<div>*/}
               {/*  KOMENTARI*/}
               {/*</div>*/}
-              <div>
+              <ContentWrapper padding>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
                   <Box>
                     <PageSubHeader headerText={'Rezervacija karata:'} Icon={LocalActivityOutlined} />
@@ -288,7 +291,7 @@ function MovieSingleWrapper() {
                 ) : (
                   <PageSubHeader headerText={'Projekcije nisu pronadjene'} />
                 )}
-              </div>
+              </ContentWrapper>
             </React.Fragment>
           ) : (
             <PageSubHeader headerText={'Film nije pronadjen'} />

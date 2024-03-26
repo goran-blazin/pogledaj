@@ -13,9 +13,9 @@ function HorizontalFilmStripWrapper({
     <Box
       sx={{
         backgroundColor: '#000000',
-        width: '100vw',
+        // width: '100vw',
         position: 'relative',
-        left: 'calc(-50vw + 50%)',
+        // left: 'calc(-50vw + 50%)',
         '& div.swiper-wrapper:before': {
           marginLeft: '-100vw',
           paddingLeft: '100vw',
