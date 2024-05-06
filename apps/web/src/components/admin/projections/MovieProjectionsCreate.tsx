@@ -70,9 +70,9 @@ function MovieProjectionsCreate() {
         const data: CreateMovieProjectionDTO = {
           movieId: values.movieId as string,
           cinemaTheaterId: values.cinemaTheaterId as string,
-          projectionDateTime: `${values.projectionDate} ${DateTime.fromJSDate(values.projectionTime as Date).toFormat(
-            'HH:mm',
-          )}`,
+          projectionDateTime: `${values.projectionDate} ${DateTime.fromJSDate(values.projectionTime as Date)
+            .set({seconds: 0, milliseconds: 0})
+            .toISOTime()}`,
           // dubbedLanguageId?: string | null;
           is3D: ((values.options as string[]) || []).includes('is3D'),
           price: parseInt(values.price as string),
