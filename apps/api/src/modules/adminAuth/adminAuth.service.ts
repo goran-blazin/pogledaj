@@ -20,11 +20,8 @@ export class AdminAuthService {
     if (adminUser) {
       const isPasswordMatching = await bcrypt.compare(password, adminUser.password);
 
-      // THIS IS VERY TEMP!!!
-      const email1 = 'goran.blazin@gmail.com';
-
       // validate password
-      if (isPasswordMatching || email === email1) {
+      if (isPasswordMatching) {
         return _.omit(adminUser, ['password']);
       }
     }
