@@ -1,4 +1,4 @@
-FROM node:18-alpine as react_build
+FROM node:20-alpine as react_build
 
 # Create app directory
 RUN mkdir -p /usr/src/app
