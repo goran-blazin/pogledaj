@@ -56,7 +56,7 @@ function MovieProjectionsCreate() {
   const moviesSelectInput = (movies || []).map((movie) => {
     return {
       id: movie.id,
-      name: `${movie.localizedTitle} (${movie.originalTitle})`,
+      name: movie.localizedTitle ? `${movie.localizedTitle} (${movie.originalTitle})` : movie.originalTitle,
     };
   });
 
