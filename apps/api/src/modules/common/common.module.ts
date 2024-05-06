@@ -6,7 +6,11 @@ import {BullModule} from '@nestjs/bullmq';
 @Module({
   imports: [
     BullModule.registerQueue(
-      ...[QueuesDefinition.EMAIL.name, QueuesDefinition.INSERT_MOVIES.name].map((name) => ({
+      ...[
+        QueuesDefinition.EMAIL.name,
+        QueuesDefinition.INSERT_MOVIES.name,
+        QueuesDefinition.INSERT_MOVIE_PROJECTIONS.name,
+      ].map((name) => ({
         name,
       })),
     ),

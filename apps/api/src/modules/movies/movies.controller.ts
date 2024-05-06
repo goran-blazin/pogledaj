@@ -95,8 +95,8 @@ export class MoviesController {
 
   @Roles(AdminRole.SuperAdmin)
   @UseGuards(JwtAdminAuthGuard)
-  @Post('upsertNewPopular')
-  upsertNewPopular() {
-    return this.moviesService.upsertNewPopularMovies();
+  @Post('bulkInsertPopularMovies')
+  async bulkInsertPopularMovies() {
+    return await this.moviesService.upsertNewPopularMovies();
   }
 }

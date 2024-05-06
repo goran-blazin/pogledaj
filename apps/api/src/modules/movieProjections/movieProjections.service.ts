@@ -1,4 +1,4 @@
-import {ForbiddenException, Injectable, OnModuleInit} from '@nestjs/common';
+import {ForbiddenException, Injectable} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
 import {MovieProjectionOptions} from './movieProjections.types';
@@ -10,9 +10,6 @@ import {NotFoundException} from '@nestjs/common/exceptions/not-found.exception';
 import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';
 import AuthHelper from '../../helpers/Auth.helper';
 import {FORBIDDEN_MESSAGE} from '@nestjs/core/guards';
-import {QueuesDefinition} from '../../helpers/QueuesHelper';
-import {InjectQueue} from '@nestjs/bullmq';
-import {Queue} from 'bullmq';
 import {getRandomInt} from '../../helpers/Utils';
 
 const RESERVATION_TIME_OFFSET_MINUTES = 30;
@@ -74,33 +71,10 @@ const generateProjections = (
 };
 
 @Injectable()
-export class MovieProjectionsService implements OnModuleInit {
+export class MovieProjectionsService {
   private readonly logger = new Logger(MovieProjectionsService.name);
 
-  constructor(
-    private prismaService: PrismaService,
-    @InjectQueue(QueuesDefinition.INSERT_MOVIE_PROJECTIONS.name) private readonly automaticDataInsertQueue: Queue,
-  ) {}
-
-  async onModuleInit() {
-    // Get all repeatable jobs
-    const repeatableJobs = await this.automaticDataInsertQueue.getRepeatableJobs();
-    // Iterate over the jobs and remove each one
-    for (const job of repeatableJobs) {
-      await this.automaticDataInsertQueue.removeRepeatableByKey(job.key);
-    }
-
-    await this.automaticDataInsertQueue.add(
-      QueuesDefinition.INSERT_MOVIE_PROJECTIONS.jobs.INSERT_MOVIE_PROJECTIONS,
-      {},
-      {
-        repeat: {
-          pattern: '0 6 * * *',
-        },
-        jobId: QueuesDefinition.INSERT_MOVIE_PROJECTIONS.jobs.INSERT_MOVIE_PROJECTIONS, // Ensure the job ID is unique to prevent multiple instances
-      },
-    );
-  }
+  constructor(private prismaService: PrismaService) {}
 
   async findById(movieProjectionId: string) {
     return this.prismaService.movieProjection.findUnique({

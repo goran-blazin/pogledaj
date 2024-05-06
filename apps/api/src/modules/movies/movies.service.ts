@@ -29,13 +29,13 @@ export class MoviesService implements OnModuleInit {
     }
 
     await this.automaticDataInsertQueue.add(
-      QueuesDefinition.INSERT_MOVIES.jobs.INSERT_NEW_POPULAR_MOVIES,
+      QueuesDefinition.INSERT_MOVIES.jobId,
       {},
       {
         repeat: {
           pattern: '0 5 * * 1',
         },
-        jobId: QueuesDefinition.INSERT_MOVIES.jobs.INSERT_NEW_POPULAR_MOVIES, // Ensure the job ID is unique to prevent multiple instances
+        jobId: QueuesDefinition.INSERT_MOVIES.jobId, // Ensure the job ID is unique to prevent multiple instances
       },
     );
   }

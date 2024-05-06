@@ -26,7 +26,7 @@ export class EmailService {
       </html>
     `;
 
-    return this.emailQueue.add(QueuesDefinition.EMAIL.jobs.SUPPORT_EMAIL, {
+    return this.emailQueue.add(QueuesDefinition.EMAIL.jobId, {
       html: html,
       subject: `Nova poruka za podrsku od ${supportEmailDto.email}`,
       toEmails: sendSupportEmailsTo,

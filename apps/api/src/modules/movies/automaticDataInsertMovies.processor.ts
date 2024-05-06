@@ -16,7 +16,7 @@ export class AutomaticDataInsertMoviesProcessor extends WorkerHost {
     this.logger.debug(`Started job ${job.name} in queue ${QueuesDefinition.INSERT_MOVIES.name}...`);
 
     switch (job.name) {
-      case QueuesDefinition.INSERT_MOVIES.jobs.INSERT_NEW_POPULAR_MOVIES:
+      case QueuesDefinition.INSERT_MOVIES.jobId:
         await this.moviesService.upsertNewPopularMovies();
         break;
     }

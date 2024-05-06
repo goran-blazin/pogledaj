@@ -26,7 +26,6 @@ const redisConnection = new Redis(redisConnString, {
 });
 
 const REDIS_APP_PREFIX = `POGLEDAJ-ENV-${env}`;
-
 @Module({
   imports: [
     ConfigModule.forRoot({
