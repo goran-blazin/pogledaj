@@ -57,10 +57,21 @@ export type MovieProjection = {
   reservations: Reservation[];
 };
 
+export type ProjectionsDates = Record<
+  string,
+  {
+    day: string;
+    weekDay: string;
+    month: string;
+    date: string;
+    movieProjections: MovieProjection[];
+  }
+>;
+
 export type ProjectionsGroupedPerCinemaType = {
   [cinemaId: string]: {
     cinema: Cinema;
-    movieProjections: MovieProjection[];
+    dates: ProjectionsDates;
   };
 };
 

@@ -32,6 +32,10 @@ declare module '@mui/material/styles' {
         textColor: string;
         iconBgColor: string;
       };
+      dateButtons: {
+        selectedColor: string;
+        nonSelectedColor: string;
+      };
     };
     customForm: {
       inputField: {
@@ -100,6 +104,10 @@ declare module '@mui/material/styles' {
         color: React.CSSProperties['color'];
         textColor: React.CSSProperties['color'];
         iconBgColor: React.CSSProperties['color'];
+      };
+      dateButtons: {
+        selectedColor: React.CSSProperties['color'];
+        nonSelectedColor: React.CSSProperties['color'];
       };
     };
     customForm?: {

@@ -44,6 +44,10 @@ const lightTheme = createTheme({
       textColor: `var(--dark-grey)`,
       iconBgColor: `var(--light-blue)`,
     },
+    dateButtons: {
+      selectedColor: 'var(--light-blue)',
+      nonSelectedColor: 'var(--cathegory-grey)',
+    },
   },
   breakpoints: {
     values: {
@@ -64,6 +68,7 @@ const lightTheme = createTheme({
     lightGrey: {
       color: `var(--input-field-grey)`,
     },
+
     darkBlue: {
       color: `var(--dark-blue)`,
     },

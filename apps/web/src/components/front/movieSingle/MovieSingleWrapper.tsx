@@ -1,11 +1,11 @@
-import {useNavigate, useParams} from 'react-router-dom';
-import {useMemo, useState} from 'react';
-import {ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
+import {useParams} from 'react-router-dom';
+import {useEffect, useMemo, useState} from 'react';
+import {ProjectionsDates, ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import MovieSinglePreview from '../EventPreview/EventPreview';
 import {DateTime} from 'ts-luxon';
-import {Box, FormControl, InputAdornment, MenuItem, SelectChangeEvent, Typography} from '@mui/material';
+import {Box, Button, FormControl, InputAdornment, MenuItem, SelectChangeEvent, Stack, Typography} from '@mui/material';
 import {styled} from '@mui/material';
 
 import MainTitle from '../utility/typography/MainTitle';
@@ -16,12 +16,34 @@ import {useQuery} from 'react-query';
 import React from 'react';
 import PageSubHeader from '../utility/PageSubHeader';
 import SelectBoxStyled from '../utility/form/SelectBoxStyled';
-import ButtonStyled from '../utility/buttons/Button';
-import {namedRoutes} from '../../../routes';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {LocalActivityOutlined} from '@mui/icons-material';
+import _ from 'lodash';
 
-const movieProjectionDateTimeFormat = 'dd.MM.yyyy / HH:mm';
+const monthsLocalization: Record<number, string> = {
+  1: 'JAN',
+  2: 'FEB',
+  3: 'MAR',
+  4: 'APR',
+  5: 'MAJ',
+  6: 'JUN',
+  7: 'JUL',
+  8: 'AVG',
+  9: 'SEP',
+  10: 'OKT',
+  11: 'NOV',
+  12: 'DEC',
+};
+
+const daysLocalization: Record<number, string> = {
+  1: 'Pon',
+  2: 'Uto',
+  3: 'Sre',
+  4: 'Čet',
+  5: 'Pet',
+  6: 'Sub',
+  7: 'Ned',
+};
 
 const MovieTitleHolder = styled('div')({
   display: 'flex',
@@ -70,11 +92,19 @@ const EventInformation = styled('ul')(({theme}) => ({
 }));
 
 function MovieSingleWrapper() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  // navigate(
+  //   namedRoutes.movieProjectionSingle.replace(
+  //     ':movieProjectionId',
+  //     selectedMovieProjection,
+  //   ),
+  // );
+  //
   const {movieId} = useParams();
+  // const isReadOnly = true;
 
   const [selectedCinema, setSelectedCinema] = useState('');
-  const [selectedMovieProjection, setSelectedMovieProjection] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
 
   const movie = movieId
     ? useQuery(['movie.includePersons', movieId], () => MoviesService.findByIdWithPersons(movieId))
@@ -83,6 +113,9 @@ function MovieSingleWrapper() {
   const movieProjections = movieId
     ? useQuery(['movieProjections.findAllByMovie', movieId], () => MovieProjectionsService.findAllByMovie(movieId))
     : undefined;
+
+  const todayISO = DateTime.local().toISODate();
+  const tomorrowISO = DateTime.local().plus({day: 1}).toISODate();
 
   const projectionsGroupedPerCinema = useMemo(() => {
     if (!movieProjections?.data) {
@@ -95,17 +128,56 @@ function MovieSingleWrapper() {
       if (!carry[cinema.id]) {
         carry[cinema.id] = {
           cinema,
-          movieProjections: [],
+          dates: {},
         };
       }
 
       if (carry[cinema.id]) {
-        carry[cinema.id].movieProjections.push(mp);
+        const cinemaInnerObj = carry[cinema.id];
+        const luxonDate = DateTime.fromISO(mp.projectionDateTime);
+        const dateString = luxonDate.toFormat('yyyy-MM-dd');
+        const dateISO = luxonDate.toISODate();
+        if (!cinemaInnerObj.dates[dateString]) {
+          cinemaInnerObj.dates[dateString] = {
+            weekDay:
+              dateISO === todayISO ? 'Danas' : dateISO === tomorrowISO ? 'Sutra' : daysLocalization[luxonDate.weekday],
+            day: luxonDate.toFormat('dd'),
+            month: monthsLocalization[luxonDate.month],
+            date: dateString,
+            movieProjections: [],
+          };
+        }
+
+        cinemaInnerObj.dates[dateString].movieProjections.push(mp);
       }
 
       return carry;
     }, {});
   }, [movieProjections?.data]);
+
+  useEffect(() => {
+    if (selectedCinema === '' && Object.keys(projectionsGroupedPerCinema).length > 0) {
+      setSelectedCinema(Object.keys(projectionsGroupedPerCinema)[0]);
+    }
+  }, [projectionsGroupedPerCinema]);
+
+  const sortDates = (dates: ProjectionsDates) =>
+    Object.values(
+      _(dates) // sort by date
+        .toPairs()
+        .sortBy(0)
+        .fromPairs()
+        .value(),
+    );
+
+  useEffect(() => {
+    if (selectedCinema !== '') {
+      const date = sortDates(projectionsGroupedPerCinema[selectedCinema].dates)[0];
+      if (date) {
+        setSelectedDate(date.date);
+      }
+    }
+  }, [selectedCinema]);
 
   const {orderedActors, trailerUrl, posterUrl} = useMemo(() => {
     const movieData = movie?.data;
@@ -233,6 +305,7 @@ function MovieSingleWrapper() {
                     <FormControl fullWidth sx={{mt: 2}}>
                       <Typography>Izaberi bioskop:</Typography>
                       <SelectBoxStyled
+                        sx={{mt: 1}}
                         value={selectedCinema}
                         startAdornment={
                           <InputAdornment className={'select-adornment'} position="start">
@@ -250,43 +323,81 @@ function MovieSingleWrapper() {
                         })}
                       </SelectBoxStyled>
                     </FormControl>
-                    <FormControl fullWidth sx={{mt: 2}}>
-                      <Typography>Izaberi termin:</Typography>
-                      <SelectBoxStyled
-                        value={selectedMovieProjection}
-                        startAdornment={
-                          <InputAdornment className={'select-adornment'} position="start">
-                            Termin
-                          </InputAdornment>
-                        }
-                        onChange={(event: SelectChangeEvent) => setSelectedMovieProjection(event.target.value)}
-                      >
-                        {selectedCinema &&
-                          projectionsGroupedPerCinema[selectedCinema].movieProjections.map((mp, i) => {
-                            return (
-                              <MenuItem key={i} value={mp.id}>
-                                {DateTime.fromISO(mp.projectionDateTime).toFormat(movieProjectionDateTimeFormat)} (
-                                {mp.cinemaTheater.name})
-                              </MenuItem>
-                            );
-                          })}
-                      </SelectBoxStyled>
-                    </FormControl>
-                    <Box sx={{mt: 2}}>
-                      <ButtonStyled
-                        onClick={() => {
-                          if (selectedMovieProjection) {
-                            navigate(
-                              namedRoutes.movieProjectionSingle.replace(':movieProjectionId', selectedMovieProjection),
-                            );
-                          } else {
-                            alert('Izaberite termin');
-                          }
-                        }}
-                      >
-                        Rezerviši karte
-                      </ButtonStyled>
-                    </Box>
+                    <React.Fragment>
+                      {selectedCinema && (
+                        <Box sx={{mt: 2}}>
+                          <Typography>Izaberi datum:</Typography>
+                          <Stack sx={{mt: 1}} direction={'row'} spacing={2}>
+                            {sortDates(projectionsGroupedPerCinema[selectedCinema].dates).map((date, index) => (
+                              <Button
+                                key={index}
+                                variant="outlined"
+                                onClick={() => setSelectedDate(date.date)}
+                                sx={{
+                                  borderRadius: '15px', // Rounded border
+                                  borderColor: (theme) =>
+                                    selectedDate === date.date
+                                      ? theme.customButtons.dateButtons.selectedColor
+                                      : theme.customButtons.dateButtons.nonSelectedColor, // Border color
+                                  borderWidth: '2px', // Border width
+                                  '&.MuiButtonBase-root:hover': {
+                                    borderWidth: '2px',
+                                  },
+                                  textTransform: 'none', // Prevent uppercase transformation
+                                  backgroundColor: 'transparent', // Transparent background
+                                  width: '66px', // Fit to content size
+                                  height: '66px', // Fit to content size
+                                }}
+                              >
+                                <Stack spacing={0}>
+                                  <Box
+                                    component="span"
+                                    sx={{
+                                      fontSize: '1em',
+                                      fontWeight: 600,
+                                      color: (theme) =>
+                                        selectedDate === date.date
+                                          ? theme.customButtons.dateButtons.selectedColor
+                                          : theme.customButtons.dateButtons.nonSelectedColor,
+                                    }}
+                                  >
+                                    {date.weekDay}
+                                  </Box>
+                                  <Box
+                                    component="span"
+                                    sx={{
+                                      mt: 1,
+                                      lineHeight: 0,
+                                      fontSize: '0.6em',
+                                      fontWeight: 600,
+                                      color: (theme) =>
+                                        selectedDate === date.date
+                                          ? theme.customButtons.dateButtons.selectedColor
+                                          : theme.customButtons.dateButtons.nonSelectedColor,
+                                    }}
+                                  >
+                                    {date.month}
+                                  </Box>
+                                  <Box
+                                    component="span"
+                                    sx={{
+                                      fontSize: '1.2em',
+                                      fontWeight: 600,
+                                      color: (theme) =>
+                                        selectedDate === date.date
+                                          ? theme.customButtons.dateButtons.selectedColor
+                                          : theme.customButtons.dateButtons.nonSelectedColor,
+                                    }}
+                                  >
+                                    {date.day}
+                                  </Box>
+                                </Stack>
+                              </Button>
+                            ))}
+                          </Stack>
+                        </Box>
+                      )}
+                    </React.Fragment>
                   </Box>
                 ) : (
                   <PageSubHeader headerText={'Projekcije nisu pronadjene'} />

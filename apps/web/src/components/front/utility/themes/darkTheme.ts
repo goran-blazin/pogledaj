@@ -43,6 +43,10 @@ const darkTheme = createTheme({
       textColor: `var(--dark-mode-text)`,
       iconBgColor: `var(--light-blue)`,
     },
+    dateButtons: {
+      selectedColor: 'var(--dark-mode-text)',
+      nonSelectedColor: 'var(--dark-mode-cathegory-blue)',
+    },
   },
   breakpoints: {
     values: {
