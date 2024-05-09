@@ -10,6 +10,7 @@ import {MovieProjection, MovieWithMovieProjection} from '../../../types/MoviesTy
 import ReservationsHelper from '../../../helpers/ReservationsHelper';
 import {DateTime} from 'ts-luxon';
 import MoviesSearchTextbox from './MoviesSearchTextbox';
+import ContentWrapper from '../layout/ContentWrapper';
 
 function MoviesListingWrapper() {
   const movies = useQuery(['movies', 'findAll'], () => {
@@ -90,17 +91,22 @@ function MoviesListingWrapper() {
 
   return (
     <Box>
-      <PageHeader headerText={'Filmovi'} />
-      <Box mb={'20px'}>
-        <MoviesSearchTextbox />
-      </Box>
+      <ContentWrapper padding>
+        <>
+          <PageHeader headerText={'Filmovi'} />
+          <Box mb={'20px'}>
+            <MoviesSearchTextbox />
+          </Box>
+        </>
+      </ContentWrapper>
       {movies.isLoading ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <React.Fragment>
           <Box mb={'20px'}>
-            <PageSubHeader headerText={'Popularno'} />
-
+            <ContentWrapper padding>
+              <PageSubHeader headerText={'Popularno'} />
+            </ContentWrapper>
             <HorizontalSmallCardsCarousel>
               {popularMoviesList.map((movie, i) => (
                 <MovieSmallCard movie={movie} key={i} />
@@ -108,8 +114,9 @@ function MoviesListingWrapper() {
             </HorizontalSmallCardsCarousel>
           </Box>
           <Box mb={'20px'}>
-            <PageSubHeader headerText={'Poslednja prilika'} />
-
+            <ContentWrapper padding>
+              <PageSubHeader headerText={'Poslednja prilika'} />
+            </ContentWrapper>
             <HorizontalSmallCardsCarousel>
               {lastChanceMoviesList.map((movie, i) => (
                 <MovieSmallCard movie={movie} key={i} />
@@ -117,8 +124,9 @@ function MoviesListingWrapper() {
             </HorizontalSmallCardsCarousel>
           </Box>
           <Box mb={'20px'}>
-            <PageSubHeader headerText={'Najnovije'} />
-
+            <ContentWrapper padding>
+              <PageSubHeader headerText={'Najnovije'} />
+            </ContentWrapper>
             <HorizontalSmallCardsCarousel>
               {newestMoviesList.map((movie, i) => (
                 <MovieSmallCard movie={movie} key={i} />
@@ -126,8 +134,9 @@ function MoviesListingWrapper() {
             </HorizontalSmallCardsCarousel>
           </Box>
           <Box mb={'20px'}>
-            <PageSubHeader headerText={'Za decu'} />
-
+            <ContentWrapper padding>
+              <PageSubHeader headerText={'Za decu'} />
+            </ContentWrapper>
             <HorizontalSmallCardsCarousel>
               {forChildrenMoviesList.map((movie, i) => (
                 <MovieSmallCard movie={movie} key={i} />
@@ -135,8 +144,9 @@ function MoviesListingWrapper() {
             </HorizontalSmallCardsCarousel>
           </Box>
           <Box mb={'20px'}>
-            <PageSubHeader headerText={'Uskoro'} />
-
+            <ContentWrapper padding>
+              <PageSubHeader headerText={'Uskoro'} />
+            </ContentWrapper>
             <HorizontalSmallCardsCarousel>
               {soonMoviesList.map((movie, i) => (
                 <MovieSmallCard movie={movie} key={i} />

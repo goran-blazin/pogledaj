@@ -19,6 +19,7 @@ import SelectBoxStyled from '../utility/form/SelectBoxStyled';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {LocalActivityOutlined} from '@mui/icons-material';
 import _ from 'lodash';
+import Utils from '../../../helpers/Utils';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -301,7 +302,12 @@ function MovieSingleWrapper() {
               <ContentWrapper padding>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
                   <Box>
-                    <PageSubHeader headerText={'Rezervacija karata:'} Icon={LocalActivityOutlined} />
+                    {Utils.isBetaMode() ? (
+                      <PageSubHeader headerText={'Rezervacija karata:'} Icon={LocalActivityOutlined} />
+                    ) : (
+                      <PageSubHeader headerText={'Datumi projekcija:'} />
+                    )}
+
                     <FormControl fullWidth sx={{mt: 2}}>
                       <Typography>Izaberi bioskop:</Typography>
                       <SelectBoxStyled

@@ -22,6 +22,7 @@ import useMoviesFiltersStore from '../../../store/MoviesFiltersStore';
 import ButtonStyled from '../utility/buttons/Button';
 import {namedRoutes} from '../../../routes';
 import {useNavigate} from 'react-router-dom';
+import ContentWrapper from '../layout/ContentWrapper';
 
 function MoviesFiltersWrapper() {
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
@@ -165,251 +166,256 @@ function MoviesFiltersWrapper() {
   };
 
   return (
-    <Box>
-      <PageHeader headerText={'Filteri'} />
-      <Box sx={{mt: 5}}>
-        <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
-        <FormControl fullWidth sx={{mt: 2}}>
-          <SelectBoxStyled
-            value={selectedCity}
-            startAdornment={
-              <InputAdornment className={'select-adornment'} position="start">
-                Grad
-              </InputAdornment>
-            }
-            onChange={handleCityChange}
-          >
-            {(citiesRQ.data || []).map((city, i) => {
-              return (
-                <MenuItem key={i} value={city.id}>
-                  {city.name}
-                </MenuItem>
-              );
-            })}
-          </SelectBoxStyled>
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <SelectBoxStyled
-            multiple
-            value={selectedCinemas}
-            startAdornment={
-              <InputAdornment className={'select-adornment'} position="start">
-                Bioskopi
-              </InputAdornment>
-            }
-            onChange={handleCinemasChange}
-            renderValue={(selected) => (
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                {selected.map((value) => (
-                  <Chip key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
-                ))}
-              </Box>
-            )}
-          >
-            {(cinemasRQ.data || []).map((cinema, i) => {
-              return (
-                <MenuItem key={i} value={cinema.id}>
-                  {cinema.name}
-                </MenuItem>
-              );
-            })}
-          </SelectBoxStyled>
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <DatePicker
-            format={Utils.luxonDateFormat}
-            value={selectedDateFrom}
-            slots={{
-              toolbar: (params) => {
-                return <DatePickerToolbar {...params} hidden={true} />;
-              },
-              textField: (params) => {
-                if (params.InputProps) {
-                  params.InputProps.startAdornment = <InputAdornment position="start">Datum Od</InputAdornment>;
-                }
-                return <TextFieldStyled {...params} fullWidth placeholder={''} />;
-              },
-            }}
-            onAccept={(value) => {
-              setSelectedDateFrom(value as DateTime);
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <DatePicker
-            format={Utils.luxonDateFormat}
-            value={selectedDateTo}
-            slots={{
-              toolbar: (params) => {
-                return <DatePickerToolbar {...params} hidden={true} />;
-              },
-              textField: (params) => {
-                if (params.InputProps) {
-                  params.InputProps.startAdornment = <InputAdornment position="start">Datum Do</InputAdornment>;
-                }
-                return <TextFieldStyled {...params} fullWidth placeholder={''} />;
-              },
-            }}
-            onAccept={(value) => {
-              setSelectedDateTo(value as DateTime);
-            }}
-          />
-        </FormControl>
-      </Box>
-      <Box sx={{mt: 5}}>
-        <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
-        <FormControl fullWidth sx={{mt: 2}}>
-          <SelectBoxStyled
-            multiple
-            value={selectedGenres}
-            startAdornment={
-              <InputAdornment className={'select-adornment'} position="start">
-                Žanr
-              </InputAdornment>
-            }
-            onChange={handleGenreChange}
-            renderValue={(selected) => (
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                {selected.map((value) => (
-                  <Chip key={value} label={(genresRQ.data || []).find((g) => g.systemName === value)?.localizedName} />
-                ))}
-              </Box>
-            )}
-          >
-            {(genresRQ.data || []).map((genre, i) => {
-              return (
-                <MenuItem key={i} value={genre.systemName}>
-                  {genre.localizedName}
-                </MenuItem>
-              );
-            })}
-          </SelectBoxStyled>
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <SelectBoxStyled
-            multiple
-            value={selectedCountries}
-            startAdornment={
-              <InputAdornment className={'select-adornment'} position="start">
-                Država porekla
-              </InputAdornment>
-            }
-            onChange={handleCountryChange}
-            renderValue={(selected) => (
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                {selected.map((value) => (
-                  <Chip key={value} label={(countriesRQ.data || []).find((c) => c.code === value)?.name} />
-                ))}
-              </Box>
-            )}
-          >
-            {(countriesRQ.data || []).map((country, i) => {
-              return (
-                <MenuItem key={i} value={country.code}>
-                  {country.name}
-                </MenuItem>
-              );
-            })}
-          </SelectBoxStyled>
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <Autocomplete<Person, true>
-            id="choose-actors-filter"
-            multiple
-            filterOptions={(x) => x}
-            filterSelectedOptions
-            options={actorsAutocompleteOptions}
-            autoComplete
-            includeInputInList
-            loading={actorsRQ.isLoading}
-            PopperComponent={StyledPopper}
-            renderInput={(params) => {
-              params.InputProps.startAdornment = (
-                <>
-                  <InputAdornment className={'select-adornment'} position="start">
-                    Glumci
-                  </InputAdornment>
-                  <React.Fragment>{params.InputProps.startAdornment}</React.Fragment>
-                </>
-              );
-              return <TextFieldStyled {...params} fullWidth />;
-            }}
-            noOptionsText="Nije nadjeno"
-            onInputChange={(event, newInputValue) => {
-              setActorsAutocompleteInputValue(newInputValue);
-            }}
-            onChange={(event: React.SyntheticEvent, newValue: Person[]) => {
-              setActorsAutocompleteValue(newValue);
-            }}
-            value={actorsAutocompleteValue}
-            getOptionLabel={(actor) => actor.name}
-            isOptionEqualToValue={(option, value) => {
-              return option.id === value.id;
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <Autocomplete<Person>
-            id="choose-director-filter"
-            filterOptions={(x) => x}
-            filterSelectedOptions
-            options={directorAutocompleteOptions}
-            autoComplete
-            includeInputInList
-            loading={directorsRQ.isLoading}
-            PopperComponent={StyledPopper}
-            renderInput={(params) => {
-              params.InputProps.startAdornment = <InputAdornment position="start">Režiser</InputAdornment>;
-              return <TextFieldStyled {...params} fullWidth />;
-            }}
-            noOptionsText="Nije nadjeno"
-            onInputChange={(event, newInputValue) => {
-              setDirectorAutocompleteInputValue(newInputValue);
-            }}
-            onChange={(event: React.SyntheticEvent, newValue: Person | null) => {
-              setDirectorAutocompleteValue(newValue);
-            }}
-            value={directorAutocompleteValue}
-            getOptionLabel={(director) => director.name}
-            isOptionEqualToValue={(option, value) => {
-              return option.id === value.id;
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{mt: 1}}>
-          <SelectBoxStyled
-            multiple
-            value={movieLengths}
-            startAdornment={
-              <InputAdornment className={'select-adornment'} position="start">
-                Trajanje filma
-              </InputAdornment>
-            }
-            onChange={handleMovieLengthsChange}
-            renderValue={(selected) => (
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                {selected.map((value) => (
-                  <Chip key={value} label={movieLengthsMap[value]} />
-                ))}
-              </Box>
-            )}
-          >
-            {(Object.keys(movieLengthsMap) as MovieLengthCategory[]).map((movieLengthCategory, i) => {
-              return (
-                <MenuItem key={i} value={movieLengthCategory}>
-                  {movieLengthsMap[movieLengthCategory]}
-                </MenuItem>
-              );
-            })}
-          </SelectBoxStyled>
-        </FormControl>
-      </Box>
-      <Box sx={{mt: 5}} textAlign="center">
-        <ButtonStyled variant="contained" onClick={buttonClickHandler}>
-          {'Primeni filtere'}
-        </ButtonStyled>
-      </Box>
-    </Box>
+    <ContentWrapper padding>
+      <>
+        <PageHeader headerText={'Filteri'} />
+        <Box sx={{mt: 5}}>
+          <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
+          <FormControl fullWidth sx={{mt: 2}}>
+            <SelectBoxStyled
+              value={selectedCity}
+              startAdornment={
+                <InputAdornment className={'select-adornment'} position="start">
+                  Grad
+                </InputAdornment>
+              }
+              onChange={handleCityChange}
+            >
+              {(citiesRQ.data || []).map((city, i) => {
+                return (
+                  <MenuItem key={i} value={city.id}>
+                    {city.name}
+                  </MenuItem>
+                );
+              })}
+            </SelectBoxStyled>
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <SelectBoxStyled
+              multiple
+              value={selectedCinemas}
+              startAdornment={
+                <InputAdornment className={'select-adornment'} position="start">
+                  Bioskopi
+                </InputAdornment>
+              }
+              onChange={handleCinemasChange}
+              renderValue={(selected) => (
+                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
+                  ))}
+                </Box>
+              )}
+            >
+              {(cinemasRQ.data || []).map((cinema, i) => {
+                return (
+                  <MenuItem key={i} value={cinema.id}>
+                    {cinema.name}
+                  </MenuItem>
+                );
+              })}
+            </SelectBoxStyled>
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <DatePicker
+              format={Utils.luxonDateFormat}
+              value={selectedDateFrom}
+              slots={{
+                toolbar: (params) => {
+                  return <DatePickerToolbar {...params} hidden={true} />;
+                },
+                textField: (params) => {
+                  if (params.InputProps) {
+                    params.InputProps.startAdornment = <InputAdornment position="start">Datum Od</InputAdornment>;
+                  }
+                  return <TextFieldStyled {...params} fullWidth placeholder={''} />;
+                },
+              }}
+              onAccept={(value) => {
+                setSelectedDateFrom(value as DateTime);
+              }}
+            />
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <DatePicker
+              format={Utils.luxonDateFormat}
+              value={selectedDateTo}
+              slots={{
+                toolbar: (params) => {
+                  return <DatePickerToolbar {...params} hidden={true} />;
+                },
+                textField: (params) => {
+                  if (params.InputProps) {
+                    params.InputProps.startAdornment = <InputAdornment position="start">Datum Do</InputAdornment>;
+                  }
+                  return <TextFieldStyled {...params} fullWidth placeholder={''} />;
+                },
+              }}
+              onAccept={(value) => {
+                setSelectedDateTo(value as DateTime);
+              }}
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{mt: 5}}>
+          <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
+          <FormControl fullWidth sx={{mt: 2}}>
+            <SelectBoxStyled
+              multiple
+              value={selectedGenres}
+              startAdornment={
+                <InputAdornment className={'select-adornment'} position="start">
+                  Žanr
+                </InputAdornment>
+              }
+              onChange={handleGenreChange}
+              renderValue={(selected) => (
+                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                  {selected.map((value) => (
+                    <Chip
+                      key={value}
+                      label={(genresRQ.data || []).find((g) => g.systemName === value)?.localizedName}
+                    />
+                  ))}
+                </Box>
+              )}
+            >
+              {(genresRQ.data || []).map((genre, i) => {
+                return (
+                  <MenuItem key={i} value={genre.systemName}>
+                    {genre.localizedName}
+                  </MenuItem>
+                );
+              })}
+            </SelectBoxStyled>
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <SelectBoxStyled
+              multiple
+              value={selectedCountries}
+              startAdornment={
+                <InputAdornment className={'select-adornment'} position="start">
+                  Država porekla
+                </InputAdornment>
+              }
+              onChange={handleCountryChange}
+              renderValue={(selected) => (
+                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={(countriesRQ.data || []).find((c) => c.code === value)?.name} />
+                  ))}
+                </Box>
+              )}
+            >
+              {(countriesRQ.data || []).map((country, i) => {
+                return (
+                  <MenuItem key={i} value={country.code}>
+                    {country.name}
+                  </MenuItem>
+                );
+              })}
+            </SelectBoxStyled>
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <Autocomplete<Person, true>
+              id="choose-actors-filter"
+              multiple
+              filterOptions={(x) => x}
+              filterSelectedOptions
+              options={actorsAutocompleteOptions}
+              autoComplete
+              includeInputInList
+              loading={actorsRQ.isLoading}
+              PopperComponent={StyledPopper}
+              renderInput={(params) => {
+                params.InputProps.startAdornment = (
+                  <>
+                    <InputAdornment className={'select-adornment'} position="start">
+                      Glumci
+                    </InputAdornment>
+                    <React.Fragment>{params.InputProps.startAdornment}</React.Fragment>
+                  </>
+                );
+                return <TextFieldStyled {...params} fullWidth />;
+              }}
+              noOptionsText="Nije nadjeno"
+              onInputChange={(event, newInputValue) => {
+                setActorsAutocompleteInputValue(newInputValue);
+              }}
+              onChange={(event: React.SyntheticEvent, newValue: Person[]) => {
+                setActorsAutocompleteValue(newValue);
+              }}
+              value={actorsAutocompleteValue}
+              getOptionLabel={(actor) => actor.name}
+              isOptionEqualToValue={(option, value) => {
+                return option.id === value.id;
+              }}
+            />
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <Autocomplete<Person>
+              id="choose-director-filter"
+              filterOptions={(x) => x}
+              filterSelectedOptions
+              options={directorAutocompleteOptions}
+              autoComplete
+              includeInputInList
+              loading={directorsRQ.isLoading}
+              PopperComponent={StyledPopper}
+              renderInput={(params) => {
+                params.InputProps.startAdornment = <InputAdornment position="start">Režiser</InputAdornment>;
+                return <TextFieldStyled {...params} fullWidth />;
+              }}
+              noOptionsText="Nije nadjeno"
+              onInputChange={(event, newInputValue) => {
+                setDirectorAutocompleteInputValue(newInputValue);
+              }}
+              onChange={(event: React.SyntheticEvent, newValue: Person | null) => {
+                setDirectorAutocompleteValue(newValue);
+              }}
+              value={directorAutocompleteValue}
+              getOptionLabel={(director) => director.name}
+              isOptionEqualToValue={(option, value) => {
+                return option.id === value.id;
+              }}
+            />
+          </FormControl>
+          <FormControl fullWidth sx={{mt: 1}}>
+            <SelectBoxStyled
+              multiple
+              value={movieLengths}
+              startAdornment={
+                <InputAdornment className={'select-adornment'} position="start">
+                  Trajanje filma
+                </InputAdornment>
+              }
+              onChange={handleMovieLengthsChange}
+              renderValue={(selected) => (
+                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={movieLengthsMap[value]} />
+                  ))}
+                </Box>
+              )}
+            >
+              {(Object.keys(movieLengthsMap) as MovieLengthCategory[]).map((movieLengthCategory, i) => {
+                return (
+                  <MenuItem key={i} value={movieLengthCategory}>
+                    {movieLengthsMap[movieLengthCategory]}
+                  </MenuItem>
+                );
+              })}
+            </SelectBoxStyled>
+          </FormControl>
+        </Box>
+        <Box sx={{mt: 5}} textAlign="center">
+          <ButtonStyled variant="contained" onClick={buttonClickHandler}>
+            {'Primeni filtere'}
+          </ButtonStyled>
+        </Box>
+      </>
+    </ContentWrapper>
   );
 }
 

@@ -2,7 +2,7 @@ import {Link, useLocation} from 'react-router-dom';
 import {BottomNavigation, BottomNavigationAction} from '@mui/material';
 import {
   HomeOutlined,
-  TheatersOutlined,
+  // TheatersOutlined,
   Tune,
   VideoCameraBackOutlined,
   LocalActivityOutlined,
@@ -13,6 +13,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import darkTheme from '../utility/themes/darkTheme';
 import lightTheme from '../utility/themes/lightTheme';
 import useTheme from '../../../store/ThemeStore';
+import Utils from '../../../helpers/Utils';
 
 function FooterMenuWrapper() {
   const navActionStyles: SxProps = (isSelected = false) => {
@@ -20,6 +21,10 @@ function FooterMenuWrapper() {
       color: isSelected ? 'primary.main' : 'text.primary',
       fontWeight: '600',
       minWidth: '60px',
+      textAlign: 'center',
+      '&.Mui-disabled': {
+        color: 'gray',
+      },
       '::before': isSelected
         ? {
             content: '""',
@@ -69,26 +74,28 @@ function FooterMenuWrapper() {
           label="Početna"
           icon={<HomeOutlined />}
         />
-        <BottomNavigationAction
-          sx={navActionStyles(location.pathname.startsWith('/movie'))}
-          component={Link}
-          to={namedRoutes.moviesListing}
-          label="Filmovi"
-          icon={<TheatersOutlined />}
-        />
+        {/*<BottomNavigationAction*/}
+        {/*  sx={navActionStyles(location.pathname.startsWith('/movie'))}*/}
+        {/*  component={Link}*/}
+        {/*  to={namedRoutes.moviesListing}*/}
+        {/*  label="Filmovi"*/}
+        {/*  icon={<TheatersOutlined />}*/}
+        {/*/>*/}
         <BottomNavigationAction
           sx={navActionStyles(location.pathname.startsWith('/reservations'))}
           component={Link}
           to={namedRoutes.reservations}
-          label="Rezervacije"
+          label={Utils.isBetaMode() ? 'Rezervacije' : 'Rezervacije (uskoro)'}
           icon={<LocalActivityOutlined />}
+          disabled={!Utils.isBetaMode()}
         />
         <BottomNavigationAction
           sx={navActionStyles(location.pathname.startsWith('/cinema'))}
           component={Link}
           to={namedRoutes.cinemasListing}
-          label="Bioskopi"
+          label={Utils.isBetaMode() ? 'Bioskopi' : 'Bioskopi (uskoro)'}
           icon={<VideoCameraBackOutlined />}
+          disabled={!Utils.isBetaMode()}
         />
         <BottomNavigationAction
           sx={{

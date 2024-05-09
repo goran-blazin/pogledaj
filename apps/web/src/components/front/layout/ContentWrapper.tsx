@@ -1,4 +1,5 @@
 import {ReactElement} from 'react';
+import {Box} from '@mui/material';
 
 type ContentWrapperTypes = {
   children: ReactElement;
@@ -6,7 +7,7 @@ type ContentWrapperTypes = {
 };
 
 function ContentWrapper({children, padding}: ContentWrapperTypes) {
-  return <div className={`content-wrapper${padding ? ' inner-padding' : ''}`}>{children}</div>;
+  return <Box className={`content-wrapper${padding ? ' inner-padding' : ''}`}>{children}</Box>;
 }
 
 export default ContentWrapper;

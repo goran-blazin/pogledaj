@@ -7,6 +7,7 @@ import PageSubHeader from '../utility/PageSubHeader';
 import MovieBigCard from '../utility/cards/MovieBigCard';
 import PageHeader from '../utility/PageHeader';
 import MoviesSearchTextbox from './MoviesSearchTextbox';
+import ContentWrapper from '../layout/ContentWrapper';
 
 function MoviesSearchWrapper() {
   const moviesFilters = useMoviesFiltersStore().moviesFilters;
@@ -15,26 +16,28 @@ function MoviesSearchWrapper() {
   });
 
   return (
-    <Box>
-      <PageHeader headerText={'Filmovi'} />
-      <Box mb={'20px'}>
-        <MoviesSearchTextbox />
-      </Box>
-      <Box mb={'20px'}>
-        <PageSubHeader headerText={'Rezultat pretrage'} />
-        {moviesSearch.isLoading ? (
-          <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
-        ) : (moviesSearch.data || []).length > 0 ? (
-          (moviesSearch.data || []).map((movie, i) => (
-            <Box sx={{mt: 1}} key={i}>
-              <MovieBigCard movie={movie} />
-            </Box>
-          ))
-        ) : (
-          <PageSubHeader headerText={'Filmovi nisu pronađeni'} />
-        )}
-      </Box>
-    </Box>
+    <ContentWrapper padding>
+      <>
+        <PageHeader headerText={'Filmovi'} />
+        <Box mb={'20px'}>
+          <MoviesSearchTextbox />
+        </Box>
+        <Box mb={'20px'}>
+          <PageSubHeader headerText={'Rezultat pretrage'} />
+          {moviesSearch.isLoading ? (
+            <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+          ) : (moviesSearch.data || []).length > 0 ? (
+            (moviesSearch.data || []).map((movie, i) => (
+              <Box sx={{mt: 1}} key={i}>
+                <MovieBigCard movie={movie} />
+              </Box>
+            ))
+          ) : (
+            <PageSubHeader headerText={'Filmovi nisu pronađeni'} />
+          )}
+        </Box>
+      </>
+    </ContentWrapper>
   );
 }
 

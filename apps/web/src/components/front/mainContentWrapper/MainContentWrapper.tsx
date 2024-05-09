@@ -1,5 +1,5 @@
 import {Route, Routes} from 'react-router-dom';
-import Homepage from '../homepage/Homepage';
+// import Homepage from '../homepage/Homepage';
 import CinemasListingWrapper from '../cinemasListing/CinemasListingWrapper';
 import CinemaSingleWrapper from '../cinemaSingle/CinemaSingleWrapper';
 import MoviesListingWrapper from '../moviesListing/MoviesListingWrapper';
@@ -16,7 +16,7 @@ import MoviesSearchWrapper from '../moviesListing/MoviesSearchWrapper';
 function MainContentWrapper() {
   const routes = (
     <Routes>
-      <Route path={namedRoutes.home} element={<Homepage />} />
+      <Route path={namedRoutes.home} element={<MoviesListingWrapper />} />
       <Route path={namedRoutes.settings} element={<SettingsWrapper />} />
       <Route path={namedRoutes.cinemasListing} element={<CinemasListingWrapper />} />
       <Route path={namedRoutes.cinemaSingle} element={<CinemaSingleWrapper />} />
