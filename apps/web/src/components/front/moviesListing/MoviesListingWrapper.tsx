@@ -103,56 +103,70 @@ function MoviesListingWrapper() {
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <React.Fragment>
-          <Box mb={'20px'}>
-            <ContentWrapper padding>
-              <PageSubHeader headerText={'Popularno'} />
-            </ContentWrapper>
-            <HorizontalSmallCardsCarousel>
-              {popularMoviesList.map((movie, i) => (
-                <MovieSmallCard movie={movie} key={i} />
-              ))}
-            </HorizontalSmallCardsCarousel>
-          </Box>
-          <Box mb={'20px'}>
-            <ContentWrapper padding>
-              <PageSubHeader headerText={'Poslednja prilika'} />
-            </ContentWrapper>
-            <HorizontalSmallCardsCarousel>
-              {lastChanceMoviesList.map((movie, i) => (
-                <MovieSmallCard movie={movie} key={i} />
-              ))}
-            </HorizontalSmallCardsCarousel>
-          </Box>
-          <Box mb={'20px'}>
-            <ContentWrapper padding>
-              <PageSubHeader headerText={'Najnovije'} />
-            </ContentWrapper>
-            <HorizontalSmallCardsCarousel>
-              {newestMoviesList.map((movie, i) => (
-                <MovieSmallCard movie={movie} key={i} />
-              ))}
-            </HorizontalSmallCardsCarousel>
-          </Box>
-          <Box mb={'20px'}>
-            <ContentWrapper padding>
-              <PageSubHeader headerText={'Za decu'} />
-            </ContentWrapper>
-            <HorizontalSmallCardsCarousel>
-              {forChildrenMoviesList.map((movie, i) => (
-                <MovieSmallCard movie={movie} key={i} />
-              ))}
-            </HorizontalSmallCardsCarousel>
-          </Box>
-          <Box mb={'20px'}>
-            <ContentWrapper padding>
-              <PageSubHeader headerText={'Uskoro'} />
-            </ContentWrapper>
-            <HorizontalSmallCardsCarousel>
-              {soonMoviesList.map((movie, i) => (
-                <MovieSmallCard movie={movie} key={i} />
-              ))}
-            </HorizontalSmallCardsCarousel>
-          </Box>
+          {popularMoviesList.length > 0 && (
+            <Box mb={'20px'}>
+              <ContentWrapper padding>
+                <PageSubHeader headerText={'Popularno'} />
+              </ContentWrapper>
+              <HorizontalSmallCardsCarousel>
+                {popularMoviesList.map((movie, i) => (
+                  <MovieSmallCard movie={movie} key={i} />
+                ))}
+              </HorizontalSmallCardsCarousel>
+            </Box>
+          )}
+
+          {lastChanceMoviesList.length > 0 && (
+            <Box mb={'20px'}>
+              <ContentWrapper padding>
+                <PageSubHeader headerText={'Poslednja prilika'} />
+              </ContentWrapper>
+              <HorizontalSmallCardsCarousel>
+                {lastChanceMoviesList.map((movie, i) => (
+                  <MovieSmallCard movie={movie} key={i} />
+                ))}
+              </HorizontalSmallCardsCarousel>
+            </Box>
+          )}
+
+          {newestMoviesList.length > 0 && (
+            <Box mb={'20px'}>
+              <ContentWrapper padding>
+                <PageSubHeader headerText={'Najnovije'} />
+              </ContentWrapper>
+              <HorizontalSmallCardsCarousel>
+                {newestMoviesList.map((movie, i) => (
+                  <MovieSmallCard movie={movie} key={i} />
+                ))}
+              </HorizontalSmallCardsCarousel>
+            </Box>
+          )}
+
+          {forChildrenMoviesList.length > 0 && (
+            <Box mb={'20px'}>
+              <ContentWrapper padding>
+                <PageSubHeader headerText={'Za decu'} />
+              </ContentWrapper>
+              <HorizontalSmallCardsCarousel>
+                {forChildrenMoviesList.map((movie, i) => (
+                  <MovieSmallCard movie={movie} key={i} />
+                ))}
+              </HorizontalSmallCardsCarousel>
+            </Box>
+          )}
+
+          {soonMoviesList.length > 0 && (
+            <Box mb={'20px'}>
+              <ContentWrapper padding>
+                <PageSubHeader headerText={'Uskoro'} />
+              </ContentWrapper>
+              <HorizontalSmallCardsCarousel>
+                {soonMoviesList.map((movie, i) => (
+                  <MovieSmallCard movie={movie} key={i} />
+                ))}
+              </HorizontalSmallCardsCarousel>
+            </Box>
+          )}
         </React.Fragment>
       )}
     </Box>

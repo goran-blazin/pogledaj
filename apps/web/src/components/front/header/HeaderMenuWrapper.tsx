@@ -5,6 +5,7 @@ import {namedRoutes} from '../../../routes';
 import PogledajSvgIcon from '../utility/svgCustomIcons/PogledajSvgIcon';
 import {SxProps} from '@mui/system';
 import {ReactElement} from 'react';
+import Utils from '../../../helpers/Utils';
 
 function HeaderMenuButton({
   children,
@@ -80,10 +81,10 @@ function HeaderMenuWrapper() {
           </Typography>
         </Box>
         <Box display="flex" flex={'1 auto'} justifyContent={'flex-end'}>
-          <HeaderMenuButton>
+          <HeaderMenuButton visible={Utils.isBetaMode()}>
             <NotificationsNoneRounded fontSize="small" sx={helperIconStyle} />
           </HeaderMenuButton>
-          <HeaderMenuButton>
+          <HeaderMenuButton visible={Utils.isBetaMode()}>
             <AccountCircle fontSize="small" sx={helperIconStyle} />
           </HeaderMenuButton>
         </Box>
