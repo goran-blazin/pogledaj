@@ -25,6 +25,9 @@ declare module '@mui/material/styles' {
         fontSize: string;
         color: string;
       };
+      movieProjectionsSubHeader: {
+        color: string;
+      };
     };
     customButtons: {
       buttonWithIcon: {
@@ -96,6 +99,9 @@ declare module '@mui/material/styles' {
       };
       link?: {
         fontSize: React.CSSProperties['fontSize'];
+        color: React.CSSProperties['color'];
+      };
+      movieProjectionsSubHeader?: {
         color: React.CSSProperties['color'];
       };
     };

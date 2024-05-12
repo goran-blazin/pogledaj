@@ -1,6 +1,7 @@
 import {Stack, styled, Typography} from '@mui/material';
 import React from 'react';
 import {SvgIconComponent} from '@mui/icons-material';
+import {SxProps} from '@mui/system';
 
 const StyledTypography = styled(Typography)((theme) => ({
   color: theme.theme.customTypography.mainTitle.color,
@@ -9,11 +10,22 @@ const StyledTypography = styled(Typography)((theme) => ({
   lineHeight: '22px',
 }));
 
-function PageSubHeader({headerText = 'Header', Icon}: {headerText: string; Icon?: SvgIconComponent; mb?: number}) {
+function PageSubHeader({
+  headerText = 'Header',
+  Icon,
+  sx,
+}: {
+  headerText: string;
+  Icon?: SvgIconComponent;
+  mb?: number;
+  sx?: SxProps;
+}) {
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {Icon && <Icon color="primary" />}
-      <StyledTypography variant="subtitle1">{headerText}</StyledTypography>
+      <StyledTypography sx={sx} variant="subtitle1">
+        {headerText}
+      </StyledTypography>
     </Stack>
   );
 }

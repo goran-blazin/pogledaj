@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useEffect, useMemo, useState} from 'react';
 import {ProjectionsDates, ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
@@ -20,6 +20,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {LocalActivityOutlined} from '@mui/icons-material';
 import _ from 'lodash';
 import Utils from '../../../helpers/Utils';
+import SmallButton from '../utility/buttons/SmallButton';
+import {namedRoutes} from '../../../routes';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -59,6 +61,20 @@ const MovieTitleHolder = styled('div')({
   },
 });
 
+const ProjectionsRow = styled(Box)({
+  fontSize: '12px',
+  fontWeight: '600',
+  lineHeight: '16px',
+});
+
+const ProjectionsSubHeader = styled(Typography)(({theme}) => ({
+  color: theme.customTypography.movieProjectionsSubHeader.color,
+  fontStyle: 'normal',
+  fontWeight: 600,
+  fontSize: '16px',
+  lineHeight: '22px',
+}));
+
 // TODO maybe move this in separate component, might be used in other components
 const EventInformation = styled('ul')(({theme}) => ({
   listStyle: 'none',
@@ -93,14 +109,7 @@ const EventInformation = styled('ul')(({theme}) => ({
 }));
 
 function MovieSingleWrapper() {
-  // const navigate = useNavigate();
-  // navigate(
-  //   namedRoutes.movieProjectionSingle.replace(
-  //     ':movieProjectionId',
-  //     selectedMovieProjection,
-  //   ),
-  // );
-  //
+  const navigate = useNavigate();
   const {movieId} = useParams();
   // const isReadOnly = true;
 
@@ -248,6 +257,7 @@ function MovieSingleWrapper() {
                             sx={{
                               display: 'flex',
                               color: (theme) => theme.palette.primary.main,
+                              mr: 0.5,
                             }}
                           />
                         </span>
@@ -302,14 +312,18 @@ function MovieSingleWrapper() {
               <ContentWrapper padding>
                 {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
                   <Box>
-                    {Utils.isBetaMode() ? (
-                      <PageSubHeader headerText={'Rezervacija karata:'} Icon={LocalActivityOutlined} />
-                    ) : (
-                      <PageSubHeader headerText={'Datumi projekcija:'} />
-                    )}
-
+                    <PageSubHeader
+                      headerText={Utils.isBetaMode() ? 'Rezervacija karata:' : 'Datumi projekcija:'}
+                      Icon={LocalActivityOutlined}
+                      sx={{
+                        fontWeight: 700,
+                        fontStyle: 'normal',
+                        fontSize: '22px',
+                        lineHeight: '30px',
+                      }}
+                    />
                     <FormControl fullWidth sx={{mt: 2}}>
-                      <Typography>Izaberi bioskop:</Typography>
+                      <ProjectionsSubHeader>Izaberi bioskop:</ProjectionsSubHeader>
                       <SelectBoxStyled
                         sx={{mt: 1}}
                         value={selectedCinema}
@@ -332,8 +346,15 @@ function MovieSingleWrapper() {
                     <React.Fragment>
                       {selectedCinema && (
                         <Box sx={{mt: 2}}>
-                          <Typography>Izaberi datum:</Typography>
-                          <Stack sx={{mt: 1}} direction={'row'} spacing={2}>
+                          <ProjectionsSubHeader>Izaberi datum:</ProjectionsSubHeader>
+                          <Stack
+                            sx={{
+                              mt: 1,
+                              overflowX: 'auto',
+                            }}
+                            direction={'row'}
+                            spacing={2}
+                          >
                             {sortDates(projectionsGroupedPerCinema[selectedCinema].dates).map((date, index) => (
                               <Button
                                 key={index}
@@ -401,6 +422,85 @@ function MovieSingleWrapper() {
                               </Button>
                             ))}
                           </Stack>
+                        </Box>
+                      )}
+                    </React.Fragment>
+                    <React.Fragment>
+                      {selectedDate && projectionsGroupedPerCinema[selectedCinema].dates[selectedDate] && (
+                        <Box sx={{mt: 2}}>
+                          <ProjectionsSubHeader
+                            sx={(theme) => ({
+                              borderBottomWidth: '1px',
+                              borderBottomStyle: 'solid',
+                              borderBottomColor: theme.colorPalette.lightGrey.color,
+                              marginBottom: '16px',
+                              paddingBottom: '16px',
+                            })}
+                          >
+                            Izaberi projekciju:
+                          </ProjectionsSubHeader>
+                          {projectionsGroupedPerCinema[selectedCinema].dates[selectedDate].movieProjections.length >
+                          0 ? (
+                            <>
+                              {projectionsGroupedPerCinema[selectedCinema].dates[selectedDate].movieProjections.map(
+                                (mp, i) => {
+                                  return (
+                                    <Stack
+                                      direction="row"
+                                      justifyContent="space-between"
+                                      alignItems="center"
+                                      key={mp.id + i}
+                                      sx={(theme) => ({
+                                        borderBottomWidth: '1px',
+                                        borderBottomStyle: 'solid',
+                                        borderBottomColor: theme.colorPalette.lightGrey.color,
+                                        marginBottom: '16px',
+                                        paddingBottom: '16px',
+                                      })}
+                                    >
+                                      <ProjectionsRow>
+                                        <Box component={'span'} sx={{color: 'primary.main'}}>
+                                          Vreme:
+                                        </Box>
+                                        &nbsp;
+                                        {DateTime.fromISO(mp.projectionDateTime).toFormat('HH:mm')}
+                                      </ProjectionsRow>
+                                      <ProjectionsRow>
+                                        <Box component={'span'} sx={{color: 'primary.main'}}>
+                                          Sala:
+                                        </Box>
+                                        &nbsp;
+                                        {mp.cinemaTheater.name}
+                                      </ProjectionsRow>
+                                      <ProjectionsRow>
+                                        <Box component={'span'} sx={{color: 'primary.main'}}>
+                                          Jezik:
+                                        </Box>
+                                        &nbsp;
+                                        {mp.dubbedLanguage ? 'SINH' : 'ORIG'}
+                                      </ProjectionsRow>
+                                      {Utils.isBetaMode() && (
+                                        <ProjectionsRow>
+                                          <SmallButton
+                                            variant="contained"
+                                            onClick={() => {
+                                              navigate(
+                                                namedRoutes.movieProjectionSingle.replace(':movieProjectionId', mp.id),
+                                              );
+                                            }}
+                                          >
+                                            Rezerviši
+                                          </SmallButton>
+                                        </ProjectionsRow>
+                                      )}
+                                    </Stack>
+                                  );
+                                },
+                              )}
+                            </>
+                          ) : (
+                            <Typography>Projekcije nisu pronadjene</Typography>
+                          )}
                         </Box>
                       )}
                     </React.Fragment>

@@ -22,6 +22,9 @@ const darkTheme = createTheme({
       fontSize: '14px',
       color: `var(--light-blue)`,
     },
+    movieProjectionsSubHeader: {
+      color: 'var(--light-blue)',
+    },
   },
   customForm: {
     inputField: {

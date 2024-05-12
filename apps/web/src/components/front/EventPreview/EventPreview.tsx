@@ -63,8 +63,21 @@ function EventPreview({children}: {children: ReactElement}) {
   const handleClickFavorites = () => {
     return 'handleClickFavorites';
   };
-  const handleClickShare = () => {
-    return 'handleClickShare';
+  const handleClickShare = async () => {
+    const shareData = {
+      title: 'Podeli film',
+      text: 'Podeli ovaj film sa prijateljima',
+      url: window.location.href,
+    };
+
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    }
   };
 
   return (
