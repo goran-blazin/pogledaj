@@ -95,6 +95,20 @@ const Utils = {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // Distance in km
   },
+
+  wrapSubstringInTag(text: string, substring: string, tag: string = 'span') {
+    const _substring = substring.trim();
+    if (_substring) {
+      // Create a regular expression to find all occurrences of 'substring'
+      // 'g' flag for global search and 'i' for case-insensitive
+      const regex = new RegExp(`(${substring})`, 'gi');
+
+      // Replace each occurrence with the substring wrapped in a <span> tag
+      return text.replace(regex, `<${tag}>$1</${tag}>`);
+    } else {
+      return text;
+    }
+  },
 };
 
 export default Utils;

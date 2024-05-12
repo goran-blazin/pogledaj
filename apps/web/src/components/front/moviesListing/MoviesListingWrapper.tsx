@@ -17,6 +17,8 @@ import {SearchTextFieldStyled} from '../utility/SearchTextField';
 import {namedRoutes} from '../../../routes';
 import FilterLinkButton from '../utility/FilterLinkButton';
 import {useNavigate} from 'react-router-dom';
+import Utils from '../../../helpers/Utils';
+import parse from 'html-react-parser';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -119,7 +121,20 @@ function MoviesListingWrapper() {
               options={moviesSearchRQ.data || []}
               autoComplete
               renderOption={(props, option, state, ownerState) => {
-                return <span {...props}>{ownerState.getOptionLabel(option)}</span>;
+                return (
+                  <Box
+                    component={'li'}
+                    {...props}
+                    sx={(theme) => ({
+                      whiteSpace: 'pre',
+                      '& span': {
+                        color: theme.palette.primary.main,
+                      },
+                    })}
+                  >
+                    {parse(Utils.wrapSubstringInTag(ownerState.getOptionLabel(option), state.inputValue))}
+                  </Box>
+                );
               }}
               getOptionLabel={(movie) =>
                 `${movie.localizedTitle || movie.originalTitle} (${DateTime.fromISO(movie.releaseDate).toFormat(
