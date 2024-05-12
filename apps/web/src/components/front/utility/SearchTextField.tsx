@@ -7,7 +7,7 @@ type SearchTextFieldProps = {
   EndAdornment?: React.ReactNode;
 };
 
-const SearchTextFieldStyled = styled(TextField)({
+export const SearchTextFieldStyled = styled(TextField)({
   '& .MuiOutlinedInput-root': {
     backgroundColor: '#f0f0f0',
     paddingLeft: '20px',

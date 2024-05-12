@@ -25,6 +25,15 @@ const MoviesService = {
     return result.data;
   },
 
+  async findMoviesForSearch(searchText: string): Promise<MovieWithMovieProjection[]> {
+    const result = await PogledajApi().get('movies/search', {
+      params: {
+        searchText,
+      },
+    });
+    return result.data;
+  },
+
   async findAllWithPersons({onlyWithActiveProjections}: {onlyWithActiveProjections?: boolean} = {}): Promise<
     MovieWithPersons[]
   > {

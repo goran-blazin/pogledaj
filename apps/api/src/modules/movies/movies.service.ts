@@ -523,4 +523,39 @@ export class MoviesService implements OnModuleInit {
       },
     });
   }
+
+  searchMoviesByName({take, searchText}: {take: number; searchText: string}) {
+    return this.prismaService.movie.findMany({
+      where: {
+        OR: [
+          {
+            localizedTitle: {
+              contains: searchText,
+              mode: 'insensitive',
+            },
+          },
+          {
+            originalTitle: {
+              contains: searchText,
+              mode: 'insensitive',
+            },
+          },
+        ],
+        movieProjections: {
+          some: {
+            projectionDateTime: excludeArchivedMovieProjectionsQuery(),
+          },
+        },
+      },
+      orderBy: [
+        {
+          localizedTitle: 'asc',
+        },
+        {
+          originalTitle: 'asc',
+        },
+      ],
+      take,
+    });
+  }
 }

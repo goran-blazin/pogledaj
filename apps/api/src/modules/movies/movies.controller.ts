@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   UseGuards,
   Body,
+  ParseIntPipe,
 } from '@nestjs/common';
 import {MoviesService} from './movies.service';
 import {JwtAdminAuthGuard} from '../../guards/jwtAdminAuth.guard';
@@ -45,6 +46,17 @@ export class MoviesController {
   @Get('soon')
   findSoon() {
     return this.moviesService.findSoon();
+  }
+
+  @Get('search')
+  findSearch(
+    @Query('searchText') searchText: string,
+    @Query('take', new DefaultValuePipe(5), ParseIntPipe) take: number,
+  ) {
+    return this.moviesService.searchMoviesByName({
+      searchText,
+      take,
+    });
   }
 
   @Get(':id')
