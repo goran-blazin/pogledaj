@@ -30,7 +30,7 @@ const lightTheme = createTheme({
   customForm: {
     inputField: {
       color: `var(--input-field-grey)`,
-      textColor: `var(--dark-grey)`,
+      textColor: `var(--dark-mode-text)`,
     },
     selectField: {
       color: `var(--input-field-grey)`,
@@ -87,6 +87,12 @@ const lightTheme = createTheme({
     iconColor: `var(--light-grey)`,
     iconHolderBorderColor: `var(--input-field-grey-light)`,
     iconHolderBackgroundColor: `var(--input-field-grey-light)`,
+  },
+  footerTheme: {
+    backgroundColor: `var(--input-field-grey-light)`,
+    borderColor: `var(--input-field-grey-light-border)`,
+    color: `var(--dark-grey)`,
+    activeItemColor: `var(--light-blue)`
   },
   palette: {
     background: {

@@ -61,6 +61,7 @@ function FooterMenuWrapper() {
           borderRadius: '32px',
           marginLeft: '12px',
           zIndex: '1000',
+          backgroundColor: (theme) => theme.footerTheme.backgroundColor,
         }}
       >
         <BottomNavigationAction
@@ -68,6 +69,7 @@ function FooterMenuWrapper() {
             ...navActionStyles(location.pathname === namedRoutes.home),
             borderBottomLeftRadius: '32px',
             borderTopLeftRadius: '32px',
+            color: (theme) => location.pathname === namedRoutes.home ? theme.footerTheme.activeItemColor : theme.footerTheme.color,
           }}
           component={Link}
           to={namedRoutes.home}
@@ -102,6 +104,7 @@ function FooterMenuWrapper() {
             ...navActionStyles(location.pathname === namedRoutes.settings),
             borderBottomRightRadius: '32px',
             borderTopRightRadius: '32px',
+            color: (theme) => location.pathname === namedRoutes.settings ? theme.footerTheme.activeItemColor : theme.footerTheme.color,
           }}
           component={Link}
           to={namedRoutes.settings}

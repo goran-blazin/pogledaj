@@ -86,6 +86,12 @@ const darkTheme = createTheme({
     iconHolderBorderColor: `var(--dark-blue-bright)`,
     iconHolderBackgroundColor: `var(--dark-blue)`,
   },
+  footerTheme: {
+    backgroundColor: `var(--dark-blue)`,
+    borderColor: `var(--dark-mode-cathegory-blue)`,
+    color: `var(--dark-mode-text)`,
+    activeItemColor: `var(--light-blue)`
+  },
   palette: {
     background: {
       default: '#FFFFFF',
