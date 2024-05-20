@@ -82,7 +82,7 @@ declare module '@mui/material/styles' {
       color: string;
       activeItemColor: string;
       borderColor: string;
-    }
+    };
   }
 
   interface ThemeOptions {
@@ -164,6 +164,6 @@ declare module '@mui/material/styles' {
       borderColor: React.CSSProperties['borderColor'];
       color: React.CSSProperties['color'];
       activeItemColor: React.CSSProperties['color'];
-    }
+    };
   }
 }

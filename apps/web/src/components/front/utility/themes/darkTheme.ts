@@ -90,7 +90,7 @@ const darkTheme = createTheme({
     backgroundColor: `var(--dark-blue)`,
     borderColor: `var(--dark-mode-cathegory-blue)`,
     color: `var(--dark-mode-text)`,
-    activeItemColor: `var(--light-blue)`
+    activeItemColor: `var(--light-blue)`,
   },
   palette: {
     background: {

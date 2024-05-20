@@ -92,7 +92,7 @@ const lightTheme = createTheme({
     backgroundColor: `var(--input-field-grey-light)`,
     borderColor: `var(--input-field-grey-light-border)`,
     color: `var(--dark-grey)`,
-    activeItemColor: `var(--light-blue)`
+    activeItemColor: `var(--light-blue)`,
   },
   palette: {
     background: {
