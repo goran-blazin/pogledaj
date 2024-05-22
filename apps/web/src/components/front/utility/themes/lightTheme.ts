@@ -94,6 +94,12 @@ const lightTheme = createTheme({
     color: `var(--dark-grey)`,
     activeItemColor: `var(--light-blue)`,
   },
+  headerTheme: {
+    backgroundColor: `var(--input-field-grey-light)`,
+    borderColor: `var(--input-field-grey-light-border)`,
+    color: `var(--dark-grey)`,
+    activeItemColor: `var(--light-blue)`,
+  },
   mainContentWrapperTheme: {
     backgroundColor: `var(--white)`,
     borderColor: `var(--input-field-grey-light-border)`,

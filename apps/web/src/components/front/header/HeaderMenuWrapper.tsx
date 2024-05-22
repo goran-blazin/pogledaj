@@ -54,7 +54,14 @@ function HeaderMenuWrapper() {
   }
 
   return (
-    <AppBar color="secondary" position={'relative'} elevation={0}>
+    <AppBar
+      color="secondary"
+      position={'relative'}
+      elevation={0}
+      sx={{
+        backgroundColor: (theme) => theme.headerTheme.backgroundColor,
+      }}
+    >
       <Toolbar sx={{justifyContent: 'center'}}>
         <Box
           display="flex"

@@ -92,6 +92,12 @@ const darkTheme = createTheme({
     color: `var(--dark-mode-text)`,
     activeItemColor: `var(--light-blue)`,
   },
+  headerTheme: {
+    backgroundColor: `var(--dark-blue)`,
+    borderColor: `var(--dark-mode-cathegory-blue)`,
+    color: `var(--dark-mode-text)`,
+    activeItemColor: `var(--light-blue)`,
+  },
   mainContentWrapperTheme: {
     backgroundColor: `var(--dark-mode-background)`,
     borderColor: `var(--dark-mode-cathegory-blue)`,
