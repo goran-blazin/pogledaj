@@ -7,6 +7,8 @@ import {LocalizationProvider, PickersLocaleText} from '@mui/x-date-pickers';
 // components
 import FooterMenuWrapper from './front/footer/FooterMenuWrapper';
 import HeaderMenuWrapper from './front/header/HeaderMenuWrapper';
+import MainLayout from './front/layout/MainLayout';
+import CenterContent from './front/layout/CenterContent';
 
 // scss
 import '../styles/App.scss';
@@ -63,15 +65,19 @@ function App() {
           <div className="App">
             <CssBaseline />
             <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
-              {comingSoon ? (
-                <ComingSoon />
-              ) : (
-                <React.Fragment>
-                  <HeaderMenuWrapper />
-                  <MainContentWrapper />
-                  <FooterMenuWrapper />
-                </React.Fragment>
-              )}
+              <MainLayout>
+                <CenterContent>
+                  {comingSoon ? (
+                    <ComingSoon />
+                  ) : (
+                    <React.Fragment>
+                      <HeaderMenuWrapper />
+                      <MainContentWrapper />
+                      <FooterMenuWrapper />
+                    </React.Fragment>
+                  )}
+                </CenterContent>
+              </MainLayout>
             </ThemeProvider>
           </div>
         </LocalizationProvider>

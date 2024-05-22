@@ -52,7 +52,8 @@ function FooterMenuWrapper() {
         sx={{
           position: 'fixed',
           bottom: '16px',
-          width: 'calc(100% - 24px);',
+          width: 'calc(1024px - 24px);',
+          // width: 'calc(100% - 24px);', // main-content-wrapper width
           height: '68px',
           margin: '0 auto',
           boxShadow: '0px 3px 16px rgba(0, 0, 0, 0.05), 0px 3px 10px rgba(0, 0, 0, 0.02)',
