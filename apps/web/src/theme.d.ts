@@ -97,6 +97,12 @@ declare module '@mui/material/styles' {
       color: string;
       borderColor: string;
     };
+    cardFilm: {
+      backgroundColor: string;
+      borderImageColor: string;
+      borderImageHole: string;
+      borderImageHoleBg: string;
+    };
   }
 
   interface ThemeOptions {
@@ -192,6 +198,12 @@ declare module '@mui/material/styles' {
     eventInfoSection: {
       color: string;
       borderColor: React.CSSProperties['borderColor'];
+    };
+    cardFilm: {
+      backgroundColor: React.CSSProperties['backgroundColor'];
+      borderImageColor: React.CSSProperties['backgroundColor'];
+      borderImageHole: React.CSSProperties['backgroundColor'];
+      borderImageHoleBg: React.CSSProperties['backgroundColor'];
     };
   }
 }

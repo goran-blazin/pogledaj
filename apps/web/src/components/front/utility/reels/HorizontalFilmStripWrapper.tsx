@@ -12,7 +12,7 @@ function HorizontalFilmStripWrapper({
   return (
     <Box
       sx={{
-        backgroundColor: '#000000',
+        backgroundColor: (theme) => theme.cardFilm.backgroundColor,
         // width: '100vw',
         position: 'relative',
         // left: 'calc(-50vw + 50%)',
@@ -26,8 +26,10 @@ function HorizontalFilmStripWrapper({
         '& div.swiper-wrapper:before, & div.swiper-wrapper:after': {
           content: '""',
           border: 'solid',
-          borderImage: borderImage(modifier),
+          borderImage: (theme) =>
+            borderImage(modifier, theme.cardFilm.borderImageHole, theme.cardFilm.borderImageHoleBg),
           borderWidth: `${26 * modifier}px 0`,
+          borderColor: (theme) => theme.cardFilm.backgroundColor,
         },
       }}
     >

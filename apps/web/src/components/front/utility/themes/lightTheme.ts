@@ -108,6 +108,12 @@ const lightTheme = createTheme({
     color: `var(--dark-grey)`,
     borderColor: `var(--input-field-grey)`,
   },
+  cardFilm: {
+    backgroundColor: '#1C1C1C',
+    borderImageColor: '#1C1C1C',
+    borderImageHole: 'white',
+    borderImageHoleBg: '%231C1C1C',
+  },
   palette: {
     background: {
       default: '#FFFFFF',

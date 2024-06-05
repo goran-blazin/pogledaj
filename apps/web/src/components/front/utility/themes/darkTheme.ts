@@ -106,6 +106,13 @@ const darkTheme = createTheme({
     color: `var(--dark-mode-text)`,
     borderColor: `var(--dark-blue)`,
   },
+  cardFilm: {
+    // use %23 instead of # for svg fill
+    backgroundColor: '#132F57',
+    borderImageColor: '#081A34',
+    borderImageHole: '%23081A34',
+    borderImageHoleBg: `%23132F57`,
+  },
   palette: {
     background: {
       default: '#FFFFFF',
