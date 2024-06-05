@@ -93,6 +93,10 @@ declare module '@mui/material/styles' {
       backgroundColor: string;
       borderColor: string;
     };
+    eventInfoSection: {
+      color: string;
+      borderColor: string;
+    };
   }
 
   interface ThemeOptions {
@@ -183,7 +187,11 @@ declare module '@mui/material/styles' {
     };
     mainContentWrapperTheme: {
       backgroundColor: React.CSSProperties['backgroundColor'];
-      borderColor: React.CSSProperties['backgroundColor'];
+      borderColor: React.CSSProperties['borderColor'];
+    };
+    eventInfoSection: {
+      color: string;
+      borderColor: React.CSSProperties['borderColor'];
     };
   }
 }

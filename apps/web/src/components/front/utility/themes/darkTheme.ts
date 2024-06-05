@@ -102,6 +102,10 @@ const darkTheme = createTheme({
     backgroundColor: `var(--dark-mode-background)`,
     borderColor: `var(--dark-mode-cathegory-blue)`,
   },
+  eventInfoSection: {
+    color: `var(--dark-mode-text)`,
+    borderColor: `var(--dark-blue)`,
+  },
   palette: {
     background: {
       default: '#FFFFFF',

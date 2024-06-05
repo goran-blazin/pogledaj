@@ -104,6 +104,10 @@ const lightTheme = createTheme({
     backgroundColor: `var(--white)`,
     borderColor: `var(--input-field-grey-light-border)`,
   },
+  eventInfoSection: {
+    color: `var(--dark-grey)`,
+    borderColor: `var(--input-field-grey)`,
+  },
   palette: {
     background: {
       default: '#FFFFFF',

@@ -84,12 +84,13 @@ const EventInformation = styled('ul')(({theme}) => ({
   '.event-info-section': {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
-    borderBottomColor: theme.colorPalette.lightGrey.color,
+    borderBottomColor: theme.eventInfoSection.borderColor,
     marginBottom: '16px',
     paddingBottom: '16px',
     '.event-info-subtitle': {
       display: 'block',
       fontWeight: 600,
+      color: theme.eventInfoSection.color,
       '&.inline': {
         display: 'inline',
         marginRight: '5px',
@@ -97,6 +98,7 @@ const EventInformation = styled('ul')(({theme}) => ({
     },
     '.event-section-description': {
       margin: 0,
+      color: theme.eventInfoSection.color,
       '&.inline': {
         display: 'inline',
       },
@@ -104,6 +106,7 @@ const EventInformation = styled('ul')(({theme}) => ({
     '.event-info-section-with-icons': {
       display: 'flex',
       alignItems: 'center',
+      color: theme.eventInfoSection.color,
     },
   },
 }));
