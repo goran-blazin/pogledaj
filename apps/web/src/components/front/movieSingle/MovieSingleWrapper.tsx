@@ -80,7 +80,6 @@ const EventInformation = styled('ul')(({theme}) => ({
   listStyle: 'none',
   padding: 0,
   margin: 0,
-  color: theme.colorPalette.darkGrey.color,
   '.event-info-section': {
     borderBottomWidth: '1px',
     borderBottomStyle: 'solid',
