@@ -7,22 +7,22 @@ type SearchTextFieldProps = {
   EndAdornment?: React.ReactNode;
 };
 
-export const SearchTextFieldStyled = styled(TextField)({
+export const SearchTextFieldStyled = styled(TextField)(({theme}) => ({
   '& .MuiOutlinedInput-root': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.searchTextField.backgroundColor,
     paddingLeft: '20px',
     borderRadius: '20px',
     '& fieldset': {
-      borderColor: '#f0f0f0',
+      borderColor: theme.searchTextField.backgroundColor,
     },
     '& fieldset.MuiOutlinedInput-notchedOutline': {
-      borderColor: '#f0f0f0',
+      borderColor: theme.searchTextField.backgroundColor,
     },
   },
   '& .MuiOutlinedInput-input': {
-    color: '#000000',
+    color: theme.searchTextField.color,
   },
-});
+}));
 
 function SearchTextField({id, placeholder, EndAdornment}: SearchTextFieldProps) {
   return (

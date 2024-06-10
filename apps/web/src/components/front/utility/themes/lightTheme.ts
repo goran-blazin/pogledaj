@@ -114,6 +114,23 @@ const lightTheme = createTheme({
     borderImageHole: 'white',
     borderImageHoleBg: '%231C1C1C',
   },
+  searchTextField: {
+    backgroundColor: `var(--input-field-grey-light)`,
+    color: `var(--dark-grey)`,
+  },
+  components: {
+    MuiAutocomplete: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: `var(--input-field-grey-light)`,
+          color: `var(--dark-grey)`,
+        },
+        option: {
+          color: `var(--dark-grey)`,
+        },
+      },
+    },
+  },
   palette: {
     background: {
       default: '#FFFFFF',

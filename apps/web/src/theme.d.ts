@@ -103,6 +103,10 @@ declare module '@mui/material/styles' {
       borderImageHole: string;
       borderImageHoleBg: string;
     };
+    searchTextField: {
+      backgroundColor: string;
+      color: string;
+    };
   }
 
   interface ThemeOptions {
@@ -204,6 +208,10 @@ declare module '@mui/material/styles' {
       borderImageColor: React.CSSProperties['backgroundColor'];
       borderImageHole: React.CSSProperties['backgroundColor'];
       borderImageHoleBg: React.CSSProperties['backgroundColor'];
+    };
+    searchTextField: {
+      backgroundColor: React.CSSProperties['backgroundColor'];
+      color: React.CSSProperties['color'];
     };
   }
 }

@@ -113,6 +113,23 @@ const darkTheme = createTheme({
     borderImageHole: '%23081A34',
     borderImageHoleBg: `%23132F57`,
   },
+  searchTextField: {
+    backgroundColor: `var(--dark-blue)`,
+    color: `var(--dark-mode-text)`,
+  },
+  components: {
+    MuiAutocomplete: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: `var(--dark-blue)`,
+          color: `var(--dark-mode-text)`,
+        },
+        option: {
+          color: `var(--dark-mode-text)`,
+        },
+      },
+    },
+  },
   palette: {
     background: {
       default: '#FFFFFF',
