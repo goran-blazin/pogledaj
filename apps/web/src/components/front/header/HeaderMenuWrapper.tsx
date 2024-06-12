@@ -1,8 +1,10 @@
-import {AppBar, Box, Button, ButtonProps, Toolbar, Typography} from '@mui/material';
+import {AppBar, Box, Button, ButtonProps, Toolbar} from '@mui/material';
 import {AccountCircle, ArrowBackIos, NotificationsNoneRounded} from '@mui/icons-material';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {namedRoutes} from '../../../routes';
-import PogledajSvgIcon from '../utility/svgCustomIcons/PogledajSvgIcon';
+// import PogledajSvgIcon from '../utility/svgCustomIcons/PogledajSvgIcon';
+import SvgIconComp from '../utility/svgCustomIcons/SvgIconComp';
+import MainLogoIcon from '../utility/svgCustomIcons/main_logo.svg';
 import {SxProps} from '@mui/system';
 import {ReactElement} from 'react';
 import Utils from '../../../helpers/Utils';
@@ -82,10 +84,11 @@ function HeaderMenuWrapper() {
           </HeaderMenuButton>
         </Box>
         <Box display="flex" flex={'1 auto'} justifyContent={'center'} alignItems={'center'} onClick={goToHome}>
-          <PogledajSvgIcon height="28px" color="primary" viewBox="0 0 24 28" />
-          <Typography component="h1" color="primary" fontWeight="600" fontSize="15px" lineHeight="19px" pb="5px">
+          {/* <PogledajSvgIcon height="28px" color="primary" viewBox="0 0 24 28"/> */}
+          {/* <Typography component="h1" color="primary" fontWeight="600" fontSize="15px" lineHeight="19px" pb="5px">
             pogledaj
-          </Typography>
+          </Typography> */}
+          <SvgIconComp src={MainLogoIcon} />
         </Box>
         <Box display="flex" flex={'1 auto'} justifyContent={'flex-end'}>
           <HeaderMenuButton visible={Utils.isBetaMode()}>
