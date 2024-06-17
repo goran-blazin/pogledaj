@@ -11,6 +11,7 @@ export const SearchTextFieldStyled = styled(TextField)(({theme}) => ({
   '& .MuiOutlinedInput-root': {
     backgroundColor: theme.searchTextField.backgroundColor,
     paddingLeft: '20px',
+    paddingRight: '9px !important',
     borderRadius: '20px',
     '& fieldset': {
       borderColor: theme.searchTextField.backgroundColor,

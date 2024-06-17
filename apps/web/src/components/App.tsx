@@ -73,7 +73,7 @@ function App() {
                     <React.Fragment>
                       <HeaderMenuWrapper />
                       <MainContentWrapper />
-                      <FooterMenuWrapper />
+                      {Utils.isBetaMode() && <FooterMenuWrapper />}
                     </React.Fragment>
                   )}
                 </CenterContent>

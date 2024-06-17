@@ -7,12 +7,12 @@ import {DateTime} from 'ts-luxon';
 import ProjectionsGroupedPerDateAndMovie from './ProjectionsGroupedPerDateAndMovie';
 import {Typography} from '@mui/material';
 import {useQuery} from 'react-query';
-import CinemaSinglePreview from '../EventPreview/EventPreview';
 import MainTitle from '../utility/typography/MainTitle';
 import RatingInfo from '../utility/RatingInfo';
 import LinkComponent from '../utility/typography/Link';
 
 import {styled} from '@mui/material';
+import {EventPreviewWithAction} from '../EventPreview/EventPreview';
 
 const CinemaTitleHolder = styled('div')({
   display: 'flex',
@@ -119,10 +119,10 @@ function CinemaSingleWrapper() {
         <div>
           {cinema?.data ? (
             <div>
-              <CinemaSinglePreview>
+              <EventPreviewWithAction>
                 {/* TODO add cinema image */}
                 <img src={'/iron-man.png'} alt={'POSTER IMAGE'} />
-              </CinemaSinglePreview>
+              </EventPreviewWithAction>
               <CinemaTitleHolder>
                 <div className="titleWrap">
                   <MainTitle title={cinema.data.name} />

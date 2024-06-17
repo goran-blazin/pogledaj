@@ -15,16 +15,19 @@ function FilterLinkButton({navigateTo}: {navigateTo: string}) {
     <Button
       href={navigateTo}
       sx={{
-        maxWidth: '32px',
-        maxHeight: '32px',
+        textTransform: 'none',
         minWidth: '32px',
         minHeight: '32px',
         borderRadius: '8px',
+        fontWeight: '700',
+        fontSize: '16px',
+        padding: '3px 6px',
       }}
       onClick={handleClick}
       variant="contained"
     >
       <FilterAltOutlined fontSize="small" />
+      Filtriraj
     </Button>
   );
 }

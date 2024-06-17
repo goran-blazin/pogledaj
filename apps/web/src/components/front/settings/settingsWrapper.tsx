@@ -21,7 +21,7 @@ function settingsWrapper() {
 
   return (
     <ContentWrapper padding>
-      <>
+      <Box mt="35px">
         <PageTitle title="Podešavanja" marginBottom={'22px'} />
         {/*<ButtonWrap>*/}
         {/*  <ButtonStyled onClick={handleLogin}>Uloguj se</ButtonStyled>*/}
@@ -104,7 +104,7 @@ function settingsWrapper() {
             )}
           </React.Fragment>
         )}
-      </>
+      </Box>
     </ContentWrapper>
   );
 }

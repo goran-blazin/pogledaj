@@ -3,7 +3,6 @@ import {useEffect, useMemo, useState} from 'react';
 import {ProjectionsDates, ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
-import MovieSinglePreview from '../EventPreview/EventPreview';
 import {DateTime} from 'ts-luxon';
 import {Box, Button, FormControl, InputAdornment, MenuItem, SelectChangeEvent, Stack, Typography} from '@mui/material';
 import {styled} from '@mui/material';
@@ -22,6 +21,7 @@ import _ from 'lodash';
 import Utils from '../../../helpers/Utils';
 import SmallButton from '../utility/buttons/SmallButton';
 import {namedRoutes} from '../../../routes';
+import {EventPreviewWithAction} from '../EventPreview/EventPreview';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -113,7 +113,6 @@ const EventInformation = styled('ul')(({theme}) => ({
 function MovieSingleWrapper() {
   const navigate = useNavigate();
   const {movieId} = useParams();
-  // const isReadOnly = true;
 
   const [selectedCinema, setSelectedCinema] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -228,7 +227,7 @@ function MovieSingleWrapper() {
         <React.Fragment>
           {movie?.data ? (
             <React.Fragment>
-              <MovieSinglePreview>
+              <EventPreviewWithAction>
                 {trailerUrl ? (
                   <iframe width="420" height="315" src={trailerUrl}></iframe>
                 ) : posterUrl ? (
@@ -236,7 +235,7 @@ function MovieSingleWrapper() {
                 ) : (
                   <div>NO POSTER IMAGE</div>
                 )}
-              </MovieSinglePreview>
+              </EventPreviewWithAction>
               <ContentWrapper padding>
                 <>
                   <MovieTitleHolder>

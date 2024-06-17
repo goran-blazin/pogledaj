@@ -1,7 +1,6 @@
 import MoviesService from '../../../services/MoviesService';
 import {Autocomplete, Box, InputAdornment, Typography} from '@mui/material';
 import React, {useMemo} from 'react';
-import PageHeader from '../utility/PageHeader';
 import HorizontalSmallCardsCarousel from '../utility/reels/HorizontalSmallCardsCarousel';
 import MovieSmallCard from '../utility/cards/MovieSmallCard';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -19,6 +18,8 @@ import FilterLinkButton from '../utility/FilterLinkButton';
 import {useNavigate} from 'react-router-dom';
 import Utils from '../../../helpers/Utils';
 import parse from 'html-react-parser';
+import {EventPreviewWithMargin} from '../EventPreview/EventPreview';
+import _ from 'lodash';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -96,6 +97,10 @@ function MoviesListingWrapper() {
     }
   }, [movies?.data]);
 
+  const movieIndexPoster = useMemo(() => {
+    return _.random(0, popularMoviesList.length - 1);
+  }, [popularMoviesList.length]);
+
   const soonMoviesList = useMemo(() => {
     if (soonMovies?.data) {
       return soonMovies.data
@@ -110,76 +115,78 @@ function MoviesListingWrapper() {
 
   return (
     <Box>
-      <ContentWrapper padding>
-        <>
-          <PageHeader headerText={'Filmovi'} />
-          <Box mb={'20px'}>
-            <Autocomplete<MovieWithMovieProjection>
-              id="movies-search-autocomplete"
-              filterOptions={(x) => x}
-              filterSelectedOptions
-              options={moviesSearchRQ.data || []}
-              autoComplete
-              renderOption={(props, option, state, ownerState) => {
-                return (
-                  <Box
-                    component={'li'}
-                    {...props}
-                    sx={(theme) => ({
-                      whiteSpace: 'pre',
-                      '& span': {
-                        color: theme.palette.primary.main,
-                      },
-                    })}
-                  >
-                    {parse(Utils.wrapSubstringInTag(ownerState.getOptionLabel(option), state.inputValue))}
-                  </Box>
-                );
-              }}
-              getOptionLabel={(movie) =>
-                `${movie.localizedTitle || movie.originalTitle} (${DateTime.fromISO(movie.releaseDate).toFormat(
-                  'yyyy',
-                )})`
-              }
-              includeInputInList
-              loading={moviesSearchRQ.isLoading}
-              PopperComponent={StyledPopper}
-              renderInput={(params) => {
-                params.InputProps.startAdornment = (
-                  <InputAdornment position="start">
-                    <Search color="primary" />
-                  </InputAdornment>
-                );
-                params.InputProps.endAdornment = <FilterLinkButton navigateTo={namedRoutes.moviesFilters} />;
-                return (
-                  <SearchTextFieldStyled
-                    {...params}
-                    variant="outlined"
-                    fullWidth
-                    placeholder={'Pronađi filmski naslov'}
-                  />
-                );
-              }}
-              noOptionsText="Nije nadjeno"
-              onInputChange={(event, newInputValue) => {
-                setMoviesAutocompleteInputValue(newInputValue);
-              }}
-              onChange={(event: React.SyntheticEvent, newValue: MovieWithMovieProjection | null) => {
-                if (newValue) {
-                  navigate(namedRoutes.movieSingle.replace(':movieId', newValue.id));
-                }
-              }}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-            />
-          </Box>
-        </>
-      </ContentWrapper>
       {movies.isLoading ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <React.Fragment>
+          <EventPreviewWithMargin marginBottom={'-120px'}>
+            <img src={popularMoviesList[movieIndexPoster]?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
+          </EventPreviewWithMargin>
+          <Box mb={'120px'}>
+            <ContentWrapper padding>
+              <>
+                <Autocomplete<MovieWithMovieProjection>
+                  id="movies-search-autocomplete"
+                  filterOptions={(x) => x}
+                  filterSelectedOptions
+                  options={moviesSearchRQ.data || []}
+                  autoComplete
+                  renderOption={(props, option, state, ownerState) => {
+                    return (
+                      <Box
+                        component={'li'}
+                        {...props}
+                        sx={(theme) => ({
+                          whiteSpace: 'pre',
+                          '& span': {
+                            color: theme.palette.primary.main,
+                          },
+                        })}
+                      >
+                        {parse(Utils.wrapSubstringInTag(ownerState.getOptionLabel(option), state.inputValue))}
+                      </Box>
+                    );
+                  }}
+                  getOptionLabel={(movie) =>
+                    `${movie.localizedTitle || movie.originalTitle} (${DateTime.fromISO(movie.releaseDate).toFormat(
+                      'yyyy',
+                    )})`
+                  }
+                  includeInputInList
+                  loading={moviesSearchRQ.isLoading}
+                  PopperComponent={StyledPopper}
+                  renderInput={(params) => {
+                    params.InputProps.startAdornment = (
+                      <InputAdornment position="start">
+                        <Search color="primary" />
+                      </InputAdornment>
+                    );
+                    params.InputProps.endAdornment = <FilterLinkButton navigateTo={namedRoutes.moviesFilters} />;
+                    return (
+                      <SearchTextFieldStyled
+                        {...params}
+                        variant="outlined"
+                        fullWidth
+                        placeholder={'Pronađi filmski naslov'}
+                      />
+                    );
+                  }}
+                  noOptionsText="Nije nadjeno"
+                  onInputChange={(event, newInputValue) => {
+                    setMoviesAutocompleteInputValue(newInputValue);
+                  }}
+                  onChange={(event: React.SyntheticEvent, newValue: MovieWithMovieProjection | null) => {
+                    if (newValue) {
+                      navigate(namedRoutes.movieSingle.replace(':movieId', newValue.id));
+                    }
+                  }}
+                  isOptionEqualToValue={(option, value) => {
+                    return option.id === value.id;
+                  }}
+                />
+              </>
+            </ContentWrapper>
+          </Box>
           {popularMoviesList.length > 0 && (
             <Box mb={'20px'}>
               <ContentWrapper padding>

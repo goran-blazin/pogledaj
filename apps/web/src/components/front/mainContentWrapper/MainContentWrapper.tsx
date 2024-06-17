@@ -37,8 +37,6 @@ function MainContentWrapper() {
   return (
     <Box
       sx={{
-        mt: '35px',
-        mb: '85px',
         pb: '50px',
       }}
     >

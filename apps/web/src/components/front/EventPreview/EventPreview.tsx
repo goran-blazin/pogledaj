@@ -15,7 +15,6 @@ const EventPreviewMainWrap = styled(Box)({
   height: '70vh',
   backgroundColor: 'primary.default', // TODO fix this
   position: 'relative',
-  marginBottom: '30px',
   '&::before': {
     content: '""',
     display: 'block',
@@ -59,7 +58,7 @@ function ShareIconStyle(props: SvgIconProps) {
   );
 }
 
-function EventPreview({children}: {children: ReactElement}) {
+export function EventPreviewWithAction({children}: {children: ReactElement}) {
   const handleClickFavorites = () => {
     return 'handleClickFavorites';
   };
@@ -81,7 +80,11 @@ function EventPreview({children}: {children: ReactElement}) {
   };
 
   return (
-    <EventPreviewMainWrap>
+    <EventPreviewMainWrap
+      sx={{
+        marginBottom: '30px',
+      }}
+    >
       {/* image/video */}
       <EventPreviewHolder>{children}</EventPreviewHolder>
       {/* favorite button */}
@@ -108,4 +111,15 @@ function EventPreview({children}: {children: ReactElement}) {
   );
 }
 
-export default EventPreview;
+export function EventPreviewWithMargin({children, marginBottom}: {children: ReactElement; marginBottom: string}) {
+  return (
+    <EventPreviewMainWrap
+      sx={{
+        marginBottom,
+      }}
+    >
+      {/* image/video */}
+      <EventPreviewHolder>{children}</EventPreviewHolder>
+    </EventPreviewMainWrap>
+  );
+}

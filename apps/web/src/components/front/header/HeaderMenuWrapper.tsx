@@ -1,12 +1,11 @@
 import {AppBar, Box, Button, ButtonProps, Toolbar} from '@mui/material';
-import {AccountCircle, ArrowBackIos, NotificationsNoneRounded} from '@mui/icons-material';
+import {AccountCircle, ArrowBackIos, NotificationsNoneRounded, Menu, Clear} from '@mui/icons-material';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {namedRoutes} from '../../../routes';
-// import PogledajSvgIcon from '../utility/svgCustomIcons/PogledajSvgIcon';
 import SvgIconComp from '../utility/svgCustomIcons/SvgIconComp';
 import MainLogoIcon from '../utility/svgCustomIcons/main_logo.svg';
 import {SxProps} from '@mui/system';
-import {ReactElement} from 'react';
+import React, {ReactElement} from 'react';
 import Utils from '../../../helpers/Utils';
 
 function HeaderMenuButton({
@@ -47,14 +46,6 @@ function HeaderMenuWrapper() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  function goToHome() {
-    navigate(namedRoutes.home);
-  }
-
-  function goBack() {
-    navigate(-1);
-  }
-
   return (
     <AppBar
       color="secondary"
@@ -72,9 +63,9 @@ function HeaderMenuWrapper() {
           visibility={location.pathname === namedRoutes.home ? 'hidden' : 'visible'}
         >
           <HeaderMenuButton
-            visible={location.pathname !== namedRoutes.home}
+            visible={location.pathname !== namedRoutes.home && location.pathname !== namedRoutes.settings}
             props={{
-              onClick: goBack,
+              onClick: () => navigate(-1),
             }}
           >
             <ArrowBackIos sx={helperIconStyle} fontSize={'small'} viewBox="-5 0 24 24" />
@@ -82,12 +73,22 @@ function HeaderMenuWrapper() {
           <HeaderMenuButton visible={false}>
             <ArrowBackIos sx={helperIconStyle} fontSize={'small'} />
           </HeaderMenuButton>
+          <HeaderMenuButton visible={false}>
+            <ArrowBackIos sx={helperIconStyle} fontSize={'small'} />
+          </HeaderMenuButton>
         </Box>
-        <Box display="flex" flex={'1 auto'} justifyContent={'center'} alignItems={'center'} onClick={goToHome}>
-          {/* <PogledajSvgIcon height="28px" color="primary" viewBox="0 0 24 28"/> */}
-          {/* <Typography component="h1" color="primary" fontWeight="600" fontSize="15px" lineHeight="19px" pb="5px">
-            pogledaj
-          </Typography> */}
+        <Box
+          component="a"
+          href={namedRoutes.home}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(namedRoutes.home);
+          }}
+          display="flex"
+          flex={'1 auto'}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
           <SvgIconComp src={MainLogoIcon} />
         </Box>
         <Box display="flex" flex={'1 auto'} justifyContent={'flex-end'}>
@@ -96,6 +97,23 @@ function HeaderMenuWrapper() {
           </HeaderMenuButton>
           <HeaderMenuButton visible={Utils.isBetaMode()}>
             <AccountCircle fontSize="small" sx={helperIconStyle} />
+          </HeaderMenuButton>
+          <HeaderMenuButton
+            props={{
+              onClick: () => {
+                if (location.pathname === namedRoutes.settings) {
+                  navigate(-1);
+                } else {
+                  navigate(namedRoutes.settings);
+                }
+              },
+            }}
+          >
+            {location.pathname === namedRoutes.settings ? (
+              <Clear fontSize="small" sx={helperIconStyle} />
+            ) : (
+              <Menu fontSize="small" sx={helperIconStyle} />
+            )}
           </HeaderMenuButton>
         </Box>
       </Toolbar>
