@@ -240,7 +240,7 @@ function MovieSingleWrapper() {
                 <>
                   <MovieTitleHolder>
                     <div className="titleWrap">
-                      <MainTitle title={movie.data.localizedTitle} />
+                      <MainTitle title={movie.data.localizedTitle || Utils.getMovieTitle(movie.data)} />
                     </div>
                     <div className="titleRating">
                       <RatingInfo rating={movie.data.rating} />

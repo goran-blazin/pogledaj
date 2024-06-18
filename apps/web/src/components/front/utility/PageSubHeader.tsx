@@ -14,6 +14,7 @@ function PageSubHeader({
   headerText = 'Header',
   Icon,
   sx,
+  mb = 5,
 }: {
   headerText: string;
   Icon?: SvgIconComponent;
@@ -21,7 +22,7 @@ function PageSubHeader({
   sx?: SxProps;
 }) {
   return (
-    <Stack direction="row" alignItems="center" gap={1}>
+    <Stack direction="row" alignItems="center" gap={1} mb={`${mb}px`}>
       {Icon && <Icon color="primary" />}
       <StyledTypography sx={sx} variant="subtitle1">
         {headerText}

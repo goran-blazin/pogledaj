@@ -126,7 +126,7 @@ function MoviesListingWrapper() {
           <EventPreviewWithMargin marginBottom={'-120px'}>
             <img src={moviePoster?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
           </EventPreviewWithMargin>
-          <Box mb={'120px'}>
+          <Box mb={'85px'}>
             <ContentWrapper padding>
               <>
                 <Autocomplete<MovieWithMovieProjection>
