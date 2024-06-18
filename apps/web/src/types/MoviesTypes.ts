@@ -13,6 +13,7 @@ export type MovieAdditionalData = {
 export type Movie = {
   id: string;
   originalTitle: string;
+  title: string;
   localizedTitle: string;
   plot: string;
   localizedPlot: string;

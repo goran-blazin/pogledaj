@@ -19,6 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import QRCode from 'react-qr-code';
 import {useState} from 'react';
 import React from 'react';
+import Utils from '../../../helpers/Utils';
 
 function CancelReservationDialog({open, handleClose}: {open: boolean; handleClose: (cancel?: boolean) => void}) {
   return (
@@ -144,7 +145,7 @@ function ReservationSingle({reservation}: {reservation: ReservationWithMovieProj
         />
         <Box sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
           <CardContent sx={{flex: '1 0 auto', padding: '0'}}>
-            <Typography sx={typoStyle}>{movie.localizedTitle || movie.originalTitle}</Typography>
+            <Typography sx={typoStyle}>{movie.localizedTitle || Utils.getMovieTitle(movie)}</Typography>
             <Typography sx={typoStyle}>Bioskop: {cinemaTheater.cinema.name}</Typography>
             <Typography sx={typoStyle}>
               Termin: {CustomerHelper.formatDateMovieProjection(reservation.movieProjection.projectionDateTime)}

@@ -27,6 +27,7 @@ function MoviesList() {
   return (
     <List>
       <Datagrid bulkActionButtons={false}>
+        <TextField source="title" label="Naziv" />
         <TextField source="originalTitle" label="Originalni naziv" />
         <TextField source="localizedTitle" label="Prevedeni naziv" />
         <ArrayField source="genres" label={'Zanrovi'}>

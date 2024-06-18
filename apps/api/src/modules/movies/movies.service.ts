@@ -315,6 +315,7 @@ export class MoviesService implements OnModuleInit {
           },
           create: {
             originalTitle: externalMovieData.originalTitle,
+            title: externalMovieData.title,
             plot: externalMovieData.plot,
             genres: {
               connectOrCreate: externalMovieData.genreCodes.map((genreCode) => {
@@ -345,6 +346,7 @@ export class MoviesService implements OnModuleInit {
           },
           update: {
             originalTitle: externalMovieData.originalTitle,
+            title: externalMovieData.title,
             plot: externalMovieData.plot,
             genres: {
               connectOrCreate: externalMovieData.genreCodes.map((genreCode) => {
@@ -535,6 +537,12 @@ export class MoviesService implements OnModuleInit {
             },
           },
           {
+            title: {
+              contains: searchText,
+              mode: 'insensitive',
+            },
+          },
+          {
             originalTitle: {
               contains: searchText,
               mode: 'insensitive',
@@ -550,6 +558,9 @@ export class MoviesService implements OnModuleInit {
       orderBy: [
         {
           localizedTitle: 'asc',
+        },
+        {
+          title: 'asc',
         },
         {
           originalTitle: 'asc',

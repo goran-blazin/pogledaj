@@ -66,7 +66,7 @@ function ReservationsAndTicketsList() {
             <FunctionField<ReservationSeatWithMovieProjection>
               label="Projekcija"
               render={(reservationSeat) =>
-                reservationSeat ? reservationSeat.reservation.movieProjection.movie.originalTitle : 'N/A'
+                reservationSeat ? Utils.getMovieTitle(reservationSeat.reservation.movieProjection.movie) : 'N/A'
               }
             />
             <FunctionField<ReservationSeatWithMovieProjection>

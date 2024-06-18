@@ -242,6 +242,7 @@ export class TmdbProvider {
       externalType: InputProvider.Tmdb,
       genreCodes: externalMovie.genres.map((genre) => genre.name.toLowerCase()),
       originalLanguageCode: externalMovie.original_language,
+      title: externalMovie.title || '',
       originalTitle: externalMovie.original_title,
       plot: externalMovie.overview || '',
       posterImages: {

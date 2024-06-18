@@ -1,6 +1,6 @@
 import MoviesService from '../../../services/MoviesService';
 import {Autocomplete, Box, InputAdornment, Typography} from '@mui/material';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import HorizontalSmallCardsCarousel from '../utility/reels/HorizontalSmallCardsCarousel';
 import MovieSmallCard from '../utility/cards/MovieSmallCard';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -23,6 +23,7 @@ import _ from 'lodash';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
+  const [moviePoster, setMoviePoster] = useState<MovieWithMovieProjection>();
 
   const movies = useQuery(['movies', 'findAll'], () => {
     return MoviesService.findAll({onlyWithActiveProjections: true});
@@ -97,8 +98,11 @@ function MoviesListingWrapper() {
     }
   }, [movies?.data]);
 
-  const movieIndexPoster = useMemo(() => {
-    return _.random(0, popularMoviesList.length - 1);
+  useEffect(() => {
+    if (!moviePoster && popularMoviesList.length > 0) {
+      const movieIndex = _.random(0, popularMoviesList.length - 1);
+      setMoviePoster(popularMoviesList[movieIndex]);
+    }
   }, [popularMoviesList.length]);
 
   const soonMoviesList = useMemo(() => {
@@ -115,12 +119,12 @@ function MoviesListingWrapper() {
 
   return (
     <Box>
-      {movies.isLoading ? (
+      {movies.isLoading && !moviePoster ? (
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <React.Fragment>
           <EventPreviewWithMargin marginBottom={'-120px'}>
-            <img src={popularMoviesList[movieIndexPoster]?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
+            <img src={moviePoster?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
           </EventPreviewWithMargin>
           <Box mb={'120px'}>
             <ContentWrapper padding>
@@ -148,9 +152,9 @@ function MoviesListingWrapper() {
                     );
                   }}
                   getOptionLabel={(movie) =>
-                    `${movie.localizedTitle || movie.originalTitle} (${DateTime.fromISO(movie.releaseDate).toFormat(
-                      'yyyy',
-                    )})`
+                    `${movie.localizedTitle || Utils.getMovieTitle(movie)} (${DateTime.fromISO(
+                      movie.releaseDate,
+                    ).toFormat('yyyy')})`
                   }
                   includeInputInList
                   loading={moviesSearchRQ.isLoading}

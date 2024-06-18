@@ -12,6 +12,7 @@ import {
 } from 'react-admin';
 import {Cinema} from '../../../types/CinemaTypes';
 import {MovieProjection} from '../../../types/MoviesTypes';
+import Utils from '../../../helpers/Utils';
 
 function MovieProjectionsList() {
   const [currentCinemaId, setCurrentCinemaId] = React.useState('');
@@ -79,7 +80,7 @@ function MovieProjectionsList() {
           <Datagrid bulkActionButtons={false}>
             <FunctionField<MovieProjection>
               label="Ime filma"
-              render={(projection) => (projection ? projection.movie.originalTitle : 'N/A')}
+              render={(projection) => (projection ? Utils.getMovieTitle(projection.movie) : 'N/A')}
             />
             <FunctionField<MovieProjection>
               label="Sala"

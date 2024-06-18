@@ -3,6 +3,7 @@ import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from 
 import {Datagrid, DateField, FunctionField, List, Title, useGetList} from 'react-admin';
 import {Cinema} from '../../../types/CinemaTypes';
 import {MovieProjection} from '../../../types/MoviesTypes';
+import Utils from '../../../helpers/Utils';
 
 function Projections() {
   const [currentCinemaId, setCurrentCinemaId] = React.useState('');
@@ -59,7 +60,7 @@ function Projections() {
           <Datagrid>
             <FunctionField<MovieProjection>
               label="Ime filma"
-              render={(projection) => (projection ? projection.movie.originalTitle : 'N/A')}
+              render={(projection) => (projection ? Utils.getMovieTitle(projection.movie) : 'N/A')}
             />
             <FunctionField<MovieProjection>
               label="Sala"

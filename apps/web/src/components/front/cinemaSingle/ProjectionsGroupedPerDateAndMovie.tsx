@@ -1,5 +1,6 @@
 import {ProjectionsGroupedPerMoviesType} from '../../../types/MoviesTypes';
 import {Link} from 'react-router-dom';
+import Utils from '../../../helpers/Utils';
 
 function ProjectionsGroupedPerDateAndMovie({
   groupedMovieProjections,
@@ -16,7 +17,7 @@ function ProjectionsGroupedPerDateAndMovie({
         const movieProjections = groupedMovieProjections[movieId].movieProjections;
         return (
           <div key={movieId}>
-            <h5>{movie.localizedTitle || movie.originalTitle}:</h5>
+            <h5>{movie.localizedTitle || Utils.getMovieTitle(movie)}:</h5>
             <div>
               {movieProjections.map((mp) => {
                 return (

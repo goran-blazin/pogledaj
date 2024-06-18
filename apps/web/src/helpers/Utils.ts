@@ -2,6 +2,7 @@ import {AxiosError} from 'axios';
 import _ from 'lodash';
 import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData, EnvTypes} from '../types/GeneralTypes';
 import jwt_decode from 'jwt-decode';
+import {Movie} from '../types/MoviesTypes';
 
 const Utils = {
   delay(time: number, value = null, rejectDelay = false): Promise<unknown> {
@@ -108,6 +109,10 @@ const Utils = {
     } else {
       return text;
     }
+  },
+
+  getMovieTitle(movie: Movie) {
+    return movie.title || movie.originalTitle;
   },
 };
 

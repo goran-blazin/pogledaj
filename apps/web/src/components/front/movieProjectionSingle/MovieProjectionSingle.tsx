@@ -10,6 +10,7 @@ import {namedRoutes} from '../../../routes';
 import useReservationsStore from '../../../store/ReservationsStore';
 import CustomerHelper from '../../../helpers/CustomerHelper';
 import BigInfoDialog from '../utility/BigInfoDialog';
+import Utils from '../../../helpers/Utils';
 
 const CinemaCanvasHolder = styled('div')({
   display: 'flex',
@@ -339,7 +340,7 @@ function MovieProjectionSingle() {
           {movieProjectionData && seats ? (
             <React.Fragment>
               <Box className="movie-projection-single-header">
-                <p>{movieProjectionData.movie.localizedTitle || movieProjectionData.movie.originalTitle}</p>
+                <p>{movieProjectionData.movie.localizedTitle || Utils.getMovieTitle(movieProjectionData.movie)}</p>
                 <p>
                   <span>Bioskop: </span> {movieProjectionData.cinemaTheater.cinema.name}
                 </p>
