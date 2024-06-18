@@ -25,7 +25,7 @@ import {Link} from '@mui/material';
 
 function MoviesList() {
   return (
-    <List>
+    <List sort={{field: 'updatedAt', order: 'DESC'}}>
       <Datagrid bulkActionButtons={false}>
         <TextField source="title" label="Naziv" />
         <TextField source="originalTitle" label="Originalni naziv" />
