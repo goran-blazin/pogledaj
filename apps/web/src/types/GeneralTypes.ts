@@ -66,6 +66,7 @@ export const AdminRoutes = {
   adminUsers: 'adminUsers',
   movies: 'movies',
   projections: 'movieProjections',
+  projectionsWithCinema: 'movieProjections/cinema/:cinemaId',
   projectionsCreate: 'movieProjections/cinema/:cinemaId/create',
   movieTickets: 'movieTickets',
   ticketValidation: 'ticketValidation',

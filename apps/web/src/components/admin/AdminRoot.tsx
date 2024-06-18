@@ -58,6 +58,7 @@ const AdminRoot = function () {
             {AdminHelper.checkRoutePermissions(AdminRoutes.projections, permission) ? (
               <React.Fragment>
                 <Route path={`/${AdminRoutes.projections}`} element={<MovieProjectionsList />} />
+                <Route path={`/${AdminRoutes.projectionsWithCinema}`} element={<MovieProjectionsList />} />
                 <Route path={`/${AdminRoutes.projectionsCreate}`} element={<MovieProjectionsCreate />} />
               </React.Fragment>
             ) : null}

@@ -10,7 +10,6 @@ import {
   useGetList,
   useGetOne,
   useNotify,
-  useRedirect,
 } from 'react-admin';
 import * as React from 'react';
 import {useCallback} from 'react';
@@ -18,19 +17,18 @@ import {AxiosError} from 'axios';
 import Utils from '../../../helpers/Utils';
 import {Box} from '@mui/material';
 import {Cinema, CinemaTheater} from '../../../types/CinemaTypes';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {CreateMovieProjectionDTO, CurrencyCode, Movie} from '../../../types/MoviesTypes';
 import {useMutation} from 'react-query';
 import {ApiErrors} from '../../../types/ErrorTypes';
 import {DateTime} from 'ts-luxon';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
-import {AdminRoutes} from '../../../types/GeneralTypes';
 import LoadingBox from '../utility/LoadingBox';
 
 function MovieProjectionsCreate() {
   const params = useParams();
 
-  const redirect = useRedirect();
+  const navigate = useNavigate();
   const notify = useNotify();
 
   const {data: cinema, isSuccess: cinemaIsSuccess} = useGetOne<Cinema>('cinemas', {id: params.cinemaId || ''});
@@ -86,7 +84,7 @@ function MovieProjectionsCreate() {
           type: 'info',
           messageArgs: {smart_count: 1},
         });
-        redirect('list', AdminRoutes.projections);
+        navigate(`/admin/movieProjections/cinema/${params.cinemaId}`);
       } catch (error) {
         if (error instanceof AxiosError) {
           return Utils.convertErrorMessagesToReactAdminForm(error, {
@@ -97,7 +95,7 @@ function MovieProjectionsCreate() {
         }
       }
     },
-    [notify, redirect],
+    [notify, params.cinemaId],
   );
 
   return cinemaIsSuccess && cinemaTheatersIsSuccess && moviesIsSuccess ? (

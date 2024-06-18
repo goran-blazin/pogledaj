@@ -13,32 +13,33 @@ import {
 import {Cinema} from '../../../types/CinemaTypes';
 import {MovieProjection} from '../../../types/MoviesTypes';
 import Utils from '../../../helpers/Utils';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useEffect, useMemo} from 'react';
 
 function MovieProjectionsList() {
-  const [currentCinemaId, setCurrentCinemaId] = React.useState('');
+  const params = useParams();
+  const navigate = useNavigate();
 
-  const {data} = useGetList<Cinema>(
-    'cinemas',
-    {
-      filter: undefined,
-      pagination: {page: 1, perPage: 100},
-      sort: {field: 'name', order: 'DESC'},
-    },
-    {
-      onSuccess(result) {
-        if (!currentCinemaId && result.data.length > 0) {
-          setCurrentCinemaId(result.data[0].id);
-        }
-      },
-    },
-  );
-
-  const cinemasSelectInput = (data || []).map((cinema) => {
-    return {
-      id: cinema.id,
-      name: `${cinema.name}, ${cinema.address}, ${cinema.city.name}`,
-    };
+  const {data} = useGetList<Cinema>('cinemas', {
+    filter: undefined,
+    pagination: {page: 1, perPage: 100},
+    sort: {field: 'name', order: 'DESC'},
   });
+
+  useEffect(() => {
+    if (!params.cinemaId && data && data.length > 0) {
+      navigate(`/admin/movieProjections/cinema/${data[0].id}`);
+    }
+  }, [data, navigate]);
+
+  const cinemasSelectInput = useMemo(() => {
+    return (data || []).map((cinema) => {
+      return {
+        id: cinema.id,
+        name: `${cinema.name}, ${cinema.address}, ${cinema.city.name}`,
+      };
+    });
+  }, [data]);
 
   const ListActions = () => (
     <TopToolbar>
@@ -48,57 +49,66 @@ function MovieProjectionsList() {
   );
 
   return (
-    <Box>
-      <FormControl sx={{margin: 1}} size="small">
-        <InputLabel id="demo-select-small">Bioskop</InputLabel>
-        <Select
-          sx={{minWidth: 500}}
-          labelId="demo-select-small"
-          id="demo-select-small"
-          value={currentCinemaId}
-          label="Bioskop"
-          onChange={(event: SelectChangeEvent) => {
-            setCurrentCinemaId(event.target.value);
-          }}
-        >
-          {cinemasSelectInput.map((cinemaItem) => {
-            return (
-              <MenuItem key={cinemaItem.id} value={cinemaItem.id}>
-                {cinemaItem.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
-      {currentCinemaId && (
-        <List
-          actions={<ListActions />}
-          resource={`movieProjections/cinema/${currentCinemaId}`}
-          title={'Projekcije'}
-          empty={<ListActions />}
-        >
-          <Datagrid bulkActionButtons={false}>
-            <FunctionField<MovieProjection>
-              label="Ime filma"
-              render={(projection) => (projection ? Utils.getMovieTitle(projection.movie) : 'N/A')}
-            />
-            <FunctionField<MovieProjection>
-              label="Sala"
-              render={(projection) => (projection ? projection.cinemaTheater.name : 'N/A')}
-            />
-            <DateField label="Datum projekcije" source="projectionDateTime" showTime={true} />
-            <FunctionField<MovieProjection>
-              label="Cena"
-              render={(projection) =>
-                projection?.projectionPrices.length
-                  ? `${projection?.projectionPrices[0].price} ${projection?.projectionPrices[0].currencyCode}`
-                  : 'N/A'
-              }
-            />
-          </Datagrid>
-        </List>
+    <>
+      {data && (
+        <Box>
+          <FormControl sx={{margin: 1}} size="small">
+            <InputLabel id="demo-select-small">Bioskop</InputLabel>
+            <Select
+              sx={{minWidth: 500}}
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={params.cinemaId || (cinemasSelectInput.length ? cinemasSelectInput[0].id : '')}
+              label="Bioskop"
+              onChange={(event: SelectChangeEvent) => {
+                navigate(`/admin/movieProjections/cinema/${event.target.value}`);
+              }}
+            >
+              {cinemasSelectInput.map((cinemaItem) => {
+                return (
+                  <MenuItem key={cinemaItem.id} value={cinemaItem.id}>
+                    {cinemaItem.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          {params.cinemaId && (
+            <List
+              actions={<ListActions />}
+              resource={`movieProjections/cinema/${params.cinemaId}`}
+              title={'Projekcije'}
+              empty={<ListActions />}
+              sort={{
+                field: 'updatedAt',
+                order: 'DESC',
+              }}
+            >
+              <Datagrid bulkActionButtons={false}>
+                <FunctionField<MovieProjection>
+                  label="Ime filma"
+                  render={(projection) => (projection ? Utils.getMovieTitle(projection.movie) : 'N/A')}
+                />
+                <FunctionField<MovieProjection>
+                  label="Sala"
+                  render={(projection) => (projection ? projection.cinemaTheater.name : 'N/A')}
+                />
+                <DateField label="Datum projekcije" source="projectionDateTime" showTime={true} />
+                <DateField label="Poslednja promena" source="updatedAt" showTime={true} />
+                <FunctionField<MovieProjection>
+                  label="Cena"
+                  render={(projection) =>
+                    projection?.projectionPrices.length
+                      ? `${projection?.projectionPrices[0].price} ${projection?.projectionPrices[0].currencyCode}`
+                      : 'N/A'
+                  }
+                />
+              </Datagrid>
+            </List>
+          )}
+        </Box>
       )}
-    </Box>
+    </>
   );
 }
 
