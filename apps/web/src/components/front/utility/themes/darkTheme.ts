@@ -115,6 +115,7 @@ const darkTheme = createTheme({
   },
   searchTextField: {
     backgroundColor: `var(--dark-blue)`,
+    borderColor: 'var(--dark-mode-cathegory-blue)',
     color: `var(--dark-mode-text)`,
   },
   components: {

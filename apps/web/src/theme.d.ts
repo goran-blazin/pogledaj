@@ -105,6 +105,7 @@ declare module '@mui/material/styles' {
     };
     searchTextField: {
       backgroundColor: string;
+      borderColor: string;
       color: string;
     };
   }
@@ -211,6 +212,7 @@ declare module '@mui/material/styles' {
     };
     searchTextField: {
       backgroundColor: React.CSSProperties['backgroundColor'];
+      borderColor: React.CSSProperties['borderColor'];
       color: React.CSSProperties['color'];
     };
   }

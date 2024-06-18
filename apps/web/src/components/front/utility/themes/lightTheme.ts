@@ -116,6 +116,7 @@ const lightTheme = createTheme({
   },
   searchTextField: {
     backgroundColor: `var(--input-field-grey-light)`,
+    borderColor: `var(--cathegory-grey)`,
     color: `var(--dark-grey)`,
   },
   components: {

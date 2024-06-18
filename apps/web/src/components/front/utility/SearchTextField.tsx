@@ -13,6 +13,8 @@ export const SearchTextFieldStyled = styled(TextField)(({theme}) => ({
     paddingLeft: '20px',
     paddingRight: '9px !important',
     borderRadius: '20px',
+    border: '1px solid #D6D6D6',
+    borderColor: theme.searchTextField.borderColor,
     '& fieldset': {
       borderColor: theme.searchTextField.backgroundColor,
     },
