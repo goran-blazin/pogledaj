@@ -3,6 +3,7 @@ import '../../../../styles/App.scss';
 
 const lightTheme = createTheme({
   customTypography: {
+    color: `var(--dark-grey)`,
     mainTitle: {
       fontSize: '22px',
       fontWeight: 'bold',

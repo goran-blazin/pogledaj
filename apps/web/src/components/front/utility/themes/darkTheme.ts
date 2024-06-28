@@ -2,6 +2,7 @@ import {createTheme} from '@mui/material/styles';
 
 const darkTheme = createTheme({
   customTypography: {
+    color: `var(--dark-mode-text)`,
     mainTitle: {
       fontSize: '22px',
       fontWeight: 'bold',

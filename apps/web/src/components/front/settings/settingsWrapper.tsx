@@ -7,8 +7,10 @@ import useTheme from '../../../store/ThemeStore';
 import Utils from '../../../helpers/Utils';
 import ContentWrapper from '../layout/ContentWrapper';
 
-const ButtonWrap = styled('div')(() => ({
+const ButtonWrap = styled('div')(({theme}) => ({
   marginBottom: '12px',
+  color: theme.customButtons.buttonWithIcon.textColor,
+  fontSize: '14px',
   '&:last-child': {
     marginBottom: 0,
   },

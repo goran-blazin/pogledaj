@@ -3,6 +3,7 @@ import React from 'react';
 declare module '@mui/material/styles' {
   interface Theme {
     customTypography: {
+      color: string;
       mainTitle: {
         // missing font weight
         fontSize: string;
@@ -71,6 +72,10 @@ declare module '@mui/material/styles' {
         color: string;
       };
     };
+    typography: {
+      fontFamily: string;
+      color: string;
+    };
     eventPreviewAction: {
       backgroundColor: string;
       iconColor: string;
@@ -112,6 +117,7 @@ declare module '@mui/material/styles' {
 
   interface ThemeOptions {
     customTypography?: {
+      color: React.CSSProperties['color'];
       mainTitle?: {
         fontSize: React.CSSProperties['fontSize'];
         fontWeight: React.CSSProperties['fontWeight'];
@@ -177,6 +183,10 @@ declare module '@mui/material/styles' {
     };
     customBackground: {
       primary: React.CSSProperties['color'];
+    };
+    typography: {
+      fontFamily: React.CSSProperties['fontFamily'];
+      color: React.CSSProperties['color'];
     };
     eventPreviewAction: {
       backgroundColor: React.CSSProperties['backgroundColor'];

@@ -61,11 +61,12 @@ const MovieTitleHolder = styled('div')({
   },
 });
 
-const ProjectionsRow = styled(Box)({
+const ProjectionsRow = styled(Box)(({theme}) => ({
+  color: theme.customTypography.color,
   fontSize: '12px',
   fontWeight: '600',
   lineHeight: '16px',
-});
+}));
 
 const ProjectionsSubHeader = styled(Typography)(({theme}) => ({
   color: theme.customTypography.movieProjectionsSubHeader.color,
