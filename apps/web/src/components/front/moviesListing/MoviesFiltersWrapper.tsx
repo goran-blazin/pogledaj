@@ -24,6 +24,12 @@ import {namedRoutes} from '../../../routes';
 import {useNavigate} from 'react-router-dom';
 import ContentWrapper from '../layout/ContentWrapper';
 
+import {styled} from '@mui/material';
+
+const ChipStyled = styled(Chip)(() => ({
+  color: 'red',
+}));
+
 function MoviesFiltersWrapper() {
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
     return MoviesService.getAllGenresForMoviesFilter();
@@ -203,7 +209,7 @@ function MoviesFiltersWrapper() {
               renderValue={(selected) => (
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                   {selected.map((value) => (
-                    <Chip key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
+                    <ChipStyled key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
                   ))}
                 </Box>
               )}
