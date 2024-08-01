@@ -37,6 +37,10 @@ const darkTheme = createTheme({
       textColor: `var(--dark-mode-text)`,
       startAdornmentTextColor: `var(--light-blue)`,
     },
+    inputFieldStyled: {
+      color: `var(--dark-mode-text)`,
+      backgroundColor: `var(--dark-mode-background-light)`,
+    },
   },
   customBackground: {
     primary: `var(--dark-blue)`,

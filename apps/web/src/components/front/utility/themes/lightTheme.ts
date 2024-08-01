@@ -38,6 +38,10 @@ const lightTheme = createTheme({
       textColor: `var(--dark-grey)`,
       startAdornmentTextColor: '#8A8A8A',
     },
+    inputFieldStyled: {
+      color: `var(--dark-grey)`,
+      backgroundColor: `var(--cathegory-grey)`,
+    },
   },
   customBackground: {
     primary: `var(--input-field-grey)`,

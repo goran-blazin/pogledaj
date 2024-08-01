@@ -1,4 +1,4 @@
-import {Autocomplete, Box, Chip, FormControl, InputAdornment, MenuItem, SelectChangeEvent} from '@mui/material';
+import {Autocomplete, Box, FormControl, InputAdornment, MenuItem, SelectChangeEvent} from '@mui/material';
 import PageHeader from '../utility/PageHeader';
 import React, {useMemo, useState} from 'react';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -24,6 +24,12 @@ import ChipStyled from '../utility/ChipStyled';
 import {namedRoutes} from '../../../routes';
 import {useNavigate} from 'react-router-dom';
 import ContentWrapper from '../layout/ContentWrapper';
+
+import {styled} from '@mui/material';
+
+const InputText = styled('span')(({theme}) => ({
+  color: theme.customForm.inputFieldStyled.color,
+}));
 
 function MoviesFiltersWrapper() {
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
@@ -177,7 +183,7 @@ function MoviesFiltersWrapper() {
               value={selectedCity}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
-                  Grad
+                  <InputText>Grad</InputText>
                 </InputAdornment>
               }
               onChange={handleCityChange}
@@ -197,7 +203,7 @@ function MoviesFiltersWrapper() {
               value={selectedCinemas}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
-                  Bioskopi
+                  <InputText>Bioskopi</InputText>
                 </InputAdornment>
               }
               onChange={handleCinemasChange}
@@ -235,7 +241,11 @@ function MoviesFiltersWrapper() {
                 },
                 textField: (params) => {
                   if (params.InputProps) {
-                    params.InputProps.startAdornment = <InputAdornment position="start">Datum Od</InputAdornment>;
+                    params.InputProps.startAdornment = (
+                      <InputAdornment position="start">
+                        <InputText>Datum Od</InputText>
+                      </InputAdornment>
+                    );
                   }
                   return <TextFieldStyled {...params} fullWidth placeholder={''} />;
                 },
@@ -255,7 +265,11 @@ function MoviesFiltersWrapper() {
                 },
                 textField: (params) => {
                   if (params.InputProps) {
-                    params.InputProps.startAdornment = <InputAdornment position="start">Datum Do</InputAdornment>;
+                    params.InputProps.startAdornment = (
+                      <InputAdornment position="start">
+                        <InputText>Datum Do</InputText>
+                      </InputAdornment>
+                    );
                   }
                   return <TextFieldStyled {...params} fullWidth placeholder={''} />;
                 },
@@ -274,14 +288,14 @@ function MoviesFiltersWrapper() {
               value={selectedGenres}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
-                  Žanr
+                  <InputText>Žanr</InputText>
                 </InputAdornment>
               }
               onChange={handleGenreChange}
               renderValue={(selected) => (
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                   {selected.map((value) => (
-                    <Chip
+                    <ChipStyled
                       key={value}
                       label={(genresRQ.data || []).find((g) => g.systemName === value)?.localizedName}
                     />
@@ -304,14 +318,14 @@ function MoviesFiltersWrapper() {
               value={selectedCountries}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
-                  Država porekla
+                  <InputText>Država porekla</InputText>
                 </InputAdornment>
               }
               onChange={handleCountryChange}
               renderValue={(selected) => (
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                   {selected.map((value) => (
-                    <Chip key={value} label={(countriesRQ.data || []).find((c) => c.code === value)?.name} />
+                    <ChipStyled key={value} label={(countriesRQ.data || []).find((c) => c.code === value)?.name} />
                   ))}
                 </Box>
               )}
@@ -340,7 +354,7 @@ function MoviesFiltersWrapper() {
                 params.InputProps.startAdornment = (
                   <>
                     <InputAdornment className={'select-adornment'} position="start">
-                      Glumci
+                      <InputText>Glumci</InputText>
                     </InputAdornment>
                     <React.Fragment>{params.InputProps.startAdornment}</React.Fragment>
                   </>
@@ -372,7 +386,11 @@ function MoviesFiltersWrapper() {
               loading={directorsRQ.isLoading}
               PopperComponent={StyledPopper}
               renderInput={(params) => {
-                params.InputProps.startAdornment = <InputAdornment position="start">Režiser</InputAdornment>;
+                params.InputProps.startAdornment = (
+                  <InputAdornment position="start">
+                    <InputText>Režiser</InputText>
+                  </InputAdornment>
+                );
                 return <TextFieldStyled {...params} fullWidth />;
               }}
               noOptionsText="Nije nadjeno"
@@ -395,14 +413,14 @@ function MoviesFiltersWrapper() {
               value={movieLengths}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
-                  Trajanje filma
+                  <InputText>Trajanje filma</InputText>
                 </InputAdornment>
               }
               onChange={handleMovieLengthsChange}
               renderValue={(selected) => (
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                   {selected.map((value) => (
-                    <Chip key={value} label={movieLengthsMap[value]} />
+                    <ChipStyled key={value} label={movieLengthsMap[value]} />
                   ))}
                 </Box>
               )}

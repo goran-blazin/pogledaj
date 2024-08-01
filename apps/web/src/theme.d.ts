@@ -51,6 +51,10 @@ declare module '@mui/material/styles' {
         textColor: string;
         startAdornmentTextColor: string;
       };
+      inputFieldStyled: {
+        color: string;
+        backgroundColor: string;
+      };
     };
     customBackground: {
       primary: string;
@@ -162,6 +166,10 @@ declare module '@mui/material/styles' {
         color: React.CSSProperties['color'];
         textColor: React.CSSProperties['color'];
         startAdornmentTextColor: React.CSSProperties['color'];
+      };
+      inputFieldStyled: {
+        color: React.CSSProperties['color'];
+        backgroundColor: React.CSSProperties['color'];
       };
     };
     colorPalette?: {
