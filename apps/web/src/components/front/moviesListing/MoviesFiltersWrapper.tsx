@@ -20,6 +20,7 @@ import {DateTime} from 'ts-luxon';
 import Utils from '../../../helpers/Utils';
 import useMoviesFiltersStore from '../../../store/MoviesFiltersStore';
 import ButtonStyled from '../utility/buttons/Button';
+import ChipStyled from '../utility/ChipStyled';
 import {namedRoutes} from '../../../routes';
 import {useNavigate} from 'react-router-dom';
 import ContentWrapper from '../layout/ContentWrapper';
@@ -203,7 +204,14 @@ function MoviesFiltersWrapper() {
               renderValue={(selected) => (
                 <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
                   {selected.map((value) => (
-                    <Chip key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
+                    <ChipStyled key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
+                    // <Chip
+                    //   sx={{
+                    //     color: (theme) => theme.eventPreviewAction.iconColor,
+                    //   }}
+                    //   key={value}
+                    //   label={(cinemasRQ.data || []).find((g) => g.id === value)?.name}
+                    // />
                   ))}
                 </Box>
               )}
