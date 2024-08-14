@@ -230,7 +230,7 @@ function MovieSingleWrapper() {
             <React.Fragment>
               <EventPreviewWithAction>
                 {trailerUrl ? (
-                  <iframe width="420" height="315" src={trailerUrl}></iframe>
+                  <iframe width="420" height="315" src={trailerUrl + ''}></iframe>
                 ) : posterUrl ? (
                   <img src={posterUrl} alt={'POSTER IMAGE'} />
                 ) : (
@@ -434,7 +434,7 @@ function MovieSingleWrapper() {
                             sx={(theme) => ({
                               borderBottomWidth: '1px',
                               borderBottomStyle: 'solid',
-                              borderBottomColor: theme.colorPalette.lightGrey.color,
+                              borderBottomColor: theme.eventInfoSection.borderColor,
                               marginBottom: '16px',
                               paddingBottom: '16px',
                             })}
@@ -455,7 +455,7 @@ function MovieSingleWrapper() {
                                       sx={(theme) => ({
                                         borderBottomWidth: '1px',
                                         borderBottomStyle: 'solid',
-                                        borderBottomColor: theme.colorPalette.lightGrey.color,
+                                        borderBottomColor: theme.eventInfoSection.borderColor,
                                         marginBottom: '16px',
                                         paddingBottom: '16px',
                                       })}

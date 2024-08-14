@@ -32,7 +32,13 @@ function RatingInfo({rating}: RatingInfoProps) {
           color: (theme) => theme.colorPalette.lightBlue,
         }}
       />
-      <RatingNumber>{rating}</RatingNumber>
+      <RatingNumber
+        sx={{
+          color: (theme) => theme.customTypography.mainTitle.color,
+        }}
+      >
+        {rating}
+      </RatingNumber>
     </RatingInfoStyled>
   );
 }

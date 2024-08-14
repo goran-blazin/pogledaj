@@ -1,11 +1,10 @@
-import React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import {styled} from '@mui/system';
 import {ReactElement} from 'react';
 import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
 
-import ShareIcon from '@mui/icons-material/Share';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import EventPreviewAction from './EventPreviewAction';
@@ -53,7 +52,7 @@ function FavoriteIconStyle(props: SvgIconProps) {
 function ShareIconStyle(props: SvgIconProps) {
   return (
     <SvgIcon {...props}>
-      <ShareIcon />
+      <ShareOutlinedIcon />
     </SvgIcon>
   );
 }
@@ -89,7 +88,7 @@ export function EventPreviewWithAction({children}: {children: ReactElement}) {
       <EventPreviewHolder>{children}</EventPreviewHolder>
       {/* favorite button */}
       <EventPreviewAction position={'bl'}>
-        <IconButton aria-label="Share" onClick={handleClickFavorites}>
+        <IconButton aria-label="Like" onClick={handleClickFavorites}>
           <FavoriteIconStyle
             sx={{
               color: (theme) => theme.eventPreviewAction.iconColor,
