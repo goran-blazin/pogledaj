@@ -20,6 +20,7 @@ import Utils from '../../../helpers/Utils';
 import parse from 'html-react-parser';
 import {EventPreviewWithMargin} from '../EventPreview/EventPreview';
 import _ from 'lodash';
+import NoImage from '../utility/NoImage';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -124,7 +125,11 @@ function MoviesListingWrapper() {
       ) : (
         <React.Fragment>
           <EventPreviewWithMargin marginBottom={'-120px'}>
-            <img src={moviePoster?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
+            {moviePoster?.posterImages?.mediumPoster ? (
+              <img src={moviePoster?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
+            ) : (
+              <NoImage />
+            )}
           </EventPreviewWithMargin>
           <Box mb={'85px'}>
             <ContentWrapper padding>
