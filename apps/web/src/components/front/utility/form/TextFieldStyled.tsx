@@ -17,7 +17,7 @@ const TextFieldStyled = styled(TextField)((theme) => ({
     },
   },
   '& .MuiOutlinedInput-input': {
-    color: '#000000',
+    color: theme.theme.customForm.inputFieldStyled.color,
   },
 })) as unknown as typeof TextField;
 
