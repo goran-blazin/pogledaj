@@ -4,7 +4,7 @@ import {styled} from '@mui/system';
 import {ReactElement} from 'react';
 import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
 
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import ShareIcon from '@mui/icons-material/Share';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import EventPreviewAction from './EventPreviewAction';
@@ -14,17 +14,7 @@ const EventPreviewMainWrap = styled(Box)({
   height: '70vh',
   backgroundColor: 'primary.default', // TODO fix this
   position: 'relative',
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    boxSizing: 'border-Box',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '152px',
-    background: 'linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,0))',
-  },
+  marginBottom: '20px',
 });
 const EventPreviewHolder = styled('div')({
   width: '100%',
@@ -52,7 +42,7 @@ function FavoriteIconStyle(props: SvgIconProps) {
 function ShareIconStyle(props: SvgIconProps) {
   return (
     <SvgIcon {...props}>
-      <ShareOutlinedIcon />
+      <ShareIcon />
     </SvgIcon>
   );
 }
@@ -88,7 +78,7 @@ export function EventPreviewWithAction({children}: {children: ReactElement}) {
       <EventPreviewHolder>{children}</EventPreviewHolder>
       {/* favorite button */}
       <EventPreviewAction position={'bl'}>
-        <IconButton aria-label="Like" onClick={handleClickFavorites}>
+        <IconButton aria-label="Share" onClick={handleClickFavorites}>
           <FavoriteIconStyle
             sx={{
               color: (theme) => theme.eventPreviewAction.iconColor,
@@ -117,6 +107,15 @@ export function EventPreviewWithMargin({children, marginBottom}: {children: Reac
         marginBottom,
       }}
     >
+      {/* image/video */}
+      <EventPreviewHolder>{children}</EventPreviewHolder>
+    </EventPreviewMainWrap>
+  );
+}
+
+export function EventPreview({children}: {children: ReactElement}) {
+  return (
+    <EventPreviewMainWrap>
       {/* image/video */}
       <EventPreviewHolder>{children}</EventPreviewHolder>
     </EventPreviewMainWrap>

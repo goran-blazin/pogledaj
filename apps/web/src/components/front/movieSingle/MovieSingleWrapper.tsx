@@ -21,7 +21,7 @@ import _ from 'lodash';
 import Utils from '../../../helpers/Utils';
 import SmallButton from '../utility/buttons/SmallButton';
 import {namedRoutes} from '../../../routes';
-import {EventPreviewWithAction} from '../EventPreview/EventPreview';
+import {EventPreview} from '../EventPreview/EventPreview';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -228,7 +228,7 @@ function MovieSingleWrapper() {
         <React.Fragment>
           {movie?.data ? (
             <React.Fragment>
-              <EventPreviewWithAction>
+              <EventPreview>
                 {trailerUrl ? (
                   <iframe width="420" height="315" src={trailerUrl + ''}></iframe>
                 ) : posterUrl ? (
@@ -236,7 +236,7 @@ function MovieSingleWrapper() {
                 ) : (
                   <div>NO POSTER IMAGE</div>
                 )}
-              </EventPreviewWithAction>
+              </EventPreview>
               <ContentWrapper padding>
                 <>
                   <MovieTitleHolder>

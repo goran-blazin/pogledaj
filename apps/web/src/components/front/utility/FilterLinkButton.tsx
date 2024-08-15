@@ -3,7 +3,13 @@ import {Button} from '@mui/material';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 
-function FilterLinkButton({navigateTo}: {navigateTo: string}) {
+type FilterLinkButtonProptypes = {
+  navigateTo: string;
+  fullWidth?: boolean;
+  text: string;
+};
+
+function FilterLinkButton({navigateTo, fullWidth, text}: FilterLinkButtonProptypes) {
   const navigate = useNavigate();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -18,16 +24,19 @@ function FilterLinkButton({navigateTo}: {navigateTo: string}) {
         textTransform: 'none',
         minWidth: '32px',
         minHeight: '32px',
-        borderRadius: '8px',
-        fontWeight: '700',
-        fontSize: '16px',
-        padding: '3px 6px',
+        height: '100%',
+        borderRadius: '15px',
+        fontSize: {
+          xs: '14px',
+          md: '16px',
+        },
       }}
       onClick={handleClick}
       variant="contained"
+      fullWidth={fullWidth}
     >
       <FilterAltOutlined fontSize="small" />
-      Filtriraj
+      {text}
     </Button>
   );
 }

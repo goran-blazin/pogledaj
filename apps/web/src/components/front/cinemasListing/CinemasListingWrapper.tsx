@@ -19,7 +19,7 @@ function CinemasListingWrapper() {
           <SearchTextField
             id={'search-cinemas'}
             placeholder={'Pronađi bioskop'}
-            EndAdornment={<FilterLinkButton navigateTo={namedRoutes.moviesFilters} />}
+            EndAdornment={<FilterLinkButton navigateTo={namedRoutes.moviesFilters} text={'Detaljna Pretraga'} />}
           />
         </Box>
         {cinemas.isLoading ? (

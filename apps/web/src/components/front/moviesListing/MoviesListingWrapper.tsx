@@ -18,9 +18,10 @@ import FilterLinkButton from '../utility/FilterLinkButton';
 import {useNavigate} from 'react-router-dom';
 import Utils from '../../../helpers/Utils';
 import parse from 'html-react-parser';
-import {EventPreviewWithMargin} from '../EventPreview/EventPreview';
+import {EventPreview} from '../EventPreview/EventPreview';
 import _ from 'lodash';
 import NoImage from '../utility/NoImage';
+import Grid from '@mui/material/Grid';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -124,16 +125,16 @@ function MoviesListingWrapper() {
         <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
       ) : (
         <React.Fragment>
-          <EventPreviewWithMargin marginBottom={'-120px'}>
+          <EventPreview>
             {moviePoster?.posterImages?.mediumPoster ? (
               <img src={moviePoster?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
             ) : (
               <NoImage />
             )}
-          </EventPreviewWithMargin>
-          <Box mb={'85px'}>
-            <ContentWrapper padding>
-              <>
+          </EventPreview>
+          <ContentWrapper padding marginBottom={'48px'}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <Autocomplete<MovieWithMovieProjection>
                   id="movies-search-autocomplete"
                   filterOptions={(x) => x}
@@ -170,7 +171,7 @@ function MoviesListingWrapper() {
                         <Search color="primary" />
                       </InputAdornment>
                     );
-                    params.InputProps.endAdornment = <FilterLinkButton navigateTo={namedRoutes.moviesFilters} />;
+                    // params.InputProps.endAdornment = <FilterLinkButton navigateTo={namedRoutes.moviesFilters} />;
                     return (
                       <SearchTextFieldStyled
                         {...params}
@@ -193,9 +194,12 @@ function MoviesListingWrapper() {
                     return option.id === value.id;
                   }}
                 />
-              </>
-            </ContentWrapper>
-          </Box>
+              </Grid>
+              <Grid item xs={6} sx={{alignItems: 'stretch'}}>
+                <FilterLinkButton navigateTo={namedRoutes.moviesFilters} fullWidth={true} text={'Detaljna Pretraga'} />
+              </Grid>
+            </Grid>
+          </ContentWrapper>
           {popularMoviesList.length > 0 && (
             <Box mb={'20px'}>
               <ContentWrapper padding>
