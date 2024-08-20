@@ -4,8 +4,24 @@ import {ProjectionsDates, ProjectionsGroupedPerCinemaType} from '../../../types/
 import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import {DateTime} from 'ts-luxon';
-import {Box, Button, FormControl, InputAdornment, MenuItem, SelectChangeEvent, Stack, Typography} from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from '@mui/material';
 import {styled} from '@mui/material';
+
+import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShareIcon from '@mui/icons-material/Share';
+
+import IconButtonStyled from '../utility/buttons/IconButtonStyled';
 
 import MainTitle from '../utility/typography/MainTitle';
 import RatingInfo from '../utility/RatingInfo';
@@ -47,6 +63,21 @@ const daysLocalization: Record<number, string> = {
   6: 'Sub',
   7: 'Ned',
 };
+
+function FavoriteIconStyle(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      <FavoriteBorderIcon />
+    </SvgIcon>
+  );
+}
+function ShareIconStyle(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      <ShareIcon />
+    </SvgIcon>
+  );
+}
 
 const MovieTitleHolder = styled('div')({
   display: 'flex',
@@ -108,6 +139,10 @@ const EventInformation = styled('ul')(({theme}) => ({
       alignItems: 'center',
       color: theme.eventInfoSection.color,
     },
+    '&.event-info-section-borderless': {
+      borderBottom: 'none',
+      paddingBottom: '0px',
+    },
   },
 }));
 
@@ -117,6 +152,26 @@ function MovieSingleWrapper() {
 
   const [selectedCinema, setSelectedCinema] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+
+  const handleClickFavorites = () => {
+    return 'handleClickFavorites';
+  };
+  const handleClickShare = async () => {
+    const shareData = {
+      title: 'Podeli film',
+      text: 'Podeli ovaj film sa prijateljima',
+      url: window.location.href,
+    };
+
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    }
+  };
 
   const movie = movieId
     ? useQuery(['movie.includePersons', movieId], () => MoviesService.findByIdWithPersons(movieId))
@@ -248,25 +303,66 @@ function MovieSingleWrapper() {
                     </div>
                   </MovieTitleHolder>
                   <EventInformation>
-                    <li className="event-info-section">
+                    <li className="event-info-section event-info-section-borderless">
                       <TagsComponent genres={movie.data.genres} />
                     </li>
                     <li className="event-info-section">
-                      <div className="event-info-section-with-icons">
-                        <span>
-                          <AccessTimeIcon
-                            fontSize={'small'}
-                            sx={{
-                              display: 'flex',
-                              color: (theme) => theme.palette.primary.main,
-                              mr: 0.5,
-                            }}
-                          />
-                        </span>
-                        <span>
-                          {movie.data.runtimeMinutes} min | {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
-                        </span>
-                      </div>
+                      <Grid
+                        container
+                        sx={{
+                          justifyContent: 'space-between',
+                          alignItems: 'end',
+                        }}
+                      >
+                        <Grid
+                          item
+                          xs={6}
+                          sx={{
+                            flex: {
+                              xs: '0 0 auto',
+                            },
+                          }}
+                        >
+                          <div className="event-info-section-with-icons">
+                            <span>
+                              <AccessTimeIcon
+                                fontSize={'small'}
+                                sx={{
+                                  display: 'flex',
+                                  color: (theme) => theme.palette.primary.main,
+                                  mr: 0.5,
+                                }}
+                              />
+                            </span>
+                            <span>
+                              {movie.data.runtimeMinutes} min |{' '}
+                              {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
+                            </span>
+                          </div>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={6}
+                          sx={{
+                            flex: {
+                              xs: '0 0 auto',
+                            },
+                          }}
+                        >
+                          <Grid container spacing={1}>
+                            <Grid item>
+                              <IconButtonStyled handleClick={handleClickFavorites}>
+                                <FavoriteIconStyle />
+                              </IconButtonStyled>
+                            </Grid>
+                            <Grid item>
+                              <IconButtonStyled handleClick={handleClickShare}>
+                                <ShareIconStyle />
+                              </IconButtonStyled>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
                     </li>
                     <li className="event-info-section">
                       <span className="event-info-subtitle">Sinopsis:</span>

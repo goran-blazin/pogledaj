@@ -90,7 +90,7 @@ const lightTheme = createTheme({
   eventPreviewAction: {
     backgroundColor: `var(--white)`,
     iconColor: `var(--light-grey)`,
-    iconHolderBorderColor: `var(--input-field-grey-light)`,
+    iconHolderBorderColor: `var(--input-field-grey-light-border)`,
     iconHolderBackgroundColor: `var(--input-field-grey-light)`,
   },
   footerTheme: {
