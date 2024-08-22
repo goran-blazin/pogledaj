@@ -1,0 +1,20 @@
+name: pogledajAPIProduction CI
+
+on: workflow_dispatch
+
+jobs:
+  build-and-push-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push the Docker image
+        run: |
+          docker build -f ./apps/api/CI/Dockerfile-prod ./apps/api --tag ghcr.io/goran-blazin/pogledaj/pogledaj-api:prod
+          docker push ghcr.io/goran-blazin/pogledaj/pogledaj-api:prod
