@@ -12,12 +12,22 @@ import {namedRoutes} from '../../../routes';
 import {Box} from '@mui/material';
 import MoviesFiltersWrapper from '../moviesListing/MoviesFiltersWrapper';
 import MoviesSearchWrapper from '../moviesListing/MoviesSearchWrapper';
+import ContactUs from '../settings/contactUs';
+import FollowUs from '../settings/followUs';
+import TermsOfAgreement from '../settings/termsOfAgreement';
+import AboutUs from '../settings/aboutUs';
+import PrivacyPolicy from '../settings/privacyPolicy';
 
 function MainContentWrapper() {
   const routes = (
     <Routes>
       <Route path={namedRoutes.home} element={<MoviesListingWrapper />} />
       <Route path={namedRoutes.settings} element={<SettingsWrapper />} />
+      <Route path={namedRoutes.contactUs} element={<ContactUs />} />
+      <Route path={namedRoutes.followUs} element={<FollowUs />} />
+      <Route path={namedRoutes.termsOfAgreement} element={<TermsOfAgreement />} />
+      <Route path={namedRoutes.aboutUs} element={<AboutUs />} />
+      <Route path={namedRoutes.privacyPolicy} element={<PrivacyPolicy />} />
       <Route path={namedRoutes.cinemasListing} element={<CinemasListingWrapper />} />
       <Route path={namedRoutes.cinemaSingle} element={<CinemaSingleWrapper />} />
       <Route path={namedRoutes.moviesListing} element={<MoviesListingWrapper />} />

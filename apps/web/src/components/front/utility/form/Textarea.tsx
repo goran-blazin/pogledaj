@@ -28,5 +28,16 @@ type TextareaTypes = {
 export default function InputField(props: TextareaTypes) {
   const {onChange, name, value, placeholder, rows} = props;
 
-  return <TextareaStyled onChange={onChange} name={name} value={value} placeholder={placeholder} rows={rows} />;
+  return (
+    <TextareaStyled
+      onChange={onChange}
+      name={name}
+      value={value}
+      placeholder={placeholder}
+      rows={rows}
+      sx={{
+        resize: 'none',
+      }}
+    />
+  );
 }

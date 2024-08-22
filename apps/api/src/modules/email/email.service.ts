@@ -4,13 +4,6 @@ import {EmailJobData} from './email.types';
 import {QueuesDefinition} from '../../helpers/QueuesHelper';
 import {InjectQueue} from '@nestjs/bullmq';
 import {Queue} from 'bullmq';
-const sendSupportEmailsTo: string[] = [
-  'goran.blazin@gmail.com',
-  'pedjalaya@gmail.com',
-  'danijel.avramov@gmail.com',
-  'igor.jockovic@gmail.com',
-  'milosblazin@gmail.com',
-];
 
 @Injectable()
 export class EmailService {
@@ -29,7 +22,7 @@ export class EmailService {
     return this.emailQueue.add(QueuesDefinition.EMAIL.jobId, {
       html: html,
       subject: `Nova poruka za podrsku od ${supportEmailDto.email}`,
-      toEmails: sendSupportEmailsTo,
+      toEmails: ['info@pogledaj.rs'],
       emailType: 'SupportEmail',
     });
   }

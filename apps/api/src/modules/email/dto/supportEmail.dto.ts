@@ -15,6 +15,6 @@ export class SupportEmailDto {
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(15)
+  @MinLength(5)
   message: string;
 }

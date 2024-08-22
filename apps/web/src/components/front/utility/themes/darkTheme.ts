@@ -16,7 +16,7 @@ const darkTheme = createTheme({
     },
     paragraph: {
       fontSize: '14px',
-      color: `var(--dark-grey)`,
+      color: `var(--dark-mode-text)`,
       marginBottom: '30px',
     },
     link: {

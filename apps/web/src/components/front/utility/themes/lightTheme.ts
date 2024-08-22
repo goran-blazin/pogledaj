@@ -31,7 +31,7 @@ const lightTheme = createTheme({
   customForm: {
     inputField: {
       color: `var(--input-field-grey)`,
-      textColor: `var(--dark-mode-text)`,
+      textColor: `var(--dark-grey)`,
     },
     selectField: {
       color: `var(--input-field-grey)`,

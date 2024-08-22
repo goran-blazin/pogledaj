@@ -11,6 +11,11 @@ export const namedRoutes = {
   movieProjectionSingle: '/movie-projections/:movieProjectionId',
   reservations: '/reservations',
   settings: '/settings',
+  contactUs: '/contactUs',
+  aboutUs: '/aboutUs',
+  followUs: '/followUs',
+  termsOfAgreement: '/termsOfAgreement',
+  privacyPolicy: '/privacyPolicy',
 };
 
 const adminRootPath = '/admin';

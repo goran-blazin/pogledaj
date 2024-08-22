@@ -11,12 +11,13 @@ const PageTitleStyled = styled(Typography)(({theme}) => ({
 interface PageTitleProps {
   title: string;
   marginBottom?: string;
+  variant?: 'h2' | 'h3' | 'h4' | 'h5';
 }
 
-function PageTitle({title, marginBottom}: PageTitleProps) {
+function PageTitle({title, marginBottom, variant = 'h2'}: PageTitleProps) {
   return (
     <PageTitleStyled
-      variant="h2"
+      variant={variant}
       sx={{
         marginBottom: (theme) => (marginBottom ? marginBottom : theme.customTypography.pageTitle.marginBottom),
       }}

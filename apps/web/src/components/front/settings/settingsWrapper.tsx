@@ -6,6 +6,9 @@ import React from 'react';
 import useTheme from '../../../store/ThemeStore';
 import Utils from '../../../helpers/Utils';
 import ContentWrapper from '../layout/ContentWrapper';
+import {useNavigate} from 'react-router-dom';
+import {namedRoutes} from '../../../routes';
+import MiscTextWrapper from '../layout/MiscTextWrapper';
 
 const ButtonWrap = styled('div')(({theme}) => ({
   marginBottom: '12px',
@@ -20,93 +23,127 @@ const ButtonWrap = styled('div')(({theme}) => ({
 
 function settingsWrapper() {
   const themeStore = useTheme();
+  const navigate = useNavigate();
 
   return (
     <ContentWrapper padding>
-      <Box mt="35px">
-        <PageTitle title="Podešavanja" marginBottom={'22px'} />
-        {/*<ButtonWrap>*/}
-        {/*  <ButtonStyled onClick={handleLogin}>Uloguj se</ButtonStyled>*/}
-        {/*</ButtonWrap>*/}
-        {/*<ButtonWrap>*/}
-        {/*  <ButtonWithIcon text={'Prati nas'} type={'button'} icon={'connect_without_contact'} />*/}
-        {/*</ButtonWrap>*/}
-        <ButtonWrap>
-          <ButtonWithIcon text={'Kontaktiraj nas'} type={'button'} icon={'support_agent'} />
-        </ButtonWrap>
-        <ButtonWrap>
-          <ButtonWithIcon text={'O nama'} type={'button'} icon={'info_outlined'} />
-        </ButtonWrap>
-        <ButtonWrap>
-          <ButtonWithIcon text={'Uslovi korišćenja'} type={'button'} icon={'rule'} />
-        </ButtonWrap>
-        {Utils.isBetaMode() && (
+      <MiscTextWrapper>
+        <React.Fragment>
+          <PageTitle title="Podešavanja" marginBottom={'22px'} />
+          {/*<ButtonWrap>*/}
+          {/*  <ButtonStyled onClick={handleLogin}>Uloguj se</ButtonStyled>*/}
+          {/*</ButtonWrap>*/}
+          {/*<ButtonWrap>*/}
+          {/*  <ButtonWithIcon text={'Prati nas'} type={'button'} icon={'connect_without_contact'} />*/}
+          {/*</ButtonWrap>*/}
           <ButtonWrap>
             <ButtonWithIcon
-              text={'Isključi beta mod'}
+              text={'Prati nas'}
               type={'button'}
-              icon={'info_outlined'}
-              onClick={() => {
-                if (window.confirm('Isključi beta mod?')) {
-                  window.localStorage.removeItem('betaMode');
-                  window.location.href = '/';
-                }
-              }}
+              icon={'chat_bubble_outline_icon'}
+              onClick={() => navigate(namedRoutes.followUs)}
             />
           </ButtonWrap>
-        )}
-        <ButtonWrap>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Box
-              sx={{
-                paddingLeft: '8px',
-              }}
-            >
-              Tamni mod (eksperimentalno, moguće da ne radi kako treba na svim telefonima)
-            </Box>
-            <ButtonSwitch checked={themeStore.darkTheme} onChange={() => themeStore.toggleTheme()} />
-          </Box>
-        </ButtonWrap>
-        {Utils.env !== 'production' && (
-          <React.Fragment>
-            <PageTitle title="DEV TOOLS" marginBottom={'22px'} />
+          <ButtonWrap>
+            <ButtonWithIcon
+              text={'Kontaktirajte nas'}
+              type={'button'}
+              icon={'headset_mic_outlined_icon'}
+              onClick={() => navigate(namedRoutes.contactUs)}
+            />
+          </ButtonWrap>
+          <ButtonWrap>
+            <ButtonWithIcon
+              text={'O nama'}
+              type={'button'}
+              icon={'info_outlined'}
+              onClick={() => navigate(namedRoutes.aboutUs)}
+            />
+          </ButtonWrap>
+          <ButtonWrap>
+            <ButtonWithIcon
+              text={'Uslovi korišćenja'}
+              type={'button'}
+              icon={'rule'}
+              onClick={() => navigate(namedRoutes.termsOfAgreement)}
+            />
+          </ButtonWrap>
+          <ButtonWrap>
+            <ButtonWithIcon
+              text={'Politika privatnosti'}
+              type={'button'}
+              icon={'privacy_tip_outlined_icon'}
+              onClick={() => navigate(namedRoutes.privacyPolicy)}
+            />
+          </ButtonWrap>
+          {Utils.isBetaMode() && (
             <ButtonWrap>
               <ButtonWithIcon
-                text={'Obrisi sve podatke sa aplikacije'}
+                text={'Isključi beta mod'}
                 type={'button'}
-                icon={'delete_forever'}
+                icon={'info_outlined'}
                 onClick={() => {
-                  if (window.confirm('Obrisi sve podatke i vrati na pocetnu stranu?')) {
-                    window.localStorage.clear();
+                  if (window.confirm('Isključi beta mod?')) {
+                    window.localStorage.removeItem('betaMode');
                     window.location.href = '/';
                   }
                 }}
               />
             </ButtonWrap>
-            {!Utils.isBetaMode() && (
+          )}
+          <ButtonWrap>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  paddingLeft: '8px',
+                }}
+              >
+                Tamni mod (eksperimentalno, moguće da ne radi kako treba na svim telefonima)
+              </Box>
+              <ButtonSwitch checked={themeStore.darkTheme} onChange={() => themeStore.toggleTheme()} />
+            </Box>
+          </ButtonWrap>
+          {Utils.env !== 'production' && (
+            <React.Fragment>
+              <PageTitle title="DEV TOOLS" marginBottom={'22px'} />
               <ButtonWrap>
                 <ButtonWithIcon
-                  text={'Ukljuci beta mod'}
+                  text={'Obrisi sve podatke sa aplikacije'}
                   type={'button'}
-                  icon={'info_outlined'}
+                  icon={'delete_forever'}
                   onClick={() => {
-                    if (window.confirm('Ukljuci beta mod?')) {
-                      window.localStorage.setItem('betaMode', '1');
+                    if (window.confirm('Obrisi sve podatke i vrati na pocetnu stranu?')) {
+                      window.localStorage.clear();
                       window.location.href = '/';
                     }
                   }}
                 />
               </ButtonWrap>
-            )}
-          </React.Fragment>
-        )}
-      </Box>
+              {!Utils.isBetaMode() && (
+                <ButtonWrap>
+                  <ButtonWithIcon
+                    text={'Ukljuci beta mod'}
+                    type={'button'}
+                    icon={'info_outlined'}
+                    onClick={() => {
+                      if (window.confirm('Ukljuci beta mod?')) {
+                        window.localStorage.setItem('betaMode', '1');
+                        window.location.href = '/';
+                      }
+                    }}
+                  />
+                </ButtonWrap>
+              )}
+            </React.Fragment>
+          )}
+        </React.Fragment>
+      </MiscTextWrapper>
     </ContentWrapper>
   );
 }

@@ -10,7 +10,7 @@ export class SendGridService {
   async sendNewEmail(emailJobData: EmailJobData) {
     const msg = {
       to: emailJobData.toEmails, // Change to your recipient
-      from: 'goran.blazin@gmail.com', // Change to your verified sender
+      from: 'no-reply@pogledaj.rs', // Change to your verified sender
       subject: emailJobData.subject,
       html: `<p>${emailJobData.html}</p>`,
     };

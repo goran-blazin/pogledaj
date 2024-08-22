@@ -127,7 +127,13 @@ function MoviesListingWrapper() {
         <React.Fragment>
           <EventPreview>
             {moviePoster?.posterImages?.mediumPoster ? (
-              <img src={moviePoster?.posterImages?.mediumPoster} alt={'POSTER IMAGE'} />
+              <img
+                src={moviePoster?.posterImages?.mediumPoster}
+                alt={'POSTER IMAGE'}
+                onClick={() => {
+                  navigate(namedRoutes.movieSingle.replace(':movieId', moviePoster.id));
+                }}
+              />
             ) : (
               <NoImage />
             )}

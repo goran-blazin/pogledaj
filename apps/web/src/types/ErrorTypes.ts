@@ -1,5 +1,5 @@
 export type ApiErrors = {
   error: string;
-  message: string[];
+  messages: Record<string, string[]>;
   statusCode: number;
 };
