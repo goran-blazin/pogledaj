@@ -246,17 +246,17 @@ export class TmdbProvider {
       originalTitle: externalMovie.original_title,
       plot: externalMovie.overview || '',
       posterImages: {
-        bigPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, -1)}${externalMovie.poster_path}`,
-        mediumPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, -2)}${externalMovie.poster_path}`,
-        smallPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, -3)}${externalMovie.poster_path}`,
-        thumbPoster: `${apiConf.images.base_url}${_.nth(apiConf.images.poster_sizes, 1)}${externalMovie.poster_path}`,
-        bigBackground: `${apiConf.images.base_url}${_.nth(apiConf.images.backdrop_sizes, -1)}${
+        bigPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, -1)}${externalMovie.poster_path}`,
+        mediumPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, -2)}${externalMovie.poster_path}`,
+        smallPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, -3)}${externalMovie.poster_path}`,
+        thumbPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, 1)}${externalMovie.poster_path}`,
+        bigBackground: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -1)}${
           externalMovie.backdrop_path
         }`,
-        mediumBackground: `${apiConf.images.base_url}${_.nth(apiConf.images.backdrop_sizes, -2)}${
+        mediumBackground: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -2)}${
           externalMovie.backdrop_path
         }`,
-        smallBackground: `${apiConf.images.base_url}${_.nth(apiConf.images.backdrop_sizes, -3)}${
+        smallBackground: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -3)}${
           externalMovie.backdrop_path
         }`,
       },

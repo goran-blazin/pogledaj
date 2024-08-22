@@ -394,7 +394,7 @@ function MovieSingleWrapper() {
                       {/*  </p>*/}
                       {/*</div>*/}
                       <div>
-                        <span className="event-info-subtitle inline">Zemlja Porekla:</span>
+                        <span className="event-info-subtitle inline">Zemlja porekla:</span>
                         <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
                       </div>
                     </li>

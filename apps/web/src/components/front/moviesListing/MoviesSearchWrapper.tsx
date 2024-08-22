@@ -33,7 +33,7 @@ function MoviesSearchWrapper() {
               </Box>
             ))
           ) : (
-            <PageSubHeader headerText={'Filmovi nisu pronađeni'} />
+            <PageSubHeader headerText={'Nijedan film ne odgovara unešenim parametrima'} />
           )}
         </Box>
       </>

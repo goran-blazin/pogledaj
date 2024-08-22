@@ -243,7 +243,7 @@ function MoviesFiltersWrapper() {
                   if (params.InputProps) {
                     params.InputProps.startAdornment = (
                       <InputAdornment position="start">
-                        <InputText>Datum Od</InputText>
+                        <InputText>Datum od</InputText>
                       </InputAdornment>
                     );
                   }
@@ -267,7 +267,7 @@ function MoviesFiltersWrapper() {
                   if (params.InputProps) {
                     params.InputProps.startAdornment = (
                       <InputAdornment position="start">
-                        <InputText>Datum Do</InputText>
+                        <InputText>Datum do</InputText>
                       </InputAdornment>
                     );
                   }
@@ -318,7 +318,7 @@ function MoviesFiltersWrapper() {
               value={selectedCountries}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
-                  <InputText>Država porekla</InputText>
+                  <InputText>Zemlja porekla</InputText>
                 </InputAdornment>
               }
               onChange={handleCountryChange}
