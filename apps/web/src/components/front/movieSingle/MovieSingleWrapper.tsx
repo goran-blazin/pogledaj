@@ -248,12 +248,6 @@ function MovieSingleWrapper() {
     userSettingsStore.setGlobalCity(event.target.value);
   };
 
-  useEffect(() => {
-    if (!userSettingsStore.globalSelectedCity && Object.keys(citiesObjects).length > 0) {
-      userSettingsStore.setGlobalCity(Object.keys(citiesObjects)[0]);
-    }
-  }, [citiesObjects]);
-
   const projectionsGroupedCinemaPerCity: ProjectionsGroupedPerCinemaType = useMemo(() => {
     return _.pickBy(projectionsGroupedCinema, (v) => v.cinema.city.id === userSettingsStore.globalSelectedCity);
   }, [userSettingsStore.globalSelectedCity, projectionsGroupedCinema]);
