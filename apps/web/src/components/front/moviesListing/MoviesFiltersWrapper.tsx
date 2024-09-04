@@ -26,6 +26,7 @@ import {useNavigate} from 'react-router-dom';
 import ContentWrapper from '../layout/ContentWrapper';
 
 import {styled} from '@mui/material';
+import {PickersActionBar} from '@mui/x-date-pickers';
 
 const InputText = styled('span')(({theme}) => ({
   color: theme.customForm.inputFieldStyled.color,
@@ -125,7 +126,7 @@ function MoviesFiltersWrapper() {
     const {
       target: {value},
     } = event;
-    setSelectedCinemas([]);
+    setSelectedCinema('');
     setSelectedCity(value);
   };
 
@@ -134,15 +135,12 @@ function MoviesFiltersWrapper() {
   });
 
   // cinema select
-  const [selectedCinemas, setSelectedCinemas] = useState<string[]>([]);
-  const handleCinemasChange = (event: SelectChangeEvent<typeof selectedCinemas>) => {
+  const [selectedCinema, setSelectedCinema] = useState<string>('');
+  const handleCinemaChange = (event: SelectChangeEvent<typeof selectedCinema>) => {
     const {
       target: {value},
     } = event;
-    setSelectedCinemas(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setSelectedCinema(value);
   };
 
   const cinemasRQ = useQuery(['cinemas', selectedCity], () => {
@@ -164,7 +162,7 @@ function MoviesFiltersWrapper() {
       selectedActorPersonIds: actorsAutocompleteValue.map((a) => a.id),
       movieLengths: movieLengths,
       selectedCityId: selectedCity.length > 0 ? selectedCity : undefined,
-      selectedCinemasIds: selectedCinemas,
+      selectedCinemasIds: [selectedCinema],
       selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
       selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
     });
@@ -199,28 +197,13 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
-              multiple
-              value={selectedCinemas}
+              value={selectedCinema}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
                   <InputText>Bioskopi</InputText>
                 </InputAdornment>
               }
-              onChange={handleCinemasChange}
-              renderValue={(selected) => (
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                  {selected.map((value) => (
-                    <ChipStyled key={value} label={(cinemasRQ.data || []).find((g) => g.id === value)?.name} />
-                    // <Chip
-                    //   sx={{
-                    //     color: (theme) => theme.eventPreviewAction.iconColor,
-                    //   }}
-                    //   key={value}
-                    //   label={(cinemasRQ.data || []).find((g) => g.id === value)?.name}
-                    // />
-                  ))}
-                </Box>
-              )}
+              onChange={handleCinemaChange}
             >
               {(cinemasRQ.data || []).map((cinema, i) => {
                 return (
@@ -236,6 +219,9 @@ function MoviesFiltersWrapper() {
               format={Utils.luxonDateFormat}
               value={selectedDateFrom}
               slots={{
+                actionBar: (params) => {
+                  return <PickersActionBar {...params} actions={[]} />;
+                },
                 toolbar: (params) => {
                   return <DatePickerToolbar {...params} hidden={true} />;
                 },
@@ -250,9 +236,10 @@ function MoviesFiltersWrapper() {
                   return <TextFieldStyled {...params} fullWidth placeholder={''} />;
                 },
               }}
-              onAccept={(value) => {
+              onChange={(value) => {
                 setSelectedDateFrom(value as DateTime);
               }}
+              closeOnSelect={true}
             />
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
@@ -260,6 +247,9 @@ function MoviesFiltersWrapper() {
               format={Utils.luxonDateFormat}
               value={selectedDateTo}
               slots={{
+                actionBar: (params) => {
+                  return <PickersActionBar {...params} actions={[]} />;
+                },
                 toolbar: (params) => {
                   return <DatePickerToolbar {...params} hidden={true} />;
                 },
@@ -274,7 +264,8 @@ function MoviesFiltersWrapper() {
                   return <TextFieldStyled {...params} fullWidth placeholder={''} />;
                 },
               }}
-              onAccept={(value) => {
+              closeOnSelect={true}
+              onChange={(value) => {
                 setSelectedDateTo(value as DateTime);
               }}
             />

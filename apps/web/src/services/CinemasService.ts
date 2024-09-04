@@ -22,7 +22,7 @@ const CinemasService = {
 
   async findAllByCity(cityId?: string): Promise<Cinema[]> {
     if (!cityId) {
-      return [];
+      return CinemasService.findAll();
     }
 
     const result = await PogledajApi().get(`cinemas/findByCity/${cityId}`);

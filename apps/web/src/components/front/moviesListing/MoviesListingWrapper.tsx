@@ -140,7 +140,7 @@ function MoviesListingWrapper() {
           </EventPreview>
           <ContentWrapper padding marginBottom={'48px'}>
             <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Grid item xs={9}>
                 <Autocomplete<MovieWithMovieProjection>
                   id="movies-search-autocomplete"
                   filterOptions={(x) => x}
@@ -201,8 +201,8 @@ function MoviesListingWrapper() {
                   }}
                 />
               </Grid>
-              <Grid item xs={6} sx={{alignItems: 'stretch'}}>
-                <FilterLinkButton navigateTo={namedRoutes.moviesFilters} fullWidth={true} text={'Detaljna Pretraga'} />
+              <Grid item xs={3} sx={{alignItems: 'stretch'}}>
+                <FilterLinkButton navigateTo={namedRoutes.moviesFilters} fullWidth={true} text={''} />
               </Grid>
             </Grid>
           </ContentWrapper>
