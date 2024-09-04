@@ -322,9 +322,11 @@ function MovieSingleWrapper() {
                     <div className="titleWrap">
                       <MainTitle title={movie.data.localizedTitle || Utils.getMovieTitle(movie.data)} />
                     </div>
-                    <div className="titleRating">
-                      <RatingInfo rating={movie.data.rating} />
-                    </div>
+                    {Utils.isBetaMode() && (
+                      <div className="titleRating">
+                        <RatingInfo rating={movie.data.rating} />
+                      </div>
+                    )}
                   </MovieTitleHolder>
                   <EventInformation>
                     <li className="event-info-section event-info-section-borderless">
@@ -374,11 +376,13 @@ function MovieSingleWrapper() {
                           }}
                         >
                           <Grid container spacing={1}>
-                            <Grid item>
-                              <IconButtonStyled handleClick={handleClickFavorites}>
-                                <FavoriteIconStyle />
-                              </IconButtonStyled>
-                            </Grid>
+                            {Utils.isBetaMode() && (
+                              <Grid item>
+                                <IconButtonStyled handleClick={handleClickFavorites}>
+                                  <FavoriteIconStyle />
+                                </IconButtonStyled>
+                              </Grid>
+                            )}
                             <Grid item>
                               <IconButtonStyled handleClick={handleClickShare}>
                                 <ShareIconStyle />
