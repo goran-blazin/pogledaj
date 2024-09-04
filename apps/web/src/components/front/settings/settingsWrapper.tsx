@@ -3,12 +3,12 @@ import PageTitle from '../utility/typography/PageTitle';
 import ButtonWithIcon from '../utility/buttons/ButtonWithIcon';
 import ButtonSwitch from '../utility/buttons/ButtonSwitch';
 import React from 'react';
-import useTheme from '../../../store/ThemeStore';
 import Utils from '../../../helpers/Utils';
 import ContentWrapper from '../layout/ContentWrapper';
 import {useNavigate} from 'react-router-dom';
 import {namedRoutes} from '../../../routes';
 import MiscTextWrapper from '../layout/MiscTextWrapper';
+import useUserSettings from '../../../store/UserSettingsStore';
 
 const ButtonWrap = styled('div')(({theme}) => ({
   marginBottom: '12px',
@@ -22,8 +22,8 @@ const ButtonWrap = styled('div')(({theme}) => ({
 // const label = { inputProps: { 'aria-label': 'Color switch demo' } };
 
 function settingsWrapper() {
-  const themeStore = useTheme();
   const navigate = useNavigate();
+  const userSettingsStore = useUserSettings();
 
   return (
     <ContentWrapper padding>
@@ -104,9 +104,12 @@ function settingsWrapper() {
                   paddingLeft: '8px',
                 }}
               >
-                Tamni mod (eksperimentalno, moguće da ne radi kako treba na svim telefonima)
+                Tamni mod
               </Box>
-              <ButtonSwitch checked={themeStore.darkTheme} onChange={() => themeStore.toggleTheme()} />
+              <ButtonSwitch
+                checked={userSettingsStore.theme === 'dark'}
+                onChange={() => userSettingsStore.toggleTheme()}
+              />
             </Box>
           </ButtonWrap>
           {Utils.env !== 'production' && (

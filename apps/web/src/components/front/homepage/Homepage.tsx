@@ -12,8 +12,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useReservationsStore from '../../../store/ReservationsStore';
 import ReservationsList from '../reservations/ReservationsList';
 import {namedRoutes} from '../../../routes';
-import useAppStore from '../../../store/AppStore';
-import BigInfoDialog from '../utility/BigInfoDialog';
 import ButtonStyled from '../utility/buttons/Button';
 import {useMemo} from 'react';
 import {MovieProjection} from '../../../types/MoviesTypes';
@@ -33,7 +31,6 @@ function Homepage() {
     cacheTime: 0,
   });
   const reservationStore = useReservationsStore();
-  const appStore = useAppStore();
 
   const MAX_ITEMS_PER_SLIDER = 10;
 
@@ -199,17 +196,6 @@ function Homepage() {
           )}
         </Box>
       </ContentWrapper>
-      <BigInfoDialog
-        open={appStore.firstTimeVisitor}
-        imgSrc={'/img/couchPopcorn.svg'}
-        header={'Dobrodošli na pogledaj!'}
-        text={`
-        Čestitamo, postali ste deo budućnosti bioskopa! 
-        Svi vaši omiljeni filmski titlovi, omiljeni bioskopi od sada se nalaze na jednom mestu, na dohvat ruke! 
-        Neka uživanje počne!
-    `}
-        buttons={[{text: 'Pristupi platformi', onClick: appStore.setNotFirstTimeVisitor}]}
-      />
     </>
   );
 }

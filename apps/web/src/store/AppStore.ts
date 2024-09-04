@@ -15,7 +15,7 @@ const useAppStore = create<AppStore>()(
           setNotFirstTimeVisitor: () => set({firstTimeVisitor: false}),
         };
       },
-      {name: 'appStore'},
+      {name: 'AppStore'},
     ),
   ),
 );

@@ -49,7 +49,7 @@ const useReservationsStore = create<ReservationsStore>()(
         };
       },
       {
-        name: 'reservationsStore',
+        name: 'ReservationsStore',
       },
     ),
   ),

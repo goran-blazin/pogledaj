@@ -38,6 +38,8 @@ import Utils from '../../../helpers/Utils';
 import SmallButton from '../utility/buttons/SmallButton';
 import {namedRoutes} from '../../../routes';
 import {EventPreview} from '../EventPreview/EventPreview';
+import {City} from '../../../types/GeneralTypes';
+import useUserSettings from '../../../store/UserSettingsStore';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -149,6 +151,7 @@ const EventInformation = styled('ul')(({theme}) => ({
 function MovieSingleWrapper() {
   const navigate = useNavigate();
   const {movieId} = useParams();
+  const userSettingsStore = useUserSettings();
 
   const [selectedCinema, setSelectedCinema] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -184,7 +187,7 @@ function MovieSingleWrapper() {
   const todayISO = DateTime.local().toISODate();
   const tomorrowISO = DateTime.local().plus({day: 1}).toISODate();
 
-  const projectionsGroupedPerCinema = useMemo(() => {
+  const projectionsGroupedCinema = useMemo(() => {
     if (!movieProjections?.data) {
       return {};
     }
@@ -222,11 +225,38 @@ function MovieSingleWrapper() {
     }, {});
   }, [movieProjections?.data]);
 
+  const citiesObjects = Object.keys(projectionsGroupedCinema).reduce(
+    (carry: Record<string, {city: City; count: number}>, cinemaId) => {
+      const city = projectionsGroupedCinema[cinemaId].cinema.city;
+      if (carry[city.id]) {
+        carry[city.id].count += 1;
+      } else {
+        carry[city.id] = {
+          count: 1,
+          city: projectionsGroupedCinema[cinemaId].cinema.city,
+        };
+      }
+
+      return carry;
+    },
+    {},
+  );
+
+  const onCityChange = (event: SelectChangeEvent) => {
+    setSelectedDate('');
+    setSelectedCinema('');
+    userSettingsStore.setGlobalCity(event.target.value);
+  };
+
   useEffect(() => {
-    if (selectedCinema === '' && Object.keys(projectionsGroupedPerCinema).length > 0) {
-      setSelectedCinema(Object.keys(projectionsGroupedPerCinema)[0]);
+    if (!userSettingsStore.globalSelectedCity && Object.keys(citiesObjects).length > 0) {
+      userSettingsStore.setGlobalCity(Object.keys(citiesObjects)[0]);
     }
-  }, [projectionsGroupedPerCinema]);
+  }, [citiesObjects]);
+
+  const projectionsGroupedCinemaPerCity: ProjectionsGroupedPerCinemaType = useMemo(() => {
+    return _.pickBy(projectionsGroupedCinema, (v) => v.cinema.city.id === userSettingsStore.globalSelectedCity);
+  }, [userSettingsStore.globalSelectedCity, projectionsGroupedCinema]);
 
   const sortDates = (dates: ProjectionsDates) =>
     Object.values(
@@ -239,7 +269,7 @@ function MovieSingleWrapper() {
 
   useEffect(() => {
     if (selectedCinema !== '') {
-      const date = sortDates(projectionsGroupedPerCinema[selectedCinema].dates)[0];
+      const date = sortDates(projectionsGroupedCinemaPerCity[selectedCinema].dates)[0];
       if (date) {
         setSelectedDate(date.date);
       }
@@ -408,7 +438,7 @@ function MovieSingleWrapper() {
               {/*  KOMENTARI*/}
               {/*</div>*/}
               <ContentWrapper padding>
-                {Object.keys(projectionsGroupedPerCinema).length > 0 ? (
+                {Object.keys(citiesObjects).length > 0 ? (
                   <Box>
                     <PageSubHeader
                       headerText={Utils.isBetaMode() ? 'Rezervacija karata:' : 'Datumi projekcija:'}
@@ -421,9 +451,35 @@ function MovieSingleWrapper() {
                       }}
                     />
                     <FormControl fullWidth sx={{mt: 2}}>
+                      <ProjectionsSubHeader>Izaberi grad:</ProjectionsSubHeader>
+                      <SelectBoxStyled
+                        sx={{mt: 1}}
+                        value={
+                          Object.keys(citiesObjects).includes(userSettingsStore.globalSelectedCity || '')
+                            ? userSettingsStore.globalSelectedCity
+                            : ''
+                        }
+                        startAdornment={
+                          <InputAdornment className={'select-adornment'} position="start">
+                            Grad
+                          </InputAdornment>
+                        }
+                        onChange={onCityChange}
+                      >
+                        {Object.keys(citiesObjects).map((cityId, i) => {
+                          return (
+                            <MenuItem key={i} value={cityId}>
+                              {citiesObjects[cityId].city.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </SelectBoxStyled>
+                    </FormControl>
+                    <FormControl fullWidth sx={{mt: 2}}>
                       <ProjectionsSubHeader>Izaberi bioskop:</ProjectionsSubHeader>
                       <SelectBoxStyled
                         sx={{mt: 1}}
+                        disabled={!userSettingsStore.globalSelectedCity}
                         value={selectedCinema}
                         startAdornment={
                           <InputAdornment className={'select-adornment'} position="start">
@@ -432,10 +488,10 @@ function MovieSingleWrapper() {
                         }
                         onChange={(event: SelectChangeEvent) => setSelectedCinema(event.target.value)}
                       >
-                        {Object.keys(projectionsGroupedPerCinema).map((cinemaId, i) => {
+                        {Object.keys(projectionsGroupedCinemaPerCity).map((cinemaId, i) => {
                           return (
                             <MenuItem key={i} value={cinemaId}>
-                              {projectionsGroupedPerCinema[cinemaId].cinema.name}
+                              {projectionsGroupedCinemaPerCity[cinemaId].cinema.name}
                             </MenuItem>
                           );
                         })}
@@ -453,7 +509,7 @@ function MovieSingleWrapper() {
                             direction={'row'}
                             spacing={2}
                           >
-                            {sortDates(projectionsGroupedPerCinema[selectedCinema].dates).map((date, index) => (
+                            {sortDates(projectionsGroupedCinemaPerCity[selectedCinema].dates).map((date, index) => (
                               <Button
                                 key={index}
                                 variant="outlined"
@@ -524,7 +580,7 @@ function MovieSingleWrapper() {
                       )}
                     </React.Fragment>
                     <React.Fragment>
-                      {selectedDate && projectionsGroupedPerCinema[selectedCinema].dates[selectedDate] && (
+                      {selectedDate && projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate] && (
                         <Box sx={{mt: 2}}>
                           <ProjectionsSubHeader
                             sx={(theme) => ({
@@ -537,10 +593,10 @@ function MovieSingleWrapper() {
                           >
                             Izaberi projekciju:
                           </ProjectionsSubHeader>
-                          {projectionsGroupedPerCinema[selectedCinema].dates[selectedDate].movieProjections.length >
+                          {projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate].movieProjections.length >
                           0 ? (
                             <>
-                              {projectionsGroupedPerCinema[selectedCinema].dates[selectedDate].movieProjections.map(
+                              {projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate].movieProjections.map(
                                 (mp, i) => {
                                   return (
                                     <Stack

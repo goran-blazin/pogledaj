@@ -12,8 +12,8 @@ import {namedRoutes} from '../../../routes';
 import {ThemeProvider} from '@mui/material/styles';
 import darkTheme from '../utility/themes/darkTheme';
 import lightTheme from '../utility/themes/lightTheme';
-import useTheme from '../../../store/ThemeStore';
 import Utils from '../../../helpers/Utils';
+import useUserSettings from '../../../store/UserSettingsStore';
 
 function FooterMenuWrapper() {
   const navActionStyles: SxProps = (isSelected = false) => {
@@ -53,11 +53,10 @@ function FooterMenuWrapper() {
   });
 
   const location = useLocation();
-  // theme store
-  const themeStore = useTheme();
+  const userSettings = useUserSettings();
 
   return (
-    <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
+    <ThemeProvider theme={userSettings.theme === 'light' ? lightTheme : darkTheme}>
       <FooterPositionWrap>
         <BottomNavigation
           component={'footer'}

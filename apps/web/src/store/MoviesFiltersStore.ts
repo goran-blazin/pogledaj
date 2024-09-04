@@ -21,7 +21,7 @@ const useMoviesFiltersStore = create<MoviesFiltersStore>()(
       };
     },
     {
-      name: 'moviesFiltersStore',
+      name: 'MoviesFiltersStore',
     },
   ),
 );

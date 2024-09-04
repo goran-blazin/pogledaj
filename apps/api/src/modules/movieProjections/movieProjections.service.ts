@@ -194,7 +194,11 @@ export class MovieProjectionsService {
         include: {
           cinemaTheater: {
             include: {
-              cinema: true,
+              cinema: {
+                include: {
+                  city: true,
+                },
+              },
             },
           },
           movie: true,

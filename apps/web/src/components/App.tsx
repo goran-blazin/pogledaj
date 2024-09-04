@@ -23,7 +23,9 @@ import Utils from '../helpers/Utils';
 import {Route, Routes, useLocation, useSearchParams} from 'react-router-dom';
 import {isAdminRoute} from '../routes';
 import AdminRoot from './admin/AdminRoot';
-import useTheme from '../store/ThemeStore';
+import useUserSettings from '../store/UserSettingsStore';
+import useAppStore from '../store/AppStore';
+import BigInfoDialog from './front/utility/BigInfoDialog';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -43,8 +45,8 @@ function App() {
     window.localStorage.removeItem('betaMode');
   }
 
-  // theme store
-  const themeStore = useTheme();
+  const userSettingsStore = useUserSettings();
+  const appStore = useAppStore();
 
   // handle env switch
   const comingSoon = Utils.env === 'production' && !Utils.isBetaMode();
@@ -64,7 +66,7 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterLuxon} localeText={customLocaleText}>
           <div className="App">
             <CssBaseline />
-            <ThemeProvider theme={themeStore.darkTheme ? darkTheme : lightTheme}>
+            <ThemeProvider theme={userSettingsStore.theme === 'light' ? lightTheme : darkTheme}>
               <MainLayout>
                 <CenterContent>
                   {comingSoon ? (
@@ -74,6 +76,17 @@ function App() {
                       <HeaderMenuWrapper />
                       <MainContentWrapper />
                       {Utils.isBetaMode() && <FooterMenuWrapper />}
+                      <BigInfoDialog
+                        open={appStore.firstTimeVisitor}
+                        imgSrc={'/img/couchPopcorn.svg'}
+                        header={'Dobrodošli na pogledaj!'}
+                        text={`
+                            Čestitamo, postali ste deo budućnosti bioskopa! 
+                            Svi vaši omiljeni filmski titlovi, omiljeni bioskopi od sada se nalaze na jednom mestu, na dohvat ruke! 
+                            Neka uživanje počne!
+                        `}
+                        buttons={[{text: 'Pristupi platformi', onClick: appStore.setNotFirstTimeVisitor}]}
+                      />
                     </React.Fragment>
                   )}
                 </CenterContent>
