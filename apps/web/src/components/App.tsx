@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
 import {AdapterLuxon} from '@mui/x-date-pickers/AdapterLuxon';
@@ -41,12 +41,23 @@ function App() {
     window.localStorage.setItem('betaMode', '1');
   }
 
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+
   if (searchParams.get('unsetBetaMode')) {
     window.localStorage.removeItem('betaMode');
   }
 
   const userSettingsStore = useUserSettings();
   const appStore = useAppStore();
+
+  useEffect(() => {
+    const currentTheme = userSettingsStore.theme === 'light' ? lightTheme : darkTheme;
+
+    if (metaThemeColor) {
+      // Update the content attribute
+      metaThemeColor.setAttribute('content', currentTheme.metaThemeBackgroundColor);
+    }
+  }, [userSettingsStore.theme]); // Dependency on theme ensures this effect runs when the theme changes
 
   // handle env switch
   const comingSoon = Utils.env === 'production' && !Utils.isBetaMode();

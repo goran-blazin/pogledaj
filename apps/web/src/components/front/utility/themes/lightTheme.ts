@@ -93,6 +93,7 @@ const lightTheme = createTheme({
     iconHolderBorderColor: `var(--input-field-grey-light-border)`,
     iconHolderBackgroundColor: `var(--input-field-grey-light)`,
   },
+  metaThemeBackgroundColor: '#F5F5F5',
   footerTheme: {
     backgroundColor: `var(--input-field-grey-light)`,
     borderColor: `var(--input-field-grey-light-border)`,

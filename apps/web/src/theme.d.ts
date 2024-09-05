@@ -86,6 +86,7 @@ declare module '@mui/material/styles' {
       iconHolderBorderColor: string;
       iconHolderBackgroundColor: string;
     };
+    metaThemeBackgroundColor: string;
     footerTheme: {
       backgroundColor: string;
       color: string;
@@ -202,6 +203,7 @@ declare module '@mui/material/styles' {
       iconHolderBorderColor: React.CSSProperties['borderColor'];
       iconHolderBackgroundColor: React.CSSProperties['backgroundColor'];
     };
+    metaThemeBackgroundColor: React.CSSProperties['backgroundColor'];
     footerTheme: {
       backgroundColor: React.CSSProperties['backgroundColor'];
       borderColor: React.CSSProperties['borderColor'];

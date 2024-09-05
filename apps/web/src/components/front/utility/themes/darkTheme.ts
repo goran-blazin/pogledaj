@@ -91,6 +91,7 @@ const darkTheme = createTheme({
     iconHolderBorderColor: `var(--dark-blue-bright)`,
     iconHolderBackgroundColor: `var(--dark-blue)`,
   },
+  metaThemeBackgroundColor: '#091F3E',
   footerTheme: {
     backgroundColor: `var(--dark-blue)`,
     borderColor: `var(--dark-mode-cathegory-blue)`,
