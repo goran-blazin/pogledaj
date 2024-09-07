@@ -183,6 +183,11 @@ function MoviesFiltersWrapper() {
           <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
           <FormControl fullWidth sx={{mt: 2}}>
             <SelectBoxStyled
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               value={selectedCity}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
@@ -202,6 +207,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               value={selectedCinema}
               startAdornment={
                 <InputAdornment className={'select-adornment'} position="start">
@@ -221,6 +231,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <DatePicker
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               format={Utils.luxonDateFormat}
               value={selectedDateFrom}
               slots={{
@@ -249,6 +264,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <DatePicker
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               format={Utils.luxonDateFormat}
               value={selectedDateTo}
               slots={{
@@ -280,6 +300,11 @@ function MoviesFiltersWrapper() {
           <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
           <FormControl fullWidth sx={{mt: 2}}>
             <SelectBoxStyled
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               multiple
               value={selectedGenres}
               startAdornment={
@@ -310,6 +335,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               multiple
               value={selectedCountries}
               startAdornment={
@@ -337,6 +367,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <Autocomplete<Person, true>
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               id="choose-actors-filter"
               multiple
               filterOptions={(x) => x}
@@ -383,6 +418,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <Autocomplete<Person>
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               id="choose-director-filter"
               filterOptions={(x) => x}
               filterSelectedOptions
@@ -415,6 +455,11 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              sx={{
+                '.MuiSvgIcon-root ': {
+                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                },
+              }}
               multiple
               value={movieLengths}
               startAdornment={
