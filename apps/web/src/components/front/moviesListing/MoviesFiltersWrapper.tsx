@@ -170,6 +170,11 @@ function MoviesFiltersWrapper() {
     navigate(namedRoutes.moviesSearch);
   };
 
+  const handleActorRemoval = (option: Person) => {
+    const filterActor = actorsAutocompleteValue.filter((actor) => actor.id !== option.id);
+    setActorsAutocompleteValue(filterActor);
+  };
+
   return (
     <ContentWrapper padding>
       <>
@@ -341,6 +346,16 @@ function MoviesFiltersWrapper() {
               includeInputInList
               loading={actorsRQ.isLoading}
               PopperComponent={StyledPopper}
+              renderTags={(tagValue, getTagProps) =>
+                tagValue.map((option, index) => (
+                  <ChipStyled
+                    label={option.name}
+                    {...getTagProps({index})}
+                    margin={'0 5px 0 0'}
+                    onClick={() => handleActorRemoval(option)}
+                  />
+                ))
+              }
               renderInput={(params) => {
                 params.InputProps.startAdornment = (
                   <>
