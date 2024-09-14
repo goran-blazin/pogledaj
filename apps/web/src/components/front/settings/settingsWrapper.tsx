@@ -29,19 +29,25 @@ function settingsWrapper() {
     <ContentWrapper padding>
       <MiscTextWrapper>
         <React.Fragment>
-          {/* <Box
+          <Box
             sx={{
               textAlign: 'center',
               margin: '0 auto',
               maxWidth: '800px',
+              marginBottom: '30px',
               '& img': {
                 maxWidth: '100%',
-                height: 'auto'
-              }
+                height: 'auto',
+              },
             }}
           >
-            <img src="/img/sofa.png" alt="" />
-          </Box> */}
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSd6Lrd6_ozFTO-ygg9mNGTwm0joj0F_XgmWQyUItcnWk23KEg/viewform"
+              target="_blank"
+            >
+              <img src="/img/anketa_cta.svg" alt="image link" />
+            </a>
+          </Box>
           <PageTitle title="Podešavanja" marginBottom={'22px'} />
           {/*<ButtonWrap>*/}
           {/*  <ButtonStyled onClick={handleLogin}>Uloguj se</ButtonStyled>*/}

@@ -673,13 +673,13 @@ function MovieSingleWrapper() {
                                         &nbsp;
                                         {mp.cinemaTheater.name}
                                       </ProjectionsRow>
-                                      <ProjectionsRow>
+                                      {/* <ProjectionsRow>
                                         <Box component={'span'} sx={{color: 'primary.main'}}>
                                           Jezik:
                                         </Box>
                                         &nbsp;
                                         {mp.dubbedLanguage ? 'SINH' : 'ORIG'}
-                                      </ProjectionsRow>
+                                      </ProjectionsRow> */}
                                       {Utils.isBetaMode() && (
                                         <ProjectionsRow>
                                           <SmallButton
