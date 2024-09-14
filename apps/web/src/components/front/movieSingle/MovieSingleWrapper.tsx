@@ -20,6 +20,7 @@ import {styled} from '@mui/material';
 import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
+import OpenInNew from '@mui/icons-material/OpenInNew';
 
 import IconButtonStyled from '../utility/buttons/IconButtonStyled';
 
@@ -140,6 +141,11 @@ const EventInformation = styled('ul')(({theme}) => ({
     '.event-section-link': {
       margin: '0 0 0 36px',
       color: theme.colorPalette.lightBlue.color,
+      display: 'inline-flex',
+      gap: '4px',
+      '.MuiSvgIcon-root': {
+        width: '18px',
+      },
     },
     '.event-info-section-with-icons': {
       display: 'flex',
@@ -448,7 +454,10 @@ function MovieSingleWrapper() {
                             href={`https://www.imdb.com/title/${movie.data.additionalData.imdbId}`}
                             target="_blank"
                           >
-                            imdb.com
+                            <span>imdb.com</span>
+                            <span>
+                              <OpenInNew />
+                            </span>
                           </a>
                         </p>
                       </div>
