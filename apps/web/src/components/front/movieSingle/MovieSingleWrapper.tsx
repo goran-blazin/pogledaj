@@ -33,7 +33,7 @@ import React from 'react';
 import PageSubHeader from '../utility/PageSubHeader';
 import SelectBoxStyled from '../utility/form/SelectBoxStyled';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {LocalActivityOutlined} from '@mui/icons-material';
+import {VideocamOutlined} from '@mui/icons-material';
 import _ from 'lodash';
 import Utils from '../../../helpers/Utils';
 import SmallButton from '../utility/buttons/SmallButton';
@@ -411,14 +411,18 @@ function MovieSingleWrapper() {
                         </Grid>
                       </Grid>
                     </li>
-                    <li className="event-info-section">
-                      <span className="event-info-subtitle">Sinopsis:</span>
-                      <p className="event-section-description">{movie.data.localizedPlot}</p>
-                    </li>
-                    <li className="event-info-section">
-                      <span className="event-info-subtitle">Sinopsis u originalu:</span>
-                      <p className="event-section-description">{movie.data.plot}</p>
-                    </li>
+                    {movie.data.localizedPlot ? (
+                      <li className="event-info-section">
+                        <span className="event-info-subtitle">Sinopsis:</span>
+                        <p className="event-section-description">{movie.data.localizedPlot}</p>
+                      </li>
+                    ) : null}
+                    {movie.data.plot ? (
+                      <li className="event-info-section">
+                        <span className="event-info-subtitle">Sinopsis u originalu:</span>
+                        <p className="event-section-description">{movie.data.plot}</p>
+                      </li>
+                    ) : null}
                     <li className="event-info-section">
                       <div>
                         <span className="event-info-subtitle inline">Režiseri:</span>
@@ -475,8 +479,8 @@ function MovieSingleWrapper() {
                 {Object.keys(citiesObjects).length > 0 ? (
                   <Box>
                     <PageSubHeader
-                      headerText={Utils.isBetaMode() ? 'Rezervacija karata:' : 'Datumi projekcija:'}
-                      Icon={LocalActivityOutlined}
+                      headerText={Utils.isBetaMode() ? 'Rezervacija karata:' : 'Detalji projekcija:'}
+                      Icon={VideocamOutlined}
                       sx={{
                         fontWeight: 700,
                         fontStyle: 'normal',
@@ -487,7 +491,9 @@ function MovieSingleWrapper() {
                     <FormControl fullWidth sx={{mt: 2}}>
                       <ProjectionsSubHeader>Izaberi grad:</ProjectionsSubHeader>
                       <SelectBoxStyled
-                        sx={{mt: 1}}
+                        sx={{
+                          mt: 1,
+                        }}
                         value={
                           Object.keys(citiesObjects).includes(userSettingsStore.globalSelectedCity || '')
                             ? userSettingsStore.globalSelectedCity
@@ -625,7 +631,7 @@ function MovieSingleWrapper() {
                               paddingBottom: '16px',
                             })}
                           >
-                            Izaberi projekciju:
+                            Projekcije:
                           </ProjectionsSubHeader>
                           {projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate].movieProjections.length >
                           0 ? (

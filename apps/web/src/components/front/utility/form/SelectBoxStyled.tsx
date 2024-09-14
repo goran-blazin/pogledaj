@@ -13,6 +13,9 @@ const SelectBoxStyled = styled(Select)((theme) => ({
     color: theme.theme.customForm.selectField.startAdornmentTextColor,
     minWidth: '65px',
   },
+  '.MuiSvgIcon-root ': {
+    color: theme.theme.customForm.selectField.startAdornmentTextColor,
+  },
 })) as unknown as typeof Select;
 
 export default SelectBoxStyled;
