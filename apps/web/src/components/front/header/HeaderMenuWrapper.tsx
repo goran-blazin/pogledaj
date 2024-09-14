@@ -94,15 +94,8 @@ function HeaderMenuWrapper() {
               <IconButtonStyled>
                 <ArrowBackIconStyle />
               </IconButtonStyled>
-              {/* <ArrowBackIos sx={helperIconStyle} fontSize={'small'} viewBox="-5 0 24 24" /> */}
             </Box>
           ) : null}
-          {/* <HeaderMenuButton visible={false}>
-            <ArrowBackIos sx={helperIconStyle} fontSize={'small'} />
-          </HeaderMenuButton>
-          <HeaderMenuButton visible={false}>
-            <ArrowBackIos sx={helperIconStyle} fontSize={'small'} />
-          </HeaderMenuButton> */}
         </Box>
         <Box
           component="a"
@@ -125,28 +118,6 @@ function HeaderMenuWrapper() {
           <HeaderMenuButton visible={Utils.isBetaMode()}>
             <AccountCircle fontSize="small" sx={helperIconStyle} />
           </HeaderMenuButton>
-          {/* <HeaderMenuButton
-            props={{
-              onClick: () => {
-                if (location.pathname === namedRoutes.settings) {
-                  navigate(-1);
-                } else {
-                  navigate(namedRoutes.settings);
-                }
-              },
-            }}
-          >
-            {location.pathname === namedRoutes.settings ? (
-              <IconButtonStyled>
-                <ClearIconStyle />
-              </IconButtonStyled>
-              // <Clear fontSize="small" sx={helperIconStyle} />
-            ) : (
-              <IconButtonStyled>
-                <MenuIconStyle />
-              </IconButtonStyled>
-            )}
-          </HeaderMenuButton> */}
           <Box
             onClick={() => {
               if (location.pathname === namedRoutes.settings) {
@@ -161,7 +132,6 @@ function HeaderMenuWrapper() {
                 <ClearIconStyle />
               </IconButtonStyled>
             ) : (
-              // <Clear fontSize="small" sx={helperIconStyle} />
               <IconButtonStyled>
                 <MenuIconStyle />
               </IconButtonStyled>

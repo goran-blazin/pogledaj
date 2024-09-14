@@ -10,6 +10,7 @@ type SearchTextFieldProps = {
 export const SearchTextFieldStyled = styled(TextField)(({theme}) => ({
   '& .MuiOutlinedInput-root': {
     height: '48px',
+    padding: '0',
     backgroundColor: theme.searchTextField.backgroundColor,
     paddingLeft: '20px',
     paddingRight: '9px !important',
