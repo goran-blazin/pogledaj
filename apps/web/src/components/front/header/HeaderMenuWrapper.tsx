@@ -1,5 +1,5 @@
 import {AppBar, Box, Button, ButtonProps, Toolbar} from '@mui/material';
-import {AccountCircle, ArrowBackIos, NotificationsNoneRounded, Menu, Clear} from '@mui/icons-material';
+import {AccountCircle, ArrowBackIosNew, NotificationsNoneRounded} from '@mui/icons-material';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {namedRoutes} from '../../../routes';
 import SvgIconComp from '../utility/svgCustomIcons/SvgIconComp';
@@ -7,6 +7,33 @@ import MainLogoIcon from '../utility/svgCustomIcons/main_logo.svg';
 import {SxProps} from '@mui/system';
 import React, {ReactElement} from 'react';
 import Utils from '../../../helpers/Utils';
+import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
+import MenuIcon from '@mui/icons-material/Menu';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import IconButtonStyled from '../utility/buttons/IconButtonStyled';
+
+function MenuIconStyle(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      <MenuIcon />
+    </SvgIcon>
+  );
+}
+function ClearIconStyle(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      <ClearIcon />
+    </SvgIcon>
+  );
+}
+function ArrowBackIconStyle(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      <ArrowBackIosNew />
+    </SvgIcon>
+  );
+}
 
 function HeaderMenuButton({
   children,
@@ -62,20 +89,20 @@ function HeaderMenuWrapper() {
           justifyContent={'flex-start'}
           visibility={location.pathname === namedRoutes.home ? 'hidden' : 'visible'}
         >
-          <HeaderMenuButton
-            visible={location.pathname !== namedRoutes.home && location.pathname !== namedRoutes.settings}
-            props={{
-              onClick: () => navigate(-1),
-            }}
-          >
-            <ArrowBackIos sx={helperIconStyle} fontSize={'small'} viewBox="-5 0 24 24" />
-          </HeaderMenuButton>
-          <HeaderMenuButton visible={false}>
+          {location.pathname !== namedRoutes.home && location.pathname !== namedRoutes.settings ? (
+            <Box onClick={() => navigate(-1)}>
+              <IconButtonStyled>
+                <ArrowBackIconStyle />
+              </IconButtonStyled>
+              {/* <ArrowBackIos sx={helperIconStyle} fontSize={'small'} viewBox="-5 0 24 24" /> */}
+            </Box>
+          ) : null}
+          {/* <HeaderMenuButton visible={false}>
             <ArrowBackIos sx={helperIconStyle} fontSize={'small'} />
           </HeaderMenuButton>
           <HeaderMenuButton visible={false}>
             <ArrowBackIos sx={helperIconStyle} fontSize={'small'} />
-          </HeaderMenuButton>
+          </HeaderMenuButton> */}
         </Box>
         <Box
           component="a"
@@ -98,7 +125,7 @@ function HeaderMenuWrapper() {
           <HeaderMenuButton visible={Utils.isBetaMode()}>
             <AccountCircle fontSize="small" sx={helperIconStyle} />
           </HeaderMenuButton>
-          <HeaderMenuButton
+          {/* <HeaderMenuButton
             props={{
               onClick: () => {
                 if (location.pathname === namedRoutes.settings) {
@@ -110,11 +137,36 @@ function HeaderMenuWrapper() {
             }}
           >
             {location.pathname === namedRoutes.settings ? (
-              <Clear fontSize="small" sx={helperIconStyle} />
+              <IconButtonStyled>
+                <ClearIconStyle />
+              </IconButtonStyled>
+              // <Clear fontSize="small" sx={helperIconStyle} />
             ) : (
-              <Menu fontSize="small" sx={helperIconStyle} />
+              <IconButtonStyled>
+                <MenuIconStyle />
+              </IconButtonStyled>
             )}
-          </HeaderMenuButton>
+          </HeaderMenuButton> */}
+          <Box
+            onClick={() => {
+              if (location.pathname === namedRoutes.settings) {
+                navigate(-1);
+              } else {
+                navigate(namedRoutes.settings);
+              }
+            }}
+          >
+            {location.pathname === namedRoutes.settings ? (
+              <IconButtonStyled>
+                <ClearIconStyle />
+              </IconButtonStyled>
+            ) : (
+              // <Clear fontSize="small" sx={helperIconStyle} />
+              <IconButtonStyled>
+                <MenuIconStyle />
+              </IconButtonStyled>
+            )}
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>
