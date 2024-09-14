@@ -49,6 +49,19 @@ const Utils = {
     }
   },
 
+  // Utility function to await promises one by one with error handling
+  async forEachAwait<T>(array: T[], callback: (item: T, index: number, array: T[]) => Promise<void>): Promise<void> {
+    for (let i = 0; i < array.length; i++) {
+      try {
+        await callback(array[i], i, array);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Error processing item at index ${i}:`, error);
+        throw error; // Stops execution on error
+      }
+    }
+  },
+
   getLoggedUser(): AdminUserJwtPayload {
     const authDataString = localStorage.getItem(AUTH_DATA_LOCAL_STORAGE);
     if (authDataString) {
