@@ -371,6 +371,7 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              // TODO rework inputProps into main component
               inputProps={{
                 MenuProps: {
                   MenuListProps: {

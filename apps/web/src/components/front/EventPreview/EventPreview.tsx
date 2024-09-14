@@ -12,7 +12,7 @@ import EventPreviewAction from './EventPreviewAction';
 const EventPreviewMainWrap = styled(Box)({
   width: '100%',
   // height: '70vh',
-  height: 'calc(100vh - 204px)',
+  height: 'calc(100dvh - 204px)',
   backgroundColor: 'primary.default', // TODO fix this
   position: 'relative',
   marginBottom: '20px',
