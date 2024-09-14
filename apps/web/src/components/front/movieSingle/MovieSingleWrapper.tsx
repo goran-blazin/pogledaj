@@ -169,6 +169,9 @@ function MovieSingleWrapper() {
 
   const projectionsRef = useRef<HTMLDivElement | null>(null);
 
+  const [citySelectOpen, setCitySelectOpen] = useState(false);
+  const [cinemaSelectOpen, setCinemaSelectOpen] = useState(false);
+
   const handleClickFavorites = () => {
     return 'handleClickFavorites';
   };
@@ -184,7 +187,7 @@ function MovieSingleWrapper() {
         await navigator.share(shareData);
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
       }
     }
   };
@@ -499,8 +502,15 @@ function MovieSingleWrapper() {
                             ? userSettingsStore.globalSelectedCity
                             : ''
                         }
+                        open={citySelectOpen}
+                        onOpen={() => setCitySelectOpen(true)}
+                        onClose={() => setCitySelectOpen(false)}
                         startAdornment={
-                          <InputAdornment className={'select-adornment'} position="start">
+                          <InputAdornment
+                            className={'select-adornment'}
+                            position="start"
+                            onClick={() => setCitySelectOpen(true)}
+                          >
                             Grad
                           </InputAdornment>
                         }
@@ -521,8 +531,15 @@ function MovieSingleWrapper() {
                         sx={{mt: 1}}
                         disabled={!userSettingsStore.globalSelectedCity}
                         value={selectedCinema}
+                        open={cinemaSelectOpen}
+                        onOpen={() => setCinemaSelectOpen(true)}
+                        onClose={() => setCinemaSelectOpen(false)}
                         startAdornment={
-                          <InputAdornment className={'select-adornment'} position="start">
+                          <InputAdornment
+                            className={'select-adornment'}
+                            position="start"
+                            onClick={() => setCinemaSelectOpen(true)}
+                          >
                             Bioskop
                           </InputAdornment>
                         }
