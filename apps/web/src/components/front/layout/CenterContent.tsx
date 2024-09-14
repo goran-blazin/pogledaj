@@ -6,12 +6,12 @@ type ContentWrapperTypes = {
 };
 
 const CenterContentWrap = styled('div')((theme) => ({
-  maxWidth: '1024px',
+  maxWidth: '1600px',
   minHeight: '100vh',
   margin: '0 auto',
   position: 'relative',
   backgroundColor: theme.theme.mainContentWrapperTheme.backgroundColor,
-  border: `1px solid ${theme.theme.mainContentWrapperTheme.borderColor}`,
+  // border: `1px solid ${theme.theme.mainContentWrapperTheme.borderColor}`,
 }));
 
 function CenterContent({children}: ContentWrapperTypes) {
