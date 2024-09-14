@@ -291,7 +291,7 @@ function MovieSingleWrapper() {
     return {
       orderedActors: movieData.actors.sort((a, b) => a.castOrder - b.castOrder),
       trailerUrl: (() => {
-        const makeUrl = (key: string) => `https://www.youtube.com/embed/${key}?controls=0`;
+        const makeUrl = (key: string) => `https://www.youtube.com/embed/${key}`;
         const movieTrailer = movieData.videos.find((video) => video.type === 'Trailer');
         if (movieTrailer) {
           return makeUrl(movieTrailer.key);
