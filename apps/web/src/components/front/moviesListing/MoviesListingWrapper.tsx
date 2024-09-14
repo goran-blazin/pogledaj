@@ -1,5 +1,5 @@
 import MoviesService from '../../../services/MoviesService';
-import {Autocomplete, Box, InputAdornment, Typography} from '@mui/material';
+import {Autocomplete, Box, InputAdornment} from '@mui/material';
 import React, {useEffect, useMemo, useState} from 'react';
 import HorizontalSmallCardsCarousel from '../utility/reels/HorizontalSmallCardsCarousel';
 import MovieSmallCard from '../utility/cards/MovieSmallCard';
@@ -23,6 +23,7 @@ import _ from 'lodash';
 import NoImage from '../utility/NoImage';
 import Grid from '@mui/material/Grid';
 import {isLandscape} from '../../../helpers/HelperFunctions';
+import LoadingBox from '../utility/LoadingBox';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -141,7 +142,8 @@ function MoviesListingWrapper() {
   return (
     <Box>
       {movies.isLoading && !moviePoster ? (
-        <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
+        // <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
+        <LoadingBox />
       ) : (
         <React.Fragment>
           <EventPreview>

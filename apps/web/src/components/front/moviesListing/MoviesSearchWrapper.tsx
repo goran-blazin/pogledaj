@@ -1,4 +1,4 @@
-import {Box, Typography} from '@mui/material';
+import {Box} from '@mui/material';
 import useMoviesFiltersStore from '../../../store/MoviesFiltersStore';
 import {useQuery} from 'react-query';
 import MoviesService from '../../../services/MoviesService';
@@ -8,6 +8,7 @@ import MovieBigCard from '../utility/cards/MovieBigCard';
 import PageHeader from '../utility/PageHeader';
 import MoviesSearchTextbox from './MoviesSearchTextbox';
 import ContentWrapper from '../layout/ContentWrapper';
+import LoadingBox from '../utility/LoadingBox';
 
 function MoviesSearchWrapper() {
   const moviesFilters = useMoviesFiltersStore().moviesFilters;
@@ -29,7 +30,8 @@ function MoviesSearchWrapper() {
         <Box mb={'20px'}>
           <PageSubHeader headerText={'Rezultat pretrage'} />
           {moviesSearch.isLoading ? (
-            <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+            // <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+            <LoadingBox />
           ) : (moviesSearch.data || []).length > 0 ? (
             (moviesSearch.data || []).map((movie, i) => (
               <Box sx={{mt: 1}} key={i}>
