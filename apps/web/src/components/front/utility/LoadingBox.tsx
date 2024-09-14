@@ -1,8 +1,17 @@
 import {Box} from '@mui/material';
-import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
-function LoadingBox({text = 'Ucitava se...'}: {text?: string}) {
-  return <Box>{text}</Box>;
+function LoadingBox() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  );
 }
 
 export default LoadingBox;

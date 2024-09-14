@@ -40,6 +40,7 @@ import {namedRoutes} from '../../../routes';
 import {EventPreview} from '../EventPreview/EventPreview';
 import {City} from '../../../types/GeneralTypes';
 import useUserSettings from '../../../store/UserSettingsStore';
+import LoadingBox from '../utility/LoadingBox';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -302,7 +303,8 @@ function MovieSingleWrapper() {
   return (
     <div className="movie-single-wrapper">
       {movie?.isLoading ? (
-        <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
+        // <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
+        <LoadingBox />
       ) : (
         <React.Fragment>
           {movie?.data ? (
