@@ -30,7 +30,7 @@ const ReactAdminDataProvider: DataProvider = {
   },
   async deleteMany(resource: string, params: DeleteManyParams): Promise<DeleteManyResult> {
     const query = {
-      filter: JSON.stringify({ids: params.ids}),
+      ids: params.ids,
     };
 
     return PogledajApi().delete(`${resource}`, {

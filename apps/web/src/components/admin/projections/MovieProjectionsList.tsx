@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from '@mui/material';
 import {
+  BulkDeleteButton,
   CreateButton,
   Datagrid,
   DateField,
@@ -51,6 +52,17 @@ function MovieProjectionsList() {
     </TopToolbar>
   );
 
+  const PostBulkActionButtons = () => (
+    <>
+      <BulkDeleteButton
+        label={'Brisanje'}
+        mutationMode={'pessimistic'}
+        confirmContent={'Jeste li sigurni da zelite da obrisete ove projekcije?'}
+        confirmTitle={'Brisanje vise projekcija'}
+      />
+    </>
+  );
+
   return (
     <>
       {data && (
@@ -87,7 +99,7 @@ function MovieProjectionsList() {
                 order: 'DESC',
               }}
             >
-              <Datagrid bulkActionButtons={false}>
+              <Datagrid bulkActionButtons={<PostBulkActionButtons />}>
                 <FunctionField<MovieProjection>
                   label="Ime filma"
                   render={(projection) => (projection ? Utils.getMovieLocalizedTitle(projection.movie) : 'N/A')}

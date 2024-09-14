@@ -145,4 +145,13 @@ export class MovieProjectionsController {
   async deleteMovieProjectionWithCinema(@Param('movieProjectionId') movieProjectionId: string) {
     await this.movieProjectionsService.deleteMovieProjection(movieProjectionId);
   }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Delete('cinema/:cinemaId')
+  async deleteBulkMovieProjectionsWithCinema(@Query('ids') ids: string[]) {
+    await this.movieProjectionsService.deleteBulkMovieProjections(ids);
+
+    return ids;
+  }
 }

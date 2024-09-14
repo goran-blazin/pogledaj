@@ -302,6 +302,27 @@ export class MovieProjectionsService {
     });
   }
 
+  async deleteBulkMovieProjections(movieProjectionIds: string[]) {
+    // first delete all projection prices
+    return this.prismaService.$transaction(async (transactionClient) => {
+      await transactionClient.projectionPrice.deleteMany({
+        where: {
+          projectionId: {
+            in: movieProjectionIds,
+          },
+        },
+      });
+
+      await transactionClient.movieProjection.deleteMany({
+        where: {
+          id: {
+            in: movieProjectionIds,
+          },
+        },
+      });
+    });
+  }
+
   async findAll(
     params: {movieId?: string; cinemaId?: string; includeArchived: boolean},
     options: GetListOptions = {},
