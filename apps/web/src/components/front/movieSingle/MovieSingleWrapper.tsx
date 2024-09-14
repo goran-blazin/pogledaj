@@ -137,6 +137,10 @@ const EventInformation = styled('ul')(({theme}) => ({
         display: 'inline',
       },
     },
+    '.event-section-link': {
+      margin: '0 0 0 36px',
+      color: theme.colorPalette.lightBlue.color,
+    },
     '.event-info-section-with-icons': {
       display: 'flex',
       alignItems: 'center',
@@ -426,6 +430,19 @@ function MovieSingleWrapper() {
                       <div>
                         <span className="event-info-subtitle inline">Zemlja porekla:</span>
                         <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
+                      </div>
+                    </li>
+                    <li className="event-info-section">
+                      <div>
+                        <span className="event-info-subtitle inline">Detaljnije:</span>
+                        <p className="event-section-description inline">
+                          <a
+                            className="event-section-link"
+                            href={`https://www.imdb.com/title/${movie.data.additionalData.imdbId}`}
+                          >
+                            imdb.com
+                          </a>
+                        </p>
                       </div>
                     </li>
                     {/*<li className="event-info-section">*/}
