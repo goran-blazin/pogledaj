@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from 'react-router-dom';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {ProjectionsDates, ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
@@ -157,6 +157,8 @@ function MovieSingleWrapper() {
   const [selectedCinema, setSelectedCinema] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
+  const projectionsRef = useRef<HTMLDivElement | null>(null);
+
   const handleClickFavorites = () => {
     return 'handleClickFavorites';
   };
@@ -268,6 +270,11 @@ function MovieSingleWrapper() {
       if (date) {
         setSelectedDate(date.date);
       }
+      setTimeout(() => {
+        if (projectionsRef.current) {
+          projectionsRef.current.scrollIntoView({behavior: 'smooth'});
+        }
+      }, 100); // Timeout to ensure the div is rendered
     }
   }, [selectedCinema]);
 
@@ -499,7 +506,7 @@ function MovieSingleWrapper() {
                     </FormControl>
                     <React.Fragment>
                       {selectedCinema && (
-                        <Box sx={{mt: 2}}>
+                        <Box sx={{mt: 2}} ref={projectionsRef}>
                           <ProjectionsSubHeader>Izaberi datum:</ProjectionsSubHeader>
                           <Stack
                             sx={{
