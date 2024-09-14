@@ -85,17 +85,20 @@ function HeaderMenuWrapper() {
       <Toolbar sx={{justifyContent: 'center'}}>
         <Box
           display="flex"
-          flex={'1 auto'}
+          flex={'1 0 auto'}
+          width={'33%'}
           justifyContent={'flex-start'}
           visibility={location.pathname === namedRoutes.home ? 'hidden' : 'visible'}
         >
-          {location.pathname !== namedRoutes.home && location.pathname !== namedRoutes.settings ? (
-            <Box onClick={() => navigate(-1)}>
-              <IconButtonStyled>
-                <ArrowBackIconStyle />
-              </IconButtonStyled>
-            </Box>
-          ) : null}
+          <div>
+            {location.pathname !== namedRoutes.home && location.pathname !== namedRoutes.settings ? (
+              <Box onClick={() => navigate(-1)}>
+                <IconButtonStyled>
+                  <ArrowBackIconStyle />
+                </IconButtonStyled>
+              </Box>
+            ) : null}
+          </div>
         </Box>
         <Box
           component="a"
@@ -105,13 +108,14 @@ function HeaderMenuWrapper() {
             navigate(namedRoutes.home);
           }}
           display="flex"
-          flex={'1 auto'}
+          flex={'1 0 auto'}
+          width={'33%'}
           justifyContent={'center'}
           alignItems={'center'}
         >
           <SvgIconComp src={MainLogoIcon} />
         </Box>
-        <Box display="flex" flex={'1 auto'} justifyContent={'flex-end'}>
+        <Box display="flex" flex={'1 0 auto'} width={'33%'} justifyContent={'flex-end'}>
           <HeaderMenuButton visible={Utils.isBetaMode()}>
             <NotificationsNoneRounded fontSize="small" sx={helperIconStyle} />
           </HeaderMenuButton>
@@ -119,6 +123,9 @@ function HeaderMenuWrapper() {
             <AccountCircle fontSize="small" sx={helperIconStyle} />
           </HeaderMenuButton>
           <Box
+            display="flex"
+            flex={'1 0 auto'}
+            justifyContent={'flex-end'}
             onClick={() => {
               if (location.pathname === namedRoutes.settings) {
                 navigate(-1);

@@ -30,6 +30,9 @@ export const SearchTextFieldStyled = styled(TextField)(({theme}) => ({
   '& .MuiSvgIcon-root ': {
     color: theme.customForm.selectField.startAdornmentTextColor,
   },
+  '& .MuiButtonBase-root ': {
+    display: 'none',
+  },
 }));
 
 function SearchTextField({id, placeholder, EndAdornment}: SearchTextFieldProps) {
