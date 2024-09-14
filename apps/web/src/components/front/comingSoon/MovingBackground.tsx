@@ -38,7 +38,7 @@ const Container = styled(Box)(() => ({
   },
 }));
 
-const MovingBackground = () => {
+const MovingBackground = ({headerText}: {headerText: string}) => {
   const {handleMouseMove} = useMove();
 
   return (
@@ -52,7 +52,7 @@ const MovingBackground = () => {
       <img src="/img/sofa.png" className={'object sofa'} data-value="-1.5" alt="sofa" />
       <img src="/img/logo_rolna.png" className={'object rolna'} data-value="1.5" alt="logo_rolna" />
       <h2 className={'object title'} data-value="0">
-        Uskoro!
+        {headerText}
       </h2>
     </Container>
   );
