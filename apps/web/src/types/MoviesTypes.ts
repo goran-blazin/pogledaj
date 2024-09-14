@@ -127,9 +127,13 @@ export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
 export type CreateMovieProjectionDTO = {
   movieId: string;
   cinemaTheaterId: string;
-} & CreateMovieProjectionDetailsDTO;
+} & MovieProjectionDetailsDTO;
 
-type CreateMovieProjectionDetailsDTO = {
+export type EditMovieProjectionDTO = {
+  cinemaTheaterId: string;
+} & MovieProjectionDetailsDTO;
+
+type MovieProjectionDetailsDTO = {
   projectionDateTime: string;
   dubbedLanguageId?: string | null;
   is3D: boolean;
@@ -140,7 +144,7 @@ type CreateMovieProjectionDetailsDTO = {
 export type CreateMovieProjectionBulkDTO = {
   movieId: string;
   cinemaTheaterId: string;
-  projectionDetails: CreateMovieProjectionDetailsDTO[];
+  projectionDetails: MovieProjectionDetailsDTO[];
 };
 
 export type CreateCinemaTheaterDTO = {

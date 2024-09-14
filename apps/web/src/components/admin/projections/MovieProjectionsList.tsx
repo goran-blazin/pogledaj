@@ -5,6 +5,7 @@ import {
   Datagrid,
   DateField,
   DeleteButton,
+  EditButton,
   ExportButton,
   FunctionField,
   List,
@@ -106,6 +107,7 @@ function MovieProjectionsList() {
                   }
                 />
                 <WrapperField>
+                  <EditButton label={'Izmena'} />
                   <DeleteButton
                     label="Brisanje"
                     confirmContent={'Jeste li sigurni da zelite da obrisete ovu projekciju?'}

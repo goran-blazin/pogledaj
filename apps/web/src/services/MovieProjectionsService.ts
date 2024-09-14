@@ -1,4 +1,4 @@
-import {CreateMovieProjectionDTO, MovieProjection} from '../types/MoviesTypes';
+import {CreateMovieProjectionDTO, EditMovieProjectionDTO, MovieProjection} from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
 
 const MovieProjectionsService = {
@@ -16,6 +16,10 @@ const MovieProjectionsService = {
 
   async createMovieProjection(data: CreateMovieProjectionDTO) {
     return PogledajApi().post(`movieProjections`, data);
+  },
+
+  async editMovieProjection(id: string, data: EditMovieProjectionDTO) {
+    return PogledajApi().put(`movieProjections/${id}`, data);
   },
 
   async findOneById(id: string): Promise<MovieProjection> {

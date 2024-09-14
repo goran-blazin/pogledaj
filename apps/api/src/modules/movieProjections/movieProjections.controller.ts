@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
@@ -19,6 +20,7 @@ import {Roles} from '../../decorators/roles.decorator';
 import {AdminRole} from '@prisma/client';
 import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
 import {ExpressRequestWithUser} from '../../types/CommonTypes';
+import {EditMovieProjectionDto} from './dto/editMovieProjection.dto';
 
 @Controller('movieProjections')
 export class MovieProjectionsController {
@@ -105,6 +107,17 @@ export class MovieProjectionsController {
     @Req() req: ExpressRequestWithUser,
   ) {
     return this.movieProjectionsService.createByUser(createMovieProjection, req.user);
+  }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Put(':movieProjectionId')
+  async editMovieProjection(
+    @Param('movieProjectionId') movieProjectionId: string,
+    @Body() editMovieProjection: EditMovieProjectionDto,
+    @Req() req: ExpressRequestWithUser,
+  ) {
+    return this.movieProjectionsService.editByUser(movieProjectionId, editMovieProjection, req.user);
   }
 
   @Get(':movieProjectionId')

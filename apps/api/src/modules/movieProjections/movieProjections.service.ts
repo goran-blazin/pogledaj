@@ -11,6 +11,7 @@ import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes
 import AuthHelper from '../../helpers/Auth.helper';
 import {FORBIDDEN_MESSAGE} from '@nestjs/core/guards';
 import {getRandomInt} from '../../helpers/Utils';
+import {EditMovieProjectionDto} from './dto/editMovieProjection.dto';
 
 const RESERVATION_TIME_OFFSET_MINUTES = 30;
 
@@ -101,6 +102,7 @@ export class MovieProjectionsService {
             reservationSeats: true,
           },
         },
+        projectionPrices: true,
       },
     });
   }
@@ -120,6 +122,23 @@ export class MovieProjectionsService {
     }
 
     return this.create(data);
+  }
+
+  async editByUser(movieProjectionId: string, data: EditMovieProjectionDto, user: AdminUserSafe) {
+    // check if manager has access to passed cinema
+    if (user.role !== AdminRole.SuperAdmin) {
+      // get cinema
+      const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+        where: {
+          id: data.cinemaTheaterId,
+        },
+      });
+      if (!cinemaTheater || AuthHelper.checkAccessToCinema(user, cinemaTheater.cinemaId)) {
+        return new ForbiddenException(FORBIDDEN_MESSAGE);
+      }
+    }
+
+    return this.edit(movieProjectionId, data);
   }
 
   async create(data: CreateMovieProjectionDto) {
@@ -155,7 +174,6 @@ export class MovieProjectionsService {
       });
 
       // create prices
-
       await Promise.all(
         cinemaTheater.cinemaSeatGroups.map((seatGroup) => {
           return transactionClient.projectionPrice.create({
@@ -170,6 +188,84 @@ export class MovieProjectionsService {
       );
 
       return movieProjection;
+    });
+  }
+
+  async edit(movieProjectionId: string, data: EditMovieProjectionDto) {
+    const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+      where: {
+        id: data.cinemaTheaterId,
+      },
+      include: {
+        cinemaSeatGroups: true,
+      },
+    });
+
+    if (!cinemaTheater) {
+      throw new NotFoundException(`Cinema theater ${data.cinemaTheaterId} not found`);
+    }
+
+    const movieProjection = await this.prismaService.movieProjection.findUnique({
+      where: {
+        id: movieProjectionId,
+      },
+      include: {
+        reservations: true,
+        projectionPrices: true,
+      },
+    });
+
+    if (!movieProjection) {
+      throw new ForbiddenException('Movie projection not found');
+    }
+
+    if (movieProjection.reservations.length > 0) {
+      throw new ForbiddenException('Cannot edit movie projection that has reservations');
+    }
+
+    const options: MovieProjectionOptions = {
+      ...(movieProjection.options as MovieProjectionOptions),
+      is3D: data.is3D,
+    };
+
+    // open transaction
+    return this.prismaService.$transaction(async (transactionClient) => {
+      // edit movie projection
+      const movieProjectionEdited = await transactionClient.movieProjection.update({
+        where: {
+          id: movieProjection.id,
+        },
+        data: {
+          cinemaTheaterId: data.cinemaTheaterId,
+          projectionDateTime: data.projectionDateTime,
+          dubbedLanguageId: data.dubbedLanguageId || null,
+          updatedAt: new Date(),
+          options,
+        },
+      });
+
+      // delete all projection prices
+      await this.prismaService.projectionPrice.deleteMany({
+        where: {
+          projectionId: movieProjectionId,
+        },
+      });
+
+      // create prices
+      await Promise.all(
+        cinemaTheater.cinemaSeatGroups.map((seatGroup) => {
+          return transactionClient.projectionPrice.create({
+            data: {
+              projectionId: movieProjection.id,
+              groupId: seatGroup.id,
+              price: data.price,
+              currencyCode: data.currencyCode,
+            },
+          });
+        }),
+      );
+
+      return movieProjectionEdited;
     });
   }
 
