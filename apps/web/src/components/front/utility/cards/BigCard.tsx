@@ -4,6 +4,7 @@ import React from 'react';
 import {IntRange} from '../../../../types/GeneralTypes';
 import _ from 'lodash';
 import ImageHelper from '../../../../helpers/ImageHelper';
+import Utils from '../../../../helpers/Utils';
 
 interface BigCardParams {
   title: string;
@@ -106,13 +107,15 @@ function BigCard({
             >
               {title}
             </Typography>
-            <IconButton aria-label="dodaj u omiljene">
-              <Icon
-                sx={{
-                  color: 'text.secondary',
-                }}
-              />
-            </IconButton>
+            {Utils.isBetaMode() && (
+              <IconButton aria-label="dodaj u omiljene">
+                <Icon
+                  sx={{
+                    color: 'text.secondary',
+                  }}
+                />
+              </IconButton>
+            )}
           </Stack>
           <Divider
             sx={{

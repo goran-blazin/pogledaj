@@ -6,10 +6,11 @@ import {useNavigate} from 'react-router-dom';
 type FilterLinkButtonProptypes = {
   navigateTo: string;
   fullWidth?: boolean;
+  height?: string;
   text: string;
 };
 
-function FilterLinkButton({navigateTo, fullWidth, text}: FilterLinkButtonProptypes) {
+function FilterLinkButton({navigateTo, fullWidth, text, height}: FilterLinkButtonProptypes) {
   const navigate = useNavigate();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -24,7 +25,7 @@ function FilterLinkButton({navigateTo, fullWidth, text}: FilterLinkButtonProptyp
         textTransform: 'none',
         minWidth: '32px',
         minHeight: '32px',
-        height: '100%',
+        height: `${height ? height : '100%'}`,
         borderRadius: '15px',
         fontSize: {
           xs: '14px',

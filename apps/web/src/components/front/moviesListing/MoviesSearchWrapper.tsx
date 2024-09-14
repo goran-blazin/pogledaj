@@ -17,7 +17,11 @@ function MoviesSearchWrapper() {
 
   return (
     <ContentWrapper padding>
-      <>
+      <Box
+        sx={{
+          paddingTop: '30px',
+        }}
+      >
         <PageHeader headerText={'Filmovi'} />
         <Box mb={'20px'}>
           <MoviesSearchTextbox />
@@ -36,7 +40,7 @@ function MoviesSearchWrapper() {
             <PageSubHeader headerText={'Nijedan film ne odgovara unešenim parametrima'} />
           )}
         </Box>
-      </>
+      </Box>
     </ContentWrapper>
   );
 }
