@@ -29,6 +29,19 @@ function settingsWrapper() {
     <ContentWrapper padding>
       <MiscTextWrapper>
         <React.Fragment>
+          {/* <Box
+            sx={{
+              textAlign: 'center',
+              margin: '0 auto',
+              maxWidth: '800px',
+              '& img': {
+                maxWidth: '100%',
+                height: 'auto'
+              }
+            }}
+          >
+            <img src="/img/sofa.png" alt="" />
+          </Box> */}
           <PageTitle title="Podešavanja" marginBottom={'22px'} />
           {/*<ButtonWrap>*/}
           {/*  <ButtonStyled onClick={handleLogin}>Uloguj se</ButtonStyled>*/}

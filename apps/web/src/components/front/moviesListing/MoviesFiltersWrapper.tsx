@@ -183,6 +183,18 @@ function MoviesFiltersWrapper() {
           <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
           <FormControl fullWidth sx={{mt: 2}}>
             <SelectBoxStyled
+              inputProps={{
+                MenuProps: {
+                  MenuListProps: {
+                    sx: {
+                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                        theme.customForm.selectField.color,
+                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                        theme.customForm.selectField.textColor,
+                    },
+                  },
+                },
+              }}
               sx={{
                 '.MuiSvgIcon-root ': {
                   color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
@@ -207,6 +219,18 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              inputProps={{
+                MenuProps: {
+                  MenuListProps: {
+                    sx: {
+                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                        theme.customForm.selectField.color,
+                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                        theme.customForm.selectField.textColor,
+                    },
+                  },
+                },
+              }}
               sx={{
                 '.MuiSvgIcon-root ': {
                   color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
@@ -300,6 +324,18 @@ function MoviesFiltersWrapper() {
           <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
           <FormControl fullWidth sx={{mt: 2}}>
             <SelectBoxStyled
+              inputProps={{
+                MenuProps: {
+                  MenuListProps: {
+                    sx: {
+                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                        theme.customForm.selectField.color,
+                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                        theme.customForm.selectField.textColor,
+                    },
+                  },
+                },
+              }}
               sx={{
                 '.MuiSvgIcon-root ': {
                   color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
@@ -335,6 +371,18 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              inputProps={{
+                MenuProps: {
+                  MenuListProps: {
+                    sx: {
+                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                        theme.customForm.selectField.color,
+                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                        theme.customForm.selectField.textColor,
+                    },
+                  },
+                },
+              }}
               sx={{
                 '.MuiSvgIcon-root ': {
                   color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
@@ -456,6 +504,18 @@ function MoviesFiltersWrapper() {
           </FormControl>
           <FormControl fullWidth sx={{mt: 1}}>
             <SelectBoxStyled
+              inputProps={{
+                MenuProps: {
+                  MenuListProps: {
+                    sx: {
+                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                        theme.customForm.selectField.color,
+                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                        theme.customForm.selectField.textColor,
+                    },
+                  },
+                },
+              }}
               sx={{
                 '.MuiSvgIcon-root ': {
                   color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
