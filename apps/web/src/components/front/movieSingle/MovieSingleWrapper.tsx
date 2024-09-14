@@ -655,6 +655,13 @@ function MovieSingleWrapper() {
                                       </ProjectionsRow>
                                       <ProjectionsRow>
                                         <Box component={'span'} sx={{color: 'primary.main'}}>
+                                          Cena:
+                                        </Box>
+                                        &nbsp;
+                                        {mp.projectionPrices?.[0].price}
+                                      </ProjectionsRow>
+                                      <ProjectionsRow>
+                                        <Box component={'span'} sx={{color: 'primary.main'}}>
                                           Sala:
                                         </Box>
                                         &nbsp;
