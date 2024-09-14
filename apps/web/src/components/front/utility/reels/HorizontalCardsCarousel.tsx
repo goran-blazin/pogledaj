@@ -19,25 +19,25 @@ function HorizontalCardsCarousel({children}: {children: React.ReactNode[]}) {
             slidesPerView: 2.2,
             spaceBetween: 0,
             centeredSlides: false,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
           960: {
             slidesPerView: 3.4,
             spaceBetween: 0,
             centeredSlides: false,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
           1280: {
             slidesPerView: 4.6,
             spaceBetween: 0,
             centeredSlides: false,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
           1600: {
             slidesPerView: 5.8,
             spaceBetween: 0,
             centeredSlides: false,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
         }}
       >

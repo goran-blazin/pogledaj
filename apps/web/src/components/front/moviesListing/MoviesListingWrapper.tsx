@@ -26,6 +26,7 @@ import Grid from '@mui/material/Grid';
 function MoviesListingWrapper() {
   const navigate = useNavigate();
   const [moviePoster, setMoviePoster] = useState<MovieWithMovieProjection>();
+  const [orientation, setsetorientation] = useState('');
 
   const movies = useQuery(['movies', 'findAll'], () => {
     return MoviesService.findAll({onlyWithActiveProjections: true});
@@ -119,6 +120,18 @@ function MoviesListingWrapper() {
     }
   }, [soonMovies?.data]);
 
+  const setOrientationFn = () => {
+    const portrait = window.matchMedia('(orientation: portrait)');
+    portrait.addEventListener('change', (e) => {
+      if (e.matches) {
+        setsetorientation('Portrait');
+      } else {
+        setsetorientation('Landscape');
+      }
+    });
+  };
+  setOrientationFn();
+
   return (
     <Box>
       {movies.isLoading && !moviePoster ? (
@@ -128,7 +141,11 @@ function MoviesListingWrapper() {
           <EventPreview>
             {moviePoster?.posterImages?.bigBackground ? (
               <img
-                src={moviePoster?.posterImages?.mediumPoster}
+                src={
+                  orientation === 'Landscape'
+                    ? moviePoster?.posterImages?.bigBackground
+                    : moviePoster?.posterImages?.mediumPoster
+                }
                 alt={'POSTER IMAGE'}
                 onClick={() => {
                   navigate(namedRoutes.movieSingle.replace(':movieId', moviePoster.id));
