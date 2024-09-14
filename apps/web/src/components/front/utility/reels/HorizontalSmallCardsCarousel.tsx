@@ -22,22 +22,22 @@ function HorizontalSmallCardsCarousel({children}: {children: React.ReactNode[]})
           640: {
             slidesPerView: 5.5,
             spaceBetween: 0,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
           960: {
             slidesPerView: 7.5,
             spaceBetween: 0,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
           1280: {
             slidesPerView: 9.5,
             spaceBetween: 0,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
           1600: {
             slidesPerView: 11.5,
             spaceBetween: 0,
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
           },
         }}
       >

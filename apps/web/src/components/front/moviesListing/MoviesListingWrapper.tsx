@@ -126,7 +126,7 @@ function MoviesListingWrapper() {
       ) : (
         <React.Fragment>
           <EventPreview>
-            {moviePoster?.posterImages?.mediumPoster ? (
+            {moviePoster?.posterImages?.bigBackground ? (
               <img
                 src={moviePoster?.posterImages?.mediumPoster}
                 alt={'POSTER IMAGE'}
