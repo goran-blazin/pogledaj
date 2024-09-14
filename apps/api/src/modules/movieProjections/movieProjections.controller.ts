@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Param,
   ParseBoolPipe,
@@ -116,5 +117,19 @@ export class MovieProjectionsController {
   @Post('generateDemoProjections')
   async generateDemoProjections() {
     return (await this.movieProjectionsService.generateDemoProjections()).flat(2);
+  }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Delete(':movieProjectionId')
+  async deleteMovieProjection(@Param('movieProjectionId') movieProjectionId: string) {
+    await this.movieProjectionsService.deleteMovieProjection(movieProjectionId);
+  }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Delete('cinema/:cinemaId/:movieProjectionId')
+  async deleteMovieProjectionWithCinema(@Param('movieProjectionId') movieProjectionId: string) {
+    await this.movieProjectionsService.deleteMovieProjection(movieProjectionId);
   }
 }

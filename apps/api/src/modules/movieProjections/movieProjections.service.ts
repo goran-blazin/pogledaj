@@ -173,6 +173,39 @@ export class MovieProjectionsService {
     });
   }
 
+  async deleteMovieProjection(movieProjectionId: string) {
+    const movieProjection = await this.prismaService.movieProjection.findUnique({
+      where: {
+        id: movieProjectionId,
+      },
+      include: {
+        reservations: true,
+        projectionPrices: true,
+      },
+    });
+
+    if (!movieProjection) {
+      throw new ForbiddenException('Movie projection not found');
+    }
+
+    if (movieProjection.reservations.length > 0) {
+      throw new ForbiddenException('Cannot delete movie projection that has reservations');
+    }
+
+    // first delete all projection prices
+    await this.prismaService.projectionPrice.deleteMany({
+      where: {
+        projectionId: movieProjectionId,
+      },
+    });
+
+    await this.prismaService.movieProjection.delete({
+      where: {
+        id: movieProjectionId,
+      },
+    });
+  }
+
   async findAll(
     params: {movieId?: string; cinemaId?: string; includeArchived: boolean},
     options: GetListOptions = {},

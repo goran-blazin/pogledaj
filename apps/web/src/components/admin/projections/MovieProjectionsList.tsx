@@ -4,11 +4,13 @@ import {
   CreateButton,
   Datagrid,
   DateField,
+  DeleteButton,
   ExportButton,
   FunctionField,
   List,
   TopToolbar,
   useGetList,
+  WrapperField,
 } from 'react-admin';
 import {Cinema} from '../../../types/CinemaTypes';
 import {MovieProjection} from '../../../types/MoviesTypes';
@@ -103,6 +105,14 @@ function MovieProjectionsList() {
                       : 'N/A'
                   }
                 />
+                <WrapperField>
+                  <DeleteButton
+                    label="Brisanje"
+                    confirmContent={'Jeste li sigurni da zelite da obrisete ovu projekciju?'}
+                    confirmTitle={'Brisanje projekcije'}
+                    mutationMode={'pessimistic'}
+                  />
+                </WrapperField>
               </Datagrid>
             </List>
           )}

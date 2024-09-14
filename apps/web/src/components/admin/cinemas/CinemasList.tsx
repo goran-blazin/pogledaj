@@ -30,7 +30,7 @@ function CinemasList() {
             <ShowButton label="Detalji" />
             <DeleteButton
               label="Brisanje"
-              confirmContent={'Jeste li sigurni da zelite da kompletno obrisete ovaj bioskop!?'}
+              confirmContent={'Jeste li sigurni da zelite da obrisete ovaj bioskop?'}
               confirmTitle={'Brisanje bioskopa'}
               mutationMode={'pessimistic'}
             />
