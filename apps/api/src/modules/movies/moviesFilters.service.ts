@@ -137,7 +137,7 @@ export class MoviesFiltersService {
           },
         },
       },
-      take: 10,
+      take: 50,
       include: {
         genres: true,
       },

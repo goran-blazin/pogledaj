@@ -162,7 +162,7 @@ function MoviesFiltersWrapper() {
       selectedActorPersonIds: actorsAutocompleteValue.map((a) => a.id),
       movieLengths: movieLengths,
       selectedCityId: selectedCity.length > 0 ? selectedCity : undefined,
-      selectedCinemasIds: [selectedCinema],
+      selectedCinemasIds: selectedCinema ? [selectedCinema] : undefined,
       selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
       selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
     });
@@ -411,6 +411,7 @@ function MoviesFiltersWrapper() {
               }}
               value={actorsAutocompleteValue}
               getOptionLabel={(actor) => actor.name}
+              getOptionKey={(actor) => actor.id}
               isOptionEqualToValue={(option, value) => {
                 return option.id === value.id;
               }}
