@@ -446,6 +446,7 @@ function MovieSingleWrapper() {
                           <a
                             className="event-section-link"
                             href={`https://www.imdb.com/title/${movie.data.additionalData.imdbId}`}
+                            target="_blank"
                           >
                             imdb.com
                           </a>

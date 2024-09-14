@@ -22,6 +22,7 @@ import {EventPreview} from '../EventPreview/EventPreview';
 import _ from 'lodash';
 import NoImage from '../utility/NoImage';
 import Grid from '@mui/material/Grid';
+import {isLandscape} from '../../../helpers/HelperFunctions';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -105,6 +106,7 @@ function MoviesListingWrapper() {
     if (!moviePoster && popularMoviesList.length > 0) {
       const movieIndex = _.random(0, popularMoviesList.length - 1);
       setMoviePoster(popularMoviesList[movieIndex]);
+      setOrientationFn();
     }
   }, [popularMoviesList.length]);
 
@@ -122,6 +124,11 @@ function MoviesListingWrapper() {
 
   const setOrientationFn = () => {
     const portrait = window.matchMedia('(orientation: portrait)');
+    if (isLandscape()) {
+      setsetorientation('Landscape');
+    } else {
+      setsetorientation('Portrait');
+    }
     portrait.addEventListener('change', (e) => {
       if (e.matches) {
         setsetorientation('Portrait');
@@ -130,7 +137,6 @@ function MoviesListingWrapper() {
       }
     });
   };
-  setOrientationFn();
 
   return (
     <Box>
