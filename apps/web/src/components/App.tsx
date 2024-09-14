@@ -13,7 +13,6 @@ import CenterContent from './front/layout/CenterContent';
 // scss
 import '../styles/App.scss';
 import MainContentWrapper from './front/mainContentWrapper/MainContentWrapper';
-import ComingSoon from './front/comingSoon/ComingSoon';
 
 // theme
 import lightTheme from './front/utility/themes/lightTheme';
@@ -26,6 +25,7 @@ import AdminRoot from './admin/AdminRoot';
 import useUserSettings from '../store/UserSettingsStore';
 import useAppStore from '../store/AppStore';
 import BigInfoDialog from './front/utility/BigInfoDialog';
+import RepairMode from './front/comingSoon/RepairMode';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -60,7 +60,8 @@ function App() {
   }, [userSettingsStore.theme]); // Dependency on theme ensures this effect runs when the theme changes
 
   // handle env switch
-  const comingSoon = Utils.env === 'production' && !Utils.isBetaMode();
+  const repairModeEnabled = false;
+  const repairMode = Utils.env === 'production' && repairModeEnabled;
   const location = useLocation();
 
   return isAdminRoute(location.pathname) ? (
@@ -80,8 +81,8 @@ function App() {
             <ThemeProvider theme={userSettingsStore.theme === 'light' ? lightTheme : darkTheme}>
               <MainLayout>
                 <CenterContent>
-                  {comingSoon ? (
-                    <ComingSoon />
+                  {repairMode ? (
+                    <RepairMode />
                   ) : (
                     <React.Fragment>
                       <HeaderMenuWrapper />

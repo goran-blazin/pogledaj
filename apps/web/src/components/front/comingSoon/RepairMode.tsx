@@ -94,7 +94,7 @@ const initialFieldValues: SupportEmail = {
   message: '',
 };
 
-function ComingSoon() {
+function RepairMode() {
   const {values, handleInputChange, resetValues} = useForm(initialFieldValues);
   const {mutate, isError, error, isSuccess} = useMutation<unknown, AxiosError<ApiErrors>, SupportEmail>({
     mutationFn: (values: SupportEmail) => EmailService.sendSupportEmail(values),
@@ -109,7 +109,7 @@ function ComingSoon() {
   return (
     <GridStyled>
       <BoxLeft>
-        <MovingBackground headerText={'Uskoro!'} />
+        <MovingBackground headerText={'Pogledaj.rs je trenutno u kvaru, molimo vas pokusajte kasnije'} />
       </BoxLeft>
       <BoxRight>
         <FormWrap>
@@ -169,4 +169,4 @@ function ComingSoon() {
   );
 }
 
-export default ComingSoon;
+export default RepairMode;
