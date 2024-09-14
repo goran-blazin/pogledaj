@@ -127,6 +127,12 @@ const Utils = {
   getMovieTitle(movie: Movie) {
     return movie.title || movie.originalTitle;
   },
+
+  getMovieLocalizedTitle(movie: Movie) {
+    return movie.localizedTitle
+      ? `${movie.localizedTitle} (${Utils.getMovieTitle(movie)})`
+      : Utils.getMovieTitle(movie);
+  },
 };
 
 export default Utils;

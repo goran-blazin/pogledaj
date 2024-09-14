@@ -87,12 +87,7 @@ function MovieProjectionsEdit() {
   return movieProjectionIsSuccess && cinemaTheatersIsSuccess && movieProjection ? (
     <SimpleForm onSubmit={save}>
       <Box>Izabrani bioskop: {movieProjection.cinemaTheater.cinema.name}</Box>
-      <Box>
-        Izabrani film:{' '}
-        {movieProjection.movie.localizedTitle
-          ? `${movieProjection.movie.localizedTitle} (${Utils.getMovieTitle(movieProjection.movie)})`
-          : Utils.getMovieTitle(movieProjection.movie)}
-      </Box>
+      <Box>Izabrani film: {Utils.getMovieLocalizedTitle(movieProjection.movie)}</Box>
       <SelectInput
         source={'cinemaTheaterId'}
         choices={cinemaTheatersSelectInput}

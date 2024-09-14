@@ -79,9 +79,7 @@ function MovieProjectionsCreate() {
   const moviesSelectInput = (movies || []).map((movie) => {
     return {
       id: movie.id,
-      name: movie.localizedTitle
-        ? `${movie.localizedTitle} (${Utils.getMovieTitle(movie)})`
-        : Utils.getMovieTitle(movie),
+      name: Utils.getMovieLocalizedTitle(movie),
     };
   });
 

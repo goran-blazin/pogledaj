@@ -90,7 +90,7 @@ function MovieProjectionsList() {
               <Datagrid bulkActionButtons={false}>
                 <FunctionField<MovieProjection>
                   label="Ime filma"
-                  render={(projection) => (projection ? Utils.getMovieTitle(projection.movie) : 'N/A')}
+                  render={(projection) => (projection ? Utils.getMovieLocalizedTitle(projection.movie) : 'N/A')}
                 />
                 <FunctionField<MovieProjection>
                   label="Sala"
