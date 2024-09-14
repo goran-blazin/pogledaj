@@ -42,6 +42,7 @@ function settingsWrapper() {
             }}
           >
             <a
+              // TODO relocate link to .env (ALL LINKS in APP)
               href="https://docs.google.com/forms/d/e/1FAIpQLSd6Lrd6_ozFTO-ygg9mNGTwm0joj0F_XgmWQyUItcnWk23KEg/viewform"
               target="_blank"
             >
