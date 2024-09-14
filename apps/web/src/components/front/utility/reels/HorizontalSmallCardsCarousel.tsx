@@ -16,7 +16,7 @@ function HorizontalSmallCardsCarousel({children}: {children: React.ReactNode[]})
         }}
         slidesPerView={3.5}
         spaceBetween={0}
-        centerInsufficientSlides={true}
+        centerInsufficientSlides={false}
         breakpoints={{
           // when window width is >= 640px
           640: {

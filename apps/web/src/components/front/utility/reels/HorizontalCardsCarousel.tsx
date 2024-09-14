@@ -12,7 +12,7 @@ function HorizontalCardsCarousel({children}: {children: React.ReactNode[]}) {
         className={'horizontal-cards-carousel'}
         slidesPerView={1.15}
         spaceBetween={0}
-        centeredSlides={true}
+        centeredSlides={false}
         breakpoints={{
           // when window width is >= 640px
           640: {
