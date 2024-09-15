@@ -40,11 +40,16 @@ function App() {
   if (Utils.env === 'production') {
     window.dataLayer = window.dataLayer || [];
     // eslint-disable-next-line no-inner-declarations
-    function gtag(...args: unknown[]) {
-      window.dataLayer.push(args);
+    function gtag() {
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments);
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     gtag('js', new Date());
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     gtag('config', 'G-1ZNMWCBWV4');
   }
 
