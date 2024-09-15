@@ -36,6 +36,18 @@ const customLocaleText: Partial<PickersLocaleText<Record<string, string>>> = {
 };
 
 function App() {
+  // init google tag if production
+  if (Utils.env === 'production') {
+    window.dataLayer = window.dataLayer || [];
+    // eslint-disable-next-line no-inner-declarations
+    function gtag(...args: unknown[]) {
+      window.dataLayer.push(args);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-1ZNMWCBWV4');
+  }
+
   const [searchParams] = useSearchParams();
   if (searchParams.get('setBetaMode')) {
     window.localStorage.setItem('betaMode', '1');
