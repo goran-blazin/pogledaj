@@ -102,7 +102,15 @@ function MovieProjectionsList() {
               <Datagrid bulkActionButtons={<PostBulkActionButtons />}>
                 <FunctionField<MovieProjection>
                   label="Ime filma"
-                  render={(projection) => (projection ? Utils.getMovieLocalizedTitle(projection.movie) : 'N/A')}
+                  render={(projection) =>
+                    projection ? (
+                      <a target={'_blank'} href={`/movies/${projection.movie.id}`}>
+                        {Utils.getMovieLocalizedTitle(projection.movie)}
+                      </a>
+                    ) : (
+                      'N/A'
+                    )
+                  }
                 />
                 <FunctionField<MovieProjection>
                   label="Sala"

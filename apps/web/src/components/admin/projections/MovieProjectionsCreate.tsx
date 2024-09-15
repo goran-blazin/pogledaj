@@ -1,18 +1,21 @@
 import {
+  ArrayInput,
   CheckboxGroupInput,
   Create,
   DateInput,
   required,
   SelectInput,
   SimpleForm,
+  SimpleFormIterator,
   TextInput,
   TimeInput,
   useGetList,
   useGetOne,
   useNotify,
+  useSimpleFormIterator,
 } from 'react-admin';
 import * as React from 'react';
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
 import {AxiosError} from 'axios';
 import Utils from '../../../helpers/Utils';
 import {Box} from '@mui/material';
@@ -91,29 +94,31 @@ function MovieProjectionsCreate() {
     async (values: Record<string, unknown>) => {
       try {
         const dates = getDatesBetween(values.projectionDateFrom as string, values.projectionDateTo as string);
-        const bulkData: CreateMovieProjectionBulkDTO = {
-          movieId: values.movieId as string,
-          cinemaTheaterId: values.cinemaTheaterId as string,
-          projectionDetails: dates.map((date) => {
-            return {
-              projectionDateTime: `${date} ${DateTime.fromJSDate(values.projectionTime as Date)
-                .set({seconds: 0, milliseconds: 0})
-                .toISOTime()}`,
-              // dubbedLanguageId?: string | null;
-              is3D: ((values.options as string[]) || []).includes('is3D'),
-              price: parseInt(values.price as string),
-              currencyCode: CurrencyCode.RSD,
-            };
-          }),
-        };
-
-        await Utils.forEachAwait(bulkData.projectionDetails, async (item) => {
-          const data: CreateMovieProjectionDTO = {
-            movieId: bulkData.movieId,
-            cinemaTheaterId: bulkData.cinemaTheaterId,
-            ...item,
+        await Utils.forEachAwait(values.projectionDetails as Record<string, unknown>[], async (projectionDetail) => {
+          const bulkData: CreateMovieProjectionBulkDTO = {
+            movieId: values.movieId as string,
+            cinemaTheaterId: projectionDetail.cinemaTheaterId as string,
+            projectionDetails: dates.map((date) => {
+              return {
+                projectionDateTime: `${date} ${DateTime.fromJSDate(projectionDetail.projectionTime as Date)
+                  .set({seconds: 0, milliseconds: 0})
+                  .toISOTime()}`,
+                // dubbedLanguageId?: string | null;
+                is3D: ((values.options as string[]) || []).includes('is3D'),
+                price: parseInt(projectionDetail.price as string),
+                currencyCode: CurrencyCode.RSD,
+              };
+            }),
           };
-          await useMutationResult.mutateAsync(data);
+
+          await Utils.forEachAwait(bulkData.projectionDetails, async (item) => {
+            const data: CreateMovieProjectionDTO = {
+              movieId: bulkData.movieId,
+              cinemaTheaterId: bulkData.cinemaTheaterId,
+              ...item,
+            };
+            await useMutationResult.mutateAsync(data);
+          });
         });
 
         notify('ra.notification.created', {
@@ -145,13 +150,7 @@ function MovieProjectionsCreate() {
           validate={required()}
           sx={{width: '30em'}}
         />
-        <SelectInput
-          source={'cinemaTheaterId'}
-          choices={cinemaTheatersSelectInput}
-          label={'Bioskopska Sala'}
-          validate={required()}
-          sx={{width: '30em'}}
-        />
+
         <DateInput
           source={'projectionDateFrom'}
           sx={{width: '30em'}}
@@ -166,14 +165,19 @@ function MovieProjectionsCreate() {
           label="Datum Do"
           validate={required()}
         />
-        <TimeInput
-          source={'projectionTime'}
-          sx={{width: '30em'}}
-          defaultValue={DateTime.now().toJSDate()}
-          label="Vreme"
-          validate={required()}
-        />
-        <TextInput source={'price'} name={'price'} label={'Cena'} validate={required()} sx={{width: '30em'}} />
+        <ArrayInput source="projectionDetails" defaultValue={[{}]}>
+          <SimpleFormIterator inline>
+            <SelectInput
+              source={'cinemaTheaterId'}
+              choices={cinemaTheatersSelectInput}
+              label={'Bioskopska Sala'}
+              validate={required()}
+              sx={{width: '20em'}}
+            />
+            <TimeInput source={'projectionTime'} sx={{width: '20em'}} label="Vreme" validate={required()} />
+            <TextInput source={'price'} label={'Cena'} validate={required()} sx={{width: '20em'}} />
+          </SimpleFormIterator>
+        </ArrayInput>
         <CheckboxGroupInput source={'options'} label={'Karakteristike'} choices={[{id: 'is3D', name: '3D'}]} />
       </SimpleForm>
     </Create>
