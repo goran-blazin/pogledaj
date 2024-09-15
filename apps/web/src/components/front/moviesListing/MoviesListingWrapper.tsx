@@ -34,9 +34,9 @@ function MoviesListingWrapper() {
     return MoviesService.findAll({onlyWithActiveProjections: true});
   });
 
-  const soonMovies = useQuery(['movies', 'findSoonMovies'], () => {
-    return MoviesService.findSoonMovies();
-  });
+  // const soonMovies = useQuery(['movies', 'findSoonMovies'], () => {
+  //   return MoviesService.findSoonMovies();
+  // });
 
   // movies autocomplete data
   const [moviesAutocompleteInputValue, setMoviesAutocompleteInputValue] = React.useState('');
@@ -111,17 +111,17 @@ function MoviesListingWrapper() {
     }
   }, [popularMoviesList.length]);
 
-  const soonMoviesList = useMemo(() => {
-    if (soonMovies?.data) {
-      return soonMovies.data
-        .sort((movie1, movie2) => {
-          return DateTime.fromISO(movie1.createdAt) < DateTime.fromISO(movie2.createdAt) ? -1 : 1;
-        })
-        .slice(0, MAX_ITEMS_PER_SLIDER);
-    } else {
-      return [];
-    }
-  }, [soonMovies?.data]);
+  // const soonMoviesList = useMemo(() => {
+  //   if (soonMovies?.data) {
+  //     return soonMovies.data
+  //       .sort((movie1, movie2) => {
+  //         return DateTime.fromISO(movie1.createdAt) < DateTime.fromISO(movie2.createdAt) ? -1 : 1;
+  //       })
+  //       .slice(0, MAX_ITEMS_PER_SLIDER);
+  //   } else {
+  //     return [];
+  //   }
+  // }, [soonMovies?.data]);
 
   const setOrientationFn = () => {
     const portrait = window.matchMedia('(orientation: portrait)');
@@ -297,18 +297,18 @@ function MoviesListingWrapper() {
             </Box>
           )}
 
-          {soonMoviesList.length > 0 && (
-            <Box mb={'20px'}>
-              <ContentWrapper padding>
-                <PageSubHeader headerText={'Uskoro'} />
-              </ContentWrapper>
-              <HorizontalSmallCardsCarousel>
-                {soonMoviesList.map((movie, i) => (
-                  <MovieSmallCard movie={movie} key={i} />
-                ))}
-              </HorizontalSmallCardsCarousel>
-            </Box>
-          )}
+          {/*{soonMoviesList.length > 0 && (*/}
+          {/*  <Box mb={'20px'}>*/}
+          {/*    <ContentWrapper padding>*/}
+          {/*      <PageSubHeader headerText={'Uskoro'} />*/}
+          {/*    </ContentWrapper>*/}
+          {/*    <HorizontalSmallCardsCarousel>*/}
+          {/*      {soonMoviesList.map((movie, i) => (*/}
+          {/*        <MovieSmallCard movie={movie} key={i} />*/}
+          {/*      ))}*/}
+          {/*    </HorizontalSmallCardsCarousel>*/}
+          {/*  </Box>*/}
+          {/*)}*/}
         </React.Fragment>
       )}
     </Box>
