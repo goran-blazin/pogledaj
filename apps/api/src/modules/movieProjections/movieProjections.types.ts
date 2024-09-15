@@ -7,3 +7,7 @@ export type MovieProjectionExtended = Omit<MovieProjection, 'options'> & {
 export type MovieProjectionOptions = {
   is3D: boolean;
 };
+
+export type MovieProjectionFilters = {
+  movieName?: string;
+};

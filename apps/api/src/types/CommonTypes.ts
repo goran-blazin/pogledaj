@@ -34,7 +34,7 @@ export type FilterOptions =
     }
   | undefined;
 
-export type GetListOptions = {
+export type GetListOptions<T = FilterOptions> = {
   sort?: {
     field: string;
     order: 'asc' | 'desc';
@@ -43,5 +43,5 @@ export type GetListOptions = {
     skip?: number;
     take?: number;
   };
-  filter?: FilterOptions;
+  filter?: T;
 };

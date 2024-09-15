@@ -1,7 +1,7 @@
 import {ForbiddenException, Injectable} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
-import {MovieProjectionOptions} from './movieProjections.types';
+import {MovieProjectionFilters, MovieProjectionOptions} from './movieProjections.types';
 import {DateTime} from 'ts-luxon';
 import {AdminRole, Cinema, CinemaTheater, CurrencyCode, Movie, MovieProjection} from '@prisma/client';
 import _ from 'lodash';
@@ -325,10 +325,12 @@ export class MovieProjectionsService {
 
   async findAll(
     params: {movieId?: string; cinemaId?: string; includeArchived: boolean},
-    options: GetListOptions = {},
+    options: GetListOptions<MovieProjectionFilters> = {},
   ): Promise<ReturnList<MovieProjection>> {
     const {includeArchived = false} = params;
-    const where = {
+    const {filter} = options;
+
+    const where: Record<string, unknown> = {
       movieId: params.movieId ? params.movieId : undefined,
       cinemaTheater: params.cinemaId
         ? {
@@ -337,6 +339,33 @@ export class MovieProjectionsService {
         : undefined,
       projectionDateTime: includeArchived ? undefined : excludeArchivedMovieProjectionsQuery(),
     };
+
+    if (filter) {
+      if (filter.movieName) {
+        where['movie'] = {
+          OR: [
+            {
+              localizedTitle: {
+                contains: filter.movieName,
+                mode: 'insensitive',
+              },
+            },
+            {
+              title: {
+                contains: filter.movieName,
+                mode: 'insensitive',
+              },
+            },
+            {
+              originalTitle: {
+                contains: filter.movieName,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        };
+      }
+    }
 
     const [movieProjections, movieProjectionsCount] = await Promise.all([
       this.prismaService.movieProjection.findMany({

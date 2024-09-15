@@ -12,10 +12,9 @@ import {
   useGetList,
   useGetOne,
   useNotify,
-  useSimpleFormIterator,
 } from 'react-admin';
 import * as React from 'react';
-import {useCallback, useEffect} from 'react';
+import {useCallback} from 'react';
 import {AxiosError} from 'axios';
 import Utils from '../../../helpers/Utils';
 import {Box} from '@mui/material';

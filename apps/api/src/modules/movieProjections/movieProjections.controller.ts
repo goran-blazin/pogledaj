@@ -75,6 +75,7 @@ export class MovieProjectionsController {
     includeArchived?: boolean,
     @Query('sort') sort?: string,
     @Query('range') range?: string,
+    @Query('filter') filter?: string,
   ) {
     return this.movieProjectionsService.findAll(
       {
@@ -84,6 +85,7 @@ export class MovieProjectionsController {
       {
         sort: sort ? JSON.parse(sort) : undefined,
         range: range ? JSON.parse(range) : undefined,
+        filter: filter ? JSON.parse(filter) : undefined,
       },
     );
   }

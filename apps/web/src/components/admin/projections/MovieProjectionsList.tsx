@@ -10,6 +10,7 @@ import {
   ExportButton,
   FunctionField,
   List,
+  SearchInput,
   TopToolbar,
   useGetList,
   WrapperField,
@@ -63,6 +64,8 @@ function MovieProjectionsList() {
     </>
   );
 
+  const postFilters = [<SearchInput source="movieName" alwaysOn placeholder={'Ime filma...'} />];
+
   return (
     <>
       {data && (
@@ -98,6 +101,7 @@ function MovieProjectionsList() {
                 field: 'updatedAt',
                 order: 'DESC',
               }}
+              filters={postFilters}
             >
               <Datagrid bulkActionButtons={<PostBulkActionButtons />}>
                 <FunctionField<MovieProjection>
