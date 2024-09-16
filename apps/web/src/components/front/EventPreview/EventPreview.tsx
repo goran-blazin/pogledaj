@@ -11,8 +11,7 @@ import EventPreviewAction from './EventPreviewAction';
 
 const EventPreviewMainWrap = styled(Box)({
   width: '100%',
-  height: 'calc(100dvh - 204px)',
-  backgroundColor: 'primary.default', // TODO fix this
+  height: 'calc(100vh - 210px)',
   position: 'relative',
   marginBottom: '20px',
 });
