@@ -3,6 +3,7 @@ import MiscTextWrapper from '../layout/MiscTextWrapper';
 import ContentWrapper from '../layout/ContentWrapper';
 import Paragraph from '../utility/typography/Paragraph';
 import {Box, Typography} from '@mui/material';
+import Link from '../utility/typography/Link';
 import React from 'react';
 
 function AboutUs() {
@@ -122,8 +123,8 @@ function AboutUs() {
           </Typography>
           <Paragraph marginBottom="0">
             Vaša povratna informacija nam je veoma važna. Ukoliko imate pitanja, sugestije ili komentare, slobodno nas
-            kontaktirajte putem e-maila na <a href="mailto:info@pogledaj.rs">info@pogledaj.rs</a>. Rado ćemo vam
-            odgovoriti i pomoći vam.
+            kontaktirajte putem e-maila na <Link text="info@pogledaj.rs" link="mailto:info@pogledaj.rs" />. Rado ćemo
+            vam odgovoriti i pomoći vam.
           </Paragraph>
         </>
       </MiscTextWrapper>

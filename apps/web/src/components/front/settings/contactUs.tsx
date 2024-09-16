@@ -12,7 +12,7 @@ import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 import {ApiErrors} from '../../../types/ErrorTypes';
 import EmailService from '../../../services/EmailService';
-import React from 'react';
+import Link from '../utility/typography/Link';
 
 const FormWrap = styled(Box)(({theme}) => ({
   padding: '0',
@@ -58,8 +58,8 @@ function ContactUs() {
             <InputWrap>
               <Paragraph>
                 Ukoliko želite da nam se obratite, imate pitanja ili sugestije, mozete nam poslati e-mail na{' '}
-                <a href="mailto:info@pogledaj.rs">info@pogledaj.rs</a> ili popunite kontakt formu u nastavku i naši
-                saradnici će vas kontaktirati u najkraćem roku.
+                <Link text="info@pogledaj.rs" link="mailto:info@pogledaj.rs" /> ili popunite kontakt formu u nastavku i
+                naši saradnici će vas kontaktirati u najkraćem roku.
               </Paragraph>
             </InputWrap>
             <InputWrap>
