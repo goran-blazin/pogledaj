@@ -7,6 +7,7 @@ const StyledPopper = styled(Popper)((theme) => ({
     fontWeight: 400,
     fontSize: '14px',
     lineHeight: '19px',
+    borderRadius: '15px',
     '& .MuiAutocomplete-noOptions': {
       color: theme.theme.palette.text.primary,
     },

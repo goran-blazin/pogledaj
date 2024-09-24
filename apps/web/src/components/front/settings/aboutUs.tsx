@@ -4,7 +4,6 @@ import ContentWrapper from '../layout/ContentWrapper';
 import Paragraph from '../utility/typography/Paragraph';
 import {Box, Typography} from '@mui/material';
 import Link from '../utility/typography/Link';
-import React from 'react';
 
 function AboutUs() {
   return (

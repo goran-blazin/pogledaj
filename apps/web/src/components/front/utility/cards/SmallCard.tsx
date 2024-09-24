@@ -36,6 +36,7 @@ function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', on
       sx={{
         borderRadius: '15px',
         backgroundColor: 'inherit',
+        margin: '4px 0',
       }}
     >
       <Box sx={{position: 'relative'}}>

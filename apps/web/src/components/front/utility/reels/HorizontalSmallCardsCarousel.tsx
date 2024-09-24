@@ -13,6 +13,7 @@ function HorizontalSmallCardsCarousel({children}: {children: React.ReactNode[]})
       <Swiper
         style={{
           paddingLeft: '21px',
+          padding: '2px 0 2px 21px',
         }}
         slidesPerView={3.5}
         spaceBetween={0}
