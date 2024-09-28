@@ -2,8 +2,9 @@ import PageTitle from '../utility/typography/PageTitle';
 import MiscTextWrapper from '../layout/MiscTextWrapper';
 import ContentWrapper from '../layout/ContentWrapper';
 import Paragraph from '../utility/typography/Paragraph';
-import {Box, Typography} from '@mui/material';
 import Link from '../utility/typography/Link';
+import PageSubTitle from '../utility/typography/PageSubTitle';
+import ListStyled from '../utility/typography/ListStyled';
 
 function AboutUs() {
   return (
@@ -15,111 +16,41 @@ function AboutUs() {
             Dobrodošli na Pogledaj.rs, vaš pouzdani izvor za najnovije informacije o dešavanjima u bioskopima širom
             Srbije!
           </Paragraph>
-          <Typography
-            variant={'h3'}
-            sx={(theme) => ({
-              color: theme.customTypography.paragraph.color,
-              fontSize: '18px',
-              fontWeight: 700,
-              marginBottom: '10px',
-            })}
-          >
-            Ko smo mi?
-          </Typography>
+          <PageSubTitle title="Ko smo mi?" variant="h3" marginBottom="0" />
           <Paragraph>
             Pogledaj.rs je informativni portal posvećen ljubiteljima filma. Naša misija je da vam omogućimo brz i lak
             pristup najnovijim informacijama o bioskopskim repertoarima, specijalnim popustima, akcijama i događajima
             koji se tiču bioskopskih projekcija.
           </Paragraph>
-          <Typography
-            variant={'h3'}
-            sx={(theme) => ({
-              color: theme.customTypography.paragraph.color,
-              fontSize: '18px',
-              fontWeight: 700,
-              marginBottom: '10px',
-            })}
-          >
-            Naša misija
-          </Typography>
+          <PageSubTitle title="Naša misija" variant="h3" marginBottom="0" />
           <Paragraph>
             Naša misija je da obogatimo vaše filmsko iskustvo pružajući vam sve potrebne informacije na jednom mestu.
             Verujemo da filmovi povezuju ljude i želimo da vam pomognemo da pronađete savršene filmske trenutke za vas i
             vaše najbliže.
           </Paragraph>
-          <Typography
-            variant={'h3'}
-            sx={(theme) => ({
-              color: theme.customTypography.paragraph.color,
-              fontSize: '18px',
-              fontWeight: 700,
-              marginBottom: '10px',
-            })}
-          >
-            Šta nudimo?
-          </Typography>
+          <PageSubTitle title="Šta nudimo?" variant="h3" marginBottom="0" />
           <Paragraph marginBottom="0">Na Pogledaj.rs možete pronaći:</Paragraph>
-          <ul>
+          <ListStyled>
             <li>
-              <Paragraph marginBottom="0">
-                <Box component={'span'} fontWeight={600}>
-                  Repertoare
-                </Box>{' '}
-                bioskopa širom Srbije, sa tačnim terminima projekcija.
-              </Paragraph>
+              <strong>Repertoare</strong> bioskopa širom Srbije, sa tačnim terminima projekcija.
             </li>
             <li>
-              <Paragraph marginBottom="0">
-                <Box component={'span'} fontWeight={600}>
-                  Informacije o popustima
-                </Box>{' '}
-                i specijalnim akcijama koje nude bioskopi.
-              </Paragraph>
+              <strong>Informacije o popustima</strong> i specijalnim akcijama koje nude bioskopi.
             </li>
             <li>
-              <Paragraph marginBottom="0">
-                <Box component={'span'} fontWeight={600}>
-                  Novosti o filmovima
-                </Box>{' '}
-                koji stižu u bioskope, kao i informacije o premijerama.
-              </Paragraph>
+              <strong>Novosti o filmovima</strong> koji stižu u bioskope, kao i informacije o premijerama.
             </li>
             <li>
-              <Paragraph marginBottom="0">
-                U budućnosti planiramo da uvedemo mogućnost{' '}
-                <Box component={'span'} fontWeight={600}>
-                  rezervacije i plaćanja ulaznica
-                </Box>{' '}
-                direktno putem našeg sajta.
-              </Paragraph>
+              U budućnosti planiramo da uvedemo mogućnost <strong>rezervacije i plaćanja ulaznica</strong> direktno
+              putem našeg sajta.
             </li>
-          </ul>
-          <Typography
-            variant={'h3'}
-            sx={(theme) => ({
-              color: theme.customTypography.paragraph.color,
-              fontSize: '18px',
-              fontWeight: 700,
-              marginBottom: '10px',
-            })}
-          >
-            Naš tim
-          </Typography>
+          </ListStyled>
+          <PageSubTitle title="Naš tim" variant="h3" marginBottom="0" />
           <Paragraph>
             Naš tim čine entuzijastični ljubitelji filma sa dugogodišnjim iskustvom u industriji zabave. Svi mi delimo
             strast prema filmovima i posvećeni smo tome da vam pružimo najkvalitetnije i najtačnije informacije.
           </Paragraph>
-          <Typography
-            variant={'h3'}
-            sx={(theme) => ({
-              color: theme.customTypography.paragraph.color,
-              fontSize: '18px',
-              fontWeight: 700,
-              marginBottom: '10px',
-            })}
-          >
-            Kontaktirajte nas
-          </Typography>
+          <PageSubTitle title="Kontaktirajte nas" variant="h3" marginBottom="0" />
           <Paragraph marginBottom="0">
             Vaša povratna informacija nam je veoma važna. Ukoliko imate pitanja, sugestije ili komentare, slobodno nas
             kontaktirajte putem e-maila na <Link text="info@pogledaj.rs" link="mailto:info@pogledaj.rs" />. Rado ćemo
