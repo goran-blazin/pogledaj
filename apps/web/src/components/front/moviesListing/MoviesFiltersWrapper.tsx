@@ -428,7 +428,6 @@ function MoviesFiltersWrapper() {
               autoComplete
               includeInputInList
               loading={actorsRQ.isLoading}
-              // PopperComponent={StyledPopper}
               renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option, index) => (
                   <ChipStyled
@@ -479,7 +478,6 @@ function MoviesFiltersWrapper() {
               autoComplete
               includeInputInList
               loading={directorsRQ.isLoading}
-              // PopperComponent={StyledPopper}
               renderInput={(params) => {
                 params.InputProps.startAdornment = (
                   <InputAdornment position="start">
