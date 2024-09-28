@@ -141,6 +141,22 @@ const lightTheme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '15px',
+          backgroundColor: `var(--input-field-grey)`,
+        },
+      },
+    },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          borderRadius: '15px',
+          backgroundColor: `var(--input-field-grey)`,
+        },
+      },
+    },
   },
   palette: {
     background: {

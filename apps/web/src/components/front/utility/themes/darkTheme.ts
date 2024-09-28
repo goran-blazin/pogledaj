@@ -140,6 +140,23 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '15px',
+          backgroundColor: `var(--dark-blue)`,
+        },
+      },
+    },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          color: 'var(--dark-mode-text)',
+          borderRadius: '15px',
+          backgroundColor: `var(--dark-blue)`,
+        },
+      },
+    },
   },
   palette: {
     background: {

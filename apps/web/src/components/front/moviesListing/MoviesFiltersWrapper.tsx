@@ -9,7 +9,6 @@ import MoviesService from '../../../services/MoviesService';
 import SelectBoxStyled from '../utility/form/SelectBoxStyled';
 import {Person} from '../../../types/PeopleTypes';
 import TextFieldStyled from '../utility/form/TextFieldStyled';
-import StyledPopper from '../utility/form/StyledPopper';
 import PersonsService from '../../../services/PersonsService';
 import {useDebounce} from '@uidotdev/usehooks';
 import {MovieLengthCategory} from '../../../types/MoviesTypes';
@@ -429,7 +428,7 @@ function MoviesFiltersWrapper() {
               autoComplete
               includeInputInList
               loading={actorsRQ.isLoading}
-              PopperComponent={StyledPopper}
+              // PopperComponent={StyledPopper}
               renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option, index) => (
                   <ChipStyled
@@ -480,7 +479,7 @@ function MoviesFiltersWrapper() {
               autoComplete
               includeInputInList
               loading={directorsRQ.isLoading}
-              PopperComponent={StyledPopper}
+              // PopperComponent={StyledPopper}
               renderInput={(params) => {
                 params.InputProps.startAdornment = (
                   <InputAdornment position="start">

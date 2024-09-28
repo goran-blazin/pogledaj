@@ -1,15 +1,13 @@
 import {styled} from '@mui/material';
 import Popper from '@mui/material/Popper';
-
+// TODO - remove this component once tested - styles added to themes
 const StyledPopper = styled(Popper)((theme) => ({
   '& .MuiPaper-root': {
-    color: theme.theme.palette.text.primary,
+    color: theme.theme.customForm.inputField.textColor,
     fontWeight: 400,
-    fontSize: '14px',
-    lineHeight: '19px',
     borderRadius: '15px',
     '& .MuiAutocomplete-noOptions': {
-      color: theme.theme.palette.text.primary,
+      color: theme.theme.customForm.inputField.textColor,
     },
   },
 }));
