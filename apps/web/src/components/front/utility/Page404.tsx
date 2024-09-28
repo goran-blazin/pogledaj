@@ -2,6 +2,8 @@ import {Grid} from '@mui/material';
 import Paragraph from './typography/Paragraph';
 import Button from './buttons/Button';
 import ContentWrapper from '../layout/ContentWrapper';
+import {Link} from 'react-router-dom';
+import {namedRoutes} from '../../../routes';
 
 function page404() {
   return (
@@ -48,7 +50,9 @@ function page404() {
             Verujemo da ovo nije bio tvoj izbor,
             <br /> vrati se u glavni hol.
           </Paragraph>
-          <Button>Povratak na početnu stranu</Button>
+          <Link to={namedRoutes.home}>
+            <Button>Povratak na početnu stranu</Button>
+          </Link>
         </Grid>
       </Grid>
     </ContentWrapper>
