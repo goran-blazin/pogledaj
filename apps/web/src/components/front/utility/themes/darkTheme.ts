@@ -41,6 +41,10 @@ const darkTheme = createTheme({
       color: `var(--dark-mode-text)`,
       backgroundColor: `var(--dark-mode-background-light)`,
     },
+    chipStyled: {
+      color: 'var(--light-blue)',
+      background: `var(--dark-mode-cathegory-blue)`,
+    },
   },
   customBackground: {
     primary: `var(--dark-blue)`,

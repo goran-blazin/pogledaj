@@ -180,7 +180,7 @@ function MoviesFiltersWrapper() {
       <>
         <PageHeader headerText={'Filteri'} />
         <Box sx={{mt: 5}}>
-          <PageSubHeader headerText={`Projekcije`} Icon={PersonalVideoOutlinedIcon} />
+          <PageSubHeader headerText={`Projekcija`} Icon={PersonalVideoOutlinedIcon} />
           <FormControl fullWidth sx={{mt: 2}}>
             <SelectBoxStyled
               inputProps={{

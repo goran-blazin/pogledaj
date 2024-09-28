@@ -1,4 +1,15 @@
 import {Chip} from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import {styled} from '@mui/material';
+
+const ClearIconStyled = styled(ClearIcon)(({theme}) => ({
+  padding: '2px',
+  color: `${theme.customForm.chipStyled.color} !important`,
+  backgroundColor: theme.customForm.chipStyled.background,
+  borderRadius: '50%',
+  marginRight: '5px',
+}));
 
 type ChipStyledProps = {
   color?: string | undefined;
@@ -17,7 +28,8 @@ function ChipStyled({color, bg, label, margin, onClick}: ChipStyledProps) {
         fontSize: '14px',
         margin: margin,
       }}
-      onClick={onClick}
+      onDelete={onClick}
+      deleteIcon={<ClearIconStyled />}
       label={label}
     />
   );

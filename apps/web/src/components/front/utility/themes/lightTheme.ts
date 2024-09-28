@@ -42,6 +42,10 @@ const lightTheme = createTheme({
       color: `var(--dark-grey)`,
       backgroundColor: `var(--cathegory-grey)`,
     },
+    chipStyled: {
+      color: 'var(--cathegory-grey)',
+      background: `#00000042`,
+    },
   },
   customBackground: {
     primary: `var(--input-field-grey)`,

@@ -55,6 +55,10 @@ declare module '@mui/material/styles' {
         color: string;
         backgroundColor: string;
       };
+      chipStyled: {
+        color: string;
+        background: string;
+      };
     };
     customBackground: {
       primary: string;
@@ -171,6 +175,10 @@ declare module '@mui/material/styles' {
       inputFieldStyled: {
         color: React.CSSProperties['color'];
         backgroundColor: React.CSSProperties['color'];
+      };
+      chipStyled: {
+        color: React.CSSProperties['color'];
+        background: React.CSSProperties['color'];
       };
     };
     colorPalette?: {
