@@ -16,6 +16,7 @@ export const namedRoutes = {
   followUs: '/followUs',
   termsOfAgreement: '/termsOfAgreement',
   privacyPolicy: '/privacyPolicy',
+  page404: '/404',
 };
 
 const adminRootPath = '/admin';

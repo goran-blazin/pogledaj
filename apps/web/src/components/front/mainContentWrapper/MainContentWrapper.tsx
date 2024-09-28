@@ -7,6 +7,7 @@ import MovieSingleWrapper from '../movieSingle/MovieSingleWrapper';
 import MovieProjectionSingle from '../movieProjectionSingle/MovieProjectionSingle';
 import SettingsWrapper from '../settings/settingsWrapper';
 import ReservationsWrapper from '../reservations/ReservationsWrapper';
+import Page404 from '../utility/Page404';
 import {namedRoutes} from '../../../routes';
 
 import {Box} from '@mui/material';
@@ -36,6 +37,7 @@ function MainContentWrapper() {
       <Route path={namedRoutes.movieSingle} element={<MovieSingleWrapper />} />
       <Route path={namedRoutes.movieProjectionSingle} element={<MovieProjectionSingle />} />
       <Route path={namedRoutes.reservations} element={<ReservationsWrapper />} />
+      <Route path={namedRoutes.page404} element={<Page404 />} />
     </Routes>
   );
 

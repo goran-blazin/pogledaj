@@ -8,12 +8,14 @@ const ParagraphStyled = styled(Typography)(({theme}) => ({
 interface ParagraphStyledProps {
   children: React.ReactNode;
   marginBottom?: string;
+  textAlign?: string;
 }
 
-function Paragraph({children, marginBottom}: ParagraphStyledProps) {
+function Paragraph({children, marginBottom, textAlign}: ParagraphStyledProps) {
   return (
     <ParagraphStyled
       sx={{
+        textAlign: textAlign ? textAlign : 'left',
         marginBottom: (theme) => marginBottom || theme.customTypography.paragraph.marginBottom,
       }}
     >
