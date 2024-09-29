@@ -10,10 +10,9 @@ WORKDIR /home/node
 COPY package*.json ./
 COPY prisma/ ./prisma/
 
-# build node_modules
 RUN npm ci
 
-RUN npx prisma generate --sql
+COPY src/generated/.prisma ./node_modules/.prisma
 
 COPY --chown=node:node . .
 
