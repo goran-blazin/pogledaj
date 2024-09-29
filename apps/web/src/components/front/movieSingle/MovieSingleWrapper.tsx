@@ -291,6 +291,8 @@ function MovieSingleWrapper() {
     }
   }, [selectedCinema]);
 
+  const nativeShare = typeof navigator.share === 'function';
+
   const {orderedActors, trailerUrl, posterUrl} = useMemo(() => {
     const movieData = movie?.data;
     if (!movieData) {
@@ -405,7 +407,7 @@ function MovieSingleWrapper() {
                                 </IconButtonStyled>
                               </Grid>
                             )}
-                            <Grid item>
+                            <Grid item sx={{display: nativeShare ? undefined : 'none'}}>
                               <IconButtonStyled handleClick={handleClickShare}>
                                 <ShareIconStyle />
                               </IconButtonStyled>
