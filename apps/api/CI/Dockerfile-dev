@@ -3,6 +3,8 @@ FROM node:20-slim as builder
 ENV NODE_ENV build
 RUN apt-get update && apt-get install -y openssl libssl-dev
 
+ENV DATABASE_URL postgresql://pogledaj_user:ovojesifrazabazu_pogledaj_db_dev@192.168.1.9:5432/pogledaj_db_dev
+
 # user node
 USER node
 WORKDIR /home/node
@@ -13,7 +15,7 @@ COPY prisma/ ./prisma/
 # build node_modules
 RUN npm ci
 
-RUN npx prisma generate
+RUN npx prisma generate --sql
 
 COPY --chown=node:node . .
 

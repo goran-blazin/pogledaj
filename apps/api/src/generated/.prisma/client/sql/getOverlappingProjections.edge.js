@@ -1,0 +1,3 @@
+"use strict"
+const { makeTypedQueryFactory: $mkFactory } = require("@prisma/client/runtime/edge.js")
+exports.getOverlappingProjections = /*#__PURE__*/ $mkFactory("WITH MovieEndTime AS (\nSELECT\nmp.id AS \"projectionId\",\nmp.\"projectionDateTime\" AS \"startDateTime\",\nm.\"runtimeMinutes\",\nm.\"originalTitle\" AS \"movieName\",\n(mp.\"projectionDateTime\" + INTERVAL '1 minute' * m.\"runtimeMinutes\") AS \"endDateTime\"\nFROM\n\"MovieProjection\" mp\nJOIN\n\"Movie\" m ON mp.\"movieId\" = m.id\nWHERE\nmp.\"cinemaTheaterId\"::text = $1\n)\nSELECT\n*\nFROM\nMovieEndTime\nWHERE\n\"startDateTime\" <= $2\nAND \"endDateTime\" >= $3\n;")
