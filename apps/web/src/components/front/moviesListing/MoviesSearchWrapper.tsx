@@ -29,14 +29,27 @@ function MoviesSearchWrapper() {
         </Box>
         <Box mb={'20px'}>
           <PageSubHeader headerText={'Rezultat pretrage'} />
-          {moviesSearch.isLoading ? (
-            // <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
-            <LoadingBox />
-          ) : (moviesSearch.data || []).length > 0 ? (
-            (moviesSearch.data || []).map((movie, i) => <MovieBigCard movie={movie} key={i} />)
-          ) : (
-            <PageSubHeader headerText={'Nijedan film ne odgovara unešenim parametrima'} />
-          )}
+          <Box
+            sx={{
+              display: 'grid',
+              gap: '20px',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: '1fr 1fr',
+                md: '1fr 1fr 1fr',
+                lg: '1fr 1fr 1fr 1fr',
+              },
+            }}
+          >
+            {moviesSearch.isLoading ? (
+              // <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+              <LoadingBox />
+            ) : (moviesSearch.data || []).length > 0 ? (
+              (moviesSearch.data || []).map((movie, i) => <MovieBigCard movie={movie} key={i} />)
+            ) : (
+              <PageSubHeader headerText={'Nijedan film ne odgovara unešenim parametrima'} />
+            )}
+          </Box>
         </Box>
       </Box>
     </ContentWrapper>

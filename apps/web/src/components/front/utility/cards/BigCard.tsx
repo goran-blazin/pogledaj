@@ -59,10 +59,10 @@ function BigCard({
     imageFilePath: imageSrc || defaultImageSrc,
     transformations: {
       width: 600,
-      aspectRatio: {
-        width: 1,
-        height: 1,
-      },
+      // aspectRatio: {
+      //   width: 1,
+      //   height: 1,
+      // },
       defaultImage: ImageHelper.getPlaceholderImagePath({
         imageFilePath: defaultImageSrc,
         omitCdnURL: true,
@@ -78,11 +78,20 @@ function BigCard({
         borderRadius: '15px',
         backgroundColor: 'inherit',
         border: '2px solid rgba(255, 255, 255, 0.25)',
-        marginBottom: '14px',
       }}
     >
       <Box sx={{position: 'relative'}}>
-        <CardMedia component="img" image={resizedImageSrc} alt={imageAltText} />
+        <CardMedia
+          component="img"
+          image={resizedImageSrc}
+          alt={imageAltText}
+          sx={{
+            aspectRatio: {
+              xs: '1/1',
+              sm: '1/1.5',
+            },
+          }}
+        />
         <Box
           sx={{
             position: 'absolute',
