@@ -20,9 +20,9 @@ export type MoviePosterImages = {
   mediumPoster: string;
   smallPoster: string;
   thumbPoster: string;
-  bigBackground: string;
-  mediumBackground: string;
-  smallBackground: string;
+  bigBackground?: string;
+  mediumBackground?: string;
+  smallBackground?: string;
 };
 
 export type MovieVideo = {

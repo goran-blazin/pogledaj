@@ -250,15 +250,15 @@ export class TmdbProvider {
         mediumPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, -2)}${externalMovie.poster_path}`,
         smallPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, -3)}${externalMovie.poster_path}`,
         thumbPoster: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.poster_sizes, 1)}${externalMovie.poster_path}`,
-        bigBackground: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -1)}${
-          externalMovie.backdrop_path
-        }`,
-        mediumBackground: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -2)}${
-          externalMovie.backdrop_path
-        }`,
-        smallBackground: `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -3)}${
-          externalMovie.backdrop_path
-        }`,
+        bigBackground: externalMovie.backdrop_path
+          ? `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -1)}${externalMovie.backdrop_path}`
+          : undefined,
+        mediumBackground: externalMovie.backdrop_path
+          ? `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -2)}${externalMovie.backdrop_path}`
+          : undefined,
+        smallBackground: externalMovie.backdrop_path
+          ? `${apiConf.images.secure_base_url}${_.nth(apiConf.images.backdrop_sizes, -3)}${externalMovie.backdrop_path}`
+          : undefined,
       },
       videos: externalMovieVideos.results
         .sort((v1, v2) => {
