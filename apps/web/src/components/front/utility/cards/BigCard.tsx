@@ -78,6 +78,7 @@ function BigCard({
         borderRadius: '15px',
         backgroundColor: 'inherit',
         border: '2px solid rgba(255, 255, 255, 0.25)',
+        marginBottom: '14px',
       }}
     >
       <Box sx={{position: 'relative'}}>

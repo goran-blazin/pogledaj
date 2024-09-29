@@ -33,11 +33,7 @@ function MoviesSearchWrapper() {
             // <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
             <LoadingBox />
           ) : (moviesSearch.data || []).length > 0 ? (
-            (moviesSearch.data || []).map((movie, i) => (
-              <Box sx={{mt: 1}} key={i}>
-                <MovieBigCard movie={movie} />
-              </Box>
-            ))
+            (moviesSearch.data || []).map((movie, i) => <MovieBigCard movie={movie} key={i} />)
           ) : (
             <PageSubHeader headerText={'Nijedan film ne odgovara unešenim parametrima'} />
           )}
