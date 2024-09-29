@@ -111,7 +111,7 @@ function App() {
                         header={'Dobrodošli na pogledaj!'}
                         text={`
                             Čestitamo, postali ste deo budućnosti bioskopa! 
-                            Svi vaši omiljeni filmski titlovi, omiljeni bioskopi od sada se nalaze na jednom mestu, na dohvat ruke! 
+                            Svi vaši omiljeni filmski titlovi, omiljeni bioskopi od sada se nalaze na jednom mestu, nadohvat ruke! 
                             Neka uživanje počne!
                         `}
                         buttons={[{text: 'Pristupi platformi', onClick: appStore.setNotFirstTimeVisitor}]}

@@ -1,6 +1,5 @@
 import {Box, Card, CardMedia, Divider, IconButton, Rating, Stack, styled, Typography} from '@mui/material';
 import {FavoriteOutlined, SvgIconComponent} from '@mui/icons-material';
-import React from 'react';
 import {IntRange} from '../../../../types/GeneralTypes';
 import _ from 'lodash';
 import ImageHelper from '../../../../helpers/ImageHelper';
@@ -139,17 +138,21 @@ function BigCard({
                 {descSecondRow}
               </Typography>
             </Box>
-            {fiveStarRating && (
-              <StyledRating
-                readOnly
-                value={fiveStarRating}
-                precision={0.1}
-                sx={{
-                  color: 'text.secondary',
-                }}
-                size={'small'}
-              />
-            )}
+            {Utils.isBetaMode() ? (
+              <>
+                {fiveStarRating && (
+                  <StyledRating
+                    readOnly
+                    value={fiveStarRating}
+                    precision={0.1}
+                    sx={{
+                      color: 'text.secondary',
+                    }}
+                    size={'small'}
+                  />
+                )}
+              </>
+            ) : null}
           </Stack>
         </Box>
       </Box>

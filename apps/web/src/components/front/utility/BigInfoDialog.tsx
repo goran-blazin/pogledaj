@@ -1,22 +1,7 @@
-import {Box, Dialog, DialogActions, DialogContent, Typography} from '@mui/material';
-import React from 'react';
-import {styled} from '@mui/system';
+import {Box, Dialog, DialogContent} from '@mui/material';
 import ButtonStyled from './buttons/Button';
-
-const TypographyHeader = styled(Typography)(() => ({
-  fontStyle: 'normal',
-  fontWeight: '700',
-  fontSize: '20px',
-  lineHeight: '27px',
-}));
-
-const TypographyText = styled(Typography)(() => ({
-  fontStyle: 'normal',
-  fontWeight: '400',
-  fontSize: '12px',
-  lineHeight: '16px',
-  color: '#535353',
-}));
+import PageTitle from './typography/PageTitle';
+import Paragraph from './typography/Paragraph';
 
 function BigInfoDialog({
   open,
@@ -34,14 +19,16 @@ function BigInfoDialog({
   return (
     <Dialog open={open}>
       <DialogContent>
-        <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <img src={imgSrc} style={{width: '100%'}} />
+        <Box sx={{textAlign: 'center', marginBottom: '20px'}}>
+          <img
+            src={imgSrc}
+            style={{
+              maxWidth: '100%',
+            }}
+          />
         </Box>
-
-        <TypographyHeader pb={2}>{header}</TypographyHeader>
-        <TypographyText>{text}</TypographyText>
-      </DialogContent>
-      <DialogActions>
+        <PageTitle title={header}></PageTitle>
+        <Paragraph>{text}</Paragraph>
         {buttons.map((button, index) => {
           return (
             <ButtonStyled variant={'contained'} key={index} onClick={() => button.onClick()}>
@@ -49,7 +36,7 @@ function BigInfoDialog({
             </ButtonStyled>
           );
         })}
-      </DialogActions>
+      </DialogContent>
     </Dialog>
   );
 }
