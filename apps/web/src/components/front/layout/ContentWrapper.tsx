@@ -5,14 +5,16 @@ type ContentWrapperTypes = {
   children: ReactElement;
   padding?: boolean;
   marginBottom?: string;
+  marginTop?: string;
 };
 
-function ContentWrapper({children, padding, marginBottom}: ContentWrapperTypes) {
+function ContentWrapper({children, padding, marginBottom, marginTop}: ContentWrapperTypes) {
   return (
     <Box
       className={`content-wrapper${padding ? ' inner-padding' : ''}`}
       sx={{
         marginBottom: marginBottom,
+        marginTop: marginTop,
       }}
     >
       {children}

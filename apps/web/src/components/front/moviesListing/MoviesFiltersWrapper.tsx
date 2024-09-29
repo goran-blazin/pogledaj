@@ -175,9 +175,9 @@ function MoviesFiltersWrapper() {
   };
 
   return (
-    <ContentWrapper padding>
+    <ContentWrapper padding marginTop="30px">
       <>
-        <PageHeader headerText={'Filteri'} />
+        <PageHeader headerText={'Detaljna pretraga'} />
         <Box sx={{mt: 5}}>
           <PageSubHeader headerText={`Projekcija`} Icon={PersonalVideoOutlinedIcon} />
           <FormControl fullWidth sx={{mt: 2}}>

@@ -6,7 +6,7 @@ type WrapperTypes = {
 };
 
 function MiscTextWrapper({children}: WrapperTypes) {
-  return <Box mt="35px">{children}</Box>;
+  return <Box mt="30px">{children}</Box>;
 }
 
 export default MiscTextWrapper;
