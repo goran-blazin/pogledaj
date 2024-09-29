@@ -1,0 +1,325 @@
+// prisma/schema.prisma
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["typedSql"]
+}
+
+// ENUMS
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum DirectorType {
+  Main
+  Assistant
+}
+
+enum ProducerType {
+  Executive
+  Assistant
+}
+
+enum ProjectionType {
+  Movie
+  TheaterPlay
+}
+
+enum CinemaSeatGroupPositionEnum {
+  TopLeft
+  TopCenter
+  TopRight
+  CenterLeft
+  Center
+  CenterRight
+  BottomLeft
+  BottomCenter
+  BottomRight
+}
+
+enum AdminRole {
+  SuperAdmin
+  Manager
+  Employee
+}
+
+enum InputProvider {
+  Tmdb
+  Imdb
+  AdminInput
+}
+
+enum PriceType {
+  Normal
+}
+
+enum CurrencyCode {
+  RSD
+  USD
+  EUR
+  CHF
+}
+
+// TABLES
+
+model Genre {
+  systemName    String  @id
+  localizedName String  @unique
+  movies        Movie[]
+}
+
+model Language {
+  code String @id
+  name String @unique
+
+  originalLanguageMovies         Movie[]           @relation("OriginalLanguage")
+  dubbedLanguageMovieProjections MovieProjection[] @relation("DubbedLanguage")
+}
+
+model Country {
+  code   String  @id
+  name   String  @unique
+  cities City[]
+  movies Movie[]
+}
+
+model City {
+  id          String   @id @default(uuid()) @db.Uuid
+  cityCode    String
+  name        String
+  postalCode  String
+  countryCode String
+  country     Country  @relation(fields: [countryCode], references: [code])
+  cinemas     Cinema[]
+
+  @@unique([cityCode, countryCode])
+}
+
+model Cinema {
+  id                   String                @id @default(uuid()) @db.Uuid
+  name                 String                @unique
+  description          String
+  cityId               String                @db.Uuid
+  city                 City                  @relation(fields: [cityId], references: [id])
+  address              String
+  rating               Int
+  phone                Json                  @default("[]")
+  posterImages         Json                  @default("[]")
+  geoLatitude          Decimal?              @db.Decimal(10, 6)
+  geoLongitude         Decimal?              @db.Decimal(10, 6)
+  cinemaTheaters       CinemaTheater[]
+  movieCinemaOverrides MovieCinemaOverride[]
+}
+
+model CinemaTheater {
+  id               String            @id @default(uuid()) @db.Uuid
+  name             String
+  cinemaId         String            @db.Uuid
+  cinema           Cinema            @relation(fields: [cinemaId], references: [id])
+  supports3D       Boolean           @default(false)
+  posterImages     Json              @default("[]")
+  cinemaSeatGroups CinemaSeatGroup[]
+  movieProjections MovieProjection[]
+}
+
+model CinemaSeatGroup {
+  id               String                      @id @default(uuid()) @db.Uuid
+  cinemaTheaterId  String                      @db.Uuid
+  cinemaTheater    CinemaTheater               @relation(fields: [cinemaTheaterId], references: [id])
+  name             String
+  rowCount         Int
+  columnCount      Int
+  cinemaSeats      CinemaSeat[]
+  position         CinemaSeatGroupPositionEnum @default(Center)
+  options          Json                        @default("{}")
+  projectionPrices ProjectionPrice[]           @relation("CinemaSeatGroupPrices")
+
+  @@unique([position, cinemaTheaterId])
+}
+
+model CinemaSeat {
+  id                String             @id @default(uuid()) @db.Uuid
+  cinemaSeatGroupId String             @db.Uuid
+  cinemaSeatGroup   CinemaSeatGroup    @relation(fields: [cinemaSeatGroupId], references: [id])
+  seatRow           String
+  seatColumn        String
+  options           Json               @default("{}")
+  reservation       ReservationSeats[] @relation("CinemaSeatReservations")
+}
+
+model Movie {
+  id                   String                @id @default(uuid()) @db.Uuid
+  title                String?
+  originalTitle        String
+  localizedTitle       String?
+  plot                 String
+  localizedPlot        String?
+  genres               Genre[]
+  runtimeMinutes       Int
+  originalLanguageId   String
+  originalLanguage     Language              @relation(fields: [originalLanguageId], references: [code], name: "OriginalLanguage")
+  countryOfOriginId    String
+  countryOfOrigin      Country               @relation(fields: [countryOfOriginId], references: [code])
+  posterImages         Json                  @default("{}")
+  videos               Json                  @default("[]")
+  rating               Int
+  releaseDate          DateTime              @db.Date
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime
+  actors               MovieActor[]
+  directors            MovieDirector[]
+  producers            MovieProducer[]
+  movieCinemaOverrides MovieCinemaOverride[]
+  movieProjections     MovieProjection[]
+  externalId           String
+  externalType         InputProvider
+  additionalData       Json                  @default("{}")
+
+  @@unique([externalId, externalType])
+}
+
+model Person {
+  id               String          @id @default(uuid()) @db.Uuid
+  name             String
+  biography        String          @default("")
+  dateOfBirth      DateTime?       @db.Date
+  dateOfDeath      DateTime?       @db.Date
+  gender           Gender
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime
+  actorInMovies    MovieActor[]
+  directorInMovies MovieDirector[]
+  producerInMovies MovieProducer[]
+  externalId       String
+  externalType     InputProvider
+  additionalData   Json            @default("{}")
+
+  @@unique([externalId, externalType])
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+model MovieActor {
+  personId      String @db.Uuid
+  person        Person @relation(fields: [personId], references: [id])
+  movieId       String @db.Uuid
+  movie         Movie  @relation(fields: [movieId], references: [id])
+  characterName String
+  castOrder     Int
+
+  @@id([personId, movieId])
+}
+
+model MovieDirector {
+  personId String       @db.Uuid
+  person   Person       @relation(fields: [personId], references: [id])
+  movieId  String       @db.Uuid
+  movie    Movie        @relation(fields: [movieId], references: [id])
+  type     DirectorType
+
+  @@id([personId, movieId])
+}
+
+model MovieProducer {
+  personId String       @db.Uuid
+  person   Person       @relation(fields: [personId], references: [id])
+  movieId  String       @db.Uuid
+  movie    Movie        @relation(fields: [movieId], references: [id])
+  type     ProducerType
+
+  @@id([personId, movieId])
+}
+
+model MovieCinemaOverride {
+  movieId            String   @db.Uuid
+  cinemaId           String   @db.Uuid
+  movie              Movie    @relation(fields: [movieId], references: [id])
+  cinema             Cinema   @relation(fields: [cinemaId], references: [id])
+  movieDataOverrides Json     @default("{}")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+
+  @@id([movieId, cinemaId])
+}
+
+model MovieProjection {
+  id                 String            @id @default(uuid()) @db.Uuid
+  movieId            String            @db.Uuid
+  movie              Movie             @relation(fields: [movieId], references: [id])
+  cinemaTheaterId    String            @db.Uuid
+  cinemaTheater      CinemaTheater     @relation(fields: [cinemaTheaterId], references: [id])
+  projectionDateTime DateTime          @db.Timestamptz(3)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime
+  dubbedLanguageId   String?
+  dubbedLanguage     Language?         @relation(fields: [dubbedLanguageId], references: [code], name: "DubbedLanguage")
+  options            Json              @default("{}")
+  projectionPrices   ProjectionPrice[] @relation("MovieProjectionPrices")
+  reservations       Reservation[]     @relation("MovieProjectionReservations")
+}
+
+model ProjectionPrice {
+  projectionId    String          @db.Uuid
+  groupId         String          @db.Uuid
+  type            PriceType       @default(Normal)
+  price           Decimal         @db.Decimal
+  currencyCode    CurrencyCode
+  cinemaSeatGroup CinemaSeatGroup @relation("CinemaSeatGroupPrices", fields: [groupId], references: [id])
+  movieProjection MovieProjection @relation("MovieProjectionPrices", fields: [projectionId], references: [id])
+
+  @@id([projectionId, groupId])
+}
+
+model AdminUser {
+  id                        String             @id @default(uuid()) @db.Uuid
+  email                     String             @unique
+  password                  String
+  fullName                  String
+  role                      AdminRole
+  cinemaIds                 Json               @default("[]")
+  createdAt                 DateTime           @default(now())
+  updatedAt                 DateTime
+  ValidatedReservationSeats ReservationSeats[]
+}
+
+model Reservation {
+  id                  String             @id @default(uuid()) @db.Uuid
+  eventId             String             @db.Uuid
+  movieProjection     MovieProjection    @relation("MovieProjectionReservations", fields: [eventId], references: [id])
+  customerInformation Json               @default("{}")
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime
+  options             Json               @default("{}")
+  reservationSeats    ReservationSeats[]
+  deletedAt           DateTime?
+
+  @@index([eventId])
+}
+
+model ReservationSeats {
+  id                     String      @id @default(uuid()) @db.Uuid
+  reservationId          String      @db.Uuid
+  eventId                String      @db.Uuid
+  seatId                 String      @db.Uuid
+  reservation            Reservation @relation(fields: [reservationId], references: [id])
+  cinemaSeat             CinemaSeat  @relation("CinemaSeatReservations", fields: [seatId], references: [id])
+  options                Json        @default("{}")
+  deletedAt              DateTime?
+  validatedAt            DateTime?
+  validatedByAdminUserId String?     @db.Uuid
+  validatedByAdminUser   AdminUser?  @relation(fields: [validatedByAdminUserId], references: [id])
+
+  @@unique([reservationId, seatId])
+  @@unique([seatId, eventId, deletedAt])
+  @@index([reservationId])
+}

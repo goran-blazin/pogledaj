@@ -1,6 +1,6 @@
 # builder image
 FROM node:20-slim as builder
-ENV NODE_ENV build
+ENV NODE_ENV=build
 RUN apt-get update && apt-get install -y openssl libssl-dev
 
 # user node
@@ -10,10 +10,9 @@ WORKDIR /home/node
 COPY package*.json ./
 COPY prisma/ ./prisma/
 
-# build node_modules
 RUN npm ci
 
-RUN npx prisma generate
+COPY src/generated/.prisma ./node_modules/.prisma
 
 COPY --chown=node:node . .
 
@@ -26,8 +25,8 @@ FROM node:20-slim as development
 RUN apt-get update && apt-get install -y openssl libssl-dev
 
 # Create app directory
-ENV NODE_ENV test
-ENV APP_LISTEN_PORT 8080
+ENV NODE_ENV=test
+ENV APP_LISTEN_PORT=8080
 
 USER node
 WORKDIR /home/node
