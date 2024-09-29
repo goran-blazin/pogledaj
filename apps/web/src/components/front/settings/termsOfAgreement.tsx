@@ -33,7 +33,11 @@ function TermsOfAgreement() {
           <PageSubTitle title="6. Privatnost i sigurnost" variant="h3" marginBottom="0" />
           <Paragraph>
             Vaši podaci neće biti zloupotrebljeni i biće dostupni samo našem timu i saradnicima. Više o tome možete
-            saznati u našoj <Link to={namedRoutes.privacyPolicy}>Politici privatnosti</Link>.
+            saznati u našoj{' '}
+            <Link to={namedRoutes.privacyPolicy}>
+              <LinkStyled link="" text="Politici privatnosti"></LinkStyled>
+            </Link>
+            .
           </Paragraph>
           <PageSubTitle title="7. Prava i obaveze vlasnika sajta" variant="h3" marginBottom="0" />
           <Paragraph>
