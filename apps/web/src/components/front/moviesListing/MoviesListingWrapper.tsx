@@ -28,7 +28,7 @@ import LoadingBox from '../utility/LoadingBox';
 function MoviesListingWrapper() {
   const navigate = useNavigate();
   const [moviePoster, setMoviePoster] = useState<MovieWithMovieProjection>();
-  const [orientation, setsetorientation] = useState('');
+  const [orientation, setOrientation] = useState('');
 
   const movies = useQuery(['movies', 'findAll'], () => {
     return MoviesService.findAll({onlyWithActiveProjections: true});
@@ -105,9 +105,14 @@ function MoviesListingWrapper() {
 
   useEffect(() => {
     if (!moviePoster && popularMoviesList.length > 0) {
-      const movieIndex = _.random(0, popularMoviesList.length - 1);
-      setMoviePoster(popularMoviesList[movieIndex]);
-      setOrientationFn();
+      const moviesWithBackground = popularMoviesList.filter((movie) => {
+        return !!movie?.posterImages?.bigBackground;
+      });
+      if (moviesWithBackground.length) {
+        const movieIndex = _.random(0, moviesWithBackground.length - 1);
+        setMoviePoster(moviesWithBackground[movieIndex]);
+        setOrientationFn();
+      }
     }
   }, [popularMoviesList.length]);
 
@@ -126,15 +131,15 @@ function MoviesListingWrapper() {
   const setOrientationFn = () => {
     const portrait = window.matchMedia('(orientation: portrait)');
     if (isLandscape()) {
-      setsetorientation('Landscape');
+      setOrientation('Landscape');
     } else {
-      setsetorientation('Portrait');
+      setOrientation('Portrait');
     }
     portrait.addEventListener('change', (e) => {
       if (e.matches) {
-        setsetorientation('Portrait');
+        setOrientation('Portrait');
       } else {
-        setsetorientation('Landscape');
+        setOrientation('Landscape');
       }
     });
   };
@@ -147,7 +152,7 @@ function MoviesListingWrapper() {
       ) : (
         <React.Fragment>
           <EventPreview>
-            {moviePoster?.posterImages?.bigBackground ? (
+            {moviePoster ? (
               <img
                 src={
                   orientation === 'Landscape'
