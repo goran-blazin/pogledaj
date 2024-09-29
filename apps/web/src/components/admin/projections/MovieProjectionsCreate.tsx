@@ -20,7 +20,7 @@ import Utils from '../../../helpers/Utils';
 import {Box} from '@mui/material';
 import {Cinema, CinemaTheater} from '../../../types/CinemaTypes';
 import {useNavigate, useParams} from 'react-router-dom';
-import {CreateMovieProjectionBulkDTO, CreateMovieProjectionDTO, CurrencyCode, Movie} from '../../../types/MoviesTypes';
+import {CreateMovieProjectionBulkDTO, CurrencyCode, Movie} from '../../../types/MoviesTypes';
 import {useMutation} from 'react-query';
 import {ApiErrors} from '../../../types/ErrorTypes';
 import {DateTime} from 'ts-luxon';
@@ -85,8 +85,8 @@ function MovieProjectionsCreate() {
     };
   });
 
-  const useMutationResult = useMutation<unknown, AxiosError<ApiErrors>, CreateMovieProjectionDTO>({
-    mutationFn: (data: CreateMovieProjectionDTO) => MovieProjectionsService.createMovieProjection(data),
+  const useMutationResult = useMutation<unknown, AxiosError<ApiErrors>, CreateMovieProjectionBulkDTO>({
+    mutationFn: (data: CreateMovieProjectionBulkDTO) => MovieProjectionsService.createMovieProjectionBulk(data),
   });
 
   const save = useCallback(
@@ -102,7 +102,6 @@ function MovieProjectionsCreate() {
                 projectionDateTime: `${date} ${DateTime.fromJSDate(projectionDetail.projectionTime as Date)
                   .set({seconds: 0, milliseconds: 0})
                   .toISOTime()}`,
-                // dubbedLanguageId?: string | null;
                 is3D: ((values.options as string[]) || []).includes('is3D'),
                 price: parseInt(projectionDetail.price as string),
                 currencyCode: CurrencyCode.RSD,
@@ -110,14 +109,16 @@ function MovieProjectionsCreate() {
             }),
           };
 
-          await Utils.forEachAwait(bulkData.projectionDetails, async (item) => {
-            const data: CreateMovieProjectionDTO = {
-              movieId: bulkData.movieId,
-              cinemaTheaterId: bulkData.cinemaTheaterId,
-              ...item,
-            };
-            await useMutationResult.mutateAsync(data);
-          });
+          await useMutationResult.mutateAsync(bulkData);
+
+          // await Utils.forEachAwait(bulkData.projectionDetails, async (item) => {
+          //   const data: CreateMovieProjectionDTO = {
+          //     movieId: bulkData.movieId,
+          //     cinemaTheaterId: bulkData.cinemaTheaterId,
+          //     ...item,
+          //   };
+          //
+          // });
         });
 
         notify('ra.notification.created', {
@@ -127,6 +128,17 @@ function MovieProjectionsCreate() {
         navigate(`/admin/movieProjections/cinema/${params.cinemaId}`);
       } catch (error) {
         if (error instanceof AxiosError) {
+          if (error.response?.data?.code === 'OverlappingProjections') {
+            notify(
+              `Projekcija se preklapa sa filmom ${error.response?.data?.overLappingProjectionsMovieName} u sali ${error.response?.data?.overLappingProjectionsCinemaTheater}`,
+              {
+                type: 'error',
+              },
+            );
+
+            return;
+          }
+
           return Utils.convertErrorMessagesToReactAdminForm(error, {
             projectionDateTime: 'projectionDate',
           });

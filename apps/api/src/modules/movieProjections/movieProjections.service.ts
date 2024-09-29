@@ -1,4 +1,4 @@
-import {ForbiddenException, Injectable} from '@nestjs/common';
+import {ForbiddenException, Injectable, InternalServerErrorException} from '@nestjs/common';
 import {PrismaService} from '../prisma/prisma.service';
 import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
 import {MovieProjectionFilters, MovieProjectionOptions} from './movieProjections.types';
@@ -10,8 +10,10 @@ import {NotFoundException} from '@nestjs/common/exceptions/not-found.exception';
 import {AdminUserSafe, GetListOptions, ReturnList} from '../../types/CommonTypes';
 import AuthHelper from '../../helpers/Auth.helper';
 import {FORBIDDEN_MESSAGE} from '@nestjs/core/guards';
-import {getRandomInt} from '../../helpers/Utils';
+import {forEachAwait, getRandomInt} from '../../helpers/Utils';
 import {EditMovieProjectionDto} from './dto/editMovieProjection.dto';
+import {getOverlappingProjections} from '.prisma/client/sql/getOverlappingProjections';
+import {CreateBulkMovieProjectionDto} from './dto/createBulkMovieProjection.dto';
 
 const RESERVATION_TIME_OFFSET_MINUTES = 30;
 
@@ -75,10 +77,10 @@ const generateProjections = (
 export class MovieProjectionsService {
   private readonly logger = new Logger(MovieProjectionsService.name);
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async findById(movieProjectionId: string) {
-    return this.prismaService.movieProjection.findUnique({
+    return this.prisma.movieProjection.findUnique({
       where: {
         id: movieProjectionId,
       },
@@ -111,7 +113,7 @@ export class MovieProjectionsService {
     // check if manager has access to passed cinema
     if (user.role !== AdminRole.SuperAdmin) {
       // get cinema
-      const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+      const cinemaTheater = await this.prisma.cinemaTheater.findUnique({
         where: {
           id: data.cinemaTheaterId,
         },
@@ -124,11 +126,95 @@ export class MovieProjectionsService {
     return this.create(data);
   }
 
+  async createByUserBulk(data: CreateBulkMovieProjectionDto, user: AdminUserSafe) {
+    const [cinemaTheater, movie] = await Promise.all([
+      this.prisma.cinemaTheater.findUnique({
+        where: {
+          id: data.cinemaTheaterId,
+        },
+        include: {
+          cinemaSeatGroups: true,
+        },
+      }),
+      this.prisma.movie.findUnique({where: {id: data.movieId}}),
+    ]);
+
+    if (!cinemaTheater) {
+      throw new NotFoundException(`Cinema theater ${data.cinemaTheaterId} not found`);
+    }
+
+    if (!movie) {
+      throw new NotFoundException(`Movie ${data.cinemaTheaterId} not found`);
+    }
+
+    // check if manager has access to passed cinema
+    if (user.role !== AdminRole.SuperAdmin) {
+      if (!cinemaTheater || AuthHelper.checkAccessToCinema(user, cinemaTheater.cinemaId)) {
+        return new ForbiddenException(FORBIDDEN_MESSAGE);
+      }
+    }
+
+    // open transaction
+    return this.prisma.$transaction(async (transactionClient) => {
+      return forEachAwait(data.projectionDetails, async (projectionData) => {
+        // TODO write test for plain usage and race condition!
+
+        // check if this session is already taken
+        const projectionStarts = DateTime.fromJSDate(projectionData.projectionDateTime);
+        const projectionEnds = projectionStarts.plus({minute: movie.runtimeMinutes});
+
+        const overLappingProjections = await transactionClient.$queryRawTyped(
+          getOverlappingProjections(data.cinemaTheaterId, projectionEnds.toJSDate(), projectionStarts.toJSDate()),
+        );
+
+        if (overLappingProjections.length > 0) {
+          throw new InternalServerErrorException({
+            code: 'OverlappingProjections',
+            overLappingProjectionsMovieName: overLappingProjections[0].movieName,
+            overLappingProjectionsCinemaTheater: cinemaTheater.name,
+          });
+        }
+
+        const options: MovieProjectionOptions = {
+          is3D: projectionData.is3D,
+        };
+
+        // create movie projection
+        const movieProjection = await transactionClient.movieProjection.create({
+          data: {
+            movieId: data.movieId,
+            cinemaTheaterId: data.cinemaTheaterId,
+            projectionDateTime: projectionData.projectionDateTime,
+            dubbedLanguageId: projectionData.dubbedLanguageId || null,
+            updatedAt: new Date(),
+            options,
+          },
+        });
+
+        // create prices
+        await Promise.all(
+          cinemaTheater.cinemaSeatGroups.map((seatGroup) => {
+            return transactionClient.projectionPrice.create({
+              data: {
+                projectionId: movieProjection.id,
+                groupId: seatGroup.id,
+                price: projectionData.price,
+                currencyCode: projectionData.currencyCode,
+              },
+            });
+          }),
+        );
+
+        return movieProjection;
+      });
+    });
+  }
+
   async editByUser(movieProjectionId: string, data: EditMovieProjectionDto, user: AdminUserSafe) {
     // check if manager has access to passed cinema
     if (user.role !== AdminRole.SuperAdmin) {
       // get cinema
-      const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+      const cinemaTheater = await this.prisma.cinemaTheater.findUnique({
         where: {
           id: data.cinemaTheaterId,
         },
@@ -142,17 +228,24 @@ export class MovieProjectionsService {
   }
 
   async create(data: CreateMovieProjectionDto) {
-    const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
-      where: {
-        id: data.cinemaTheaterId,
-      },
-      include: {
-        cinemaSeatGroups: true,
-      },
-    });
+    const [cinemaTheater, movie] = await Promise.all([
+      this.prisma.cinemaTheater.findUnique({
+        where: {
+          id: data.cinemaTheaterId,
+        },
+        include: {
+          cinemaSeatGroups: true,
+        },
+      }),
+      this.prisma.movie.findUnique({where: {id: data.movieId}}),
+    ]);
 
     if (!cinemaTheater) {
       throw new NotFoundException(`Cinema theater ${data.cinemaTheaterId} not found`);
+    }
+
+    if (!movie) {
+      throw new NotFoundException(`Movie ${data.cinemaTheaterId} not found`);
     }
 
     const options: MovieProjectionOptions = {
@@ -160,7 +253,21 @@ export class MovieProjectionsService {
     };
 
     // open transaction
-    return this.prismaService.$transaction(async (transactionClient) => {
+    return this.prisma.$transaction(async (transactionClient) => {
+      // TODO write test for plain usage and race condition!
+
+      // check if this session is already taken
+      const projectionStarts = DateTime.fromJSDate(data.projectionDateTime);
+      const projectionEnds = projectionStarts.plus({minute: movie.runtimeMinutes});
+
+      const overLappingProjections = await transactionClient.$queryRawTyped(
+        getOverlappingProjections(data.cinemaTheaterId, projectionEnds.toJSDate(), projectionStarts.toJSDate()),
+      );
+
+      if (overLappingProjections.length > 0) {
+        throw new InternalServerErrorException('OverlappingProjections');
+      }
+
       // create movie projection
       const movieProjection = await transactionClient.movieProjection.create({
         data: {
@@ -192,7 +299,7 @@ export class MovieProjectionsService {
   }
 
   async edit(movieProjectionId: string, data: EditMovieProjectionDto) {
-    const cinemaTheater = await this.prismaService.cinemaTheater.findUnique({
+    const cinemaTheater = await this.prisma.cinemaTheater.findUnique({
       where: {
         id: data.cinemaTheaterId,
       },
@@ -205,7 +312,7 @@ export class MovieProjectionsService {
       throw new NotFoundException(`Cinema theater ${data.cinemaTheaterId} not found`);
     }
 
-    const movieProjection = await this.prismaService.movieProjection.findUnique({
+    const movieProjection = await this.prisma.movieProjection.findUnique({
       where: {
         id: movieProjectionId,
       },
@@ -229,7 +336,7 @@ export class MovieProjectionsService {
     };
 
     // open transaction
-    return this.prismaService.$transaction(async (transactionClient) => {
+    return this.prisma.$transaction(async (transactionClient) => {
       // edit movie projection
       const movieProjectionEdited = await transactionClient.movieProjection.update({
         where: {
@@ -245,7 +352,7 @@ export class MovieProjectionsService {
       });
 
       // delete all projection prices
-      await this.prismaService.projectionPrice.deleteMany({
+      await this.prisma.projectionPrice.deleteMany({
         where: {
           projectionId: movieProjectionId,
         },
@@ -270,7 +377,7 @@ export class MovieProjectionsService {
   }
 
   async deleteMovieProjection(movieProjectionId: string) {
-    const movieProjection = await this.prismaService.movieProjection.findUnique({
+    const movieProjection = await this.prisma.movieProjection.findUnique({
       where: {
         id: movieProjectionId,
       },
@@ -289,13 +396,13 @@ export class MovieProjectionsService {
     }
 
     // first delete all projection prices
-    await this.prismaService.projectionPrice.deleteMany({
+    await this.prisma.projectionPrice.deleteMany({
       where: {
         projectionId: movieProjectionId,
       },
     });
 
-    await this.prismaService.movieProjection.delete({
+    await this.prisma.movieProjection.delete({
       where: {
         id: movieProjectionId,
       },
@@ -304,7 +411,7 @@ export class MovieProjectionsService {
 
   async deleteBulkMovieProjections(movieProjectionIds: string[]) {
     // first delete all projection prices
-    return this.prismaService.$transaction(async (transactionClient) => {
+    return this.prisma.$transaction(async (transactionClient) => {
       await transactionClient.projectionPrice.deleteMany({
         where: {
           projectionId: {
@@ -368,7 +475,7 @@ export class MovieProjectionsService {
     }
 
     const [movieProjections, movieProjectionsCount] = await Promise.all([
-      this.prismaService.movieProjection.findMany({
+      this.prisma.movieProjection.findMany({
         where,
         include: {
           cinemaTheater: {
@@ -391,7 +498,7 @@ export class MovieProjectionsService {
             }
           : undefined,
       }),
-      this.prismaService.movieProjection.count({
+      this.prisma.movieProjection.count({
         where,
       }),
     ]);
@@ -406,12 +513,12 @@ export class MovieProjectionsService {
   async generateSingleMovieSingleCinema(days = 30, movieId: string, cinemaId: string) {
     // first delete all MovieProjections for passed movie and cinema
     const [movie, cinema] = await Promise.all([
-      this.prismaService.movie.findUnique({
+      this.prisma.movie.findUnique({
         where: {
           id: movieId,
         },
       }),
-      this.prismaService.cinema.findUnique({
+      this.prisma.cinema.findUnique({
         where: {
           id: cinemaId,
         },
@@ -423,7 +530,7 @@ export class MovieProjectionsService {
 
     if (movie && cinema) {
       // first delete all MovieProjections
-      await this.prismaService.movieProjection.deleteMany({
+      await this.prisma.movieProjection.deleteMany({
         where: {
           movieId: movie.id,
           cinemaTheaterId: {
@@ -448,12 +555,12 @@ export class MovieProjectionsService {
 
   async generate(daysCount = 30) {
     // first delete all MovieProjections
-    await this.prismaService.movieProjection.deleteMany();
+    await this.prisma.movieProjection.deleteMany();
 
     // get all movies and cinema theaters
     const [movies, cinemas] = await Promise.all([
-      this.prismaService.movie.findMany(),
-      this.prismaService.cinema.findMany({
+      this.prisma.movie.findMany(),
+      this.prisma.cinema.findMany({
         include: {
           cinemaTheaters: true,
         },
@@ -476,12 +583,12 @@ export class MovieProjectionsService {
   }
 
   async generateDemoProjections() {
-    const cinemas = await this.prismaService.cinema.findMany({
+    const cinemas = await this.prisma.cinema.findMany({
       include: {
         cinemaTheaters: true,
       },
     });
-    const movies = await this.prismaService.movie.findMany({
+    const movies = await this.prisma.movie.findMany({
       orderBy: {
         releaseDate: 'desc',
       },

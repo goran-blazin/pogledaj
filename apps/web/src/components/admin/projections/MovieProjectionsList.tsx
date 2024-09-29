@@ -20,6 +20,7 @@ import {MovieProjection} from '../../../types/MoviesTypes';
 import Utils from '../../../helpers/Utils';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useEffect, useMemo} from 'react';
+import {DateTime} from 'ts-luxon';
 
 function MovieProjectionsList() {
   const params = useParams();
@@ -120,7 +121,22 @@ function MovieProjectionsList() {
                   label="Sala"
                   render={(projection) => (projection ? projection.cinemaTheater.name : 'N/A')}
                 />
-                <DateField label="Datum projekcije" source="projectionDateTime" showTime={true} />
+                <DateField label="Pocetak projekcije" source="projectionDateTime" showTime={true} />
+                <FunctionField<MovieProjection>
+                  label="Trajanje (min)"
+                  render={(projection) => (projection ? projection.movie.runtimeMinutes : 'N/A')}
+                />
+                <FunctionField<MovieProjection>
+                  label="Kraj projekcije"
+                  render={(projection) =>
+                    projection
+                      ? DateTime.fromISO(projection.projectionDateTime)
+                          .plus({minute: projection.movie.runtimeMinutes})
+                          .toJSDate()
+                          .toLocaleString()
+                      : 'N/A'
+                  }
+                />
                 <DateField label="Poslednja promena" source="updatedAt" showTime={true} />
                 <FunctionField<MovieProjection>
                   label="Cena"

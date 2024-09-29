@@ -21,6 +21,7 @@ import {AdminRole} from '@prisma/client';
 import {CreateMovieProjectionDto} from './dto/createMovieProjection.dto';
 import {ExpressRequestWithUser} from '../../types/CommonTypes';
 import {EditMovieProjectionDto} from './dto/editMovieProjection.dto';
+import {CreateBulkMovieProjectionDto} from './dto/createBulkMovieProjection.dto';
 
 @Controller('movieProjections')
 export class MovieProjectionsController {
@@ -109,6 +110,16 @@ export class MovieProjectionsController {
     @Req() req: ExpressRequestWithUser,
   ) {
     return this.movieProjectionsService.createByUser(createMovieProjection, req.user);
+  }
+
+  @Roles(AdminRole.SuperAdmin)
+  @UseGuards(JwtAdminAuthGuard)
+  @Post('/bulkCreate')
+  async createMovieProjectionBulk(
+    @Body() createMovieProjectionBulk: CreateBulkMovieProjectionDto,
+    @Req() req: ExpressRequestWithUser,
+  ) {
+    return this.movieProjectionsService.createByUserBulk(createMovieProjectionBulk, req.user);
   }
 
   @Roles(AdminRole.SuperAdmin)
