@@ -1,4 +1,4 @@
-import {Box, Card, CardMedia, Divider, IconButton, Rating, Stack, styled, Typography} from '@mui/material';
+import {Box, Card, CardMedia, Divider, IconButton, Rating, styled, Typography} from '@mui/material';
 import {FavoriteOutlined, SvgIconComponent} from '@mui/icons-material';
 import {IntRange} from '../../../../types/GeneralTypes';
 import _ from 'lodash';
@@ -34,6 +34,15 @@ const StyledRating = styled(Rating)({
   },
 });
 
+const BigCardInfoWrap = styled(Box)({
+  padding: '8px 10px',
+  '& > div': {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
+
 function BigCard({
   title,
   descFirstRow,
@@ -66,8 +75,9 @@ function BigCard({
       elevation={0}
       onClick={onClick || undefined}
       sx={{
-        borderRadius: '4%',
+        borderRadius: '15px',
         backgroundColor: 'inherit',
+        border: '2px solid rgba(255, 255, 255, 0.25)',
       }}
     >
       <Box sx={{position: 'relative'}}>
@@ -85,75 +95,64 @@ function BigCard({
             minHeight: '90px',
           }}
         >
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent={'space-between'}
-            sx={{
-              padding: '8px 11px',
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                fontStyle: 'normal',
-                fontWeight: 700,
-                fontSize: '16px',
-                lineHeight: '22px',
-                color: 'text.secondary',
-                textTransform: 'uppercase',
-              }}
-            >
-              {title}
-            </Typography>
-            {Utils.isBetaMode() && (
-              <IconButton aria-label="dodaj u omiljene">
-                <Icon
-                  sx={{
-                    color: 'text.secondary',
-                  }}
-                />
-              </IconButton>
-            )}
-          </Stack>
-          <Divider
-            sx={{
-              borderColor: 'text.secondary',
-              opacity: '0.25',
-            }}
-          />
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent={'space-between'}
-            sx={{
-              padding: '8px 11px',
-            }}
-          >
+          <BigCardInfoWrap>
             <Box>
-              <Typography variant="body2" sx={descCSSStyle}>
-                {descFirstRow}
+              <Typography
+                variant="h5"
+                sx={{
+                  fontStyle: 'normal',
+                  fontWeight: 700,
+                  fontSize: '16px',
+                  lineHeight: '22px',
+                  color: 'text.secondary',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {title}
               </Typography>
-              <Typography variant="body2" sx={descCSSStyle}>
-                {descSecondRow}
-              </Typography>
-            </Box>
-            {Utils.isBetaMode() ? (
-              <>
-                {fiveStarRating && (
-                  <StyledRating
-                    readOnly
-                    value={fiveStarRating}
-                    precision={0.1}
+              {Utils.isBetaMode() && (
+                <IconButton aria-label="dodaj u omiljene">
+                  <Icon
                     sx={{
                       color: 'text.secondary',
                     }}
-                    size={'small'}
                   />
-                )}
-              </>
-            ) : null}
-          </Stack>
+                </IconButton>
+              )}
+            </Box>
+            <Divider
+              sx={{
+                borderColor: 'rgba(255, 255, 255, 0.25)',
+                paddingTop: '8px',
+                marginBottom: '8px',
+              }}
+            />
+            <Box>
+              <Box>
+                <Typography variant="body2" sx={descCSSStyle}>
+                  {descFirstRow}
+                </Typography>
+                <Typography variant="body2" sx={descCSSStyle}>
+                  {descSecondRow}
+                </Typography>
+              </Box>
+              {Utils.isBetaMode() ? (
+                <>
+                  {fiveStarRating && (
+                    <StyledRating
+                      readOnly
+                      value={fiveStarRating}
+                      precision={0.1}
+                      sx={{
+                        color: 'text.secondary',
+                      }}
+                      size={'small'}
+                    />
+                  )}
+                </>
+              ) : null}
+            </Box>
+          </BigCardInfoWrap>
         </Box>
       </Box>
     </Card>
