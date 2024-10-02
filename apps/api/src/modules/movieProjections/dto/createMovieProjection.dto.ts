@@ -30,7 +30,7 @@ export class CreateMovieProjectionDto {
   @IsNotEmpty()
   @Type(() => Date)
   @IsDate()
-  @MinDate(DateTime.now().plus({days: 1}).startOf('day').toJSDate())
+  @MinDate(DateTime.now().startOf('day').toJSDate())
   projectionDateTime: Date;
 
   @IsString()

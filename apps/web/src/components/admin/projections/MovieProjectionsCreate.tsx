@@ -14,10 +14,10 @@ import {
   useNotify,
 } from 'react-admin';
 import * as React from 'react';
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {AxiosError} from 'axios';
 import Utils from '../../../helpers/Utils';
-import {Box} from '@mui/material';
+import {Box, MenuItem, Select, Stack} from '@mui/material';
 import {Cinema, CinemaTheater} from '../../../types/CinemaTypes';
 import {useNavigate, useParams} from 'react-router-dom';
 import {CreateMovieProjectionBulkDTO, CurrencyCode, Movie} from '../../../types/MoviesTypes';
@@ -26,6 +26,11 @@ import {ApiErrors} from '../../../types/ErrorTypes';
 import {DateTime} from 'ts-luxon';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import LoadingBox from '../utility/LoadingBox';
+
+const DATE_FORM_TYPE = {
+  dateRange: 'dateRange',
+  dateArray: 'dateArray',
+} as const;
 
 function getDatesBetween(from: string, to: string): string[] {
   const startDate = DateTime.fromISO(from);
@@ -57,6 +62,7 @@ function MovieProjectionsCreate() {
 
   const navigate = useNavigate();
   const notify = useNotify();
+  const [dateFormType, setDateFormType] = useState<string>(DATE_FORM_TYPE.dateRange);
 
   const {data: cinema, isSuccess: cinemaIsSuccess} = useGetOne<Cinema>('cinemas', {id: params.cinemaId || ''});
   const {data: cinemaTheaters, isSuccess: cinemaTheatersIsSuccess} = useGetList<CinemaTheater>('cinemaTheaters', {
@@ -92,7 +98,21 @@ function MovieProjectionsCreate() {
   const save = useCallback(
     async (values: Record<string, unknown>) => {
       try {
-        const dates = getDatesBetween(values.projectionDateFrom as string, values.projectionDateTo as string);
+        const dates = (() => {
+          if (dateFormType === DATE_FORM_TYPE.dateRange) {
+            return getDatesBetween(values.projectionDateFrom as string, values.projectionDateTo as string);
+          } else {
+            return (values.dateArray as Record<string, unknown>[]).map((item) => item.projectionDateArray as string);
+          }
+        })();
+        if (!dates.length) {
+          notify(`Niste izabrali datume`, {
+            type: 'error',
+          });
+
+          return;
+        }
+
         await Utils.forEachAwait(values.projectionDetails as Record<string, unknown>[], async (projectionDetail) => {
           const bulkData: CreateMovieProjectionBulkDTO = {
             movieId: values.movieId as string,
@@ -147,7 +167,7 @@ function MovieProjectionsCreate() {
         }
       }
     },
-    [notify, params.cinemaId],
+    [notify, params.cinemaId, dateFormType],
   );
 
   return cinemaIsSuccess && cinemaTheatersIsSuccess && moviesIsSuccess ? (
@@ -161,21 +181,46 @@ function MovieProjectionsCreate() {
           validate={required()}
           sx={{width: '30em'}}
         />
+        <Select
+          value={dateFormType}
+          onChange={(event) => {
+            setDateFormType(event.target.value);
+          }}
+        >
+          <MenuItem value={'dateRange'}>Unesi raspon datuma</MenuItem>
+          <MenuItem value={'dateArray'}>Unesi pojedinacne datume</MenuItem>
+        </Select>
 
-        <DateInput
-          source={'projectionDateFrom'}
-          sx={{width: '30em'}}
-          defaultValue={DateTime.now().plus({day: 1}).toFormat('yyyy-MM-dd')}
-          label="Datum Od"
-          validate={required()}
-        />
-        <DateInput
-          source={'projectionDateTo'}
-          sx={{width: '30em'}}
-          defaultValue={DateTime.now().plus({day: 8}).toFormat('yyyy-MM-dd')}
-          label="Datum Do"
-          validate={required()}
-        />
+        <Box sx={{display: dateFormType === DATE_FORM_TYPE.dateRange ? undefined : 'none'}}>
+          <Stack direction={'row'} spacing={2}>
+            <DateInput
+              source={'projectionDateFrom'}
+              sx={{width: '20em'}}
+              defaultValue={DateTime.now().plus({day: 1}).toFormat('yyyy-MM-dd')}
+              label="Datum Od"
+            />
+            <DateInput
+              source={'projectionDateTo'}
+              sx={{width: '20em'}}
+              defaultValue={DateTime.now().plus({day: 8}).toFormat('yyyy-MM-dd')}
+              label="Datum Do"
+            />
+          </Stack>
+        </Box>
+
+        <Box sx={{display: dateFormType === DATE_FORM_TYPE.dateArray ? undefined : 'none'}}>
+          <ArrayInput source="dateArray" defaultValue={[{}]}>
+            <SimpleFormIterator inline getItemLabel={(index) => `#${index + 1}`}>
+              <DateInput
+                source={'projectionDateArray'}
+                sx={{width: '30em'}}
+                defaultValue={DateTime.now().plus({day: 1}).toFormat('yyyy-MM-dd')}
+                label="Datum"
+              />
+            </SimpleFormIterator>
+          </ArrayInput>
+        </Box>
+
         <ArrayInput source="projectionDetails" defaultValue={[{}]}>
           <SimpleFormIterator inline>
             <SelectInput
