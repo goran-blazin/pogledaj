@@ -159,9 +159,9 @@ export class MovieProjectionsService {
       return forEachAwait(data.projectionDetails, async (projectionData) => {
         // TODO write test for plain usage and race condition!
 
-        // check if this session is already taken
-        const projectionStarts = DateTime.fromJSDate(projectionData.projectionDateTime);
-        const projectionEnds = projectionStarts.plus({minute: movie.runtimeMinutes});
+        const projectionStarts = DateTime.fromJSDate(projectionData.projectionDateTime).plus({minute: 10}); // allow 10 mins overlapping because of credits
+
+        const projectionEnds = projectionStarts.plus({minute: movie.runtimeMinutes - 10});
 
         const overLappingProjections = await transactionClient.$queryRawTyped(
           getOverlappingProjections(data.cinemaTheaterId, projectionEnds.toJSDate(), projectionStarts.toJSDate()),
@@ -257,7 +257,7 @@ export class MovieProjectionsService {
       // TODO write test for plain usage and race condition!
 
       // check if this session is already taken
-      const projectionStarts = DateTime.fromJSDate(data.projectionDateTime);
+      const projectionStarts = DateTime.fromJSDate(data.projectionDateTime).plus({minute: 10}); // allow 10 mins overlapping because of credits
       const projectionEnds = projectionStarts.plus({minute: movie.runtimeMinutes});
 
       const overLappingProjections = await transactionClient.$queryRawTyped(
