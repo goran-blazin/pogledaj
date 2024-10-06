@@ -149,8 +149,8 @@ function MoviesFiltersWrapper() {
   const moviesFiltersStore = useMoviesFiltersStore();
   const navigate = useNavigate();
 
-  const buttonClickHandler = () => {
-    moviesFiltersStore.applyMoviesFilters({
+  const movieFilters = useMemo(
+    () => ({
       selectedGenres: selectedGenres,
       selectedCountries: selectedCountries,
       selectedDirectorPersonId: directorAutocompleteValue?.id,
@@ -160,8 +160,22 @@ function MoviesFiltersWrapper() {
       selectedCinemasIds: userSettingsStore.globalSelectedCinema ? [userSettingsStore.globalSelectedCinema] : undefined,
       selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
       selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
-    });
+    }),
+    [
+      selectedGenres,
+      selectedCountries,
+      directorAutocompleteValue,
+      actorsAutocompleteValue,
+      movieLengths,
+      userSettingsStore.globalSelectedCity,
+      userSettingsStore.globalSelectedCinema,
+      selectedDateFrom,
+      selectedDateTo,
+    ],
+  );
 
+  const buttonClickHandler = () => {
+    moviesFiltersStore.applyMoviesFilters(movieFilters);
     navigate(namedRoutes.moviesSearch);
   };
 
@@ -173,6 +187,17 @@ function MoviesFiltersWrapper() {
   const isLoading = useMemo(() => {
     return citiesRQ.isLoading;
   }, [citiesRQ.isLoading]);
+
+  const {data: movieFilterResult} = useQuery(['moviesSearch', movieFilters], () => {
+    return MoviesService.getMoviesByFilter(movieFilters);
+  });
+
+  const buttonText = useMemo(() => {
+    return (
+      `Primeni filtere` +
+      (Utils.isNullOrUndefined(movieFilterResult?.dataCount) ? '' : ` (${movieFilterResult?.dataCount})`)
+    );
+  }, [movieFilterResult]);
 
   return (
     <ContentWrapper padding marginTop="30px">
@@ -554,7 +579,7 @@ function MoviesFiltersWrapper() {
           </Box>
           <Box sx={{mt: 5}} textAlign="center">
             <ButtonStyled variant="contained" onClick={buttonClickHandler}>
-              {'Primeni filtere'}
+              {buttonText}
             </ButtonStyled>
           </Box>
         </>

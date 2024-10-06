@@ -105,3 +105,9 @@ export type ProjectionPrice = {
   currencyCode: CurrencyCode;
   price: number;
 };
+
+export type ReturnList<T> = {
+  data: Array<T>;
+  dataCount: number;
+  total: number;
+};

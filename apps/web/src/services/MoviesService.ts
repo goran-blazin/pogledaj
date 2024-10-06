@@ -6,7 +6,7 @@ import {
   UpsertMovieFromExternalDTO,
 } from '../types/MoviesTypes';
 import {PogledajApi} from './ApiHelper';
-import {Country, Genre} from '../types/GeneralTypes';
+import {Country, Genre, ReturnList} from '../types/GeneralTypes';
 
 const MoviesService = {
   async findAll({onlyWithActiveProjections}: {onlyWithActiveProjections?: boolean} = {}): Promise<
@@ -77,7 +77,7 @@ const MoviesService = {
     return result.data;
   },
 
-  async getMoviesByFilter(moviesFilters: MoviesFilters): Promise<MovieWithMovieProjection[]> {
+  async getMoviesByFilter(moviesFilters: MoviesFilters): Promise<ReturnList<MovieWithMovieProjection>> {
     const result = await PogledajApi().get('moviesFilters/searchFilter', {
       params: moviesFilters,
     });

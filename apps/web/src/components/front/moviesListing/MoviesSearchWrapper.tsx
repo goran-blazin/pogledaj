@@ -12,7 +12,7 @@ import LoadingBox from '../utility/LoadingBox';
 
 function MoviesSearchWrapper() {
   const moviesFilters = useMoviesFiltersStore().moviesFilters;
-  const moviesSearch = useQuery(['moviesSearch', moviesFilters], () => {
+  const {data: moviesData, isLoading} = useQuery(['moviesSearch', moviesFilters], () => {
     return MoviesService.getMoviesByFilter(moviesFilters);
   });
 
@@ -41,11 +41,10 @@ function MoviesSearchWrapper() {
               },
             }}
           >
-            {moviesSearch.isLoading ? (
-              // <Typography color={'text.primary'}>Filmovi se učitavaju, molimo sačekajte...</Typography>
+            {isLoading ? (
               <LoadingBox />
-            ) : (moviesSearch.data || []).length > 0 ? (
-              (moviesSearch.data || []).map((movie, i) => <MovieBigCard movie={movie} key={i} />)
+            ) : (moviesData?.data || []).length > 0 ? (
+              (moviesData?.data || []).map((movie, i) => <MovieBigCard movie={movie} key={i} />)
             ) : (
               <PageSubHeader headerText={'Nijedan film ne odgovara unešenim parametrima'} />
             )}
