@@ -1,1 +1,1 @@
-npx prisma migrate deploy
+DATABASE_URL="postgresql://pogledaj_test_user:ovojesifrazatestusera@159.69.43.222/pogledaj_test_db" npx prisma migrate deploy
