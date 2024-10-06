@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import {styled} from '@mui/system';
+import {styled} from '@mui/material';
 import {ReactElement} from 'react';
 import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
 
@@ -15,6 +15,37 @@ const EventPreviewMainWrap = styled(Box)({
   position: 'relative',
   marginBottom: '20px',
 });
+const EventPreviewSliderContainer = styled(Box)(({theme}) => ({
+  color: theme.customTypography.color,
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  '& .slider-title': {
+    flex: '0 0 auto',
+    height: '30px',
+    alignContent: 'center',
+    '& h1': {
+      textAlign: 'center',
+      fontSize: '12px',
+      fontWeight: 'normal',
+      margin: 0,
+    },
+  },
+  '& .slider-wrap': {
+    flex: '1 1 auto',
+    '& .swiper-pagination': {
+      bottom: '20px',
+      '& .swiper-pagination-bullet': {
+        backgroundColor: '#CEE4FF',
+        opacity: 0.4,
+        '&.swiper-pagination-bullet-active': {
+          backgroundColor: 'white',
+          opacity: 1,
+        },
+      },
+    },
+  },
+}));
 const EventPreviewHolder = styled('div')({
   width: '100%',
   height: '100%',
@@ -117,6 +148,18 @@ export function EventPreview({children}: {children: ReactElement}) {
     <EventPreviewMainWrap>
       {/* image/video */}
       <EventPreviewHolder>{children}</EventPreviewHolder>
+    </EventPreviewMainWrap>
+  );
+}
+export function EventPreviewSlider({children}: {children: ReactElement}) {
+  return (
+    <EventPreviewMainWrap>
+      <EventPreviewSliderContainer>
+        <Box className="slider-title">
+          <h1>Aktuelni bioskopski repertoari na jednom mestu</h1>
+        </Box>
+        <Box className="slider-wrap">{children}</Box>
+      </EventPreviewSliderContainer>
     </EventPreviewMainWrap>
   );
 }

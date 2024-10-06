@@ -80,6 +80,7 @@ function HeaderMenuWrapper() {
       elevation={0}
       sx={{
         backgroundColor: (theme) => theme.headerTheme.backgroundColor,
+        borderRadius: 0,
       }}
     >
       <Toolbar sx={{justifyContent: 'center'}}>

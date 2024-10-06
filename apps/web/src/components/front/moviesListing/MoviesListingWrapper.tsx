@@ -18,12 +18,13 @@ import FilterLinkButton from '../utility/FilterLinkButton';
 import {useNavigate} from 'react-router-dom';
 import Utils from '../../../helpers/Utils';
 import parse from 'html-react-parser';
-import {EventPreview} from '../EventPreview/EventPreview';
+import {EventPreviewSlider} from '../EventPreview/EventPreview';
 import _ from 'lodash';
-import NoImage from '../utility/NoImage';
+// import NoImage from '../utility/NoImage';
 import Grid from '@mui/material/Grid';
 import {isLandscape} from '../../../helpers/HelperFunctions';
 import LoadingBox from '../utility/LoadingBox';
+import MoviesPreviewSlider from './MoviesPreviewSlider/MoviesPreviewSlider';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -151,7 +152,10 @@ function MoviesListingWrapper() {
         <LoadingBox />
       ) : (
         <React.Fragment>
-          <EventPreview>
+          <EventPreviewSlider>
+            <MoviesPreviewSlider slides={popularMoviesList} orientation={orientation} />
+          </EventPreviewSlider>
+          {/* <EventPreview>
             {moviePoster ? (
               <img
                 src={
@@ -167,7 +171,7 @@ function MoviesListingWrapper() {
             ) : (
               <NoImage />
             )}
-          </EventPreview>
+          </EventPreview> */}
           <ContentWrapper padding marginBottom={'48px'}>
             <Grid
               container

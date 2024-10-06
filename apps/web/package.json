@@ -35,7 +35,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.18.0",
     "react-spring": "^9.7.4",
-    "swiper": "^8.4.5",
+    "swiper": "^8.4.6",
     "ts-luxon": "^3.5.2",
     "typescript": "^5.2.2",
     "uuid": "^8.3.2",
