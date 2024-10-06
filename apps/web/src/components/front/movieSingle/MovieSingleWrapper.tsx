@@ -167,6 +167,7 @@ function MovieSingleWrapper() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const projectionsRef = useRef<HTMLDivElement | null>(null);
+  const cinemaSelectRef = useRef<HTMLDivElement | null>(null);
 
   const [citySelectOpen, setCitySelectOpen] = useState(false);
   const [cinemaSelectOpen, setCinemaSelectOpen] = useState(false);
@@ -275,6 +276,16 @@ function MovieSingleWrapper() {
         .fromPairs()
         .value(),
     );
+
+  useEffect(() => {
+    if (userSettingsStore.globalSelectedCity) {
+      setTimeout(() => {
+        if (cinemaSelectRef.current) {
+          cinemaSelectRef.current.scrollIntoView({behavior: 'smooth'});
+        }
+      }, 100); // Timeout to ensure the div is rendered
+    }
+  }, [userSettingsStore.globalSelectedCity]);
 
   useEffect(() => {
     if (
@@ -529,7 +540,7 @@ function MovieSingleWrapper() {
                         })}
                       </SelectBoxStyled>
                     </FormControl>
-                    <FormControl fullWidth sx={{mt: 2}}>
+                    <FormControl fullWidth sx={{mt: 2}} ref={cinemaSelectRef}>
                       <ProjectionsSubHeader>Izaberi bioskop:</ProjectionsSubHeader>
                       <SelectBoxStyled
                         sx={{mt: 1}}
