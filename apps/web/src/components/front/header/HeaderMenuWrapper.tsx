@@ -5,7 +5,7 @@ import {namedRoutes} from '../../../routes';
 import SvgIconComp from '../utility/svgCustomIcons/SvgIconComp';
 import MainLogoIcon from '../utility/svgCustomIcons/main_logo.svg';
 import {SxProps} from '@mui/system';
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useState} from 'react';
 import Utils from '../../../helpers/Utils';
 import SvgIcon, {SvgIconProps} from '@mui/material/SvgIcon';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -73,6 +73,17 @@ function HeaderMenuWrapper() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const settingsPages = [
+    namedRoutes.settings,
+    namedRoutes.contactUs,
+    namedRoutes.aboutUs,
+    namedRoutes.followUs,
+    namedRoutes.termsOfAgreement,
+    namedRoutes.privacyPolicy,
+  ];
+
+  const [lastNonSettingsPage, setLastNonSettingsPage] = useState<string | undefined>(undefined);
+
   return (
     <AppBar
       color="secondary"
@@ -128,14 +139,16 @@ function HeaderMenuWrapper() {
             flex={'1 0 auto'}
             justifyContent={'flex-end'}
             onClick={() => {
-              if (location.pathname === namedRoutes.settings) {
-                navigate(-1);
+              if (settingsPages.includes(location.pathname)) {
+                navigate(lastNonSettingsPage || namedRoutes.home);
+                setLastNonSettingsPage(undefined);
               } else {
+                setLastNonSettingsPage(location.pathname);
                 navigate(namedRoutes.settings);
               }
             }}
           >
-            {location.pathname === namedRoutes.settings ? (
+            {settingsPages.includes(location.pathname) ? (
               <IconButtonStyled>
                 <ClearIconStyle />
               </IconButtonStyled>

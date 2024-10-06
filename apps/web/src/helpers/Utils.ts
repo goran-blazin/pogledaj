@@ -133,6 +133,8 @@ const Utils = {
       ? `${movie.localizedTitle} (${Utils.getMovieTitle(movie)})`
       : Utils.getMovieTitle(movie);
   },
+
+  isNullOrUndefined: (i: unknown) => i === null || i === undefined,
 };
 
 export default Utils;
