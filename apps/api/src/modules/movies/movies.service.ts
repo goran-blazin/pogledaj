@@ -9,6 +9,7 @@ import {excludeArchivedMovieProjectionsQuery} from '../movieProjections/moviePro
 import {QueuesDefinition} from '../../helpers/QueuesHelper';
 import {Queue} from 'bullmq';
 import {InjectQueue} from '@nestjs/bullmq';
+import {MovieFilters} from './movies.types';
 
 @Injectable()
 export class MoviesService implements OnModuleInit {
@@ -52,7 +53,7 @@ export class MoviesService implements OnModuleInit {
   // }
 
   async findAll(
-    options: GetListOptions = {},
+    options: GetListOptions<MovieFilters> = {},
     {
       includePersons = false,
       onlyWithActiveProjections = false,
@@ -66,7 +67,29 @@ export class MoviesService implements OnModuleInit {
         }
       : false;
 
-    const where = {
+    const whereCondition: Prisma.MovieWhereInput = {
+      OR: options.filter?.searchText
+        ? [
+            {
+              localizedTitle: {
+                contains: options.filter.searchText,
+                mode: 'insensitive',
+              },
+            },
+            {
+              title: {
+                contains: options.filter.searchText,
+                mode: 'insensitive',
+              },
+            },
+            {
+              originalTitle: {
+                contains: options.filter.searchText,
+                mode: 'insensitive',
+              },
+            },
+          ]
+        : undefined,
       movieProjections: onlyWithActiveProjections
         ? {
             some: {
@@ -105,10 +128,10 @@ export class MoviesService implements OnModuleInit {
               [options.sort.field]: options.sort.order,
             }
           : undefined,
-        where,
+        where: whereCondition,
       }),
       this.prismaService.movie.count({
-        where,
+        where: whereCondition,
       }),
     ]);
 

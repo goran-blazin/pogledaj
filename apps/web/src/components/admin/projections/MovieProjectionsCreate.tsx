@@ -3,6 +3,7 @@ import {
   CheckboxGroupInput,
   Create,
   DateInput,
+  ReferenceInput,
   required,
   SelectInput,
   SimpleForm,
@@ -26,6 +27,7 @@ import {ApiErrors} from '../../../types/ErrorTypes';
 import {DateTime} from 'ts-luxon';
 import MovieProjectionsService from '../../../services/MovieProjectionsService';
 import LoadingBox from '../utility/LoadingBox';
+import {AutocompleteInput} from 'react-admin';
 
 const DATE_FORM_TYPE = {
   dateRange: 'dateRange',
@@ -72,22 +74,11 @@ function MovieProjectionsCreate() {
     pagination: {page: 1, perPage: 100},
     sort: {field: 'name', order: 'ASC'},
   });
-  const {data: movies, isSuccess: moviesIsSuccess} = useGetList<Movie>('movies', {
-    pagination: {page: 1, perPage: 10000},
-    sort: {field: 'localizedTitle', order: 'ASC'},
-  });
 
   const cinemaTheatersSelectInput = (cinemaTheaters || []).map((cinemaTheater) => {
     return {
       id: cinemaTheater.id,
       name: `${cinemaTheater.name}`,
-    };
-  });
-
-  const moviesSelectInput = (movies || []).map((movie) => {
-    return {
-      id: movie.id,
-      name: Utils.getMovieLocalizedTitle(movie),
     };
   });
 
@@ -130,15 +121,6 @@ function MovieProjectionsCreate() {
           };
 
           await useMutationResult.mutateAsync(bulkData);
-
-          // await Utils.forEachAwait(bulkData.projectionDetails, async (item) => {
-          //   const data: CreateMovieProjectionDTO = {
-          //     movieId: bulkData.movieId,
-          //     cinemaTheaterId: bulkData.cinemaTheaterId,
-          //     ...item,
-          //   };
-          //
-          // });
         });
 
         notify('ra.notification.created', {
@@ -170,17 +152,18 @@ function MovieProjectionsCreate() {
     [notify, params.cinemaId, dateFormType],
   );
 
-  return cinemaIsSuccess && cinemaTheatersIsSuccess && moviesIsSuccess ? (
+  // Note we declared the function outside the component to avoid rerenders
+  const optionTextRenderer = (movie: Movie) => Utils.getMovieLocalizedTitle(movie);
+  const filterToQuery = (searchText: string) => ({searchText: searchText});
+
+  return cinemaIsSuccess && cinemaTheatersIsSuccess ? (
     <Create title={'Kreiranje projekcije'} resource={'movieProjections'}>
       <SimpleForm onSubmit={save}>
         <Box>Izabrani bioskop: {cinema.name}</Box>
-        <SelectInput
-          source={'movieId'}
-          choices={moviesSelectInput}
-          label={'Film'}
-          validate={required()}
-          sx={{width: '30em'}}
-        />
+        <ReferenceInput label="Author" source="movieId" reference="movies">
+          <AutocompleteInput optionText={optionTextRenderer} sx={{width: '40em'}} filterToQuery={filterToQuery} />
+        </ReferenceInput>
+
         <Select
           value={dateFormType}
           onChange={(event) => {

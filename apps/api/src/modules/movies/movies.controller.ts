@@ -33,11 +33,13 @@ export class MoviesController {
     @Query('onlyWithActiveProjections', new DefaultValuePipe(false), ParseBoolPipe) onlyWithActiveProjections: boolean,
     @Query('sort') sort?: string,
     @Query('range') range?: string,
+    @Query('filter') filter?: string,
   ) {
     return this.moviesService.findAll(
       {
         sort: sort ? JSON.parse(sort) : undefined,
         range: range ? JSON.parse(range) : undefined,
+        filter: filter ? JSON.parse(filter) : undefined,
       },
       {includePersons, onlyWithActiveProjections},
     );
