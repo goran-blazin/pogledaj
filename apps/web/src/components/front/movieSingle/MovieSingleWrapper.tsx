@@ -675,66 +675,76 @@ function MovieSingleWrapper() {
                               <>
                                 {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[
                                   selectedDate
-                                ].movieProjections.map((mp, i) => {
-                                  return (
-                                    <Stack
-                                      direction="row"
-                                      justifyContent="space-between"
-                                      alignItems="center"
-                                      key={mp.id + i}
-                                      sx={(theme) => ({
-                                        borderBottomWidth: '1px',
-                                        borderBottomStyle: 'solid',
-                                        borderBottomColor: theme.eventInfoSection.borderColor,
-                                        marginBottom: '16px',
-                                        paddingBottom: '16px',
-                                      })}
-                                    >
-                                      <ProjectionsRow>
-                                        <Box component={'span'} sx={{color: 'primary.main'}}>
-                                          Vreme:
-                                        </Box>
-                                        &nbsp;
-                                        {DateTime.fromISO(mp.projectionDateTime).toFormat('HH:mm')}
-                                      </ProjectionsRow>
-                                      <ProjectionsRow>
-                                        <Box component={'span'} sx={{color: 'primary.main'}}>
-                                          Cena:
-                                        </Box>
-                                        &nbsp;
-                                        {mp.projectionPrices?.[0].price}
-                                      </ProjectionsRow>
-                                      <ProjectionsRow>
-                                        <Box component={'span'} sx={{color: 'primary.main'}}>
-                                          Sala:
-                                        </Box>
-                                        &nbsp;
-                                        {mp.cinemaTheater.name}
-                                      </ProjectionsRow>
-                                      {/* <ProjectionsRow>
+                                ].movieProjections
+                                  .sort((mp1, mp2) => {
+                                    return (
+                                      DateTime.fromISO(mp1.projectionDateTime).toUnixInteger() -
+                                      DateTime.fromISO(mp2.projectionDateTime).toUnixInteger()
+                                    );
+                                  })
+                                  .map((mp, i) => {
+                                    return (
+                                      <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        key={mp.id + i}
+                                        sx={(theme) => ({
+                                          borderBottomWidth: '1px',
+                                          borderBottomStyle: 'solid',
+                                          borderBottomColor: theme.eventInfoSection.borderColor,
+                                          marginBottom: '16px',
+                                          paddingBottom: '16px',
+                                        })}
+                                      >
+                                        <ProjectionsRow>
+                                          <Box component={'span'} sx={{color: 'primary.main'}}>
+                                            Vreme:
+                                          </Box>
+                                          &nbsp;
+                                          {DateTime.fromISO(mp.projectionDateTime).toFormat('HH:mm')}
+                                        </ProjectionsRow>
+                                        <ProjectionsRow>
+                                          <Box component={'span'} sx={{color: 'primary.main'}}>
+                                            Cena:
+                                          </Box>
+                                          &nbsp;
+                                          {mp.projectionPrices?.[0].price}
+                                        </ProjectionsRow>
+                                        <ProjectionsRow>
+                                          <Box component={'span'} sx={{color: 'primary.main'}}>
+                                            Sala:
+                                          </Box>
+                                          &nbsp;
+                                          {mp.cinemaTheater.name}
+                                        </ProjectionsRow>
+                                        {/* <ProjectionsRow>
                                         <Box component={'span'} sx={{color: 'primary.main'}}>
                                           Jezik:
                                         </Box>
                                         &nbsp;
                                         {mp.dubbedLanguage ? 'SINH' : 'ORIG'}
                                       </ProjectionsRow> */}
-                                      {Utils.isBetaMode() && (
-                                        <ProjectionsRow>
-                                          <SmallButton
-                                            variant="contained"
-                                            onClick={() => {
-                                              navigate(
-                                                namedRoutes.movieProjectionSingle.replace(':movieProjectionId', mp.id),
-                                              );
-                                            }}
-                                          >
-                                            Rezerviši
-                                          </SmallButton>
-                                        </ProjectionsRow>
-                                      )}
-                                    </Stack>
-                                  );
-                                })}
+                                        {Utils.isBetaMode() && (
+                                          <ProjectionsRow>
+                                            <SmallButton
+                                              variant="contained"
+                                              onClick={() => {
+                                                navigate(
+                                                  namedRoutes.movieProjectionSingle.replace(
+                                                    ':movieProjectionId',
+                                                    mp.id,
+                                                  ),
+                                                );
+                                              }}
+                                            >
+                                              Rezerviši
+                                            </SmallButton>
+                                          </ProjectionsRow>
+                                        )}
+                                      </Stack>
+                                    );
+                                  })}
                               </>
                             ) : (
                               <Typography>Projekcije nisu pronadjene</Typography>
