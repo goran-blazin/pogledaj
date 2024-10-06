@@ -6,6 +6,8 @@ type UserSettingsStore = {
   toggleTheme: () => void;
   globalSelectedCity?: string;
   setGlobalCity: (cityId: string | undefined) => void;
+  globalSelectedCinema?: string;
+  setGlobalCinema: (cityId: string | undefined) => void;
 };
 
 const useUserSettings = create<UserSettingsStore>()(
@@ -21,6 +23,7 @@ const useUserSettings = create<UserSettingsStore>()(
           }
         },
         setGlobalCity: (cityId: string | undefined) => set({globalSelectedCity: cityId}),
+        setGlobalCinema: (cinemaId: string | undefined) => set({globalSelectedCinema: cinemaId}),
       }),
       {
         name: 'UserSettingsStore',

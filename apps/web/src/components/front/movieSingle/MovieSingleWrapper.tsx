@@ -164,7 +164,6 @@ function MovieSingleWrapper() {
   const {movieId} = useParams();
   const userSettingsStore = useUserSettings();
 
-  const [selectedCinema, setSelectedCinema] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
   const projectionsRef = useRef<HTMLDivElement | null>(null);
@@ -260,7 +259,7 @@ function MovieSingleWrapper() {
 
   const onCityChange = (event: SelectChangeEvent) => {
     setSelectedDate('');
-    setSelectedCinema('');
+    userSettingsStore.setGlobalCinema(undefined);
     userSettingsStore.setGlobalCity(event.target.value);
   };
 
@@ -278,8 +277,11 @@ function MovieSingleWrapper() {
     );
 
   useEffect(() => {
-    if (selectedCinema !== '') {
-      const date = sortDates(projectionsGroupedCinemaPerCity[selectedCinema].dates)[0];
+    if (
+      userSettingsStore.globalSelectedCinema &&
+      projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema]
+    ) {
+      const date = sortDates(projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates)[0];
       if (date) {
         setSelectedDate(date.date);
       }
@@ -289,7 +291,7 @@ function MovieSingleWrapper() {
         }
       }, 100); // Timeout to ensure the div is rendered
     }
-  }, [selectedCinema]);
+  }, [userSettingsStore.globalSelectedCinema]);
 
   const nativeShare = typeof navigator.share === 'function';
 
@@ -532,7 +534,7 @@ function MovieSingleWrapper() {
                       <SelectBoxStyled
                         sx={{mt: 1}}
                         disabled={!userSettingsStore.globalSelectedCity}
-                        value={selectedCinema}
+                        value={userSettingsStore.globalSelectedCinema || ''}
                         open={cinemaSelectOpen}
                         onOpen={() => setCinemaSelectOpen(true)}
                         onClose={() => setCinemaSelectOpen(false)}
@@ -545,7 +547,7 @@ function MovieSingleWrapper() {
                             Bioskop
                           </InputAdornment>
                         }
-                        onChange={(event: SelectChangeEvent) => setSelectedCinema(event.target.value)}
+                        onChange={(event: SelectChangeEvent) => userSettingsStore.setGlobalCinema(event.target.value)}
                       >
                         {Object.keys(projectionsGroupedCinemaPerCity).map((cinemaId, i) => {
                           return (
@@ -557,106 +559,112 @@ function MovieSingleWrapper() {
                       </SelectBoxStyled>
                     </FormControl>
                     <React.Fragment>
-                      {selectedCinema && (
-                        <Box sx={{mt: 2}} ref={projectionsRef}>
-                          <ProjectionsSubHeader>Izaberi datum:</ProjectionsSubHeader>
-                          <Stack
-                            sx={{
-                              mt: 1,
-                              overflowX: 'auto',
-                            }}
-                            direction={'row'}
-                            spacing={2}
-                          >
-                            {sortDates(projectionsGroupedCinemaPerCity[selectedCinema].dates).map((date, index) => (
-                              <Button
-                                key={index}
-                                variant="outlined"
-                                onClick={() => setSelectedDate(date.date)}
-                                sx={{
-                                  borderRadius: '15px', // Rounded border
-                                  borderColor: (theme) =>
-                                    selectedDate === date.date
-                                      ? theme.customButtons.dateButtons.selectedColor
-                                      : theme.customButtons.dateButtons.nonSelectedColor, // Border color
-                                  borderWidth: '2px', // Border width
-                                  '&.MuiButtonBase-root:hover': {
-                                    borderWidth: '2px',
-                                  },
-                                  textTransform: 'none', // Prevent uppercase transformation
-                                  backgroundColor: 'transparent', // Transparent background
-                                  width: '66px', // Fit to content size
-                                  height: '66px', // Fit to content size
-                                }}
-                              >
-                                <Stack spacing={0}>
-                                  <Box
-                                    component="span"
-                                    sx={{
-                                      fontSize: '1em',
-                                      fontWeight: 600,
-                                      color: (theme) =>
-                                        selectedDate === date.date
-                                          ? theme.customButtons.dateButtons.selectedColor
-                                          : theme.customButtons.dateButtons.nonSelectedColor,
-                                    }}
-                                  >
-                                    {date.weekDay}
-                                  </Box>
-                                  <Box
-                                    component="span"
-                                    sx={{
-                                      mt: 1,
-                                      lineHeight: 0,
-                                      fontSize: '0.6em',
-                                      fontWeight: 600,
-                                      color: (theme) =>
-                                        selectedDate === date.date
-                                          ? theme.customButtons.dateButtons.selectedColor
-                                          : theme.customButtons.dateButtons.nonSelectedColor,
-                                    }}
-                                  >
-                                    {date.month}
-                                  </Box>
-                                  <Box
-                                    component="span"
-                                    sx={{
-                                      fontSize: '1.2em',
-                                      fontWeight: 600,
-                                      color: (theme) =>
-                                        selectedDate === date.date
-                                          ? theme.customButtons.dateButtons.selectedColor
-                                          : theme.customButtons.dateButtons.nonSelectedColor,
-                                    }}
-                                  >
-                                    {date.day}
-                                  </Box>
-                                </Stack>
-                              </Button>
-                            ))}
-                          </Stack>
-                        </Box>
-                      )}
+                      {userSettingsStore.globalSelectedCinema &&
+                        projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema] && (
+                          <Box sx={{mt: 2}} ref={projectionsRef}>
+                            <ProjectionsSubHeader>Izaberi datum:</ProjectionsSubHeader>
+                            <Stack
+                              sx={{
+                                mt: 1,
+                                overflowX: 'auto',
+                              }}
+                              direction={'row'}
+                              spacing={2}
+                            >
+                              {sortDates(
+                                projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates,
+                              ).map((date, index) => (
+                                <Button
+                                  key={index}
+                                  variant="outlined"
+                                  onClick={() => setSelectedDate(date.date)}
+                                  sx={{
+                                    borderRadius: '15px', // Rounded border
+                                    borderColor: (theme) =>
+                                      selectedDate === date.date
+                                        ? theme.customButtons.dateButtons.selectedColor
+                                        : theme.customButtons.dateButtons.nonSelectedColor, // Border color
+                                    borderWidth: '2px', // Border width
+                                    '&.MuiButtonBase-root:hover': {
+                                      borderWidth: '2px',
+                                    },
+                                    textTransform: 'none', // Prevent uppercase transformation
+                                    backgroundColor: 'transparent', // Transparent background
+                                    width: '66px', // Fit to content size
+                                    height: '66px', // Fit to content size
+                                  }}
+                                >
+                                  <Stack spacing={0}>
+                                    <Box
+                                      component="span"
+                                      sx={{
+                                        fontSize: '1em',
+                                        fontWeight: 600,
+                                        color: (theme) =>
+                                          selectedDate === date.date
+                                            ? theme.customButtons.dateButtons.selectedColor
+                                            : theme.customButtons.dateButtons.nonSelectedColor,
+                                      }}
+                                    >
+                                      {date.weekDay}
+                                    </Box>
+                                    <Box
+                                      component="span"
+                                      sx={{
+                                        mt: 1,
+                                        lineHeight: 0,
+                                        fontSize: '0.6em',
+                                        fontWeight: 600,
+                                        color: (theme) =>
+                                          selectedDate === date.date
+                                            ? theme.customButtons.dateButtons.selectedColor
+                                            : theme.customButtons.dateButtons.nonSelectedColor,
+                                      }}
+                                    >
+                                      {date.month}
+                                    </Box>
+                                    <Box
+                                      component="span"
+                                      sx={{
+                                        fontSize: '1.2em',
+                                        fontWeight: 600,
+                                        color: (theme) =>
+                                          selectedDate === date.date
+                                            ? theme.customButtons.dateButtons.selectedColor
+                                            : theme.customButtons.dateButtons.nonSelectedColor,
+                                      }}
+                                    >
+                                      {date.day}
+                                    </Box>
+                                  </Stack>
+                                </Button>
+                              ))}
+                            </Stack>
+                          </Box>
+                        )}
                     </React.Fragment>
                     <React.Fragment>
-                      {selectedDate && projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate] && (
-                        <Box sx={{mt: 2}}>
-                          <ProjectionsSubHeader
-                            sx={(theme) => ({
-                              borderBottomWidth: '1px',
-                              borderBottomStyle: 'solid',
-                              borderBottomColor: theme.eventInfoSection.borderColor,
-                              marginBottom: '16px',
-                              paddingBottom: '16px',
-                            })}
-                          >
-                            Projekcije:
-                          </ProjectionsSubHeader>
-                          {projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate].movieProjections.length >
-                          0 ? (
-                            <>
-                              {projectionsGroupedCinemaPerCity[selectedCinema].dates[selectedDate].movieProjections.map(
-                                (mp, i) => {
+                      {selectedDate &&
+                        userSettingsStore.globalSelectedCinema &&
+                        projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[selectedDate] && (
+                          <Box sx={{mt: 2}}>
+                            <ProjectionsSubHeader
+                              sx={(theme) => ({
+                                borderBottomWidth: '1px',
+                                borderBottomStyle: 'solid',
+                                borderBottomColor: theme.eventInfoSection.borderColor,
+                                marginBottom: '16px',
+                                paddingBottom: '16px',
+                              })}
+                            >
+                              Projekcije:
+                            </ProjectionsSubHeader>
+                            {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[selectedDate]
+                              .movieProjections.length > 0 ? (
+                              <>
+                                {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[
+                                  selectedDate
+                                ].movieProjections.map((mp, i) => {
                                   return (
                                     <Stack
                                       direction="row"
@@ -715,14 +723,13 @@ function MovieSingleWrapper() {
                                       )}
                                     </Stack>
                                   );
-                                },
-                              )}
-                            </>
-                          ) : (
-                            <Typography>Projekcije nisu pronadjene</Typography>
-                          )}
-                        </Box>
-                      )}
+                                })}
+                              </>
+                            ) : (
+                              <Typography>Projekcije nisu pronadjene</Typography>
+                            )}
+                          </Box>
+                        )}
                     </React.Fragment>
                   </Box>
                 ) : (

@@ -26,6 +26,8 @@ import ContentWrapper from '../layout/ContentWrapper';
 
 import {styled} from '@mui/material';
 import {PickersActionBar} from '@mui/x-date-pickers';
+import useUserSettings from '../../../store/UserSettingsStore';
+import LoadingBox from '../utility/LoadingBox';
 
 const InputText = styled('span')(({theme}) => ({
   color: theme.customForm.inputFieldStyled.color,
@@ -119,14 +121,12 @@ function MoviesFiltersWrapper() {
     );
   };
 
+  const userSettingsStore = useUserSettings();
+
   // city select
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  const handleCityChange = (event: SelectChangeEvent<typeof selectedCity>) => {
-    const {
-      target: {value},
-    } = event;
-    setSelectedCinema('');
-    setSelectedCity(value);
+  const handleCityChange = (event: SelectChangeEvent) => {
+    userSettingsStore.setGlobalCinema(undefined);
+    userSettingsStore.setGlobalCity(event.target.value);
   };
 
   const citiesRQ = useQuery('cities', () => {
@@ -134,16 +134,12 @@ function MoviesFiltersWrapper() {
   });
 
   // cinema select
-  const [selectedCinema, setSelectedCinema] = useState<string>('');
-  const handleCinemaChange = (event: SelectChangeEvent<typeof selectedCinema>) => {
-    const {
-      target: {value},
-    } = event;
-    setSelectedCinema(value);
+  const handleCinemaChange = (event: SelectChangeEvent) => {
+    userSettingsStore.setGlobalCinema(event.target.value);
   };
 
-  const cinemasRQ = useQuery(['cinemas', selectedCity], () => {
-    return CinemasService.findAllByCity(selectedCity);
+  const cinemasRQ = useQuery(['cinemas', userSettingsStore.globalSelectedCity], () => {
+    return CinemasService.findAllByCity(userSettingsStore.globalSelectedCity);
   });
 
   // dates
@@ -160,8 +156,8 @@ function MoviesFiltersWrapper() {
       selectedDirectorPersonId: directorAutocompleteValue?.id,
       selectedActorPersonIds: actorsAutocompleteValue.map((a) => a.id),
       movieLengths: movieLengths,
-      selectedCityId: selectedCity.length > 0 ? selectedCity : undefined,
-      selectedCinemasIds: selectedCinema ? [selectedCinema] : undefined,
+      selectedCityId: userSettingsStore.globalSelectedCity,
+      selectedCinemasIds: userSettingsStore.globalSelectedCinema ? [userSettingsStore.globalSelectedCinema] : undefined,
       selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
       selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
     });
@@ -174,383 +170,395 @@ function MoviesFiltersWrapper() {
     setActorsAutocompleteValue(filterActor);
   };
 
+  const isLoading = useMemo(() => {
+    return citiesRQ.isLoading;
+  }, [citiesRQ.isLoading]);
+
   return (
     <ContentWrapper padding marginTop="30px">
-      <>
-        <PageHeader headerText={'Detaljna pretraga'} />
-        <Box sx={{mt: 5}}>
-          <PageSubHeader headerText={`Projekcija`} Icon={PersonalVideoOutlinedIcon} />
-          <FormControl fullWidth sx={{mt: 2}}>
-            <SelectBoxStyled
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
-                        theme.customForm.selectField.color,
-                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
-                        theme.customForm.selectField.textColor,
+      {isLoading ? (
+        <LoadingBox />
+      ) : (
+        <>
+          <PageHeader headerText={'Detaljna pretraga'} />
+          <Box sx={{mt: 5}}>
+            <PageSubHeader headerText={`Projekcija`} Icon={PersonalVideoOutlinedIcon} />
+            <FormControl fullWidth sx={{mt: 2}}>
+              <SelectBoxStyled
+                inputProps={{
+                  MenuProps: {
+                    MenuListProps: {
+                      sx: {
+                        backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                          theme.customForm.selectField.color,
+                        color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                          theme.customForm.selectField.textColor,
+                      },
                     },
                   },
-                },
-              }}
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              value={selectedCity}
-              startAdornment={
-                <InputAdornment className={'select-adornment'} position="start">
-                  <InputText>Grad</InputText>
-                </InputAdornment>
-              }
-              onChange={handleCityChange}
-            >
-              {(citiesRQ.data || []).map((city, i) => {
-                return (
-                  <MenuItem key={i} value={city.id}>
-                    {city.name}
-                  </MenuItem>
-                );
-              })}
-            </SelectBoxStyled>
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <SelectBoxStyled
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
-                        theme.customForm.selectField.color,
-                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
-                        theme.customForm.selectField.textColor,
-                    },
+                }}
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
                   },
-                },
-              }}
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              value={selectedCinema}
-              startAdornment={
-                <InputAdornment className={'select-adornment'} position="start">
-                  <InputText>Bioskopi</InputText>
-                </InputAdornment>
-              }
-              onChange={handleCinemaChange}
-            >
-              {(cinemasRQ.data || []).map((cinema, i) => {
-                return (
-                  <MenuItem key={i} value={cinema.id}>
-                    {cinema.name}
-                  </MenuItem>
-                );
-              })}
-            </SelectBoxStyled>
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <DatePicker
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              format={Utils.luxonDateFormat}
-              value={selectedDateFrom}
-              slots={{
-                actionBar: (params) => {
-                  return <PickersActionBar {...params} actions={[]} />;
-                },
-                toolbar: (params) => {
-                  return <DatePickerToolbar {...params} hidden={true} />;
-                },
-                textField: (params) => {
-                  if (params.InputProps) {
-                    params.InputProps.startAdornment = (
-                      <InputAdornment position="start">
-                        <InputText>Datum od</InputText>
-                      </InputAdornment>
-                    );
-                  }
-                  return <TextFieldStyled {...params} fullWidth placeholder={''} />;
-                },
-              }}
-              onChange={(value) => {
-                setSelectedDateFrom(value as DateTime);
-              }}
-              closeOnSelect={true}
-            />
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <DatePicker
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              format={Utils.luxonDateFormat}
-              value={selectedDateTo}
-              slots={{
-                actionBar: (params) => {
-                  return <PickersActionBar {...params} actions={[]} />;
-                },
-                toolbar: (params) => {
-                  return <DatePickerToolbar {...params} hidden={true} />;
-                },
-                textField: (params) => {
-                  if (params.InputProps) {
-                    params.InputProps.startAdornment = (
-                      <InputAdornment position="start">
-                        <InputText>Datum do</InputText>
-                      </InputAdornment>
-                    );
-                  }
-                  return <TextFieldStyled {...params} fullWidth placeholder={''} />;
-                },
-              }}
-              closeOnSelect={true}
-              onChange={(value) => {
-                setSelectedDateTo(value as DateTime);
-              }}
-            />
-          </FormControl>
-        </Box>
-        <Box sx={{mt: 5}}>
-          <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
-          <FormControl fullWidth sx={{mt: 2}}>
-            <SelectBoxStyled
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
-                        theme.customForm.selectField.color,
-                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
-                        theme.customForm.selectField.textColor,
-                    },
-                  },
-                },
-              }}
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              multiple
-              value={selectedGenres}
-              startAdornment={
-                <InputAdornment className={'select-adornment'} position="start">
-                  <InputText>Žanr</InputText>
-                </InputAdornment>
-              }
-              onChange={handleGenreChange}
-              renderValue={(selected) => (
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                  {selected.map((value) => (
-                    <ChipStyled
-                      key={value}
-                      label={(genresRQ.data || []).find((g) => g.systemName === value)?.localizedName}
-                    />
-                  ))}
-                </Box>
-              )}
-            >
-              {(genresRQ.data || []).map((genre, i) => {
-                return (
-                  <MenuItem key={i} value={genre.systemName}>
-                    {genre.localizedName}
-                  </MenuItem>
-                );
-              })}
-            </SelectBoxStyled>
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <SelectBoxStyled
-              // TODO rework inputProps into main component
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
-                        theme.customForm.selectField.color,
-                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
-                        theme.customForm.selectField.textColor,
-                    },
-                  },
-                },
-              }}
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              multiple
-              value={selectedCountries}
-              startAdornment={
-                <InputAdornment className={'select-adornment'} position="start">
-                  <InputText>Zemlja porekla</InputText>
-                </InputAdornment>
-              }
-              onChange={handleCountryChange}
-              renderValue={(selected) => (
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                  {selected.map((value) => (
-                    <ChipStyled key={value} label={(countriesRQ.data || []).find((c) => c.code === value)?.name} />
-                  ))}
-                </Box>
-              )}
-            >
-              {(countriesRQ.data || []).map((country, i) => {
-                return (
-                  <MenuItem key={i} value={country.code}>
-                    {country.name}
-                  </MenuItem>
-                );
-              })}
-            </SelectBoxStyled>
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <Autocomplete<Person, true>
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              id="choose-actors-filter"
-              multiple
-              filterOptions={(x) => x}
-              filterSelectedOptions
-              options={actorsAutocompleteOptions}
-              autoComplete
-              includeInputInList
-              loading={actorsRQ.isLoading}
-              renderTags={(tagValue, getTagProps) =>
-                tagValue.map((option, index) => (
-                  <ChipStyled
-                    label={option.name}
-                    {...getTagProps({index})}
-                    margin={'0 5px 0 0'}
-                    onClick={() => handleActorRemoval(option)}
-                  />
-                ))
-              }
-              renderInput={(params) => {
-                params.InputProps.startAdornment = (
-                  <>
-                    <InputAdornment className={'select-adornment'} position="start">
-                      <InputText>Glumci</InputText>
-                    </InputAdornment>
-                    <React.Fragment>{params.InputProps.startAdornment}</React.Fragment>
-                  </>
-                );
-                return <TextFieldStyled {...params} fullWidth />;
-              }}
-              noOptionsText="Nije nadjeno"
-              onInputChange={(event, newInputValue) => {
-                setActorsAutocompleteInputValue(newInputValue);
-              }}
-              onChange={(event: React.SyntheticEvent, newValue: Person[]) => {
-                setActorsAutocompleteValue(newValue);
-              }}
-              value={actorsAutocompleteValue}
-              getOptionLabel={(actor) => actor.name}
-              getOptionKey={(actor) => actor.id}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-            />
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <Autocomplete<Person>
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              id="choose-director-filter"
-              filterOptions={(x) => x}
-              filterSelectedOptions
-              options={directorAutocompleteOptions}
-              autoComplete
-              includeInputInList
-              loading={directorsRQ.isLoading}
-              renderInput={(params) => {
-                params.InputProps.startAdornment = (
-                  <InputAdornment position="start">
-                    <InputText>Režiser</InputText>
+                }}
+                value={userSettingsStore.globalSelectedCity}
+                startAdornment={
+                  <InputAdornment className={'select-adornment'} position="start">
+                    <InputText>Grad</InputText>
                   </InputAdornment>
-                );
-                return <TextFieldStyled {...params} fullWidth />;
-              }}
-              noOptionsText="Nije nadjeno"
-              onInputChange={(event, newInputValue) => {
-                setDirectorAutocompleteInputValue(newInputValue);
-              }}
-              onChange={(event: React.SyntheticEvent, newValue: Person | null) => {
-                setDirectorAutocompleteValue(newValue);
-              }}
-              value={directorAutocompleteValue}
-              getOptionLabel={(director) => director.name}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-            />
-          </FormControl>
-          <FormControl fullWidth sx={{mt: 1}}>
-            <SelectBoxStyled
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
-                        theme.customForm.selectField.color,
-                      color: (theme: {customForm: {selectField: {textColor: string}}}) =>
-                        theme.customForm.selectField.textColor,
+                }
+                onChange={handleCityChange}
+              >
+                {(citiesRQ.data || []).map((city, i) => {
+                  return (
+                    <MenuItem key={i} value={city.id}>
+                      {city.name}
+                    </MenuItem>
+                  );
+                })}
+              </SelectBoxStyled>
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <SelectBoxStyled
+                inputProps={{
+                  MenuProps: {
+                    MenuListProps: {
+                      sx: {
+                        backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                          theme.customForm.selectField.color,
+                        color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                          theme.customForm.selectField.textColor,
+                      },
                     },
                   },
-                },
-              }}
-              sx={{
-                '.MuiSvgIcon-root ': {
-                  color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                },
-              }}
-              multiple
-              value={movieLengths}
-              startAdornment={
-                <InputAdornment className={'select-adornment'} position="start">
-                  <InputText>Trajanje filma</InputText>
-                </InputAdornment>
-              }
-              onChange={handleMovieLengthsChange}
-              renderValue={(selected) => (
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                  {selected.map((value) => (
-                    <ChipStyled key={value} label={movieLengthsMap[value]} />
-                  ))}
-                </Box>
-              )}
-            >
-              {(Object.keys(movieLengthsMap) as MovieLengthCategory[]).map((movieLengthCategory, i) => {
-                return (
-                  <MenuItem key={i} value={movieLengthCategory}>
-                    {movieLengthsMap[movieLengthCategory]}
-                  </MenuItem>
-                );
-              })}
-            </SelectBoxStyled>
-          </FormControl>
-        </Box>
-        <Box sx={{mt: 5}} textAlign="center">
-          <ButtonStyled variant="contained" onClick={buttonClickHandler}>
-            {'Primeni filtere'}
-          </ButtonStyled>
-        </Box>
-      </>
+                }}
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                value={
+                  (cinemasRQ.data || []).map((c) => c.id).includes(userSettingsStore.globalSelectedCinema as string)
+                    ? userSettingsStore.globalSelectedCinema
+                    : ''
+                }
+                startAdornment={
+                  <InputAdornment className={'select-adornment'} position="start">
+                    <InputText>Bioskopi</InputText>
+                  </InputAdornment>
+                }
+                onChange={handleCinemaChange}
+              >
+                {(cinemasRQ.data || []).map((cinema, i) => {
+                  return (
+                    <MenuItem key={i} value={cinema.id}>
+                      {cinema.name}
+                    </MenuItem>
+                  );
+                })}
+              </SelectBoxStyled>
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <DatePicker
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                format={Utils.luxonDateFormat}
+                value={selectedDateFrom}
+                slots={{
+                  actionBar: (params) => {
+                    return <PickersActionBar {...params} actions={[]} />;
+                  },
+                  toolbar: (params) => {
+                    return <DatePickerToolbar {...params} hidden={true} />;
+                  },
+                  textField: (params) => {
+                    if (params.InputProps) {
+                      params.InputProps.startAdornment = (
+                        <InputAdornment position="start">
+                          <InputText>Datum od</InputText>
+                        </InputAdornment>
+                      );
+                    }
+                    return <TextFieldStyled {...params} fullWidth placeholder={''} />;
+                  },
+                }}
+                onChange={(value) => {
+                  setSelectedDateFrom(value as DateTime);
+                }}
+                closeOnSelect={true}
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <DatePicker
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                format={Utils.luxonDateFormat}
+                value={selectedDateTo}
+                slots={{
+                  actionBar: (params) => {
+                    return <PickersActionBar {...params} actions={[]} />;
+                  },
+                  toolbar: (params) => {
+                    return <DatePickerToolbar {...params} hidden={true} />;
+                  },
+                  textField: (params) => {
+                    if (params.InputProps) {
+                      params.InputProps.startAdornment = (
+                        <InputAdornment position="start">
+                          <InputText>Datum do</InputText>
+                        </InputAdornment>
+                      );
+                    }
+                    return <TextFieldStyled {...params} fullWidth placeholder={''} />;
+                  },
+                }}
+                closeOnSelect={true}
+                onChange={(value) => {
+                  setSelectedDateTo(value as DateTime);
+                }}
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{mt: 5}}>
+            <PageSubHeader headerText={`Film`} Icon={MovieCreationOutlinedIcon} />
+            <FormControl fullWidth sx={{mt: 2}}>
+              <SelectBoxStyled
+                inputProps={{
+                  MenuProps: {
+                    MenuListProps: {
+                      sx: {
+                        backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                          theme.customForm.selectField.color,
+                        color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                          theme.customForm.selectField.textColor,
+                      },
+                    },
+                  },
+                }}
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                multiple
+                value={selectedGenres}
+                startAdornment={
+                  <InputAdornment className={'select-adornment'} position="start">
+                    <InputText>Žanr</InputText>
+                  </InputAdornment>
+                }
+                onChange={handleGenreChange}
+                renderValue={(selected) => (
+                  <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                    {selected.map((value) => (
+                      <ChipStyled
+                        key={value}
+                        label={(genresRQ.data || []).find((g) => g.systemName === value)?.localizedName}
+                      />
+                    ))}
+                  </Box>
+                )}
+              >
+                {(genresRQ.data || []).map((genre, i) => {
+                  return (
+                    <MenuItem key={i} value={genre.systemName}>
+                      {genre.localizedName}
+                    </MenuItem>
+                  );
+                })}
+              </SelectBoxStyled>
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <SelectBoxStyled
+                // TODO rework inputProps into main component
+                inputProps={{
+                  MenuProps: {
+                    MenuListProps: {
+                      sx: {
+                        backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                          theme.customForm.selectField.color,
+                        color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                          theme.customForm.selectField.textColor,
+                      },
+                    },
+                  },
+                }}
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                multiple
+                value={selectedCountries}
+                startAdornment={
+                  <InputAdornment className={'select-adornment'} position="start">
+                    <InputText>Zemlja porekla</InputText>
+                  </InputAdornment>
+                }
+                onChange={handleCountryChange}
+                renderValue={(selected) => (
+                  <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                    {selected.map((value) => (
+                      <ChipStyled key={value} label={(countriesRQ.data || []).find((c) => c.code === value)?.name} />
+                    ))}
+                  </Box>
+                )}
+              >
+                {(countriesRQ.data || []).map((country, i) => {
+                  return (
+                    <MenuItem key={i} value={country.code}>
+                      {country.name}
+                    </MenuItem>
+                  );
+                })}
+              </SelectBoxStyled>
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <Autocomplete<Person, true>
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                id="choose-actors-filter"
+                multiple
+                filterOptions={(x) => x}
+                filterSelectedOptions
+                options={actorsAutocompleteOptions}
+                autoComplete
+                includeInputInList
+                loading={actorsRQ.isLoading}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => (
+                    <ChipStyled
+                      label={option.name}
+                      {...getTagProps({index})}
+                      margin={'0 5px 0 0'}
+                      onClick={() => handleActorRemoval(option)}
+                    />
+                  ))
+                }
+                renderInput={(params) => {
+                  params.InputProps.startAdornment = (
+                    <>
+                      <InputAdornment className={'select-adornment'} position="start">
+                        <InputText>Glumci</InputText>
+                      </InputAdornment>
+                      <React.Fragment>{params.InputProps.startAdornment}</React.Fragment>
+                    </>
+                  );
+                  return <TextFieldStyled {...params} fullWidth />;
+                }}
+                noOptionsText="Nije nadjeno"
+                onInputChange={(event, newInputValue) => {
+                  setActorsAutocompleteInputValue(newInputValue);
+                }}
+                onChange={(event: React.SyntheticEvent, newValue: Person[]) => {
+                  setActorsAutocompleteValue(newValue);
+                }}
+                value={actorsAutocompleteValue}
+                getOptionLabel={(actor) => actor.name}
+                getOptionKey={(actor) => actor.id}
+                isOptionEqualToValue={(option, value) => {
+                  return option.id === value.id;
+                }}
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <Autocomplete<Person>
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                id="choose-director-filter"
+                filterOptions={(x) => x}
+                filterSelectedOptions
+                options={directorAutocompleteOptions}
+                autoComplete
+                includeInputInList
+                loading={directorsRQ.isLoading}
+                renderInput={(params) => {
+                  params.InputProps.startAdornment = (
+                    <InputAdornment position="start">
+                      <InputText>Režiser</InputText>
+                    </InputAdornment>
+                  );
+                  return <TextFieldStyled {...params} fullWidth />;
+                }}
+                noOptionsText="Nije nadjeno"
+                onInputChange={(event, newInputValue) => {
+                  setDirectorAutocompleteInputValue(newInputValue);
+                }}
+                onChange={(event: React.SyntheticEvent, newValue: Person | null) => {
+                  setDirectorAutocompleteValue(newValue);
+                }}
+                value={directorAutocompleteValue}
+                getOptionLabel={(director) => director.name}
+                isOptionEqualToValue={(option, value) => {
+                  return option.id === value.id;
+                }}
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{mt: 1}}>
+              <SelectBoxStyled
+                inputProps={{
+                  MenuProps: {
+                    MenuListProps: {
+                      sx: {
+                        backgroundColor: (theme: {customForm: {selectField: {color: string}}}) =>
+                          theme.customForm.selectField.color,
+                        color: (theme: {customForm: {selectField: {textColor: string}}}) =>
+                          theme.customForm.selectField.textColor,
+                      },
+                    },
+                  },
+                }}
+                sx={{
+                  '.MuiSvgIcon-root ': {
+                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                multiple
+                value={movieLengths}
+                startAdornment={
+                  <InputAdornment className={'select-adornment'} position="start">
+                    <InputText>Trajanje filma</InputText>
+                  </InputAdornment>
+                }
+                onChange={handleMovieLengthsChange}
+                renderValue={(selected) => (
+                  <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                    {selected.map((value) => (
+                      <ChipStyled key={value} label={movieLengthsMap[value]} />
+                    ))}
+                  </Box>
+                )}
+              >
+                {(Object.keys(movieLengthsMap) as MovieLengthCategory[]).map((movieLengthCategory, i) => {
+                  return (
+                    <MenuItem key={i} value={movieLengthCategory}>
+                      {movieLengthsMap[movieLengthCategory]}
+                    </MenuItem>
+                  );
+                })}
+              </SelectBoxStyled>
+            </FormControl>
+          </Box>
+          <Box sx={{mt: 5}} textAlign="center">
+            <ButtonStyled variant="contained" onClick={buttonClickHandler}>
+              {'Primeni filtere'}
+            </ButtonStyled>
+          </Box>
+        </>
+      )}
     </ContentWrapper>
   );
 }
