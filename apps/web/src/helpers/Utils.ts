@@ -135,6 +135,15 @@ const Utils = {
   },
 
   isNullOrUndefined: (i: unknown) => i === null || i === undefined,
+  urlSearchParamsToObject(queryString: string) {
+    const params = new URLSearchParams(queryString);
+
+    // Convert URLSearchParams entries into an array of key-value pairs
+    const entries = Array.from(params.entries());
+
+    // Use lodash's fromPairs to convert the array of pairs into an object
+    return _.fromPairs(entries);
+  },
 };
 
 export default Utils;
