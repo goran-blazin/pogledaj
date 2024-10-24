@@ -194,7 +194,8 @@ function MoviesListingWrapper() {
                     return (
                       <Box
                         component={'li'}
-                        {...props}
+                        key={props.id}
+                        {..._.omit(props, 'key')}
                         sx={(theme) => ({
                           whiteSpace: 'pre',
                           '& span': {

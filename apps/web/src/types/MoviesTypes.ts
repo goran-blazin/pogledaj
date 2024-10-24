@@ -175,3 +175,15 @@ export type MoviesFilters = Partial<{
   selectedDateFrom: string;
   selectedDateTo: string;
 }>;
+
+export type MoviesFiltersQuery = Partial<{
+  selectedGenres: string;
+  selectedCountries: string;
+  selectedDirectorPersonId: string;
+  selectedActorPersonIds: string;
+  movieLengths: string;
+  selectedCityId: string;
+  selectedCinemasIds: string;
+  selectedDateFrom: string;
+  selectedDateTo: string;
+}>;

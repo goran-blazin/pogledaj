@@ -1,4 +1,4 @@
-import {Autocomplete, Box, FormControl, InputAdornment, MenuItem, SelectChangeEvent} from '@mui/material';
+import {Autocomplete, Box, FormControl, InputAdornment, MenuItem, SelectChangeEvent, Stack} from '@mui/material';
 import PageHeader from '../utility/PageHeader';
 import React, {useMemo, useState} from 'react';
 import PageSubHeader from '../utility/PageSubHeader';
@@ -17,17 +17,18 @@ import CinemasService from '../../../services/CinemasService';
 import {DatePicker, DatePickerToolbar} from '@mui/x-date-pickers/DatePicker';
 import {DateTime} from 'ts-luxon';
 import Utils from '../../../helpers/Utils';
-import useMoviesFiltersStore from '../../../store/MoviesFiltersStore';
 import ButtonStyled from '../utility/buttons/Button';
 import ChipStyled from '../utility/ChipStyled';
 import {namedRoutes} from '../../../routes';
 import {useNavigate} from 'react-router-dom';
 import ContentWrapper from '../layout/ContentWrapper';
+import * as _ from 'lodash';
 
 import {styled} from '@mui/material';
 import {PickersActionBar} from '@mui/x-date-pickers';
 import useUserSettings from '../../../store/UserSettingsStore';
 import LoadingBox from '../utility/LoadingBox';
+import MovieHelper from '../../../helpers/MovieHelper';
 
 const InputText = styled('span')(({theme}) => ({
   color: theme.customForm.inputFieldStyled.color,
@@ -84,8 +85,8 @@ function MoviesFiltersWrapper() {
   }, [directorsRQ?.data]);
 
   // actor autocomplete data
-  const [actorsAutocompleteInputValue, setActorsAutocompleteInputValue] = React.useState('');
-  const [actorsAutocompleteValue, setActorsAutocompleteValue] = React.useState<Person[]>([]);
+  const [actorsAutocompleteInputValue, setActorsAutocompleteInputValue] = useState('');
+  const [actorsAutocompleteValue, setActorsAutocompleteValue] = useState<Person[]>([]);
   const debouncedActorsAutocompleteInputValue = useDebounce(actorsAutocompleteInputValue, 400);
   const actorsRQ = useQuery(['searchActorsByName', debouncedActorsAutocompleteInputValue], {
     queryFn: () => {
@@ -146,21 +147,27 @@ function MoviesFiltersWrapper() {
   const [selectedDateFrom, setSelectedDateFrom] = useState<DateTime | null>(null);
   const [selectedDateTo, setSelectedDateTo] = useState<DateTime | null>(null);
 
-  const moviesFiltersStore = useMoviesFiltersStore();
+  // const moviesFiltersStore = useMoviesFiltersStore();
   const navigate = useNavigate();
 
-  const movieFilters = useMemo(
-    () => ({
-      selectedGenres: selectedGenres,
-      selectedCountries: selectedCountries,
-      selectedDirectorPersonId: directorAutocompleteValue?.id,
-      selectedActorPersonIds: actorsAutocompleteValue.map((a) => a.id),
-      movieLengths: movieLengths,
-      selectedCityId: userSettingsStore.globalSelectedCity,
-      selectedCinemasIds: userSettingsStore.globalSelectedCinema ? [userSettingsStore.globalSelectedCinema] : undefined,
-      selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
-      selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
-    }),
+  const movieFiltersQuery = useMemo(
+    () =>
+      _.omitBy(
+        {
+          selectedGenres: selectedGenres.length ? selectedGenres.join(',') : undefined,
+          selectedCountries: selectedCountries.length ? selectedCountries.join(',') : undefined,
+          selectedDirectorPersonId: directorAutocompleteValue ? directorAutocompleteValue.id : undefined,
+          selectedActorPersonIds: actorsAutocompleteValue.length
+            ? actorsAutocompleteValue.map((a) => a.id).join(',')
+            : undefined,
+          movieLengths: movieLengths.length ? movieLengths.join(',') : undefined,
+          selectedCityId: userSettingsStore.globalSelectedCity || undefined,
+          selectedCinemasIds: userSettingsStore.globalSelectedCinema || undefined,
+          selectedDateFrom: selectedDateFrom ? selectedDateFrom.toFormat('yyyy-MM-dd') : undefined,
+          selectedDateTo: selectedDateTo ? selectedDateTo.toFormat('yyyy-MM-dd') : undefined,
+        },
+        _.isUndefined,
+      ),
     [
       selectedGenres,
       selectedCountries,
@@ -175,8 +182,21 @@ function MoviesFiltersWrapper() {
   );
 
   const buttonClickHandler = () => {
-    moviesFiltersStore.applyMoviesFilters(movieFilters);
-    navigate(namedRoutes.moviesSearch);
+    navigate(
+      namedRoutes.moviesSearch + '?' + new URLSearchParams(movieFiltersQuery as Record<string, string>).toString(),
+    );
+  };
+
+  const resetForm = () => {
+    userSettingsStore.setGlobalCinema(undefined);
+    userSettingsStore.setGlobalCity(undefined);
+    setSelectedDateFrom(null);
+    setSelectedDateTo(null);
+    setSelectedGenres([]);
+    setSelectedCountries([]);
+    setActorsAutocompleteValue([]);
+    setDirectorAutocompleteValue(null);
+    setMovieLengths([]);
   };
 
   const handleActorRemoval = (option: Person) => {
@@ -188,8 +208,8 @@ function MoviesFiltersWrapper() {
     return citiesRQ.isLoading;
   }, [citiesRQ.isLoading]);
 
-  const {data: movieFilterResult} = useQuery(['moviesSearch', movieFilters], () => {
-    return MoviesService.getMoviesByFilter(movieFilters);
+  const {data: movieFilterResult} = useQuery(['moviesSearch', movieFiltersQuery], () => {
+    return MoviesService.getMoviesByFilter(MovieHelper.formatMoviesFiltersFromQuery(movieFiltersQuery));
   });
 
   const buttonText = useMemo(() => {
@@ -218,6 +238,7 @@ function MoviesFiltersWrapper() {
                           theme.customForm.selectField.color,
                         color: (theme: {customForm: {selectField: {textColor: string}}}) =>
                           theme.customForm.selectField.textColor,
+                        maxHeight: 200,
                       },
                     },
                   },
@@ -227,7 +248,7 @@ function MoviesFiltersWrapper() {
                     color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
                   },
                 }}
-                value={userSettingsStore.globalSelectedCity}
+                value={userSettingsStore.globalSelectedCity || ''}
                 startAdornment={
                   <InputAdornment className={'select-adornment'} position="start">
                     <InputText>Grad</InputText>
@@ -254,6 +275,7 @@ function MoviesFiltersWrapper() {
                           theme.customForm.selectField.color,
                         color: (theme: {customForm: {selectField: {textColor: string}}}) =>
                           theme.customForm.selectField.textColor,
+                        maxHeight: 200,
                       },
                     },
                   },
@@ -265,7 +287,7 @@ function MoviesFiltersWrapper() {
                 }}
                 value={
                   (cinemasRQ.data || []).map((c) => c.id).includes(userSettingsStore.globalSelectedCinema as string)
-                    ? userSettingsStore.globalSelectedCinema
+                    ? userSettingsStore.globalSelectedCinema || ''
                     : ''
                 }
                 startAdornment={
@@ -363,6 +385,7 @@ function MoviesFiltersWrapper() {
                           theme.customForm.selectField.color,
                         color: (theme: {customForm: {selectField: {textColor: string}}}) =>
                           theme.customForm.selectField.textColor,
+                        maxHeight: 200,
                       },
                     },
                   },
@@ -411,6 +434,7 @@ function MoviesFiltersWrapper() {
                           theme.customForm.selectField.color,
                         color: (theme: {customForm: {selectField: {textColor: string}}}) =>
                           theme.customForm.selectField.textColor,
+                        maxHeight: 200,
                       },
                     },
                   },
@@ -461,14 +485,18 @@ function MoviesFiltersWrapper() {
                 includeInputInList
                 loading={actorsRQ.isLoading}
                 renderTags={(tagValue, getTagProps) =>
-                  tagValue.map((option, index) => (
-                    <ChipStyled
-                      label={option.name}
-                      {...getTagProps({index})}
-                      margin={'0 5px 0 0'}
-                      onClick={() => handleActorRemoval(option)}
-                    />
-                  ))
+                  tagValue.map((option, index) => {
+                    const props = _.omit(getTagProps({index}), ['key']);
+                    return (
+                      <ChipStyled
+                        label={option.name}
+                        key={index}
+                        {...props}
+                        margin={'0 5px 0 0'}
+                        onClick={() => handleActorRemoval(option)}
+                      />
+                    );
+                  })
                 }
                 renderInput={(params) => {
                   params.InputProps.startAdornment = (
@@ -542,6 +570,7 @@ function MoviesFiltersWrapper() {
                           theme.customForm.selectField.color,
                         color: (theme: {customForm: {selectField: {textColor: string}}}) =>
                           theme.customForm.selectField.textColor,
+                        maxHeight: 200,
                       },
                     },
                   },
@@ -577,11 +606,14 @@ function MoviesFiltersWrapper() {
               </SelectBoxStyled>
             </FormControl>
           </Box>
-          <Box sx={{mt: 5}} textAlign="center">
-            <ButtonStyled variant="contained" onClick={buttonClickHandler}>
+          <Stack direction="row" sx={{mt: 5}} spacing={2} textAlign="center">
+            <ButtonStyled sx={{flex: 2}} variant="contained" onClick={buttonClickHandler}>
               {buttonText}
             </ButtonStyled>
-          </Box>
+            <ButtonStyled sx={{flex: 1}} variant="contained" onClick={resetForm}>
+              Reset
+            </ButtonStyled>
+          </Stack>
         </>
       )}
     </ContentWrapper>
