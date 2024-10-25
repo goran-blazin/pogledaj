@@ -46,6 +46,60 @@ function MoviesSearchWrapper() {
     }
   };
 
+  // const genresRQ = useQuery(['genresForMoviesFilters'], () => {
+  //   return MoviesService.getAllGenresForMoviesFilter();
+  // });
+  // const countriesRQ = useQuery(['countriesForMoviesFilters'], () => {
+  //   return MoviesService.getAllCountriesForMoviesFilter();
+  // });
+  //
+  // const citiesRQ = useQuery('cities', () => {
+  //   return GeolocationService.findCitiesForMoviesFilter();
+  // });
+
+  // const cinemasRQ = useQuery(['cinemas', userSettingsStore.globalSelectedCity], () => {
+  //   return CinemasService.findAllByCity(userSettingsStore.globalSelectedCity);
+  // });
+
+  // const directorsRQ = useQuery(['searchDirectorsByName', debouncedDirectorAutocompleteInputValue], {
+  //   queryFn: () => {
+  //     return PersonsService.searchDirectorsByName(debouncedDirectorAutocompleteInputValue);
+  //   },
+  // });
+
+  // const actorsRQ = useQuery(['searchActorsByName', debouncedActorsAutocompleteInputValue], {
+  //   queryFn: () => {
+  //     return PersonsService.searchActorsByName(debouncedActorsAutocompleteInputValue);
+  //   },
+  // });
+
+  const chosenFilterChips = useMemo(() => {
+    const getLabel = (key: string, value: string) => {
+      return `label-${key}-${value}`;
+    };
+
+    return Object.entries(movieFilters)
+      .filter((kv) => !!kv[1])
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          return value.map((valueItem) => {
+            return {
+              key: key + valueItem,
+              label: getLabel(key, valueItem),
+              onClickHandler: () => removeFilterHandler(key, valueItem, true),
+            };
+          });
+        } else {
+          return {
+            key: key,
+            label: getLabel(key, value),
+            onClickHandler: () => removeFilterHandler(key, value),
+          };
+        }
+      })
+      .flat();
+  }, [movieFilters]);
+
   return (
     <ContentWrapper padding>
       <Box
@@ -59,29 +113,36 @@ function MoviesSearchWrapper() {
           }
         />
         <Grid container spacing={1} mb={'20px'}>
-          {Object.entries(movieFilters)
-            .filter((kv) => !!kv[1])
-            .map(([key, value]) => {
-              if (Array.isArray(value)) {
-                return value.map((valueItem) => {
-                  return (
-                    <Grid item key={key + valueItem}>
-                      <ChipStyled
-                        key={key}
-                        label={valueItem}
-                        onClick={() => removeFilterHandler(key, valueItem, true)}
-                      />
-                    </Grid>
-                  );
-                });
-              } else {
-                return (
-                  <Grid item key={key}>
-                    <ChipStyled label={value} onClick={() => removeFilterHandler(key, value)} />
-                  </Grid>
-                );
-              }
-            })}
+          {chosenFilterChips.map((chip) => {
+            return (
+              <Grid item key={chip.key}>
+                <ChipStyled label={chip.label} onClick={chip.onClickHandler} />
+              </Grid>
+            );
+          })}
+          {/*{Object.entries(movieFilters)*/}
+          {/*  .filter((kv) => !!kv[1])*/}
+          {/*  .map(([key, value]) => {*/}
+          {/*    if (Array.isArray(value)) {*/}
+          {/*      return value.map((valueItem) => {*/}
+          {/*        return (*/}
+          {/*          <Grid item key={key + valueItem}>*/}
+          {/*            <ChipStyled*/}
+          {/*              key={key}*/}
+          {/*              label={valueItem}*/}
+          {/*              onClick={() => removeFilterHandler(key, valueItem, true)}*/}
+          {/*            />*/}
+          {/*          </Grid>*/}
+          {/*        );*/}
+          {/*      });*/}
+          {/*    } else {*/}
+          {/*      return (*/}
+          {/*        <Grid item key={key}>*/}
+          {/*          <ChipStyled label={value} onClick={() => removeFilterHandler(key, value)} />*/}
+          {/*        </Grid>*/}
+          {/*      );*/}
+          {/*    }*/}
+          {/*  })}*/}
         </Grid>
         <Box mb={'20px'}>
           <Box
