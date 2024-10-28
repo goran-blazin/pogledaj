@@ -77,7 +77,7 @@ function MoviesSearchWrapper() {
   const personsRQ = useQuery(['getPersonByIds', movieFilters.selectedDirectorPersonId], {
     queryFn: () => {
       return PersonsService.getPersonsByIds([
-        movieFilters.selectedDirectorPersonId || '',
+        ...(movieFilters.selectedDirectorPersonId ? [movieFilters.selectedDirectorPersonId] : []),
         ...(movieFilters.selectedActorPersonIds || []),
       ]);
     },

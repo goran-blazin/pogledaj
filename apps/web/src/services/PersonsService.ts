@@ -29,6 +29,10 @@ const PersonsService = {
   // },
 
   async getPersonsByIds(personIds: string[]): Promise<Person[]> {
+    if (personIds.length === 0) {
+      return [];
+    }
+
     const result = await PogledajApi().get(`persons/getPersonsByIds`, {
       params: {
         personIds,
