@@ -40,4 +40,14 @@ export class PersonsService {
       take,
     });
   }
+
+  getByIds(personIds: string[]) {
+    return this.prismaService.person.findMany({
+      where: {
+        id: {
+          in: personIds,
+        },
+      },
+    });
+  }
 }

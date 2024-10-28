@@ -11,6 +11,12 @@ import Utils from '../../../helpers/Utils';
 import MovieHelper from '../../../helpers/MovieHelper';
 import ChipStyled from '../utility/ChipStyled';
 import {useMemo} from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import {MovieLengthCategory} from '../../../types/MoviesTypes';
+import GeolocationService from '../../../services/GeolocationService';
+import CinemasService from '../../../services/CinemasService';
+import {DateTime} from 'ts-luxon';
+import PersonsService from '../../../services/PersonsService';
 
 function MoviesSearchWrapper() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,27 +52,38 @@ function MoviesSearchWrapper() {
     }
   };
 
-  // const genresRQ = useQuery(['genresForMoviesFilters'], () => {
-  //   return MoviesService.getAllGenresForMoviesFilter();
-  // });
-  // const countriesRQ = useQuery(['countriesForMoviesFilters'], () => {
-  //   return MoviesService.getAllCountriesForMoviesFilter();
-  // });
+  const movieLengthsMap = {
+    [MovieLengthCategory.to90Minutes]: '<90 min',
+    [MovieLengthCategory.from90To120Minutes]: '90-120 min',
+    [MovieLengthCategory.from120To180Minutes]: '120-180 min',
+    [MovieLengthCategory.over180Minutes]: '>180 min',
+  };
+
+  const genresRQ = useQuery(['genresForMoviesFilters'], () => {
+    return MoviesService.getAllGenresForMoviesFilter();
+  });
+  const countriesRQ = useQuery(['countriesForMoviesFilters'], () => {
+    return MoviesService.getAllCountriesForMoviesFilter();
+  });
+
+  const citiesRQ = useQuery('cities', () => {
+    return GeolocationService.findCitiesForMoviesFilter();
+  });
+
+  const cinemasRQ = useQuery(['allCinemas'], () => {
+    return CinemasService.findAll();
+  });
+
+  const personsRQ = useQuery(['getPersonByIds', movieFilters.selectedDirectorPersonId], {
+    queryFn: () => {
+      return PersonsService.getPersonsByIds([
+        movieFilters.selectedDirectorPersonId || '',
+        ...(movieFilters.selectedActorPersonIds || []),
+      ]);
+    },
+  });
+
   //
-  // const citiesRQ = useQuery('cities', () => {
-  //   return GeolocationService.findCitiesForMoviesFilter();
-  // });
-
-  // const cinemasRQ = useQuery(['cinemas', userSettingsStore.globalSelectedCity], () => {
-  //   return CinemasService.findAllByCity(userSettingsStore.globalSelectedCity);
-  // });
-
-  // const directorsRQ = useQuery(['searchDirectorsByName', debouncedDirectorAutocompleteInputValue], {
-  //   queryFn: () => {
-  //     return PersonsService.searchDirectorsByName(debouncedDirectorAutocompleteInputValue);
-  //   },
-  // });
-
   // const actorsRQ = useQuery(['searchActorsByName', debouncedActorsAutocompleteInputValue], {
   //   queryFn: () => {
   //     return PersonsService.searchActorsByName(debouncedActorsAutocompleteInputValue);
@@ -75,6 +92,26 @@ function MoviesSearchWrapper() {
 
   const chosenFilterChips = useMemo(() => {
     const getLabel = (key: string, value: string) => {
+      switch (key) {
+        case 'selectedGenres':
+          return (genresRQ.data || []).find((i) => i.systemName === value)?.localizedName;
+        case 'selectedCountries':
+          return (countriesRQ.data || []).find((i) => i.code === value)?.name;
+        case 'movieLengths':
+          return movieLengthsMap[value as MovieLengthCategory];
+        case 'selectedCityId':
+          return (citiesRQ.data || []).find((i) => i.id === value)?.name;
+        case 'selectedCinemasIds':
+          return (cinemasRQ.data || []).find((i) => i.id === value)?.name;
+        case 'selectedDateFrom':
+          return 'Od ' + DateTime.fromISO(value).toFormat(Utils.luxonDateFormat);
+        case 'selectedDateTo':
+          return 'Do ' + DateTime.fromISO(value).toFormat(Utils.luxonDateFormat);
+        case 'selectedDirectorPersonId':
+        case 'selectedActorPersonIds':
+          return (personsRQ.data || []).find((i) => i.id === value)?.name;
+      }
+
       return `label-${key}-${value}`;
     };
 
@@ -98,7 +135,7 @@ function MoviesSearchWrapper() {
         }
       })
       .flat();
-  }, [movieFilters]);
+  }, [movieFilters, genresRQ.data, countriesRQ.data, citiesRQ.data, cinemasRQ.data]);
 
   return (
     <ContentWrapper padding>
@@ -116,7 +153,11 @@ function MoviesSearchWrapper() {
           {chosenFilterChips.map((chip) => {
             return (
               <Grid item key={chip.key}>
-                <ChipStyled label={chip.label} onClick={chip.onClickHandler} />
+                {chip.label ? (
+                  <ChipStyled label={chip.label} onClick={chip.onClickHandler} />
+                ) : (
+                  <CircularProgress size={24} />
+                )}
               </Grid>
             );
           })}
