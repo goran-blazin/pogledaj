@@ -21,5 +21,25 @@ const PersonsService = {
 
     return result.data;
   },
+
+  // async getPersonById(personId: string): Promise<Person> {
+  //   const result = await PogledajApi().get(`persons/${personId}`);
+  //
+  //   return result.data;
+  // },
+
+  async getPersonsByIds(personIds: string[]): Promise<Person[]> {
+    if (personIds.length === 0) {
+      return [];
+    }
+
+    const result = await PogledajApi().get(`persons/getPersonsByIds`, {
+      params: {
+        personIds,
+      },
+    });
+
+    return result.data;
+  },
 };
 export default Object.freeze(PersonsService);
