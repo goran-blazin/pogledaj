@@ -3,7 +3,6 @@
 Welcome to the Cinema Ticketing Platform! This application provides a convenient way to purchase cinema tickets for any movie in one centralized location.
 
 Demo: https://test.pogledaj.rs/
-Production: https://www.pogledaj.rs/
 
 ## Features
 
