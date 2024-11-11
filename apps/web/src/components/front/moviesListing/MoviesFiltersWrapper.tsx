@@ -29,30 +29,35 @@ import {PickersActionBar} from '@mui/x-date-pickers';
 import useUserSettings from '../../../store/UserSettingsStore';
 import LoadingBox from '../utility/LoadingBox';
 import MovieHelper from '../../../helpers/MovieHelper';
+import useMovieSearchStore from '../../../store/MovieSearchStore';
 
 const InputText = styled('span')(({theme}) => ({
   color: theme.customForm.inputFieldStyled.color,
 }));
 
 function MoviesFiltersWrapper() {
+  const movieSearchStore = useMovieSearchStore();
+  const moviesFiltersQuery = useMemo(() => {
+    return movieSearchStore.movieFilterQueryString
+      ? MovieHelper.formatMoviesFiltersFromQuery(Utils.urlSearchParamsToObject(movieSearchStore.movieFilterQueryString))
+      : undefined;
+  }, [movieSearchStore.movieFilterQueryString]);
+
   const genresRQ = useQuery(['genresForMoviesFilters'], () => {
     return MoviesService.getAllGenresForMoviesFilter();
   });
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(moviesFiltersQuery?.selectedGenres || []);
   const handleGenreChange = (event: SelectChangeEvent<typeof selectedGenres>) => {
     const {
       target: {value},
     } = event;
-    setSelectedGenres(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setSelectedGenres(typeof value === 'string' ? value.split(',') : value);
   };
 
   const countriesRQ = useQuery(['countriesForMoviesFilters'], () => {
     return MoviesService.getAllCountriesForMoviesFilter();
   });
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>(moviesFiltersQuery?.selectedCountries || []);
   const handleCountryChange = (event: SelectChangeEvent<typeof selectedCountries>) => {
     const {
       target: {value},
@@ -104,7 +109,7 @@ function MoviesFiltersWrapper() {
     return [...actorsAutocompleteValue, ...serverArray];
   }, [actorsRQ?.data]);
 
-  const [movieLengths, setMovieLengths] = useState<MovieLengthCategory[]>([]);
+  const [movieLengths, setMovieLengths] = useState<MovieLengthCategory[]>(moviesFiltersQuery?.movieLengths || []);
   const movieLengthsMap = {
     [MovieLengthCategory.to90Minutes]: 'do 90 minuta',
     [MovieLengthCategory.from90To120Minutes]: 'od 90 do 120 minuta',
@@ -144,8 +149,12 @@ function MoviesFiltersWrapper() {
   });
 
   // dates
-  const [selectedDateFrom, setSelectedDateFrom] = useState<DateTime | null>(null);
-  const [selectedDateTo, setSelectedDateTo] = useState<DateTime | null>(null);
+  const [selectedDateFrom, setSelectedDateFrom] = useState<DateTime | null>(
+    moviesFiltersQuery?.selectedDateFrom ? DateTime.fromISO(moviesFiltersQuery.selectedDateFrom) : null,
+  );
+  const [selectedDateTo, setSelectedDateTo] = useState<DateTime | null>(
+    moviesFiltersQuery?.selectedDateTo ? DateTime.fromISO(moviesFiltersQuery.selectedDateTo) : null,
+  );
 
   // const moviesFiltersStore = useMoviesFiltersStore();
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import {Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Query} from '@nestjs/common';
+import {Controller, DefaultValuePipe, Get, ParseIntPipe, Query} from '@nestjs/common';
 import {PersonsService} from './persons.service';
 
 @Controller('persons')
@@ -29,7 +29,6 @@ export class PersonsController {
 
   @Get('getPersonsByIds')
   getPersonById(@Query('personIds') personIds: string[]) {
-    console.log(personIds);
     return this.personsService.getByIds(personIds);
   }
 }

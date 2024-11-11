@@ -10,13 +10,14 @@ import {useQuery} from 'react-query';
 import Utils from '../../../helpers/Utils';
 import MovieHelper from '../../../helpers/MovieHelper';
 import ChipStyled from '../utility/ChipStyled';
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import {MovieLengthCategory} from '../../../types/MoviesTypes';
 import GeolocationService from '../../../services/GeolocationService';
 import CinemasService from '../../../services/CinemasService';
 import {DateTime} from 'ts-luxon';
 import PersonsService from '../../../services/PersonsService';
+import useMovieSearchStore from '../../../store/MovieSearchStore';
 
 function MoviesSearchWrapper() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +25,11 @@ function MoviesSearchWrapper() {
     const moviesFiltersQuery = Utils.urlSearchParamsToObject(searchParams.toString());
     return MovieHelper.formatMoviesFiltersFromQuery(moviesFiltersQuery);
   }, [searchParams]);
+  const movieSearchStore = useMovieSearchStore();
+
+  useEffect(() => {
+    movieSearchStore.setMovieFilterQueryString(searchParams.toString() || undefined);
+  }, []);
 
   const {data: moviesData, isLoading} = useQuery(['moviesSearch', movieFilters], () => {
     return MoviesService.getMoviesByFilter(movieFilters);
@@ -82,13 +88,6 @@ function MoviesSearchWrapper() {
       ]);
     },
   });
-
-  //
-  // const actorsRQ = useQuery(['searchActorsByName', debouncedActorsAutocompleteInputValue], {
-  //   queryFn: () => {
-  //     return PersonsService.searchActorsByName(debouncedActorsAutocompleteInputValue);
-  //   },
-  // });
 
   const chosenFilterChips = useMemo(() => {
     const getLabel = (key: string, value: string) => {
