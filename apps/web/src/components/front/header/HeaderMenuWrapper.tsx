@@ -65,6 +65,17 @@ function HeaderMenuButton({
   );
 }
 
+const goBackOverloadPages = [
+  {
+    from: namedRoutes.moviesSearch,
+    to: namedRoutes.moviesFilters,
+  },
+  {
+    from: namedRoutes.moviesFilters,
+    to: namedRoutes.home,
+  },
+];
+
 function HeaderMenuWrapper() {
   const helperIconStyle: SxProps = {
     color: '#A4A4A4',
@@ -72,6 +83,18 @@ function HeaderMenuWrapper() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const goBack = () => {
+    const backPage = goBackOverloadPages.find((overloadPage) => {
+      return overloadPage.from.includes(location.pathname);
+    });
+
+    if (backPage) {
+      navigate(backPage.to);
+    } else {
+      navigate(-1);
+    }
+  };
 
   const settingsPages = [
     namedRoutes.settings,
@@ -104,7 +127,7 @@ function HeaderMenuWrapper() {
         >
           <div>
             {location.pathname !== namedRoutes.home && location.pathname !== namedRoutes.settings ? (
-              <Box onClick={() => navigate(-1)}>
+              <Box onClick={goBack}>
                 <IconButtonStyled>
                   <ArrowBackIconStyle />
                 </IconButtonStyled>
