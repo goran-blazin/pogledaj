@@ -14,7 +14,7 @@ const useUserSettings = create<UserSettingsStore>()(
   devtools(
     persist(
       (set, get) => ({
-        theme: 'dark',
+        theme: 'light',
         toggleTheme: () => {
           if (get().theme === 'dark') {
             return set({theme: 'light'});

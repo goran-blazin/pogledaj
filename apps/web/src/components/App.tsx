@@ -25,7 +25,7 @@ import AdminRoot from './admin/AdminRoot';
 import useUserSettings from '../store/UserSettingsStore';
 import useAppStore from '../store/AppStore';
 import BigInfoDialog from './front/utility/BigInfoDialog';
-import RepairMode from './front/comingSoon/RepairMode';
+import ComingSoon from './front/comingSoon/ComingSoon';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -77,7 +77,7 @@ function App() {
   }, [userSettingsStore.theme]); // Dependency on theme ensures this effect runs when the theme changes
 
   // handle env switch
-  const repairModeEnabled = false;
+  const repairModeEnabled = true;
   const repairMode = Utils.env === 'production' && repairModeEnabled;
   const location = useLocation();
 
@@ -99,7 +99,7 @@ function App() {
               <MainLayout>
                 <CenterContent>
                   {repairMode ? (
-                    <RepairMode />
+                    <ComingSoon />
                   ) : (
                     <React.Fragment>
                       <HeaderMenuWrapper />
