@@ -146,6 +146,7 @@ const lightTheme = createTheme({
         root: {
           borderRadius: '15px',
           backgroundColor: `var(--input-field-grey)`,
+          color: `var(--dark-grey)`,
         },
       },
     },

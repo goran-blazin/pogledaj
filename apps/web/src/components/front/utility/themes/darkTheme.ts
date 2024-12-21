@@ -140,11 +140,19 @@ const darkTheme = createTheme({
         },
       },
     },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          // color: `var(--dark-mode-text)`,
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
           borderRadius: '15px',
           backgroundColor: `var(--dark-blue)`,
+          color: `var(--dark-mode-text)`,
         },
       },
     },
