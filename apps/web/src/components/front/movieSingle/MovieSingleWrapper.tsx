@@ -480,7 +480,7 @@ function MovieSingleWrapper() {
                     </EventInformation>
                   </>
                 </ContentWrapper>
-                <ContentWrapper padding>
+                <ContentWrapper padding breakpointFixed>
                   {Object.keys(citiesObjects).length > 0 ? (
                     <Box>
                       <PageSubHeader

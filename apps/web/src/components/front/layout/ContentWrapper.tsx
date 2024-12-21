@@ -6,15 +6,20 @@ type ContentWrapperTypes = {
   padding?: boolean;
   marginBottom?: string;
   marginTop?: string;
+  breakpointFixed?: boolean;
 };
 
-function ContentWrapper({children, padding, marginBottom, marginTop}: ContentWrapperTypes) {
+function ContentWrapper({children, padding, marginBottom, marginTop, breakpointFixed}: ContentWrapperTypes) {
   return (
     <Box
       className={`content-wrapper${padding ? ' inner-padding' : ''}`}
       sx={{
         marginBottom: marginBottom,
         marginTop: marginTop,
+        width: {
+          sm: '100%',
+          md: `${breakpointFixed ? '360px' : '100%'}`,
+        },
       }}
     >
       {children}

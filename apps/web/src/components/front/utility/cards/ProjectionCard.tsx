@@ -55,7 +55,9 @@ function ProjectionCard({projection}: ProjectionTypes) {
 
   const [currentPreview, setCurrentPreview] = useState('both');
 
-  const handleBtnClick = () => {};
+  const handleBtnClick = () => {
+    // TODO implement routing to appropriate page
+  };
 
   const handleShufflePreview = () => {
     const previews = ['reserve', 'buy', 'both', 'none'];
