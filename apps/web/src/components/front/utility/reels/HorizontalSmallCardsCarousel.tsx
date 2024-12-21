@@ -1,7 +1,7 @@
 import React from 'react';
 import {Swiper, SwiperSlide} from 'swiper/react'; //useSwiper
 import HorizontalFilmStripWrapper from './HorizontalFilmStripWrapper';
-import CardFilmStripWrapper from '../cards/CardFilmStripWrapper';
+import CardFilmStripWrapper from './CardFilmStripWrapper';
 // import Box from '@mui/material/Box';
 // import {styled} from '@mui/material';
 // Import Swiper styles

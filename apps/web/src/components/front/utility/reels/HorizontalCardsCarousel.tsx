@@ -3,7 +3,7 @@ import React from 'react';
 // Import Swiper styles
 import 'swiper/css/bundle';
 import HorizontalFilmStripWrapper from './HorizontalFilmStripWrapper';
-import CardFilmStripWrapper from '../cards/CardFilmStripWrapper';
+import CardFilmStripWrapper from './CardFilmStripWrapper';
 
 function HorizontalCardsCarousel({children}: {children: React.ReactNode[]}) {
   return (

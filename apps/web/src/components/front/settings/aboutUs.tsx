@@ -40,10 +40,10 @@ function AboutUs() {
             <li>
               <strong>Novosti o filmovima</strong> koji stižu u bioskope, kao i informacije o premijerama.
             </li>
-            <li>
-              U budućnosti planiramo da uvedemo mogućnost <strong>rezervacije i plaćanja ulaznica</strong> direktno
-              putem našeg sajta.
-            </li>
+            {/*<li>*/}
+            {/*  U budućnosti planiramo da uvedemo mogućnost <strong>rezervacije i plaćanja ulaznica</strong> direktno*/}
+            {/*  putem našeg sajta.*/}
+            {/*</li>*/}
           </ListStyled>
           <PageSubTitle title="Naš tim" variant="h3" marginBottom="0" />
           <Paragraph>

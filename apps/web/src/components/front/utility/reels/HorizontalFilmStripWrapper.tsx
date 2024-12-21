@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box} from '@mui/material';
-import {borderImage} from '../cards/CardFilmStripWrapper';
+import {borderImage} from './CardFilmStripWrapper';
 
 function HorizontalFilmStripWrapper({
   children,

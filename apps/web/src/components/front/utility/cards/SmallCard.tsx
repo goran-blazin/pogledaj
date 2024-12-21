@@ -3,6 +3,7 @@ import {SvgIconComponent} from '@mui/icons-material';
 import React from 'react';
 import {IntRange} from '../../../../types/GeneralTypes';
 import ImageHelper from '../../../../helpers/ImageHelper';
+import {Link} from 'react-router-dom';
 
 interface SmallCardParams {
   title: string;
@@ -14,9 +15,10 @@ interface SmallCardParams {
   imageAltText?: string;
   rating?: IntRange<0, 101>;
   onClick?(): unknown;
+  anchorUrl?: string;
 }
 
-function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', onClick}: SmallCardParams) {
+function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', onClick, anchorUrl}: SmallCardParams) {
   const resizedImageSrc = ImageHelper.getImagePath({
     imageFilePath: imageSrc || defaultImageSrc,
     transformations: {
@@ -29,7 +31,7 @@ function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', on
     },
   });
 
-  return (
+  const SmallCardEl = (
     <Card
       elevation={0}
       onClick={onClick || undefined}
@@ -73,6 +75,7 @@ function SmallCard({title, imageSrc, defaultImageSrc, imageAltText = 'Image', on
       </Box>
     </Card>
   );
+  return anchorUrl ? <Link to={anchorUrl}>{SmallCardEl}</Link> : SmallCardEl;
 }
 
 export default SmallCard;

@@ -4,6 +4,7 @@ import {IntRange} from '../../../../types/GeneralTypes';
 import _ from 'lodash';
 import ImageHelper from '../../../../helpers/ImageHelper';
 import Utils from '../../../../helpers/Utils';
+import {Link} from 'react-router-dom';
 
 interface BigCardParams {
   title: string;
@@ -15,6 +16,7 @@ interface BigCardParams {
   imageAltText?: string;
   rating?: IntRange<0, 101>;
   onClick?(): unknown;
+  anchorUrl?: string;
 }
 
 const descCSSStyle = {
@@ -53,6 +55,7 @@ function BigCard({
   imageAltText = 'Image',
   rating,
   onClick,
+  anchorUrl,
 }: BigCardParams) {
   const fiveStarRating = rating ? _.round((rating / 100) * 5, 1) : undefined;
   const resizedImageSrc = ImageHelper.getImagePath({
@@ -70,7 +73,7 @@ function BigCard({
     },
   });
 
-  return (
+  const BigCardEl = (
     <Card
       elevation={0}
       onClick={onClick || undefined}
@@ -167,6 +170,8 @@ function BigCard({
       </Box>
     </Card>
   );
+
+  return anchorUrl ? <Link to={anchorUrl}>{BigCardEl}</Link> : BigCardEl;
 }
 
 export default BigCard;
