@@ -18,7 +18,11 @@ function ContentWrapper({children, padding, marginBottom, marginTop, breakpointF
         marginTop: marginTop,
         width: {
           sm: '100%',
-          md: `${breakpointFixed ? '360px' : '100%'}`,
+          md: `${breakpointFixed ? '400px' : '100%'}`,
+        },
+        minWidth: {
+          sm: '0',
+          md: `${breakpointFixed ? '400px' : '0'}`,
         },
       }}
     >
