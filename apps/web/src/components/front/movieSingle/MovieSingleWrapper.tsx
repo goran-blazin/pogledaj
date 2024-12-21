@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {ProjectionsDates, ProjectionsGroupedPerCinemaType} from '../../../types/MoviesTypes';
 import MoviesService from '../../../services/MoviesService';
@@ -36,12 +36,11 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {VideocamOutlined} from '@mui/icons-material';
 import _ from 'lodash';
 import Utils from '../../../helpers/Utils';
-import SmallButton from '../utility/buttons/SmallButton';
-import {namedRoutes} from '../../../routes';
 import {EventPreview} from '../EventPreview/EventPreview';
 import {City} from '../../../types/GeneralTypes';
 import useUserSettings from '../../../store/UserSettingsStore';
 import LoadingBox from '../utility/LoadingBox';
+import ProjectionCard from '../utility/cards/ProjectionCard';
 
 const monthsLocalization: Record<number, string> = {
   1: 'JAN',
@@ -95,13 +94,6 @@ const MovieTitleHolder = styled('div')({
     paddingTop: '4px',
   },
 });
-
-const ProjectionsRow = styled(Box)(({theme}) => ({
-  color: theme.customTypography.color,
-  fontSize: '12px',
-  fontWeight: '600',
-  lineHeight: '16px',
-}));
 
 const ProjectionsSubHeader = styled(Typography)(({theme}) => ({
   color: theme.customTypography.movieProjectionsSubHeader.color,
@@ -160,7 +152,6 @@ const EventInformation = styled('ul')(({theme}) => ({
 }));
 
 function MovieSingleWrapper() {
-  const navigate = useNavigate();
   const {movieId} = useParams();
   const userSettingsStore = useUserSettings();
 
@@ -683,67 +674,7 @@ function MovieSingleWrapper() {
                                     );
                                   })
                                   .map((mp, i) => {
-                                    return (
-                                      <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        key={mp.id + i}
-                                        sx={(theme) => ({
-                                          borderBottomWidth: '1px',
-                                          borderBottomStyle: 'solid',
-                                          borderBottomColor: theme.eventInfoSection.borderColor,
-                                          marginBottom: '16px',
-                                          paddingBottom: '16px',
-                                        })}
-                                      >
-                                        <ProjectionsRow>
-                                          <Box component={'span'} sx={{color: 'primary.main'}}>
-                                            Vreme:
-                                          </Box>
-                                          &nbsp;
-                                          {DateTime.fromISO(mp.projectionDateTime).toFormat('HH:mm')}
-                                        </ProjectionsRow>
-                                        <ProjectionsRow>
-                                          <Box component={'span'} sx={{color: 'primary.main'}}>
-                                            Cena:
-                                          </Box>
-                                          &nbsp;
-                                          {mp.projectionPrices?.[0].price}
-                                        </ProjectionsRow>
-                                        <ProjectionsRow>
-                                          <Box component={'span'} sx={{color: 'primary.main'}}>
-                                            Sala:
-                                          </Box>
-                                          &nbsp;
-                                          {mp.cinemaTheater.name}
-                                        </ProjectionsRow>
-                                        {/* <ProjectionsRow>
-                                        <Box component={'span'} sx={{color: 'primary.main'}}>
-                                          Jezik:
-                                        </Box>
-                                        &nbsp;
-                                        {mp.dubbedLanguage ? 'SINH' : 'ORIG'}
-                                      </ProjectionsRow> */}
-                                        {Utils.isBetaMode() && (
-                                          <ProjectionsRow>
-                                            <SmallButton
-                                              variant="contained"
-                                              onClick={() => {
-                                                navigate(
-                                                  namedRoutes.movieProjectionSingle.replace(
-                                                    ':movieProjectionId',
-                                                    mp.id,
-                                                  ),
-                                                );
-                                              }}
-                                            >
-                                              Rezerviši
-                                            </SmallButton>
-                                          </ProjectionsRow>
-                                        )}
-                                      </Stack>
-                                    );
+                                    return <ProjectionCard projection={mp} key={mp.id + i} />;
                                   })}
                               </>
                             ) : (

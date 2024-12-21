@@ -80,7 +80,6 @@ const lightTheme = createTheme({
     lightGrey: {
       color: `var(--input-field-grey)`,
     },
-
     darkBlue: {
       color: `var(--dark-blue)`,
     },

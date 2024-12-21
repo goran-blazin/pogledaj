@@ -43,7 +43,7 @@ export type MovieWithMovieProjection = Movie & {
   movieProjections: MovieProjection[];
 };
 
-type MovieProjectionOptions = {
+export type MovieProjectionOptions = {
   is3D: boolean;
 };
 
