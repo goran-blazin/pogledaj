@@ -344,350 +344,350 @@ function MovieSingleWrapper() {
                   <div>NO POSTER IMAGE</div>
                 )}
               </EventPreview>
-              <ContentWrapper padding>
-                <>
-                  <MovieTitleHolder>
-                    <div className="titleWrap">
-                      <MainTitle title={movie.data.localizedTitle || Utils.getMovieTitle(movie.data)} />
-                    </div>
-                    {Utils.isBetaMode() && (
-                      <div className="titleRating">
-                        <RatingInfo rating={movie.data.rating} />
+              <Box
+                sx={{
+                  display: {
+                    sm: 'block',
+                    md: 'flex',
+                  },
+                }}
+              >
+                <ContentWrapper padding>
+                  <>
+                    <MovieTitleHolder>
+                      <div className="titleWrap">
+                        <MainTitle title={movie.data.localizedTitle || Utils.getMovieTitle(movie.data)} />
                       </div>
-                    )}
-                  </MovieTitleHolder>
-                  <EventInformation>
-                    <li className="event-info-section event-info-section-borderless">
-                      <TagsComponent genres={movie.data.genres} />
-                    </li>
-                    <li className="event-info-section">
-                      <Grid
-                        container
-                        sx={{
-                          justifyContent: 'space-between',
-                          alignItems: 'end',
-                        }}
-                      >
+                      {Utils.isBetaMode() && (
+                        <div className="titleRating">
+                          <RatingInfo rating={movie.data.rating} />
+                        </div>
+                      )}
+                    </MovieTitleHolder>
+                    <EventInformation>
+                      <li className="event-info-section event-info-section-borderless">
+                        <TagsComponent genres={movie.data.genres} />
+                      </li>
+                      <li className="event-info-section">
                         <Grid
-                          item
-                          xs={6}
+                          container
                           sx={{
-                            flex: {
-                              xs: '0 0 auto',
-                            },
+                            justifyContent: 'space-between',
+                            alignItems: 'end',
                           }}
                         >
-                          <div className="event-info-section-with-icons">
-                            <span>
-                              <AccessTimeIcon
-                                fontSize={'small'}
-                                sx={{
-                                  display: 'flex',
-                                  color: (theme) => theme.palette.primary.main,
-                                  mr: 0.5,
-                                }}
-                              />
-                            </span>
-                            <span>
-                              {movie.data.runtimeMinutes} min |{' '}
-                              {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
-                            </span>
-                          </div>
-                        </Grid>
-                        <Grid
-                          item
-                          xs={6}
-                          sx={{
-                            flex: {
-                              xs: '0 0 auto',
-                            },
-                          }}
-                        >
-                          <Grid container spacing={1}>
-                            {Utils.isBetaMode() && (
-                              <Grid item>
-                                <IconButtonStyled handleClick={handleClickFavorites}>
-                                  <FavoriteIconStyle />
+                          <Grid
+                            item
+                            xs={6}
+                            sx={{
+                              flex: {
+                                xs: '0 0 auto',
+                              },
+                            }}
+                          >
+                            <div className="event-info-section-with-icons">
+                              <span>
+                                <AccessTimeIcon
+                                  fontSize={'small'}
+                                  sx={{
+                                    display: 'flex',
+                                    color: (theme) => theme.palette.primary.main,
+                                    mr: 0.5,
+                                  }}
+                                />
+                              </span>
+                              <span>
+                                {movie.data.runtimeMinutes} min |{' '}
+                                {DateTime.fromISO(movie.data.releaseDate).toFormat('yyyy')}
+                              </span>
+                            </div>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={6}
+                            sx={{
+                              flex: {
+                                xs: '0 0 auto',
+                              },
+                            }}
+                          >
+                            <Grid container spacing={1}>
+                              {Utils.isBetaMode() && (
+                                <Grid item>
+                                  <IconButtonStyled handleClick={handleClickFavorites}>
+                                    <FavoriteIconStyle />
+                                  </IconButtonStyled>
+                                </Grid>
+                              )}
+                              <Grid item sx={{display: nativeShare ? undefined : 'none'}}>
+                                <IconButtonStyled handleClick={handleClickShare}>
+                                  <ShareIconStyle />
                                 </IconButtonStyled>
                               </Grid>
-                            )}
-                            <Grid item sx={{display: nativeShare ? undefined : 'none'}}>
-                              <IconButtonStyled handleClick={handleClickShare}>
-                                <ShareIconStyle />
-                              </IconButtonStyled>
                             </Grid>
                           </Grid>
                         </Grid>
-                      </Grid>
-                    </li>
-                    {movie.data.localizedPlot ? (
-                      <li className="event-info-section">
-                        <span className="event-info-subtitle">Sinopsis:</span>
-                        <p className="event-section-description">{movie.data.localizedPlot}</p>
                       </li>
-                    ) : null}
-                    {movie.data.plot ? (
+                      {movie.data.localizedPlot ? (
+                        <li className="event-info-section">
+                          <span className="event-info-subtitle">Sinopsis:</span>
+                          <p className="event-section-description">{movie.data.localizedPlot}</p>
+                        </li>
+                      ) : null}
+                      {movie.data.plot ? (
+                        <li className="event-info-section">
+                          <span className="event-info-subtitle">Sinopsis u originalu:</span>
+                          <p className="event-section-description">{movie.data.plot}</p>
+                        </li>
+                      ) : null}
                       <li className="event-info-section">
-                        <span className="event-info-subtitle">Sinopsis u originalu:</span>
-                        <p className="event-section-description">{movie.data.plot}</p>
-                      </li>
-                    ) : null}
-                    <li className="event-info-section">
-                      <div>
-                        <span className="event-info-subtitle inline">Režiseri:</span>
-                        <p className="event-section-description inline">
-                          {movie.data.directors.map((director) => director.person.name).join(', ')}
-                        </p>
-                      </div>
-                      {orderedActors.length > 0 && (
                         <div>
-                          <span className="event-info-subtitle inline">Glumci:</span>
+                          <span className="event-info-subtitle inline">Režiseri:</span>
                           <p className="event-section-description inline">
-                            {orderedActors.map((actor) => actor.person.name).join(', ')}
+                            {movie.data.directors.map((director) => director.person.name).join(', ')}
                           </p>
                         </div>
-                      )}
-                      {/*<div>*/}
-                      {/*  <span className="event-info-subtitle inline">Distributer:</span>*/}
-                      {/*  <p className="event-section-description inline">*/}
-                      {/*    MegaCom Film*/}
-                      {/*  </p>*/}
-                      {/*</div>*/}
-                      <div>
-                        <span className="event-info-subtitle inline">Zemlja porekla:</span>
-                        <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
-                      </div>
-                    </li>
-                    <li className="event-info-section">
-                      <div>
-                        <span className="event-info-subtitle inline">Detaljnije:</span>
-                        <p className="event-section-description inline">
-                          <a
-                            className="event-section-link"
-                            href={`https://www.imdb.com/title/${movie.data.additionalData.imdbId}`}
-                            target="_blank"
-                          >
-                            <span>imdb.com</span>
-                            <span>
-                              <OpenInNew />
-                            </span>
-                          </a>
-                        </p>
-                      </div>
-                    </li>
-                    {/*<li className="event-info-section">*/}
-                    {/*  <div>{'IMDB RATING'}</div>*/}
-                    {/*</li>*/}
-                  </EventInformation>
-                </>
-              </ContentWrapper>
-              {/*<div>*/}
-              {/*  KOMENTARI*/}
-              {/*</div>*/}
-              <ContentWrapper padding>
-                {Object.keys(citiesObjects).length > 0 ? (
-                  <Box>
-                    <PageSubHeader
-                      headerText={Utils.isBetaMode() ? 'Rezervacija karata:' : 'Detalji projekcija:'}
-                      Icon={VideocamOutlined}
-                      sx={{
-                        fontWeight: 700,
-                        fontStyle: 'normal',
-                        fontSize: '22px',
-                        lineHeight: '30px',
-                      }}
-                    />
-                    <FormControl fullWidth sx={{mt: 2}}>
-                      <ProjectionsSubHeader>Izaberi grad:</ProjectionsSubHeader>
-                      <SelectBoxStyled
+                        {orderedActors.length > 0 && (
+                          <div>
+                            <span className="event-info-subtitle inline">Glumci:</span>
+                            <p className="event-section-description inline">
+                              {orderedActors.map((actor) => actor.person.name).join(', ')}
+                            </p>
+                          </div>
+                        )}
+                        <div>
+                          <span className="event-info-subtitle inline">Zemlja porekla:</span>
+                          <p className="event-section-description inline">{movie.data.countryOfOrigin.name}</p>
+                        </div>
+                      </li>
+                      <li className="event-info-section">
+                        <div>
+                          <span className="event-info-subtitle inline">Detaljnije:</span>
+                          <p className="event-section-description inline">
+                            <a
+                              className="event-section-link"
+                              href={`https://www.imdb.com/title/${movie.data.additionalData.imdbId}`}
+                              target="_blank"
+                            >
+                              <span>imdb.com</span>
+                              <span>
+                                <OpenInNew />
+                              </span>
+                            </a>
+                          </p>
+                        </div>
+                      </li>
+                    </EventInformation>
+                  </>
+                </ContentWrapper>
+                <ContentWrapper padding>
+                  {Object.keys(citiesObjects).length > 0 ? (
+                    <Box>
+                      <PageSubHeader
+                        headerText={Utils.isBetaMode() ? 'Rezervacija karata:' : 'Detalji projekcija:'}
+                        Icon={VideocamOutlined}
                         sx={{
-                          mt: 1,
+                          fontWeight: 700,
+                          fontStyle: 'normal',
+                          fontSize: '22px',
+                          lineHeight: '30px',
                         }}
-                        value={
-                          Object.keys(citiesObjects).includes(userSettingsStore.globalSelectedCity || '')
-                            ? userSettingsStore.globalSelectedCity
-                            : ''
-                        }
-                        open={citySelectOpen}
-                        onOpen={() => setCitySelectOpen(true)}
-                        onClose={() => setCitySelectOpen(false)}
-                        startAdornment={
-                          <InputAdornment
-                            className={'select-adornment'}
-                            position="start"
-                            onClick={() => setCitySelectOpen(true)}
-                          >
-                            Grad
-                          </InputAdornment>
-                        }
-                        onChange={onCityChange}
-                      >
-                        {Object.keys(citiesObjects).map((cityId, i) => {
-                          return (
-                            <MenuItem key={i} value={cityId}>
-                              {citiesObjects[cityId].city.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </SelectBoxStyled>
-                    </FormControl>
-                    <FormControl fullWidth sx={{mt: 2}} ref={cinemaSelectRef}>
-                      <ProjectionsSubHeader>Izaberi bioskop:</ProjectionsSubHeader>
-                      <SelectBoxStyled
-                        sx={{mt: 1}}
-                        disabled={!userSettingsStore.globalSelectedCity}
-                        value={userSettingsStore.globalSelectedCinema || ''}
-                        open={cinemaSelectOpen}
-                        onOpen={() => setCinemaSelectOpen(true)}
-                        onClose={() => setCinemaSelectOpen(false)}
-                        startAdornment={
-                          <InputAdornment
-                            className={'select-adornment'}
-                            position="start"
-                            onClick={() => setCinemaSelectOpen(true)}
-                          >
-                            Bioskop
-                          </InputAdornment>
-                        }
-                        onChange={(event: SelectChangeEvent) => userSettingsStore.setGlobalCinema(event.target.value)}
-                      >
-                        {Object.keys(projectionsGroupedCinemaPerCity).map((cinemaId, i) => {
-                          return (
-                            <MenuItem key={i} value={cinemaId}>
-                              {projectionsGroupedCinemaPerCity[cinemaId].cinema.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </SelectBoxStyled>
-                    </FormControl>
-                    <React.Fragment>
-                      {userSettingsStore.globalSelectedCinema &&
-                        projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema] && (
-                          <Box sx={{mt: 2}} ref={projectionsRef}>
-                            <ProjectionsSubHeader>Izaberi datum:</ProjectionsSubHeader>
-                            <Stack
-                              sx={{
-                                mt: 1,
-                                overflowX: 'auto',
-                              }}
-                              direction={'row'}
-                              spacing={2}
+                      />
+                      <FormControl fullWidth sx={{mt: 2}}>
+                        <ProjectionsSubHeader>Izaberi grad:</ProjectionsSubHeader>
+                        <SelectBoxStyled
+                          sx={{
+                            mt: 1,
+                          }}
+                          value={
+                            Object.keys(citiesObjects).includes(userSettingsStore.globalSelectedCity || '')
+                              ? userSettingsStore.globalSelectedCity
+                              : ''
+                          }
+                          open={citySelectOpen}
+                          onOpen={() => setCitySelectOpen(true)}
+                          onClose={() => setCitySelectOpen(false)}
+                          startAdornment={
+                            <InputAdornment
+                              className={'select-adornment'}
+                              position="start"
+                              onClick={() => setCitySelectOpen(true)}
                             >
-                              {sortDates(
-                                projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates,
-                              ).map((date, index) => (
-                                <Button
-                                  key={index}
-                                  variant="outlined"
-                                  onClick={() => setSelectedDate(date.date)}
-                                  sx={{
-                                    borderRadius: '15px', // Rounded border
-                                    borderColor: (theme) =>
-                                      selectedDate === date.date
-                                        ? theme.customButtons.dateButtons.selectedColor
-                                        : theme.customButtons.dateButtons.nonSelectedColor, // Border color
-                                    borderWidth: '2px', // Border width
-                                    '&.MuiButtonBase-root:hover': {
-                                      borderWidth: '2px',
-                                    },
-                                    textTransform: 'none', // Prevent uppercase transformation
-                                    backgroundColor: 'transparent', // Transparent background
-                                    width: '66px', // Fit to content size
-                                    height: '66px', // Fit to content size
-                                  }}
-                                >
-                                  <Stack spacing={0}>
-                                    <Box
-                                      component="span"
-                                      sx={{
-                                        fontSize: '1em',
-                                        fontWeight: 600,
-                                        color: (theme) =>
-                                          selectedDate === date.date
-                                            ? theme.customButtons.dateButtons.selectedColor
-                                            : theme.customButtons.dateButtons.nonSelectedColor,
-                                      }}
-                                    >
-                                      {date.weekDay}
-                                    </Box>
-                                    <Box
-                                      component="span"
-                                      sx={{
-                                        mt: 1,
-                                        lineHeight: 0,
-                                        fontSize: '0.6em',
-                                        fontWeight: 600,
-                                        color: (theme) =>
-                                          selectedDate === date.date
-                                            ? theme.customButtons.dateButtons.selectedColor
-                                            : theme.customButtons.dateButtons.nonSelectedColor,
-                                      }}
-                                    >
-                                      {date.month}
-                                    </Box>
-                                    <Box
-                                      component="span"
-                                      sx={{
-                                        fontSize: '1.2em',
-                                        fontWeight: 600,
-                                        color: (theme) =>
-                                          selectedDate === date.date
-                                            ? theme.customButtons.dateButtons.selectedColor
-                                            : theme.customButtons.dateButtons.nonSelectedColor,
-                                      }}
-                                    >
-                                      {date.day}
-                                    </Box>
-                                  </Stack>
-                                </Button>
-                              ))}
-                            </Stack>
-                          </Box>
-                        )}
-                    </React.Fragment>
-                    <React.Fragment>
-                      {selectedDate &&
-                        userSettingsStore.globalSelectedCinema &&
-                        projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[selectedDate] && (
-                          <Box sx={{mt: 2}}>
-                            <ProjectionsSubHeader
-                              sx={(theme) => ({
-                                borderBottomWidth: '1px',
-                                borderBottomStyle: 'solid',
-                                borderBottomColor: theme.eventInfoSection.borderColor,
-                                marginBottom: '16px',
-                                paddingBottom: '16px',
-                              })}
+                              Grad
+                            </InputAdornment>
+                          }
+                          onChange={onCityChange}
+                        >
+                          {Object.keys(citiesObjects).map((cityId, i) => {
+                            return (
+                              <MenuItem key={i} value={cityId}>
+                                {citiesObjects[cityId].city.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </SelectBoxStyled>
+                      </FormControl>
+                      <FormControl fullWidth sx={{mt: 2}} ref={cinemaSelectRef}>
+                        <ProjectionsSubHeader>Izaberi bioskop:</ProjectionsSubHeader>
+                        <SelectBoxStyled
+                          sx={{mt: 1}}
+                          disabled={!userSettingsStore.globalSelectedCity}
+                          value={userSettingsStore.globalSelectedCinema || ''}
+                          open={cinemaSelectOpen}
+                          onOpen={() => setCinemaSelectOpen(true)}
+                          onClose={() => setCinemaSelectOpen(false)}
+                          startAdornment={
+                            <InputAdornment
+                              className={'select-adornment'}
+                              position="start"
+                              onClick={() => setCinemaSelectOpen(true)}
                             >
-                              Projekcije:
-                            </ProjectionsSubHeader>
-                            {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[selectedDate]
-                              .movieProjections.length > 0 ? (
-                              <>
-                                {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[
-                                  selectedDate
-                                ].movieProjections
-                                  .sort((mp1, mp2) => {
-                                    return (
-                                      DateTime.fromISO(mp1.projectionDateTime).toUnixInteger() -
-                                      DateTime.fromISO(mp2.projectionDateTime).toUnixInteger()
-                                    );
-                                  })
-                                  .map((mp, i) => {
-                                    return <ProjectionCard projection={mp} key={mp.id + i} />;
-                                  })}
-                              </>
-                            ) : (
-                              <Typography>Projekcije nisu pronadjene</Typography>
-                            )}
-                          </Box>
-                        )}
-                    </React.Fragment>
-                  </Box>
-                ) : (
-                  <PageSubHeader headerText={'Projekcije nisu pronadjene'} />
-                )}
-              </ContentWrapper>
+                              Bioskop
+                            </InputAdornment>
+                          }
+                          onChange={(event: SelectChangeEvent) => userSettingsStore.setGlobalCinema(event.target.value)}
+                        >
+                          {Object.keys(projectionsGroupedCinemaPerCity).map((cinemaId, i) => {
+                            return (
+                              <MenuItem key={i} value={cinemaId}>
+                                {projectionsGroupedCinemaPerCity[cinemaId].cinema.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </SelectBoxStyled>
+                      </FormControl>
+                      <React.Fragment>
+                        {userSettingsStore.globalSelectedCinema &&
+                          projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema] && (
+                            <Box sx={{mt: 2}} ref={projectionsRef}>
+                              <ProjectionsSubHeader>Izaberi datum:</ProjectionsSubHeader>
+                              <Stack
+                                sx={{
+                                  mt: 1,
+                                  overflowX: 'auto',
+                                }}
+                                direction={'row'}
+                                spacing={2}
+                              >
+                                {sortDates(
+                                  projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates,
+                                ).map((date, index) => (
+                                  <Button
+                                    key={index}
+                                    variant="outlined"
+                                    onClick={() => setSelectedDate(date.date)}
+                                    sx={{
+                                      borderRadius: '15px', // Rounded border
+                                      borderColor: (theme) =>
+                                        selectedDate === date.date
+                                          ? theme.customButtons.dateButtons.selectedColor
+                                          : theme.customButtons.dateButtons.nonSelectedColor, // Border color
+                                      borderWidth: '2px', // Border width
+                                      '&.MuiButtonBase-root:hover': {
+                                        borderWidth: '2px',
+                                      },
+                                      textTransform: 'none', // Prevent uppercase transformation
+                                      backgroundColor: 'transparent', // Transparent background
+                                      width: '66px', // Fit to content size
+                                      height: '66px', // Fit to content size
+                                    }}
+                                  >
+                                    <Stack spacing={0}>
+                                      <Box
+                                        component="span"
+                                        sx={{
+                                          fontSize: '1em',
+                                          fontWeight: 600,
+                                          color: (theme) =>
+                                            selectedDate === date.date
+                                              ? theme.customButtons.dateButtons.selectedColor
+                                              : theme.customButtons.dateButtons.nonSelectedColor,
+                                        }}
+                                      >
+                                        {date.weekDay}
+                                      </Box>
+                                      <Box
+                                        component="span"
+                                        sx={{
+                                          mt: 1,
+                                          lineHeight: 0,
+                                          fontSize: '0.6em',
+                                          fontWeight: 600,
+                                          color: (theme) =>
+                                            selectedDate === date.date
+                                              ? theme.customButtons.dateButtons.selectedColor
+                                              : theme.customButtons.dateButtons.nonSelectedColor,
+                                        }}
+                                      >
+                                        {date.month}
+                                      </Box>
+                                      <Box
+                                        component="span"
+                                        sx={{
+                                          fontSize: '1.2em',
+                                          fontWeight: 600,
+                                          color: (theme) =>
+                                            selectedDate === date.date
+                                              ? theme.customButtons.dateButtons.selectedColor
+                                              : theme.customButtons.dateButtons.nonSelectedColor,
+                                        }}
+                                      >
+                                        {date.day}
+                                      </Box>
+                                    </Stack>
+                                  </Button>
+                                ))}
+                              </Stack>
+                            </Box>
+                          )}
+                      </React.Fragment>
+                      <React.Fragment>
+                        {selectedDate &&
+                          userSettingsStore.globalSelectedCinema &&
+                          projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[
+                            selectedDate
+                          ] && (
+                            <Box sx={{mt: 2}}>
+                              <ProjectionsSubHeader
+                                sx={(theme) => ({
+                                  borderBottomWidth: '1px',
+                                  borderBottomStyle: 'solid',
+                                  borderBottomColor: theme.eventInfoSection.borderColor,
+                                  marginBottom: '16px',
+                                  paddingBottom: '16px',
+                                })}
+                              >
+                                Projekcije:
+                              </ProjectionsSubHeader>
+                              {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[
+                                selectedDate
+                              ].movieProjections.length > 0 ? (
+                                <>
+                                  {projectionsGroupedCinemaPerCity[userSettingsStore.globalSelectedCinema].dates[
+                                    selectedDate
+                                  ].movieProjections
+                                    .sort((mp1, mp2) => {
+                                      return (
+                                        DateTime.fromISO(mp1.projectionDateTime).toUnixInteger() -
+                                        DateTime.fromISO(mp2.projectionDateTime).toUnixInteger()
+                                      );
+                                    })
+                                    .map((mp, i) => {
+                                      return <ProjectionCard projection={mp} key={mp.id + i} />;
+                                    })}
+                                </>
+                              ) : (
+                                <Typography>Projekcije nisu pronadjene</Typography>
+                              )}
+                            </Box>
+                          )}
+                      </React.Fragment>
+                    </Box>
+                  ) : (
+                    <PageSubHeader headerText={'Projekcije nisu pronadjene'} />
+                  )}
+                </ContentWrapper>
+              </Box>
             </React.Fragment>
           ) : (
             <PageSubHeader headerText={'Film nije pronadjen'} />
