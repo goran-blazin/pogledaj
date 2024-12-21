@@ -117,7 +117,8 @@ const EventInformation = styled('ul')(({theme}) => ({
     '.event-info-subtitle': {
       display: 'block',
       fontWeight: 600,
-      color: theme.eventInfoSection.color,
+      // color: theme.eventInfoSection.color,
+      color: theme.colorPalette.lightBlue.color,
       '&.inline': {
         display: 'inline',
         marginRight: '5px',
@@ -498,6 +499,9 @@ function MovieSingleWrapper() {
                         <SelectBoxStyled
                           sx={{
                             mt: 1,
+                            '.MuiSvgIcon-root ': {
+                              color: '#8A8A8A',
+                            },
                           }}
                           value={
                             Object.keys(citiesObjects).includes(userSettingsStore.globalSelectedCity || '')
@@ -530,7 +534,12 @@ function MovieSingleWrapper() {
                       <FormControl fullWidth sx={{mt: 2}} ref={cinemaSelectRef}>
                         <ProjectionsSubHeader>Izaberi bioskop:</ProjectionsSubHeader>
                         <SelectBoxStyled
-                          sx={{mt: 1}}
+                          sx={{
+                            mt: 1,
+                            '.MuiSvgIcon-root ': {
+                              color: '#8A8A8A',
+                            },
+                          }}
                           disabled={!userSettingsStore.globalSelectedCity}
                           value={userSettingsStore.globalSelectedCinema || ''}
                           open={cinemaSelectOpen}

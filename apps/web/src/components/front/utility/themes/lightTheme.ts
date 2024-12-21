@@ -36,7 +36,8 @@ const lightTheme = createTheme({
     selectField: {
       color: `var(--input-field-grey)`,
       textColor: `var(--dark-grey)`,
-      startAdornmentTextColor: '#8A8A8A',
+      // startAdornmentTextColor: '#8A8A8A',
+      startAdornmentTextColor: `var(--light-blue)`,
     },
     inputFieldStyled: {
       color: `var(--dark-grey)`,
