@@ -136,7 +136,7 @@ function MoviesPreviewSlider({slides, orientation}: Slidesprop) {
                       letterSpacing: '0.2px',
                     }}
                   >
-                    {slide.title}
+                    {slide.localizedTitle ? slide.localizedTitle : slide.title}
                   </Typography>
                   <Typography
                     component="p"
