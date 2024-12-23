@@ -166,6 +166,8 @@ const Utils = {
         return 'Napetost do ivice';
       case 'Mystery':
         return 'Mystery';
+      case 'Music':
+        return 'Pesma priča priču';
       case 'Drama':
         return 'Priče iz života';
       case 'Romance':
