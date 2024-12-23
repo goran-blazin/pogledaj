@@ -2,9 +2,10 @@ import {AxiosError} from 'axios';
 import _ from 'lodash';
 import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData, EnvTypes, Genre} from '../types/GeneralTypes';
 import jwt_decode from 'jwt-decode';
+// types
 import {Movie} from '../types/MoviesTypes';
 
-export type MoviesByCategoryTypes = {
+export type MoviesByCategoryGenreTypes = {
   [genre: string]: Movie[];
 };
 
@@ -194,7 +195,7 @@ const Utils = {
   // TODO handle undefined
   moviesByCategory(movies: Movie[] | undefined) {
     if (movies) {
-      const groups = movies.reduce<MoviesByCategoryTypes>((byGenreMap, currentMovie: Movie) => {
+      const groups = movies.reduce<MoviesByCategoryGenreTypes>((byGenreMap, currentMovie: Movie) => {
         const newGenreMap = {...byGenreMap};
         currentMovie.genres.forEach((genre: Genre) => {
           newGenreMap[genre.localizedName] = newGenreMap[genre.localizedName]

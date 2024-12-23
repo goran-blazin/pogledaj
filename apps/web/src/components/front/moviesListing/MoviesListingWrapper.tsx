@@ -23,8 +23,8 @@ import {isLandscape} from '../../../helpers/HelperFunctions';
 import LoadingBox from '../utility/LoadingBox';
 import MoviesPreviewSlider from './MoviesPreviewSlider/MoviesPreviewSlider';
 import MovieCategorySlider from './MovieCategorySlider';
-
-import {Movie} from '../../../types/MoviesTypes';
+// types
+import {MoviesBycategoryTypes} from '../../../types/MoviesTypes';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -59,9 +59,9 @@ function MoviesListingWrapper() {
     return movie2SoldCount - movie1SoldCount;
   };
 
-  const {myMoviesBycategory} = useMemo(() => {
-    return {myMoviesBycategory: Utils.moviesByCategory(movies.data)};
-  }, [movies.data]);
+  const {moviesBycategory} = useMemo(() => {
+    return {moviesBycategory: Utils.moviesByCategory(movies?.data)};
+  }, [movies?.data]);
 
   // TODO remove/refactor this function when myMoviesBycategory gets approval
   const {popularMoviesList} = useMemo(() => {
@@ -242,7 +242,7 @@ function MoviesListingWrapper() {
             </Grid>
           </ContentWrapper>
 
-          {(myMoviesBycategory as [string, Movie[]][])?.map((item, index) => {
+          {(moviesBycategory as MoviesBycategoryTypes[])?.map((item, index) => {
             return (
               <Box mb={'20px'} key={index}>
                 <MovieCategorySlider categoryList={item[1]} category={Utils.movieCategoryLocalized(item[0])} />

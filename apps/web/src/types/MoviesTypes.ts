@@ -33,6 +33,8 @@ export type Movie = {
   createdAt: string;
 };
 
+export type MoviesBycategoryTypes = [string, Movie[]];
+
 export type MovieWithPersons = Movie & {
   producers: Producer[];
   actors: Actor[];
