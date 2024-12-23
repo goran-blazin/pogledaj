@@ -1,8 +1,12 @@
 import {AxiosError} from 'axios';
 import _ from 'lodash';
-import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData, EnvTypes} from '../types/GeneralTypes';
+import {AdminUserJwtPayload, AUTH_DATA_LOCAL_STORAGE, AuthData, EnvTypes, Genre} from '../types/GeneralTypes';
 import jwt_decode from 'jwt-decode';
 import {Movie} from '../types/MoviesTypes';
+
+export type MoviesByCategoryTypes = {
+  [genre: string]: Movie[];
+};
 
 const Utils = {
   delay(time: number, value = null, rejectDelay = false): Promise<unknown> {
@@ -143,6 +147,69 @@ const Utils = {
 
     // Use lodash's fromPairs to convert the array of pairs into an object
     return _.fromPairs(entries);
+  },
+
+  movieCategoryLocalized(category: string) {
+    switch (category) {
+      case 'Horror':
+        return 'Strah u kostima';
+      case 'Action':
+        return 'Junaci u akciji';
+      case 'Comedy':
+        return 'Smeh do suza';
+      case 'Documentary':
+        return 'Svet oko nas';
+      case 'Kids':
+        return 'Avanture za klince';
+      case 'Thriller':
+        return 'Napetost do ivice';
+      case 'Mystery':
+        return 'Mystery';
+      case 'Drama':
+        return 'Priče iz života';
+      case 'Romance':
+        return 'Ljubavne priče';
+      case 'Fantasy':
+        return 'Fantastični svetovi';
+      case 'Science fiction':
+        return 'Van granica mogućeg';
+      case 'Family':
+        return 'Za celu porodicu';
+      case 'Crime':
+        return 'Priče iz podzemlja';
+      case 'Tv movie':
+        return 'Tv movie';
+      case 'Adventure':
+        return 'Avanturistički duh';
+      case 'History':
+        return 'History';
+      case 'Animation':
+        return 'Oživljene priče';
+      default:
+        category;
+    }
+  },
+
+  // group movies by category
+  // TODO handle undefined
+  moviesByCategory(movies: Movie[] | undefined) {
+    if (movies) {
+      const groups = movies.reduce<MoviesByCategoryTypes>((byGenreMap, currentMovie: Movie) => {
+        const newGenreMap = {...byGenreMap};
+        currentMovie.genres.forEach((genre: Genre) => {
+          newGenreMap[genre.localizedName] = newGenreMap[genre.localizedName]
+            ? [...newGenreMap[genre.localizedName], currentMovie]
+            : [currentMovie];
+        });
+
+        return newGenreMap;
+      }, {});
+
+      // convert to array
+      const result = Object.keys(groups).map((key) => [key, groups[key]]);
+
+      return result;
+    }
   },
 };
 

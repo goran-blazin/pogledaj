@@ -16,7 +16,7 @@ function PageSubHeader({
   sx,
   mb = 10,
 }: {
-  headerText: string;
+  headerText?: string;
   Icon?: SvgIconComponent;
   mb?: number;
   sx?: SxProps;

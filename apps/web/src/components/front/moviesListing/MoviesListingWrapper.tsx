@@ -1,9 +1,6 @@
 import MoviesService from '../../../services/MoviesService';
 import {Autocomplete, Box, InputAdornment} from '@mui/material';
 import React, {useEffect, useMemo, useState} from 'react';
-import HorizontalSmallCardsCarousel from '../utility/reels/HorizontalSmallCardsCarousel';
-import MovieSmallCard from '../utility/cards/MovieSmallCard';
-import PageSubHeader from '../utility/PageSubHeader';
 import {useQuery} from 'react-query';
 import {MovieProjection, MovieWithMovieProjection} from '../../../types/MoviesTypes';
 import ReservationsHelper from '../../../helpers/ReservationsHelper';
@@ -25,6 +22,9 @@ import Grid from '@mui/material/Grid';
 import {isLandscape} from '../../../helpers/HelperFunctions';
 import LoadingBox from '../utility/LoadingBox';
 import MoviesPreviewSlider from './MoviesPreviewSlider/MoviesPreviewSlider';
+import MovieCategorySlider from './MovieCategorySlider';
+
+import {Movie} from '../../../types/MoviesTypes';
 
 function MoviesListingWrapper() {
   const navigate = useNavigate();
@@ -59,7 +59,12 @@ function MoviesListingWrapper() {
     return movie2SoldCount - movie1SoldCount;
   };
 
-  const {popularMoviesList, lastChanceMoviesList, newestMoviesList, forChildrenMoviesList} = useMemo(() => {
+  const {myMoviesBycategory} = useMemo(() => {
+    return {myMoviesBycategory: Utils.moviesByCategory(movies.data)};
+  }, [movies.data]);
+
+  // TODO remove/refactor this function when myMoviesBycategory gets approval
+  const {popularMoviesList} = useMemo(() => {
     if (movies?.data) {
       return {
         popularMoviesList: movies.data.sort(moviePopularitySort).slice(0, MAX_ITEMS_PER_SLIDER), // sort by most made reservations,
@@ -70,7 +75,6 @@ function MoviesListingWrapper() {
               return DateTime.now().plus({day: 7}) < DateTime.fromISO(mp.projectionDateTime);
             });
           })
-
           .sort((movie1, movie2) => {
             const reducer = (latest: MovieProjection, current: MovieProjection) =>
               DateTime.fromISO(current.projectionDateTime) > DateTime.fromISO(latest.projectionDateTime)
@@ -148,30 +152,12 @@ function MoviesListingWrapper() {
   return (
     <Box>
       {movies.isLoading && !moviePoster ? (
-        // <Typography color={'text.primary'}>Učitava se, molimo sačekajte...</Typography>
         <LoadingBox />
       ) : (
         <React.Fragment>
           <EventPreviewSlider>
             <MoviesPreviewSlider slides={popularMoviesList} orientation={orientation} />
           </EventPreviewSlider>
-          {/* <EventPreview>
-            {moviePoster ? (
-              <img
-                src={
-                  orientation === 'Landscape'
-                    ? moviePoster?.posterImages?.bigBackground
-                    : moviePoster?.posterImages?.mediumPoster
-                }
-                alt={'POSTER IMAGE'}
-                onClick={() => {
-                  navigate(namedRoutes.movieSingle.replace(':movieId', moviePoster.id));
-                }}
-              />
-            ) : (
-              <NoImage />
-            )}
-          </EventPreview> */}
           <ContentWrapper padding marginBottom={'48px'}>
             <Grid
               container
@@ -255,70 +241,14 @@ function MoviesListingWrapper() {
               </Grid>
             </Grid>
           </ContentWrapper>
-          {popularMoviesList.length > 0 && (
-            <Box mb={'20px'}>
-              <ContentWrapper padding>
-                <PageSubHeader headerText={'Popularno'} />
-              </ContentWrapper>
-              <HorizontalSmallCardsCarousel>
-                {popularMoviesList.map((movie, i) => (
-                  <MovieSmallCard movie={movie} key={i} />
-                ))}
-              </HorizontalSmallCardsCarousel>
-            </Box>
-          )}
 
-          {lastChanceMoviesList.length > 0 && (
-            <Box mb={'20px'}>
-              <ContentWrapper padding>
-                <PageSubHeader headerText={'Poslednja prilika'} />
-              </ContentWrapper>
-              <HorizontalSmallCardsCarousel>
-                {lastChanceMoviesList.map((movie, i) => (
-                  <MovieSmallCard movie={movie} key={i} />
-                ))}
-              </HorizontalSmallCardsCarousel>
-            </Box>
-          )}
-
-          {newestMoviesList.length > 0 && (
-            <Box mb={'20px'}>
-              <ContentWrapper padding>
-                <PageSubHeader headerText={'Najnovije'} />
-              </ContentWrapper>
-              <HorizontalSmallCardsCarousel>
-                {newestMoviesList.map((movie, i) => (
-                  <MovieSmallCard movie={movie} key={i} />
-                ))}
-              </HorizontalSmallCardsCarousel>
-            </Box>
-          )}
-
-          {forChildrenMoviesList.length > 0 && (
-            <Box mb={'20px'}>
-              <ContentWrapper padding>
-                <PageSubHeader headerText={'Za decu'} />
-              </ContentWrapper>
-              <HorizontalSmallCardsCarousel>
-                {forChildrenMoviesList.map((movie, i) => (
-                  <MovieSmallCard movie={movie} key={i} />
-                ))}
-              </HorizontalSmallCardsCarousel>
-            </Box>
-          )}
-
-          {/*{soonMoviesList.length > 0 && (*/}
-          {/*  <Box mb={'20px'}>*/}
-          {/*    <ContentWrapper padding>*/}
-          {/*      <PageSubHeader headerText={'Uskoro'} />*/}
-          {/*    </ContentWrapper>*/}
-          {/*    <HorizontalSmallCardsCarousel>*/}
-          {/*      {soonMoviesList.map((movie, i) => (*/}
-          {/*        <MovieSmallCard movie={movie} key={i} />*/}
-          {/*      ))}*/}
-          {/*    </HorizontalSmallCardsCarousel>*/}
-          {/*  </Box>*/}
-          {/*)}*/}
+          {(myMoviesBycategory as [string, Movie[]][])?.map((item, index) => {
+            return (
+              <Box mb={'20px'} key={index}>
+                <MovieCategorySlider categoryList={item[1]} category={Utils.movieCategoryLocalized(item[0])} />
+              </Box>
+            );
+          })}
         </React.Fragment>
       )}
     </Box>
