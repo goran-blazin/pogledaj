@@ -317,11 +317,6 @@ function MoviesFiltersWrapper() {
             </FormControl>
             <FormControl fullWidth sx={{mt: 1}}>
               <DatePicker
-                sx={{
-                  '.MuiSvgIcon-root ': {
-                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                  },
-                }}
                 slotProps={{
                   day: {
                     sx: {
@@ -366,11 +361,6 @@ function MoviesFiltersWrapper() {
             </FormControl>
             <FormControl fullWidth sx={{mt: 1}}>
               <DatePicker
-                sx={{
-                  '.MuiSvgIcon-root ': {
-                    color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
-                  },
-                }}
                 slotProps={{
                   day: {
                     sx: {
