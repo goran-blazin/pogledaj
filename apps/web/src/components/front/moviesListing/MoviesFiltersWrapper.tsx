@@ -322,6 +322,22 @@ function MoviesFiltersWrapper() {
                     color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
                   },
                 }}
+                slotProps={{
+                  day: {
+                    sx: {
+                      '&.MuiPickersDay-root': {
+                        color: (theme) => theme.customButtons.buttonWithIcon.textColor,
+                      },
+                    },
+                  },
+                  calendarHeader: {
+                    sx: {
+                      '.MuiSvgIcon-root ': {
+                        color: (theme) => theme.customButtons.buttonWithIcon.textColor,
+                      },
+                    },
+                  },
+                }}
                 format={Utils.luxonDateFormat}
                 value={selectedDateFrom}
                 slots={{
@@ -353,6 +369,22 @@ function MoviesFiltersWrapper() {
                 sx={{
                   '.MuiSvgIcon-root ': {
                     color: (theme) => theme.customForm.selectField.startAdornmentTextColor,
+                  },
+                }}
+                slotProps={{
+                  day: {
+                    sx: {
+                      '&.MuiPickersDay-root': {
+                        color: (theme) => theme.customButtons.buttonWithIcon.textColor,
+                      },
+                    },
+                  },
+                  calendarHeader: {
+                    sx: {
+                      '.MuiSvgIcon-root ': {
+                        color: (theme) => theme.customButtons.buttonWithIcon.textColor,
+                      },
+                    },
                   },
                 }}
                 format={Utils.luxonDateFormat}
